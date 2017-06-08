@@ -1,0 +1,19 @@
+﻿<Window x:Class="Test.WPF.AnotherNavigatingViewsTwo.Views.ExampleView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vms="clr-namespace:Test.WPF.AnotherNavigatingViewsTwo.ViewModels"
+        Title="ExampleView" Height="300" Width="300">
+    <!--<Window.Resources>
+        <DataTemplate DataType="{x:Type vms:ExampleVM}">
+            <Grid>
+                <TextBlock Text="ExampleView"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>-->
+    <Window.DataContext>
+        <vms:ExampleVM/>        
+    </Window.DataContext>
+    <Grid>
+        <TextBlock Text="I'm exampleview.xaml"/>
+    </Grid>
+</Window>

@@ -1,0 +1,14 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.Interface.csprojResolveAssemblyReference.cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\obj\Debug\SCA.Interface.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainInterface\bin\Debug\SCA.Model.pdb

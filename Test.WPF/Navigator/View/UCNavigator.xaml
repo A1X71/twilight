@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="Test.WPF.Navigator.View.UCNavigator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:ViewModels="clr-namespace:Test.WPF.Navigator.ViewModel"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <!--<Grid.DataContext>
+            <ViewModels:HierarchyViewModel/>
+        DataContext="{Binding Path=HierarchyViewModel}"
+        </Grid.DataContext>-->
+        <Grid.Resources>
+            <ViewModels:HierarchyDataTemplateSelector x:Key="hierarchyDataTemplateSelector"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TreeView   Name="HierarchyTreeView"  ItemTemplateSelector="{StaticResource hierarchyDataTemplateSelector}" ItemsSource="{Binding Projects}">
+            <TreeView.DataContext>
+                <ViewModels:HierarchyViewModel/>
+            </TreeView.DataContext>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                    <Setter Property="FontWeight" Value="Normal" />
+
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate x:Key="ProjectTemplate" DataType="{x:Type ViewModels:HierarchyItemViewModel}" ItemsSource="{Binding Path=Children}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
+                        <TextBlock Text="{Binding Path=DataItem.Name}" Margin="0 0 5 0" >
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=NavigateToDeviceInfoCommand }" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        <TextBlock Text="{Binding Path=DataItem.ID}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate x:Key="ControllerTemplate" DataType="{x:Type ViewModels:HierarchyItemViewModel}" ItemsSource="{Binding Path=Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
+                        <TextBlock Text="{Binding Path=DataItem.Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate x:Key="ControllerNodeTemplate" DataType="{x:Type ViewModels:HierarchyItemViewModel}" ItemsSource="{Binding Path=Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
+                        
+                        <TextBlock Text="{Binding Path=DataItem.Name}">
+                            <TextBlock.InputBindings>
+                                
+                                <MouseBinding Command="{Binding DataContext.NavigateToDetailInfoCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                              CommandParameter="{Binding}" 
+                                              MouseAction="LeftClick"/>
+                                
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate x:Key="LoopTemplate" DataType="{x:Type ViewModels:HierarchyItemViewModel}" >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
+                        <TextBlock Text="{Binding Path=DataItem.Code}">
+                            <TextBlock.InputBindings>
+                                <!--<MouseBinding Command="{Binding GetDetails }" MouseAction="LeftClick"/>-->
+                                <MouseBinding Command="{Binding DataContext.NavigateToDeviceInfoCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" CommandParameter="{Binding Path=DataItem}" MouseAction="LeftClick"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+</UserControl>

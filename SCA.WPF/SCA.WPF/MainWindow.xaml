@@ -1,0 +1,236 @@
+﻿<Window x:Class="SCA.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NT8001系列控制器配置程序V4.0" Height="350" Width="525" Icon="{Binding Path=AppIconPath,Mode=OneWay}"
+        xmlns:view="clr-namespace:SCA.WPF.ViewsRoot.Views.DetailInfo"
+        xmlns:navigatorView="clr-namespace:SCA.WPF.ViewsRoot.Views.Navigator"
+        xmlns:viewModel="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
+        xmlns:viewModelQuery="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.Query"
+        xmlns:View="clr-namespace:SCA.WPF.ViewsRoot.Views"        
+        xmlns:ViewQuery="clr-namespace:SCA.WPF.ViewsRoot.Views.Query"        
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+        xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
+        >
+    <Window.Resources>
+        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
+        
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8036ViewModel}">
+            <view:DeviceInfo8036View DataContext="{Binding}">
+
+            </view:DeviceInfo8036View>
+        </DataTemplate>        
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8001ViewModel}">
+            <view:DeviceInfo8001View DataContext="{Binding}">
+
+            </view:DeviceInfo8001View>
+        </DataTemplate>        
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8007ViewModel}">
+            <view:DeviceInfo8007View DataContext="{Binding}">
+
+            </view:DeviceInfo8007View>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8000ViewModel}">
+            <view:DeviceInfo8000View DataContext="{Binding}">
+
+            </view:DeviceInfo8000View>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8003ViewModel}">
+            <view:DeviceInfo8003View DataContext="{Binding}">
+
+            </view:DeviceInfo8003View>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8021ViewModel}">
+            <view:DeviceInfo8021View DataContext="{Binding}">
+
+            </view:DeviceInfo8021View>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigStandardViewModel}">
+            <view:LinkageConfigStandardView  DataContext="{Binding}">
+
+            </view:LinkageConfigStandardView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigGeneralViewModel}">
+            <view:LinkageConfigGeneralView DataContext="{Binding}">
+
+            </view:LinkageConfigGeneralView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigMixedViewModel}">
+            <view:LinkageConfigMixedView DataContext="{Binding}">
+
+            </view:LinkageConfigMixedView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ManualControlBoardViewModel}">
+            <view:ManualControlBoardView DataContext="{Binding}">
+
+            </view:ManualControlBoardView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DefaultViewModel}">
+            <view:DefaultView DataContext="{Binding}">
+
+            </view:DefaultView>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModelQuery:ProjectSummaryViewModel}">
+            <ViewQuery:ProjectSummaryView DataContext="{Binding}">
+
+            </ViewQuery:ProjectSummaryView>
+        </DataTemplate>
+        
+
+        <DataTemplate DataType="{x:Type viewModelQuery:SummaryInfoViewModel}">
+            <ViewQuery:SummaryInfoView DataContext="{Binding}">
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.SetNavigatorDataCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="AddButtonClick" PassArguments="True"/>
+                    
+                </i:Interaction.Behaviors>                
+            </ViewQuery:SummaryInfoView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModelQuery:LoopSummaryViewModel}">
+            <ViewQuery:LoopSummaryView DataContext="{Binding}">
+
+            </ViewQuery:LoopSummaryView>
+        </DataTemplate>
+    </Window.Resources>
+    <!--<DockPanel LastChildFill="True">
+      
+        <DockPanel  Name="LeftContainer" DockPanel.Dock="Left"/>
+
+        <DockPanel  Name="BottomContainer" DockPanel.Dock="Bottom">
+            <StatusBar>通讯状态</StatusBar>
+        </DockPanel>
+        <DockPanel  Name="RightContainer" DockPanel.Dock="Right"/>
+    </DockPanel>-->
+    <!--<Grid>
+        <Tree:NavigatorView/>
+    </Grid>-->
+    <DockPanel LastChildFill="True">
+        <!--Header Area-->
+        <!--<Border Height="50" DockPanel.Dock="Top" BorderThickness="0,0,0,1" x:Name="HeaderBorder" Padding="10,0,10,0" >
+
+        </Border>-->
+
+        <!--Menu Area-->
+        <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0,5,0,5">
+            <View:MenuView  CreateControllerClick="MenuUserController_CreateControllerClick"
+                            CreateLoopClick="MenuUserController_CreateLoopClick"
+                            ProjectSettingClick="MenuUserController_ProjectSettingClick" 
+                            CreateProjectClick="MenuUserController_CreateProjectClick" 
+                            EditLoopsClick="MenuUserController_EditLoopsClick"                            
+                            CloseProjectClick="ProjectUserControl_CloseButtonClick"                            
+                            >
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="OpenProjectClick" PassArguments="True"/>
+                </i:Interaction.Behaviors>
+            </View:MenuView>
+            
+        </Border>
+        <!--Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="OpenProjectButtonClick"-->
+        <View:StatusBarView x:Name="StatusBar" DockPanel.Dock="Bottom" />
+        
+            <Grid x:Name="MainGrid" Grid.IsSharedSizeScope="True"  VerticalAlignment="Stretch">
+
+            <!-- Diagram Area -->
+            <!--<Grid x:Name="DiagramPane" Margin="10,0,10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />                    
+                    -->
+            <!-- The column 1 clone is used when the details area is collapsed SharedSizeGroup="column1"-->
+            <!--
+                    <ColumnDefinition x:Name="column1CloneForLayer0" />
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="DiagramBorder">
+                    -->
+            <!--  Background="{DynamicResource DiagramGradientBrush}" Style="{DynamicResource BorderStyle}" <local:DiagramViewer x:Name="DiagramControl" Zoom="1.5" /> 安放用户控件-->
+            <!--
+                    <navigatorView:NavigatorView	Margin="0,10,0,0"	Grid.Row="1"  DataContext="{Binding Path=NavigatingViewModel}"/>
+                </Border>
+            </Grid>-->
+
+            <!-- Details Area SharedSizeGroup="column1"-->
+            
+                <Grid x:Name="DetailsPane" Margin="10,0,10,10" Visibility="Visible">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition  Width="30*"/>
+                    <ColumnDefinition  Width="5px"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Column="0"  VerticalScrollBarVisibility="Auto">
+                    <Border x:Name="DiagramBorder"  >
+                        <!--  Background="{DynamicResource DiagramGradientBrush}" Style="{DynamicResource BorderStyle}" <local:DiagramViewer x:Name="DiagramControl" Zoom="1.5" /> 安放用户控件-->
+                        <navigatorView:NavigatorView x:Name="Navigator"	Grid.Row="1"  DataContext="{Binding Path=NavigatingViewModel}"
+                                                 NewProjectButtonClick="MenuUserController_CreateProjectClick"                                                 
+                                                 AddControllerButtonClick="MenuUserController_CreateControllerClick"                                                                                                  
+                                                 DeleteControllerButtonClick="NavigatorUserControl_DeleteControllerButtonClick"
+                                                 AddLoopButtonClick="MenuUserController_CreateLoopClick"
+                                                 CloseProjectButtonClick="ProjectUserControl_CloseButtonClick"
+                                                 DeleteLoopButtonClick="NavigatorUserController_DeleteLoopButtonClick"
+                                                 >
+                            <i:Interaction.Behaviors>
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="OpenProjectButtonClick" PassArguments="True"/>
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.NavigateToDetailInfoCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="ControllerNodeClick" PassArguments="True"/>
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.NavigateToDeviceInfoCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="LoopItemClick" PassArguments="True"/>
+                                <eventToCommand:EventToCommandBehavior Command="{Binding DataContext.NavigateToControllerSummaryCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" Event="ControllerClick" PassArguments="True"/>
+                                <eventToCommand:EventToCommandBehavior Command="{Binding DataContext.NavigateToProjectSummaryCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" Event="ProjectClick" PassArguments="True"/>                                
+                                <!--<eventToCommand:EventToCommandBehavior Command="{Binding DataContext.NavigateToLoopSummaryCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" Event="LoopClick" PassArguments="True"/>-->
+
+
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.NavigatorUserControl_StartCommunicationCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="StartControllerButtonClick" PassArguments="True"/>
+
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.NavigatorUserControl_StopCommunicationCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="StopControllerButtonClick" PassArguments="True"/>
+                                
+                                <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.NavigatorUserControl_MergeForControllerCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="MergeButtonForControllerClick" PassArguments="True"/>
+                                                                           
+                                
+                            </i:Interaction.Behaviors>
+                        </navigatorView:NavigatorView>
+
+                    </Border>
+                    <!-- Background="{DynamicResource MainBackgroundBrush}"<local:Details Grid.Column="1" x:Name="DetailsControl" Margin="5,0,0,0" PersonInfoClick="DetailsControl_PersonInfoClick" EveryoneDeleted="DetailsControl_EveryoneDeleted" FamilyDataClick="DetailsControl_FamilyDataClick" />-->
+                    <!--MaxHeight="{Binding SystemParameters.PrimaryScreenHeight}" MaxWidth="{Binding  SystemParameters.PrimaryScreenWidth}"-->
+                </ScrollViewer>
+                <GridSplitter   Width="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" BorderThickness="0,10,0,10" />
+                <ScrollViewer  Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                    <ContentPresenter Grid.Row="1" Grid.Column="2" x:Name="ContentArea" Content="{Binding CurrentView}"/>
+                </ScrollViewer>
+            </Grid>
+
+            <View:WelcomeView x:Name="WelcomeUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   NewButtonClick="WelcomeUserControl_NewButtonClick"  ImportButtonClick="WelcomeUserControl_ImportButtonClick">
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
+                                                                    Event="OpenButtonClick" PassArguments="False"/>
+                </i:Interaction.Behaviors>
+            </View:WelcomeView>
+            <!--<View:ProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  />-->
+            <View:CreateProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center" AddButtonClick="ProjectUserControl_AddButtonClick" CloseButtonClick="ProjectUserControl_CloseButtonClick"   Visibility="Hidden"/>
+
+            <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden" ConfirmButtonClick="ImportFromOldVersionUserControl_ConfirmButtonClick"  CloseButtonClick="ImportFromOldVersionUserControl_CloseButtonClick"/>
+
+            <View:CreateControllerView x:Name="CreateControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"  AddButtonClick="CreateControllerUserControl_AddButtonClick"  CancelButtonClick="CreateControllerUserControl_CancelButtonClick"/>
+
+            <View:ImportControllerView x:Name="ImportControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   
+                                       DataContext="{Binding Path=ImportControllerDataContext}"
+                                       Visibility="{Binding Data.ImportControllerVisibilityState, Source={StaticResource proxy},Mode=TwoWay}"/>
+            <!--<View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                Visibility="{Binding  Data.CreateManualControlBoardVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>-->
+            <!--<View:CreateLoopsView x:Name="CreateLoopUserControl"  HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"  AddButtonClick="CreateLoopUserControl_AddButtonClick" />-->
+            <StackPanel x:Name="CreateViewArea"/>
+
+
+            <!--顺序放Control控件-->
+
+        </Grid>
+        
+    </DockPanel>
+</Window>

@@ -1,0 +1,15 @@
+﻿<Window x:Class="Test.WPF.DataGrid.DataGridWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Test.WPF.DataGrid"
+        xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="DataGridWindow" Height="300" Width="300">
+    <Grid>
+
+        <local:DeviceDataGridUC></local:DeviceDataGridUC>
+    </Grid>
+</Window>

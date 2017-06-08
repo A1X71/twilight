@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="SCA.WPF.ViewsRoot.Views.StatusBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels"
+             xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
+             mc:Ignorable="d" 
+             Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <local:StatusBarViewModel x:Key="vm" />
+        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource vm}"/>
+    </UserControl.DataContext>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid x:Name="ProgressBarContent" Grid.Column="0"  Visibility="{Binding Data.IsProgressBarVisible,Source={StaticResource proxy}}">
+                <Grid.ColumnDefinitions>                    
+                    <ColumnDefinition Width="Auto"/>                    
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32px"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0"  Content="{Binding Path=DescriptionText}"/>
+                <Grid Grid.Row="0" Grid.Column="1" >
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=CurrentProgressValue }" Name="pbStatus" Height="24px"/>
+                    <TextBlock Text="{Binding ElementName=pbStatus, Path=Value,StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+                    <Button Grid.Column="2" Height="24">取消操作</Button>
+                <!--<TextBlock Grid.Row="0" Grid.Column="1"   Visibility="Visible" Foreground="Black"/>-->                
+            </Grid>
+                <Label Grid.Column="2" VerticalAlignment="Center">通迅状态:</Label>
+                <Image  Grid.Column="3" x:Name="statusIcon" Source="{Binding Path=StatusOffinePath,Mode=OneWay}" ></Image>
+            </Grid>
+        </StackPanel>        
+    </DockPanel>
+        
+</UserControl>

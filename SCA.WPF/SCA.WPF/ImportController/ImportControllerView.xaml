@@ -1,0 +1,251 @@
+﻿<UserControl x:Class="SCA.WPF.ViewsRoot.Views.ImportControllerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
+             xmlns:VM="clr-namespace:SCA.WPF.CreateController"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" 
+             d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="Label">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
+        <ObjectDataProvider x:Key="ControllerTypeEnumDS" ObjectType="{x:Type VM:CreateControllerViewModel}" MethodName="GetControllerType">
+
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="SerialPortNumberEnumDS" ObjectType="{x:Type VM:CreateControllerViewModel}" MethodName="GetSerialPortNumber">
+
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <StackPanel Background="{StaticResource WindowBackgroundBrush}" >
+        <!-- Header -->
+        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
+            <TextBlock Text="导入数据" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        </Border>
+        <!--Body-->
+        <Grid  x:Name="ImportControllerDataGrid" Margin="-1,0,1,0">
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!--选择导入类型-->
+            <StackPanel  Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                
+                <RadioButton x:Name="ExcelFormat" GroupName="FileFormatType"  VerticalAlignment="Center" IsChecked="{Binding ExcelFormatState,Mode=TwoWay}"  DockPanel.Dock="Left">
+                    EXCEL格式
+                </RadioButton>
+                <RadioButton x:Name="MDBFormat" GroupName="FileFormatType"  VerticalAlignment="Center" DockPanel.Dock="Left" IsChecked="{Binding MDBFormatState,Mode=TwoWay}">
+                    MDB格式
+                </RadioButton>
+                <RadioButton x:Name="NTFormat" GroupName="FileFormatType"  VerticalAlignment="Center" DockPanel.Dock="Left" IsChecked="{Binding NTFormatState,Mode=TwoWay}">
+                    NT格式
+                </RadioButton>
+            </StackPanel>
+            <!--Excel格式导入内容-->
+            <Grid x:Name="ExcelFormatSettingContent" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Visibility="{Binding Data.ExcelFormatSettingContentVisibility, Source={StaticResource proxy} }">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="19*"/>
+                    <ColumnDefinition Width="41*"/>
+                    <ColumnDefinition Width="90*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel  Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                    <RadioButton x:Name="DefaultTemplate" GroupName="SelectedTemplate"  VerticalAlignment="Top" DockPanel.Dock="Left" IsChecked="{Binding DefaultTemplateState,Mode=TwoWay}">
+                        默认模板
+                    </RadioButton>
+                    <RadioButton x:Name="CustomizedTemplate" GroupName="SelectedTemplate"  VerticalAlignment="Center" DockPanel.Dock="Left" IsChecked="{Binding CustomizedTemplateState,Mode=TwoWay}">
+                        自定义模板
+                    </RadioButton>
+                </StackPanel>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="_控制器类型"  Style="{StaticResource Label}" Grid.ColumnSpan="2" />
+                <Border  BorderThickness="0,1,0,0" Grid.Row="1" Grid.Column="2" >
+                    <Grid Margin="10,5,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ComboBox IsSynchronizedWithCurrentItem="False" 
+                              ItemsSource="{Binding Source={StaticResource ControllerTypeEnumDS}}" 
+                              SelectedItem="{Binding Path=SelectedControllerType,Mode=TwoWay}"
+                              x:Name="ControllerTypeComboBox"  Width="120"                              
+                              Grid.Row="1" HorizontalAlignment="Left"  
+                              Grid.ColumnSpan="2" Margin="0,0,0,-0.163">
+                              <!--ControllerTypeChangedCommand-->
+                              <i:Interaction.Triggers>
+                                <!-- Invoke command for mouse Enter -->
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding ControllerTypeChangedCommand}"  CommandParameter="{Binding ElementName=ControllerTypeComboBox, Path=SelectedItem}"/>                                    
+                                </i:EventTrigger>
+                              </i:Interaction.Triggers>
+                        </ComboBox>
+                        <!--SelectionChanged="ControllerTypeComboBox_SelectionChanged"-->
+                        <!--<Button x:Name="ControllerTypeAddButton" Content="_控制器类型" Grid.Row="1" Click="ControllerTypeAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
+                    </Grid>
+                </Border>
+                <StackPanel  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding Data.ExcelFormatSettingContentCustomizedVisibility, Source={StaticResource proxy} }">
+                    <!--Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"-->
+                <GroupBox Header="控制器定义" 
+                          Margin="0,3,0,0" 
+                          x:Name="ControllerDefinitionGroup"
+                          >
+                    <Grid x:Name="ControllerDefinition" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="6*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="控制器名称"   Style="{StaticResource Label}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerNameInputTextBox" HorizontalAlignment="Left"
+                     Width="160"  TabIndex="100" Foreground="{DynamicResource InputFontColor}"  Text="{Binding Path=ControllerName,Mode=TwoWay}" Height="27" VerticalAlignment="Bottom"/>
+                        <!--Target="{Binding ElementName=ControllerTypeInputTextBox, Mode=OneWay}"-->
+
+                        <!--<TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerTypeInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
+                        <Label Grid.Row="2" Grid.Column="0" Content="_控制器机号" Target="{Binding ElementName=ControllerMachineNumInputTextBox, Mode=OneWay}"  Style="{StaticResource Label}" />
+                        <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerMachineNumInputTextBox"
+                            HorizontalAlignment="Left" Width="160" 
+                            Foreground="{DynamicResource InputFontColor}" 
+                            Text="{Binding Path=MachineNumber,Mode=TwoWay}"
+                            TabIndex="100" />
+                        <Label Grid.Row="3" Grid.Column="0" Content="_器件长度"   Style="{StaticResource Label}" />
+                        <!--<TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceCodeLengthInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
+
+                        <ComboBox x:Name="DeviceCodeLengthComboBox" ItemsSource="{Binding Path=DeviceCodeLength}"  Width="120" Grid.Row="3" Grid.Column="1" 
+                                  HorizontalAlignment="Left" Margin="5,0,0,0" IsSynchronizedWithCurrentItem="False" 
+                                  SelectedItem="{Binding Path=SelectedDeviceCodeLength,Mode=TwoWay}"
+                                  />
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="_串口号" Style="{StaticResource Label}" />
+                        <Border  BorderThickness="0,1,0,0" Grid.Row="4" Grid.Column="1" >
+                            <Grid Margin="10,5,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <ComboBox IsSynchronizedWithCurrentItem="False" 
+                                          ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}"
+                                          SelectedItem="{Binding Path=SerialPortNumber,Mode=TwoWay}"
+                                          x:Name="SerialPortNumberComboBox"  Width="120"
+                                          Grid.Row="1" HorizontalAlignment="Left" 
+                                          
+                                          Margin="-4,0,0,0"  />
+                                <!--SelectionChanged="SerialPortNumberComboBox_SelectionChanged"-->
+                                <!--<Button x:Name="SerialPortNumberAddButton" Content="_串口号" Grid.Row="1" Click="SerialPortNumberAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                </GroupBox>
+                    <!--Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"-->
+                <GroupBox Header="回路定义" 
+                          Margin="0,3,0,0" 
+                          x:Name="LoopDefinitionGroup"
+                          >
+                    <Grid x:Name="LoopDefinition">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="6*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="回路数量"   Style="{StaticResource Label}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" HorizontalAlignment="Left"
+                     Width="160"  TabIndex="100" Foreground="{DynamicResource InputFontColor}" Text="{Binding Path=LoopAmount,Mode=TwoWay}" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="回路分组"   Style="{StaticResource Label}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopGroupInputTextBox" HorizontalAlignment="Left"
+                     Width="160"  TabIndex="100" Foreground="{DynamicResource InputFontColor}"  Text="{Binding Path=LoopGroupAmount,Mode=TwoWay}"/>
+                    </Grid>
+                </GroupBox>
+                    <!--Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"-->
+                <GroupBox Header="其它" 
+                          Margin="0,3,0,0" 
+                          x:Name="OtherDefinitionGroup"
+                          >
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="标准组态"  IsChecked="{Binding Path=StandardLinkageFlag}"/>
+                        <CheckBox Content="混合组态" IsChecked="{Binding Path=MixedLinkageFlag}"/>
+                        <CheckBox Content="通用组态" IsChecked="{Binding Path=GeneralLinkageFlag}"/>
+                        <CheckBox Content="网络手动盘" IsChecked="{Binding Path=ManualControlBoardFlag}"/>
+                        </StackPanel>
+                </GroupBox>
+                </StackPanel>
+                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="20px"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="文件位置"  Foreground="Black"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" Text="{Binding Path=ExcelFilePath,Mode=TwoWay}" />
+                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="0" Grid.Column="2" Width="20px" Command="{Binding Path=SelectExcelPathCommand}">...</Button>
+                    <Button x:Name="ImportExcelButton"  Grid.Row="0" Grid.Column="3" Command="{Binding Path=ImportDataFromExcelCommand}">读取</Button>
+                    <Button x:Name="DownloadExcelTemplateButton"  Grid.Row="0" Grid.Column="4" Command="{Binding Path=DownloadExcelTemplateCommand}">下载模板</Button>
+                </Grid>
+            </Grid>
+
+            <!--Target="{Binding ElementName=ControllerNameInputTextBox, Mode=OneWay}"-->
+
+            <!--<TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="SerialPortNumberInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
+
+            
+            <Border  BorderThickness="0,1,0,0" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid Margin="10,5,10,10" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>                        
+                    </Grid.RowDefinitions>
+                    <Button x:Name="CloseButton" Content="关闭" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding Path=CloseViewCommand}"  Width="105" Height="21" FontSize="10" />
+                    <!--<ComboBox IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource RelationshipValuesEnumDS}}" x:Name="FamilyMemberComboBox"  Width="120" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" SelectionChanged="FamilyMemberComboBox_SelectionChanged"  />
+                    <Button x:Name="FamilyMemberAddButton" Content="_Add Father" Grid.Row="1" Click="FamilyMemberAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
+                </Grid>
+            </Border>
+            <!--<StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Click="AddButton_Click" TabIndex="140" Width="64"/>
+                <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CancelButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
+            </StackPanel>-->
+        </Grid>
+        
+        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+    </StackPanel>
+</UserControl>

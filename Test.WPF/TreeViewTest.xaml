@@ -1,0 +1,66 @@
+﻿<Window x:Class="Test.WPF.TreeViewTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Test.WPF"
+        Title="TreeViewTest" Height="300" Width="300"
+     >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TreeView xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+            ItemsSource="{Binding Items}"
+                Grid.Column="0">
+            <i:Interaction.Behaviors>
+                <local:TreeViewSelectedItemBlendBehavior
+                     SelectedItem="{Binding SelectedItem}"/>
+            </i:Interaction.Behaviors>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:Directory}"   ItemsSource="{Binding SubItems}">
+                    <TextBlock Text="{Binding Name}"/>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type local:File}">
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <!-- Present details of the currently selected item in a ContentPresenter -->
+        <ContentPresenter Content="{Binding SelectedItem}"
+                          Grid.Column="1">
+            <ContentPresenter.Resources>
+                <DataTemplate DataType="{x:Type local:Directory}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Folder: " />
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Grid.Column="1"/>
+                        <TextBlock Text="Number of items: " Grid.Row="1" />
+                        <TextBlock Text="{Binding SubItems.Count}" FontWeight="Bold"
+                                   Grid.Row="1" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type local:File}">
+                    <StackPanel>
+                        <TextBlock>
+                            <Run Text="File: " FontWeight="Bold"/>
+                            <Run Text="{Binding Name}" />
+                        </TextBlock>
+                        <TextBlock Text="{Binding Content, IsAsync=True}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ContentPresenter.Resources>
+        </ContentPresenter>
+    </Grid>
+</Window>

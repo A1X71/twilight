@@ -1,0 +1,4 @@
+﻿AnotherNavigatingView-->采用在MainViewModel中绑定命令方法，对不同的CurrentView进行切换(CurrentView为用户控件)
+AnotherNavigatingViewTwo-->与以上不同之处在于，将绑定从MainView页面传递至了Navigator用户控件中，MainView页面的CurrentView属性为一个object, 实际传递进去的是一个ViewModel,但此ViewModel目前没有任何代码，通过
+							在主页面的xaml代码中指定DataTemplate的值，切换至不同的UserControl。 用此种方式可以使UserControl中显示的内容和主页面中
+							显示的内容不同。UserControl与主页面在DataTemplate中对于不同的ViewModel进行不同的UserControl调用。

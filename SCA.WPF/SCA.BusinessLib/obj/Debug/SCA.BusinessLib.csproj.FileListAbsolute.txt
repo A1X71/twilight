@@ -1,0 +1,18 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.BusinessLib.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.BusinessLib.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.BusinessLib.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.BusinessLib.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\obj\Debug\SCA.BusinessLib.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.BusinessLib\bin\Debug\SCA.Model.pdb

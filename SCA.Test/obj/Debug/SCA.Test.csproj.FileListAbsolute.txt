@@ -1,0 +1,38 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Test.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Test.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\nunit.framework.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\nunit.framework.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Test.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Test.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\nunit.framework.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\nunit.framework.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\NSubstitute.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.BusinessLib.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DatabaseAccess.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\System.Data.SQLite.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.BusinessLib.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\NSubstitute.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\System.Data.SQLite.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Test\obj\Debug\SCA.Test.csprojResolveAssemblyReference.cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\NSubstitute.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.BusinessLib.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DatabaseAccess.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\System.Data.SQLite.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DatabaseAccess.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.BusinessLib.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\NSubstitute.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Test\bin\Debug\System.Data.SQLite.xml

@@ -1,0 +1,16 @@
+C:\Projects\home\nCrunch\Product\NCrunch.Console\obj\Debug\NCrunch.exe
+C:\Projects\home\nCrunch\Product\NCrunch.Console\obj\Debug\NCrunch.pdb
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\1nCrunch.build.3.5.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\nCrunch.build.4.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\1nCrunch.build.4.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\nCrunch.build.3.5.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\nCrunch.build.12.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\1nCrunch.build.12.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\nCrunch.build.14.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\1nCrunch.build.14.0.config
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\EasyHook32.dll
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\License.rtf
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\NCrunch.Console.targets
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\NCrunch.exe
+C:\Projects\home\nCrunch\Product\ConsoleToolBinaries\Debug\NCrunch.pdb
+C:\Projects\home\nCrunch\Product\NCrunch.Console\obj\Debug\NCrunch.Console.csprojResolveAssemblyReference.cache

@@ -1,0 +1,9 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Log\bin\Debug\SCA.Log.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Log\bin\Debug\SCA.Log.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Log\obj\Debug\SCA.Log.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Log\obj\Debug\SCA.Log.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Log\bin\Debug\SCA.Log.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Log\bin\Debug\SCA.Log.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Log\obj\Debug\SCA.Log.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.Log\obj\Debug\SCA.Log.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.Log\obj\Debug\SCA.Log.csprojResolveAssemblyReference.cache

@@ -1,0 +1,60 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.WPF.exe
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.WPF.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.Platform.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DatabaseAccess.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Windows.Interactivity.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DatabaseAccess.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.Platform.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Windows.Interactivity.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.csprojResolveAssemblyReference.cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\MainWindow.g.cs
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView.g.cs
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\App.g.cs
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF_MarkupCompile.cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF_MarkupCompile.lref
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\MainWindow.baml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView.baml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.g.resources
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.Properties.Resources.resources
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.csproj.GenerateResource.Cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.exe
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.exe
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.WPF.exe
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.WPF.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.Platform.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DatabaseAccess.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\Caliburn.Micro.Platform.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Windows.Interactivity.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\MainWindow.g.cs
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView.g.cs
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\App.g.cs
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF_MarkupCompile.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF_MarkupCompile.lref
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\MainWindow.baml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView.baml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.g.resources
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.Properties.Resources.resources
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\SCA.WPF.csproj.GenerateResource.Cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView2.g.cs
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\obj\Debug\Views\NavigatorView2.baml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.BusinessLib.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Data.SQLite.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\SCA.BusinessLib.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.WPF\bin\Debug\System.Data.SQLite.xml

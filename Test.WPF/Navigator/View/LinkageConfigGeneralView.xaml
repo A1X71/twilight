@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="Test.WPF.Navigator.View.LinkageConfigGeneralView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:local="clr-namespace:Test.WPF.DataGrid"
+             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"   
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="tb_ElementStyle" TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+            </Style>
+        </Grid.Resources>
+        <local:DeviceDataGrid x:Name="DataGrid_Standard" 
+                     AutoGenerateColumns="False"                                                            
+                     IsSynchronizedWithCurrentItem="True" 
+                     Background="Transparent"
+                     RowHeaderWidth="25"
+                     RowHeight="40"                     
+                     RowBackground="White" 
+                     AlternatingRowBackground="LightGray"
+                     AlternationCount="2"
+                     SelectionUnit="CellOrRowHeader"                 
+                     ItemsSource="{Binding}" Margin="0,0,-297,0">
+
+            <local:DeviceDataGrid.Columns>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="ID" 
+                                       Binding="{Binding Path=ID}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="120"                                        
+                                       Header="编号"                                       
+                                       Binding="{Binding Path=Code}"  
+                                       ElementStyle="{StaticResource tb_ElementStyle}">
+                </dg:DataGridTextColumn>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="动作常数" 
+                                       Binding="{Binding Path=ActionCoefficient}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="A楼" 
+                                       Binding="{Binding Path=BuildingNoA}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="A区" 
+                                       Binding="{Binding Path=ZoneNoA}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="A层1" 
+                                       Binding="{Binding Path=LayerNoA1}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="A层2" 
+                                       Binding="{Binding Path=LayerNoA2}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="类型A" 
+                                       Binding="{Binding Path=DeviceTypeCodeA}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C分类" 
+                                       Binding="{Binding Path=TypeC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C楼号" 
+                                       Binding="{Binding Path=BuildingNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C区号" 
+                                       Binding="{Binding Path=ZoneNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C层号" 
+                                       Binding="{Binding Path=LayerNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C机号" 
+                                       Binding="{Binding Path=MachineNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C回路号" 
+                                       Binding="{Binding Path=LoopNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="C编号" 
+                                       Binding="{Binding Path=DeviceNoC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                <dg:DataGridTextColumn Width="Auto" 
+                                       Header="类型C" 
+                                       Binding="{Binding Path=DeviceTypeCodeC}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+
+            </local:DeviceDataGrid.Columns>
+        </local:DeviceDataGrid>
+    </Grid>
+</UserControl>

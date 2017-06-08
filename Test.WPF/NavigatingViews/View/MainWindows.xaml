@@ -1,0 +1,10 @@
+﻿<Window x:Class="Test.WPF.NavigatingViews.View.MainWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindows" Height="300" Width="300">
+    <Grid >
+        <Grid x:Name="LayoutRoot">
+            <ContentControl Content="{Binding}"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,22 @@
+﻿<Window x:Class="Test.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <!--<Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed" CanExecute="NewCommand_CanExecute"/>
+        --><!--<CommandBinding Command="ApplicationCommands.Cut"  Executed="CutCommand_Executed" CanExecute="CutCommand_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteCommand_Executed" CanExecute="PasteCommand_CanExecute"/>--><!--
+        
+    </Window.CommandBindings>-->
+    <StackPanel>
+        <StackPanel FocusManager.IsFocusScope="True">
+            <Button Command="ApplicationCommands.New">New</Button>
+            <Button Command="Paste">Paste</Button>
+            <Button Command="Cut">Cut</Button>
+            <Button Command="Copy">Copy</Button>
+        </StackPanel>
+        <TextBox AcceptsReturn="True" Name="txtEditor"/>
+        <TextBox AcceptsReturn="True" Name="txtEditor2"/>
+        <TextBox></TextBox>
+    </StackPanel>
+</Window>

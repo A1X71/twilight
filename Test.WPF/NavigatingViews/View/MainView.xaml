@@ -1,0 +1,47 @@
+﻿<Window x:Class="Test.WPF.NavigatingViews.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Test.WPF.NavigatingViews.ViewModel"
+        xmlns:localView="clr-namespace:Test.WPF.NavigatingViews.View"
+        Title="MainView" Height="300" Width="300">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid x:Name="LayoutRoot"   >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="0.8*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GridSplitter HorizontalAlignment="Left" Width="5"
+            	Grid.Column="1"
+                 	Grid.Row="1"/>
+        <StatusBar Margin="0"
+                  	VerticalAlignment="Top"
+                  	Height="23"
+                  	Grid.ColumnSpan="3"
+                  	Grid.Row="2"/>
+        <!--<Menu Margin="0" Height="23" Grid.ColumnSpan="3">
+            <MenuItem Header="Views">
+                <MenuItem Header="Stock Quotes"
+                         	Command="{Binding Path=NavigateToStocksCommand}"/>
+                <MenuItem Header="Portfolio"
+                         	Command="{Binding Path=NavigateToPortfolioCommand}"/>
+            </MenuItem>
+        </Menu>-->
+        <localView:NavigationControl  
+	Margin="0,10,0,0"
+	Grid.Row="1" DataContext="{Binding}"	/>
+        
+        <ContentControl Margin="0"  Content="{Binding Path=CurrentView}"
+
+	Grid.Row="1"
+	Grid.Column="2"/>
+        <Label  Grid.Row="3" Content="{Binding Name}" Foreground="Black"/>        
+    </Grid>
+</Window>

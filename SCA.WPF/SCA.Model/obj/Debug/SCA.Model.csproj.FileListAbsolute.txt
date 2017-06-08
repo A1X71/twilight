@@ -1,0 +1,8 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\obj\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\obj\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\obj\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\SCA.Model\obj\Debug\SCA.Model.pdb

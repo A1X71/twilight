@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="SCA.WPF.ViewsRoot.Views.ImportFromOldVersionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="300">
+    <StackPanel  Background="{StaticResource WindowBackgroundBrush}" >
+        <!-- Header -->
+        <Border x:Name="Header"  Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
+            <TextBlock Text="V2.0版本数据导入"  TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        </Border>
+        <!-- Content -->
+        <Border  BorderThickness="1,1,1,1">
+            <Grid Margin="0,0,0,0" x:Name="ContentGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1" Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="56*"/>
+                        <ColumnDefinition Width="14*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!--MouseDown="AvatarGrid_MouseDown"-->
+                    <Label Grid.Row="0" Grid.Column="0" Content="_项目名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="导入文件路径" Target="{Binding ElementName=ImportFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120" />
+                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="1" Grid.Column="3" Click="SelectFolderForSourceFileButton_Click">...</Button>
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=SaveFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="SaveFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120" />                    
+                    <Button x:Name="SelectFolderForSavePathButton"  Grid.Row="2" Grid.Column="3" Click="SelectFolderForSavePathButton_Click">...</Button>
+                </Grid>
+
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                    <Button Content="_确定" x:Name="ConfirmButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" TabIndex="140" Width="64" Click="ConfirmButton_Click"/>
+                    <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CloseButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Footer -->
+        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+
+    </StackPanel>
+</UserControl>

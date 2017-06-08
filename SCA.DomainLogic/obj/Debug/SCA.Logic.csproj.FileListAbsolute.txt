@@ -1,0 +1,9 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainLogic\bin\Debug\SCA.DomainLogic.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainLogic\bin\Debug\SCA.DomainLogic.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainLogic\obj\Debug\SCA.DomainLogic.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainLogic\obj\Debug\SCA.DomainLogic.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainLogic\bin\Debug\SCA.DomainLogic.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainLogic\bin\Debug\SCA.DomainLogic.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainLogic\obj\Debug\SCA.DomainLogic.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DomainLogic\obj\Debug\SCA.DomainLogic.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DomainLogic\obj\Debug\SCA.Logic.csprojResolveAssemblyReference.cache

@@ -1,0 +1,58 @@
+﻿<Window x:Class="Test.WPF.Navigator.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:Test.WPF.Navigator.View"
+        xmlns:viewModel="clr-namespace:Test.WPF.Navigator.ViewModel"
+        xmlns:model="clr-namespace:SCA.Model;assembly=SCA.Model"
+        Title="MainWindow" Height="626.224" Width="515.035">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8036ViewModel}">
+            <view:DeviceInfo8036View DataContext="{Binding Path=DeviceInfoObservableCollection}">
+                
+            </view:DeviceInfo8036View>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8001ViewModel}">
+            <view:DeviceInfo8001View DataContext="{Binding Path=DeviceInfoObservableCollection}">
+
+            </view:DeviceInfo8001View>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigStandardViewModel}">
+            <view:LinkageConfigStandardView DataContext="{Binding Path=StandardLinkageConfigInfoObservableCollection}">
+
+            </view:LinkageConfigStandardView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigGeneralViewModel}">
+            <view:LinkageConfigGeneralView DataContext="{Binding Path=GeneralLinkageConfigInfoObservableCollection}">
+
+            </view:LinkageConfigGeneralView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LinkageConfigMixedViewModel}">
+            <view:LinkageConfigMixedView DataContext="{Binding Path=MixedLinkageConfigInfoObservableCollection}">
+
+            </view:LinkageConfigMixedView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ManualControlBoardViewModel}">
+            <view:ManualControlBoardView DataContext="{Binding Path=ManualControlBoardInfoObservableCollection}">
+
+            </view:ManualControlBoardView>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="500"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Background="AntiqueWhite" ></Border>
+        <Border Grid.Row="1" Grid.RowSpan="2" Background="AliceBlue"></Border>
+        <Border Grid.Row="1" Grid.Column="1" Background="CadetBlue"></Border>
+        <view:UCNavigator	Margin="0,10,0,0"	Grid.Row="1"  DataContext="{Binding}"/>
+        <ContentPresenter Grid.Row="1" Grid.Column="2" x:Name="ContentArea" Content="{Binding CurrentView}"/>
+
+    </Grid>
+</Window>

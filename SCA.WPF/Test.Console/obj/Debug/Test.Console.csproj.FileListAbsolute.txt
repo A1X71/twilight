@@ -1,0 +1,36 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.exe.config
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.exe
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\NSubstitute.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.BusinessLib.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DatabaseAccess.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\System.Data.SQLite.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.BusinessLib.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\NSubstitute.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\System.Data.SQLite.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.exe
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.exe.config
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.exe
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\obj\Debug\Test.Console.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.exe
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\Test.Console.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\NSubstitute.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.BusinessLib.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DatabaseAccess.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\System.Data.SQLite.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DatabaseAccess.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.BusinessLib.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\NSubstitute.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.WPF\Test.Console\bin\Debug\System.Data.SQLite.xml
