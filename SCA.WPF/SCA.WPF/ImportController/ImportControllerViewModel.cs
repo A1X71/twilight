@@ -401,7 +401,7 @@ namespace SCA.WPF.ImportController
             if (DefaultTemplateState)
             {                
                 ControllerOperation8001 operation = new ControllerOperation8001();
-                operation.DownloadDefaultEXCELTemplate(strFilePath + "//" + "默认(" + SelectedControllerType.ToString() + ")模板文件.xls", fileService, null);
+                operation.DownloadDefaultEXCELTemplate(strFilePath + "//" + "默认(" + SelectedControllerType.ToString() + ")模板文件.xlsx", fileService, null);
             }
             else if (CustomizedTemplateState)
             {
@@ -421,11 +421,11 @@ namespace SCA.WPF.ImportController
                 string fileName="";
                 if(ControllerName.Length>10)
                 {
-                    fileName = fileName + ControllerName.Substring(0, 10) + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xls";
+                    fileName = fileName + ControllerName.Substring(0, 10) + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xlsx";
                 }
                 else
                 {
-                    fileName = fileName + ControllerName + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xls";
+                    fileName = fileName + ControllerName + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xlsx";
                 }
 
                 operation.DownloadDefaultEXCELTemplate(strFilePath + "//" +fileName , fileService, customizedInfo);
