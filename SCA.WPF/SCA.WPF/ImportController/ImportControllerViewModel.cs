@@ -417,7 +417,7 @@ namespace SCA.WPF.ImportController
                 customizedInfo.MixedLinkageFlag = MixedLinkageFlag;
                 customizedInfo.GeneralLinkageFlag = GeneralLinkageFlag;
                 customizedInfo.ManualControlBoardFlag = ManualControlBoardFlag;
-                ControllerOperation8001 operation = new ControllerOperation8001();
+                ControllerOperation8001 operation = new ControllerOperation8001(); //暂时写为8001,后续需要改为各控制器通用代码
                 string fileName="";
                 if(ControllerName.Length>10)
                 {

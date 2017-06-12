@@ -115,12 +115,10 @@ namespace SCA.BusinessLib.Utility
             else if (excelPath.IndexOf(".xls") > 0) // 2003版本
             { 
                 _workbook = new HSSFWorkbook(fs);
-            }
-            
+            }            
             if(_workbook !=null )
             { 
                   sheetsAmount = _workbook.NumberOfSheets;
-
                   if (sheetName != null)
                   {
                       sheet = _workbook.GetSheet(sheetName);
@@ -132,7 +130,7 @@ namespace SCA.BusinessLib.Utility
                   }
                   else
                   { 
-                    sheet = _workbook.GetSheetAt(0);
+                       sheet = _workbook.GetSheetAt(0);
                   }
                   if (sheet != null)
                   {
@@ -190,7 +188,84 @@ namespace SCA.BusinessLib.Utility
               data.TableName = sheetName;
               return data;
         }
+        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition)
+        {
+            _workbook = null;
+            FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read);
+            ISheet sheet = null;
+            DataTable data = new DataTable();
+            string strStatus = "";
+            int sheetsAmount;//所有的Sheet数量
 
+            int startRow = 0;
+
+            if (excelPath.IndexOf(".xlsx") > 0) // 2007版本
+            {
+                _workbook = new XSSFWorkbook(fs);
+            }
+            else if (excelPath.IndexOf(".xls") > 0) // 2003版本
+            {
+                _workbook = new HSSFWorkbook(fs);
+            }
+            if (_workbook != null)
+            {
+                if (sheetName != null)
+                {
+                    sheet = _workbook.GetSheet(sheetName);
+                    if (sheet == null) //没有指定名称的Sheet页
+                    {
+                        //sheet = _workbook.GetSheetAt(0);
+                        strStatus = "未找到指定名称的Sheet页";
+                    }
+                }
+                if (sheet != null)
+                {
+                    foreach (var rowDef in dictRowsDefinition)
+                    {
+                        #region 定义表头信息
+                            IRow rowInfo = sheet.GetRow(rowDef.Key);
+                            int cellCount = rowInfo.LastCellNum; //一行最后一个cell的编号 即总的列数
+                            for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                            {
+                                ICell cell = rowInfo.GetCell(j);
+                                if (cell != null)
+                                {
+                                    string cellValue = cell.StringCellValue;
+                                    if (cellValue != null)
+                                    {                                        
+                                        if (!data.Columns.Contains(cellValue))
+                                        {
+                                            DataColumn column = new DataColumn(cellValue);
+                                            data.Columns.Add(column);
+                                        }
+
+                                        
+                                    }
+                                }
+                            }
+                        #endregion
+
+                        #region 获取数据值
+                            for (int i = rowDef.Key + 1; i <=rowDef.Value; i++)//遍历起始行至终止行
+                            {
+                                rowInfo = sheet.GetRow(i);
+                                DataRow dataRow = data.NewRow();
+                                for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                                {
+                                    if (rowInfo.GetCell(j) != null)
+                                    { 
+                                        dataRow[j] = rowInfo.GetCell(j).ToString();
+                                    }
+                                }
+                                data.Rows.Add(dataRow);
+                            }
+                        #endregion
+                    }               
+                }
+            }
+            data.TableName = sheetName;
+            return data;
+        }
         public System.Data.DataTable OpenExcel()
         {
             throw new NotImplementedException();

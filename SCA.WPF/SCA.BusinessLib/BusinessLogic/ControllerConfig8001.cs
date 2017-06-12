@@ -18,6 +18,105 @@ namespace SCA.BusinessLib.BusinessLogic
     public class ControllerConfig8001 : ControllerConfigBase,IControllerConfig
     {
         private int _defaultDeviceTypeCode = 4;
+
+        /// <summary>
+        /// EXCEL模板->摘要信息->控制器设置->行数，名称
+        /// </summary>
+        /// <returns>行号及配置名称组成的字典</returns>
+        public Dictionary<int,string> GetNameOfControllerSettingInSummaryInfoOfExcelTemplate()
+        {            
+            Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = new Dictionary<int, string>();
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(5, "控制器名称");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(6, "控制器类型");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(7, "控制器机号");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(8, "器件长度");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(9, "串口号");
+            return dictNameOfControllerSettingInSummaryInfoOfExcelTemplate;
+        }
+        /// <summary>
+        ///  EXCEL模板->摘要信息->控制器设置->行数，值验证规则
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate()
+        {
+            Dictionary<int, RuleAndErrorMessage> dictValueRule = new Dictionary<int, RuleAndErrorMessage>();
+            dictValueRule.Add(5, new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF]{0,10}$", "控制器名称为数字、字母、汉字,最长10个字符"));
+            string [] compatibleControllerTypeArray=base.CompatibleControllerTypeForExcelTemplate.Split(',');
+            string compatibleControllerType = "(";
+            for (int i = 0; i < compatibleControllerTypeArray.Length; i++)
+            {
+                compatibleControllerType += "" + compatibleControllerTypeArray[i] + "|";                
+            }
+            dictValueRule.Add(6, new RuleAndErrorMessage("" + compatibleControllerType.Substring(0,compatibleControllerType.LastIndexOf('|')) + "){1}", "控制器类型不正确"));//此验证取每一个匹配对象
+            dictValueRule.Add(7, new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+            dictValueRule.Add(8, new RuleAndErrorMessage("^([78])$", "器件长度取值范围为7或8"));
+            dictValueRule.Add(9, new RuleAndErrorMessage("^(COM([1-9]|10))$", "串口号取值范围为COM1-COM10"));
+            return dictValueRule;
+        }
+        /// <summary>
+        /// EXCEL模板->摘要信息->回路设置->行数，名称
+        /// </summary>
+        /// <returns>行号及配置名称组成的字典</returns>
+        public Dictionary<int, string> GetNameOfLoopSettingInSummaryInfoOfExcelTemplate()
+        {
+            Dictionary<int, string> dictNameOfLoopSettingInSummaryInfoOfExcelTemplate = new Dictionary<int, string>();
+            dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Add(13, "回路数量");
+            dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Add(14, "回路分组");
+            dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Add(15, "默认器件类型");            
+            return dictNameOfLoopSettingInSummaryInfoOfExcelTemplate;
+        }
+        /// <summary>
+        ///  EXCEL模板->摘要信息->回路设置->行数，值验证规则
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate()
+        {
+            Dictionary<int, RuleAndErrorMessage> dictValueRule = new Dictionary<int, RuleAndErrorMessage>();
+            dictValueRule.Add(13, new RuleAndErrorMessage("^[1-9]|[1-5][0-9]|6[0-4]$", "回路数量取值为1-64"));            
+            dictValueRule.Add(14, new RuleAndErrorMessage("^[1-9]|[1-5][0-9]|6[0-4]$", "回路分组取值为1-64"));
+            List<DeviceType> lstDeviceType = GetDeviceTypeInfo();
+            string devTypeExp = "(";
+            foreach(var devType in lstDeviceType)
+            {
+                devTypeExp += "" + devType.Name + "|";
+            }
+            dictValueRule.Add(15, new RuleAndErrorMessage("" + devTypeExp.Substring(0, devTypeExp.LastIndexOf('|')) + "){1}", "器件类型不正确"));//此验证取每一个匹配对象
+            
+            return dictValueRule;
+        }
+        /// <summary>
+        /// EXCEL模板->摘要信息->其它设置->行数，名称
+        /// </summary>
+        /// <returns>行号及配置名称组成的字典</returns>
+        public Dictionary<int, string> GetNameOfOtherSettingInSummaryInfoOfExcelTemplate()
+        {
+            Dictionary<int, string> dictNameOfOtherSettingInSummaryInfoOfExcelTemplate = new Dictionary<int, string>();
+            dictNameOfOtherSettingInSummaryInfoOfExcelTemplate.Add(19, "工作表名称");
+            return dictNameOfOtherSettingInSummaryInfoOfExcelTemplate;
+        }
+        /// <summary>
+        ///  EXCEL模板->摘要信息->其它设置->行数，值验证规则
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate()
+        {
+            Dictionary<int, RuleAndErrorMessage> dictValueRule = new Dictionary<int, RuleAndErrorMessage>();
+            
+            
+           // ControllerNodeModel[] nodes = GetNodes();
+            //string otherSettingRuleExp = "(";
+            //for (int i = 0; i < nodes.Length; i++)
+            //{
+            //    if (nodes[i].Type != ControllerNodeType.Loop)
+            //    { 
+            //        otherSettingRuleExp += "[" + nodes[i].Name + "];";
+            //    }
+            //}
+           // dictValueRule.Add(19, new RuleAndErrorMessage("" + otherSettingRuleExp.Substring(0, otherSettingRuleExp.LastIndexOf(';')) + "){1}", "工作表名称不正确"));//此验证取每一个匹配对象
+            dictValueRule.Add(19, new RuleAndErrorMessage("^(^(?:^\n){0}$)|标准组态|标准组态;混合组态|标准组态;混合组态;通用组态|标准组态;混合组态;通用组态;网络手控盘$", "工作表名称不正确"));//此验证取每一个匹配对象            
+            return dictValueRule;
+        }
+
         public Model.ControllerNodeModel[] GetNodes()
         {
             return new ControllerNodeModel[]
@@ -32,7 +131,40 @@ namespace SCA.BusinessLib.BusinessLogic
         
         public Model.ColumnConfigInfo[] GetDeviceColumns()
         {
-            throw new NotImplementedException();
+            ////板卡号，手盘号，手键号暂定不在器件中处理
+            ColumnConfigInfo[] columnDefinitionArray =new ColumnConfigInfo[15];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编码";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "器件类型";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "特性";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "屏蔽";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "灵敏度";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "输出组1";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "输出组2";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "输出组3";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "延时";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "广播分区";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "楼号";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "区号";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "层号";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "房间号";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "安装地点";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
@@ -49,6 +181,10 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// 取得器件类型信息
+        /// </summary>
+        /// <returns></returns>
         public List<DeviceType> GetDeviceTypeInfo()
         {
 
@@ -218,7 +354,7 @@ namespace SCA.BusinessLib.BusinessLogic
            //C机号
            if (addressLength == 7) //7位地址，机号范围0~63  
            {
-               dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([06][0-3])$", "机号范围为00~63"));
+               dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
            }
            else //8位地址 机号范围0~199
            {

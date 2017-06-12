@@ -34,6 +34,14 @@ namespace SCA.Interface
         /// <param name="excelPath">工作薄路径</param>
         /// <returns></returns>
         DataTable OpenExcel(string excelPath);
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="excelPath"></param>
+       /// <param name="sheetName"></param>
+       /// <param name="dictRowsDefinition">读取的数据表的行定义</param>
+       /// <returns></returns>
+        DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition);
         /// <summary>
         /// 打开EXCEL
         /// </summary>

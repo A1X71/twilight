@@ -158,6 +158,24 @@ namespace SCA.BusinessLib.BusinessLogic
             deviceType = result.FirstOrDefault<DeviceType>();
             return deviceType;
         }
+        /// <summary>
+        /// 通过器件名称取得器件ID
+        /// </summary>
+        /// <param name="deviceTypeName"></param>
+        /// <returns></returns>
+        public short GetDeviceCodeViaDeviceTypeName(string deviceTypeName)
+        {
+            short deviceCode = -1;
+            List<DeviceType> lstAllTypeInfo = GetALLDeviceTypeInfo(null);
+            DeviceType deviceType = new DeviceType();
+            var result = from t in lstAllTypeInfo where t.Name == deviceTypeName select t;
+            deviceType = result.FirstOrDefault<DeviceType>();
+            if (deviceType != null)
+            {
+                deviceCode = deviceType.Code;
+            }
+            return deviceCode;
+        }
  
     }
 }

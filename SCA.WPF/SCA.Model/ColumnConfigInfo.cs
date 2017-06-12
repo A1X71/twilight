@@ -16,6 +16,10 @@ namespace SCA.Model
        {
            ColumnName = name;           
        }
+       public ColumnConfigInfo()
+       { 
+       
+       }
        public ColumnConfigInfo(string name, string type, string order, string constraints)
        {
            ColumnName = name;
