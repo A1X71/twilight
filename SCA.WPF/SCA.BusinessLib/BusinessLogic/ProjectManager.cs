@@ -404,7 +404,7 @@ namespace SCA.BusinessLib
             dictAccumulatedNodeAmount[NodeCategory.标准组态.ToString()] = dictAccumulatedNodeAmount[NodeCategory.标准组态.ToString()] + dictNodeAmount[NodeCategory.标准组态.ToString()];
             dictAccumulatedNodeAmount[NodeCategory.混合组态.ToString()] = dictAccumulatedNodeAmount[NodeCategory.混合组态.ToString()] + dictNodeAmount[NodeCategory.混合组态.ToString()];
             dictAccumulatedNodeAmount[NodeCategory.通用组态.ToString()] = dictAccumulatedNodeAmount[NodeCategory.通用组态.ToString()] + dictNodeAmount[NodeCategory.通用组态.ToString()];
-            dictAccumulatedNodeAmount[NodeCategory.网络手控盘.ToString()] = dictAccumulatedNodeAmount[NodeCategory.网络手控盘.ToString()] + dictNodeAmount[NodeCategory.网络手控盘.ToString()];
+            dictAccumulatedNodeAmount[NodeCategory.网络手动盘.ToString()] = dictAccumulatedNodeAmount[NodeCategory.网络手动盘.ToString()] + dictNodeAmount[NodeCategory.网络手动盘.ToString()];
         }
         /// <summary>
         /// 初始化各节点的数量信息
@@ -418,7 +418,7 @@ namespace SCA.BusinessLib
             dictNodeAmount.Add(NodeCategory.标准组态.ToString(), 0);
             dictNodeAmount.Add(NodeCategory.混合组态.ToString(), 0);
             dictNodeAmount.Add(NodeCategory.通用组态.ToString(), 0);
-            dictNodeAmount.Add(NodeCategory.网络手控盘.ToString(), 0);
+            dictNodeAmount.Add(NodeCategory.网络手动盘.ToString(), 0);
 
             return dictNodeAmount;
         }
@@ -504,12 +504,12 @@ namespace SCA.BusinessLib
             SummaryNodeInfo mannualBoardNode;
             mannualBoardNode = new SummaryNodeInfo();
             i++;
-            mannualBoardNode.DisplayName =NodeCategory.网络手控盘.ToString();
+            mannualBoardNode.DisplayName =NodeCategory.网络手动盘.ToString();
             mannualBoardNode.NodeLevel = 2;
             mannualBoardNode.ParentNode = parentNode;
             //  loopNode.ChildNode = null;
             mannualBoardNode.Amount = 0;
-            nodeAmount[NodeCategory.网络手控盘.ToString()] = mannualBoardNode.Amount;
+            nodeAmount[NodeCategory.网络手动盘.ToString()] = mannualBoardNode.Amount;
             mannualBoardNode.OrderNumber = i;
             parentNode.ChildNodes.Add(mannualBoardNode);
             return nodeAmount;

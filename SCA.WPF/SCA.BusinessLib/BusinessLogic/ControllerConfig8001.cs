@@ -113,7 +113,7 @@ namespace SCA.BusinessLib.BusinessLogic
             //    }
             //}
            // dictValueRule.Add(19, new RuleAndErrorMessage("" + otherSettingRuleExp.Substring(0, otherSettingRuleExp.LastIndexOf(';')) + "){1}", "工作表名称不正确"));//此验证取每一个匹配对象
-            dictValueRule.Add(19, new RuleAndErrorMessage("^(^(?:^\n){0}$)|标准组态|标准组态;混合组态|标准组态;混合组态;通用组态|标准组态;混合组态;通用组态;网络手控盘$", "工作表名称不正确"));//此验证取每一个匹配对象            
+            dictValueRule.Add(19, new RuleAndErrorMessage("^(^(?:^\n){0}$)|标准组态|标准组态;混合组态|标准组态;混合组态;通用组态|标准组态;混合组态;通用组态;网络手动盘$", "工作表名称不正确"));//此验证取每一个匹配对象            
             return dictValueRule;
         }
 
@@ -125,7 +125,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     new ControllerNodeModel(ControllerNodeType.Standard,"标准组态",3, @"Resources\Icon\Style1\Linkage.jpg"),                    
                     new ControllerNodeModel(ControllerNodeType.Mixed,"混合组态",3, @"Resources\Icon\Style1\Linkage.jpg"),
                     new ControllerNodeModel(ControllerNodeType.General,"通用组态",3, @"Resources\Icon\Style1\Linkage.jpg"),
-                    new ControllerNodeModel(ControllerNodeType.Board,"网络手控盘",3, @"Resources\Icon\Style1\Linkage.jpg"),                    
+                    new ControllerNodeModel(ControllerNodeType.Board,"网络手动盘",3, @"Resources\Icon\Style1\Linkage.jpg"),                    
                 };
         }
         

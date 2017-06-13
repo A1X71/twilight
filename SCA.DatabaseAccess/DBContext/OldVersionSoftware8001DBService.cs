@@ -106,7 +106,7 @@ namespace SCA.DatabaseAccess.DBContext
                     device.Loop = loop;
                     if (dictDeviceMappingManualControlBoard != null)
                     {
-                        if (dictDeviceMappingManualControlBoard.ContainsKey(device.Code))//如果存在网络手控盘的信息定义，则设置MCBCode的值，建立与手动盘的关系
+                        if (dictDeviceMappingManualControlBoard.ContainsKey(device.Code))//如果存在网络手动盘的信息定义，则设置MCBCode的值，建立与手动盘的关系
                         {
                             device.MCBCode = dictDeviceMappingManualControlBoard[device.Code];
                         }   

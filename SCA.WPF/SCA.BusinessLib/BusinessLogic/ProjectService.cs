@@ -132,7 +132,7 @@ namespace SCA.BusinessLib.BusinessLogic
              * 2.2 输出“标准组态”
              * 2.3 输出“混合组态”
              * 2.4 输出“通用组态”
-             * 2.5 输出“网络手控盘”
+             * 2.5 输出“网络手动盘”
              * 3.  需要输出所有控制器的信息
              */
             if (project == null)  return false;
@@ -167,7 +167,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                     if (c.ControlBoard.Count > 0)
                     {
-                        sheetNames.Add(c.Name + NodeCategory.网络手控盘.ToString());
+                        sheetNames.Add(c.Name + NodeCategory.网络手动盘.ToString());
                     }       
                 }
                 _excelService.CreateExcelSheets(sheetNames);

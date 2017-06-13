@@ -251,7 +251,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     TheControllerType.ReceiveGeneralLinkageInfo();
                     cmd = new CommandBE(TheControllerType);
                     break;
-                case "BF"://上传网络手控盘信息
+                case "BF"://上传网络手动盘信息
                     if (TheControllerType.ControllerType != ControllerType.NONE)
                     {
                         TheControllerType.CurrentPackage = package;

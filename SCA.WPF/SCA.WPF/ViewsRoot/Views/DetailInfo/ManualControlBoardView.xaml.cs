@@ -52,7 +52,7 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
                 ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).ManualControlBoardInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableManualControlBoards(controller, controller.ControlBoard);          
             }
         }
-        //网络手控盘，添加多行事件
+        //网络手动盘，添加多行事件
         private void btnAddMoreLine_Click(object sender, RoutedEventArgs e)
         {
             SCA.WPF.Infrastructure.EventMediator.Unregister("ManualControlBoardAddMoreLines", ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).AddMoreLines);
