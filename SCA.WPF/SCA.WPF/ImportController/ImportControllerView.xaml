@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              xmlns:VM="clr-namespace:SCA.WPF.CreateController"
+             xmlns:View="clr-namespace:SCA.WPF.ViewsRoot.Views"        
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              d:DesignWidth="300">
@@ -21,7 +22,8 @@
 
         </ObjectDataProvider>
     </UserControl.Resources>
-    <StackPanel Background="{StaticResource WindowBackgroundBrush}" >
+    <StackPanel>
+        <StackPanel x:Name="ImportDataPage" Background="{StaticResource WindowBackgroundBrush}"  Visibility="{Binding Data.ConfigSection, Source={StaticResource proxy} }">
         <!-- Header -->
         <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
             <TextBlock Text="导入数据" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
@@ -245,7 +247,12 @@
                 <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CancelButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>-->
         </Grid>
-        
         <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+        
+        
+    </StackPanel>        
+        <View:ImportContentSelectorView x:Name="ImportContentSelectorUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   
+                                       DataContext="{Binding Path=ImportContentSelectorDataContext}"
+                                       Visibility="{Binding Data.SelfVisibility, Source={StaticResource proxy},Mode=TwoWay}"/>        
     </StackPanel>
 </UserControl>

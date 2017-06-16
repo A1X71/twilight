@@ -51,7 +51,7 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public short GetMaxMachineAmountValue()
+        public short GetMaxMachineAmountValue(int addressLength)
         {
             throw new NotImplementedException();
         }

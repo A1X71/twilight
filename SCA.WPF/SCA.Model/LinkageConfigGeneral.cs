@@ -92,7 +92,7 @@ namespace SCA.Model
             {
                 if (DeviceCodeC != "")
                 {
-                    return DeviceCodeC.PadLeft(Controller.DeviceCodeLength, '0');
+                    return DeviceCodeC.PadLeft(Controller.DeviceAddressLength, '0');
                 }
                 return DeviceCodeC;
             }

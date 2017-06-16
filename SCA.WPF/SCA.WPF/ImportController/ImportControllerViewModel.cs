@@ -13,6 +13,7 @@ using SCA.Model.BussinessModel;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Utility;
 using SCA.Interface;
+using SCA.WPF.ImportContentSelector;
 /* ==============================
 *
 * Author     : William
@@ -26,6 +27,12 @@ namespace SCA.WPF.ImportController
 {
     public class ImportControllerViewModel:PropertyChangedBase
     {
+        public ImportControllerViewModel()
+        { 
+            ImportContentSelectorViewModel importContentSelectorVM = new ImportContentSelectorViewModel();
+            ImportContentSelectorDataContext = importContentSelectorVM;
+        }
+
         #region 属性
         private bool _excelFormatState = true;
         private bool _mdbFormatState = false;
@@ -49,7 +56,10 @@ namespace SCA.WPF.ImportController
         private ControllerType _controllerType=ControllerType.NT8001;
         private List<int> _lstDeviceCodeLength;//器件地址长度集合
         private int _selectedDeviceCodeLength = 7; //器件地址长度
-        
+        private ImportContentSelectorViewModel _importContentSelectorDataContext;//选择面板DataContext
+        private Visibility _configSection = Visibility.Visible;   //配置部分的显示属性
+        private Visibility _importSection = Visibility.Collapsed; //导入部分的显示属性
+        public ControllerModel TheController { get; set; }//当前控制器
         public bool ExcelFormatState
         {
             get
@@ -349,6 +359,18 @@ namespace SCA.WPF.ImportController
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
+        public ImportContentSelectorViewModel ImportContentSelectorDataContext
+        {
+            get
+            {
+                return _importContentSelectorDataContext;
+            }
+            set
+            {
+                _importContentSelectorDataContext = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
         #endregion
         #region 命令
         /// <summary>
@@ -364,10 +386,23 @@ namespace SCA.WPF.ImportController
             {              
                 FileService fileService = new FileService();                
                 ControllerOperation8001 operation = new ControllerOperation8001();
-                operation.ReadEXCELTemplate(ExcelFilePath, fileService);
-            }
+                string strErrorMessage;
+                SCA.BusinessLib.ProjectManager.GetInstance.TheControllerViaImporting = operation.ReadEXCELTemplate(ExcelFilePath, fileService,TheController,out strErrorMessage);
 
-            
+                #region 显示数据选择页面
+                ConfigSection = Visibility.Collapsed;
+                ImportContentSelectorViewModel importContentSelectorVM = new ImportContentSelectorViewModel();
+                importContentSelectorVM.TheController = TheController;
+                importContentSelectorVM.SelfVisibility = Visibility.Visible;
+                importContentSelectorVM.ImportDataSelectorVisibility = Visibility.Visible;
+                importContentSelectorVM.InitilizeData(strErrorMessage);
+                ImportContentSelectorDataContext = importContentSelectorVM;
+
+                //importContentSelectorVM=
+
+                #endregion
+
+            }
         }
         public ICommand SelectExcelPathCommand
         {
@@ -479,7 +514,31 @@ namespace SCA.WPF.ImportController
             DeviceCodeLength = controllerConfig.GetDeviceCodeLength();
             return DeviceCodeLength;
         }
-        
+
+        public Visibility ConfigSection
+        {
+            get
+            {
+                return _configSection;
+            }
+            set
+            {
+                _configSection = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public Visibility ImportSection
+        {
+            get
+            {
+                return _importSection;
+            }
+            set
+            {
+                _importSection = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
         #endregion
         #region 私有方法
         /// <summary>

@@ -38,6 +38,10 @@ namespace SCA.BusinessLib
         private IManualControlBoardDBService _manualControlBoardDBService;
         private IDatabaseService _databaseService;
         private IFileService _fileService;
+        /// <summary>
+        /// 存储从外部导入的控制器信息
+        /// </summary>
+        public ControllerModel TheControllerViaImporting { get; set; }
         public static  ProjectManager GetInstance
         {
             get

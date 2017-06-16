@@ -188,9 +188,10 @@ namespace SCA.BusinessLib.Utility
               data.TableName = sheetName;
               return data;
         }
-        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition)
+        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition,out bool sheetExistFlag)
         {
             _workbook = null;
+            sheetExistFlag = false;
             FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read);
             ISheet sheet = null;
             DataTable data = new DataTable();
@@ -216,6 +217,7 @@ namespace SCA.BusinessLib.Utility
                     {
                         //sheet = _workbook.GetSheetAt(0);
                         strStatus = "未找到指定名称的Sheet页";
+                        sheetExistFlag = false;
                     }
                 }
                 if (sheet != null)
@@ -249,18 +251,27 @@ namespace SCA.BusinessLib.Utility
                             for (int i = rowDef.Key + 1; i <=rowDef.Value; i++)//遍历起始行至终止行
                             {
                                 rowInfo = sheet.GetRow(i);
-                                DataRow dataRow = data.NewRow();
-                                for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                                if (rowInfo != null)
                                 {
-                                    if (rowInfo.GetCell(j) != null)
-                                    { 
-                                        dataRow[j] = rowInfo.GetCell(j).ToString();
+                                    DataRow dataRow = data.NewRow();
+
+                                    for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                                    {
+                                        if (rowInfo.GetCell(j) != null)
+                                        {
+                                            dataRow[j] = rowInfo.GetCell(j).ToString();
+                                        }
                                     }
+                                    data.Rows.Add(dataRow);
                                 }
-                                data.Rows.Add(dataRow);
+                                else //有空行时，剩余数据不必处理，直接返回
+                                {
+                                    break;
+                                }
                             }
                         #endregion
-                    }               
+                    }
+                    sheetExistFlag = true;
                 }
             }
             data.TableName = sheetName;

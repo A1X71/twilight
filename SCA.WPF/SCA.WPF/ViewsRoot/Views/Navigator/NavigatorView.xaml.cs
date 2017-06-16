@@ -378,7 +378,7 @@ namespace SCA.WPF.ViewsRoot.Views.Navigator
 
         private void btnControllerMerge_Click(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(MergeButtonForControllerClickEvent));
+            RaiseEvent(new RoutedEventArgs(MergeButtonForControllerClickEvent,this.HierarchyTreeView.SelectedItem));            
         }
       
     }

@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SCA.WPF.ImportContentSelector
+namespace SCA.WPF.ViewsRoot.Views
 {
     /// <summary>
     /// ImportContentSelectorView.xaml 的交互逻辑

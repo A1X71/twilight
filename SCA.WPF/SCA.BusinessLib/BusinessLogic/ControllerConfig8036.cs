@@ -129,7 +129,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// 起始为0
         /// </summary>
         /// <returns></returns>
-        public short GetMaxMachineAmountValue()
+        public short GetMaxMachineAmountValue(int deviceAddress)
         {
             return 95;
         }

@@ -403,10 +403,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         //    }
         //}
         private void NavigatorUserControl_MergeForControllerExecute(object o )
-        {
-            //ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;            
-            
+        {            
+            ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;            
+
             ImportControllerViewModel  importControllerVM=new ImportControllerViewModel();
+            importControllerVM.TheController = controller;
             importControllerVM.ImportControllerVisibilityState = Visibility.Visible;
             ImportControllerDataContext = importControllerVM;            
         }

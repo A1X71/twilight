@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.ComponentModel;
 namespace SCA.Model
 {
     /// <summary>
@@ -44,15 +44,23 @@ namespace SCA.Model
         public int Amount { get; set; }
 
     }
+    
+    
     /// <summary>
     /// 控制器节点类型
     /// </summary>
+   [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum ControllerNodeType
-    { 
-        Loop,//  "回路"),
-        Standard,//","标准组态"),
-        General,//"通用组态"),
-        Mixed,//","混合组态"),
-        Board//","网络手动盘")
+    {
+       [Description("回路")]
+       Loop,
+       [Description("标准组态")]
+       Standard,
+       [Description("混合组态")]
+       Mixed,
+       [Description("通用组态")]
+       General,       
+       [Description("网络手动盘")]
+       Board
     }
 }

@@ -71,7 +71,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return 32;
         }
 
-        public short GetMaxMachineAmountValue()
+        public short GetMaxMachineAmountValue(int deviceAddress)
         {
             //最大机号31            
             return 31;

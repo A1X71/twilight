@@ -82,7 +82,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     item = CurrentItem;
                 }
                 
-                //int minRowIndex = Items.IndexOf(CurrentItem);
+                //int minRowIndex = LoopNameCollection.IndexOf(CurrentItem);
                 int minRowIndex = Items.IndexOf(item);
                 int maxRowIndex = Items.Count - 1;
 

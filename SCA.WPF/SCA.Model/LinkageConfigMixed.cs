@@ -109,7 +109,7 @@ namespace SCA.Model
             {
                 if (DeviceCodeA != "")
                 {
-                    return DeviceCodeA.PadLeft(Controller.DeviceCodeLength, '0');
+                    return DeviceCodeA.PadLeft(Controller.DeviceAddressLength, '0');
                 }
                 return DeviceCodeA;
             }            
@@ -133,7 +133,7 @@ namespace SCA.Model
             {
                 if (DeviceCodeB != "")
                 {
-                    return DeviceCodeB.PadLeft(Controller.DeviceCodeLength, '0');
+                    return DeviceCodeB.PadLeft(Controller.DeviceAddressLength, '0');
                 }
                 return DeviceCodeB;
             }  
@@ -167,7 +167,7 @@ namespace SCA.Model
             {
                 if (DeviceCodeC != "")
                 {
-                    return DeviceCodeC.PadLeft(Controller.DeviceCodeLength, '0');
+                    return DeviceCodeC.PadLeft(Controller.DeviceAddressLength, '0');
                 }
                 return DeviceCodeC;
             }  

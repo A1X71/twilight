@@ -36,7 +36,7 @@ namespace SCA.Interface
         /// 取得机号最大数量值 
        /// </summary>
        /// <returns></returns>
-       Int16 GetMaxMachineAmountValue();
+       Int16 GetMaxMachineAmountValue(int addressLength);
        /// <summary>
        /// 取得设备最大数量值 
        /// </summary>

@@ -316,6 +316,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return lstDeviceType;
         }
 
+        
         public List<DeviceInfoForSimulator> GetSimulatorDevices(ControllerModel controller)
         {
            // var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers where r.Type == ControllerType.NT8001 select r;
@@ -725,12 +726,13 @@ namespace SCA.BusinessLib.BusinessLogic
                     lstSheetNames.Add(r);
                 }
                 //sheetNames[loopSheetAmount + 1] = "标准组态";
-                //sheetNames[loopSheetAmount + 2] = "通用组态";
-                //sheetNames[loopSheetAmount + 3] = "混合组态";
+                //sheetNames[loopSheetAmount + 2] = "混合组态";
+                //sheetNames[loopSheetAmount + 3] = "通用组态";                
                 //sheetNames[loopSheetAmount + 4] = "网络手动盘";
+                //注意：在此版本中工作表的顺序不可变
                 if (blnStandardLinkageFlag) { lstSheetNames.Add(standardLinkageSheetName); }
-                if(blnGeneralLinkageFlag){lstSheetNames.Add(generalLinkageSheetName);}
-                if(blnMixedLinkageFlag){lstSheetNames.Add(mixedLinkageSheetName);}
+                if (blnMixedLinkageFlag) { lstSheetNames.Add(mixedLinkageSheetName); }
+                if(blnGeneralLinkageFlag){lstSheetNames.Add(generalLinkageSheetName);}                
                 if (blnManualControlBoardFlag) { lstSheetNames.Add(manualControlBoardSheetName); }
 
                 string sheetNamesWithoutLoopName = "";//除“所有回路页签名称”外的其它页签名称
@@ -780,6 +782,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 mergeCellRange.LastRowIndex = 11;
                 mergeCellRange.FirstColumnIndex = 0;
                 mergeCellRange.LastColumnIndex = 2;
+                lstMergeCellRange.Add(mergeCellRange);
                 mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 17;
                 mergeCellRange.LastRowIndex = 17;
@@ -807,7 +810,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetCellValue(lstSheetNames[0], 6, 2, "可填: "+config.CompatibleControllerTypeForExcelTemplate, ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 7, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[7], ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 7, 1, defaultMachineNo, ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: 00-" + config.GetMaxMachineAmountValue().ToString(), ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: 7位编码(00-" + config.GetMaxMachineAmountValue(7).ToString() + ");8位编码(000-" + config.GetMaxMachineAmountValue(8).ToString()+")", ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 8, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[8], ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 8, 1, defaultDeviceCodeLength.ToString(), ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 8, 2, "可填: " + strDeviceCodeLength, ExcelService.CellStyleType.Data);
@@ -839,17 +842,13 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetCellValue(lstSheetNames[0], 18, 2, "填写说明", ExcelService.CellStyleType.TableHead);
                 excelService.SetCellValue(lstSheetNames[0], 19, 0, "工作表名称", ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 19, 1, sheetNamesWithoutLoopName, ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 19, 2, "可填: 标准组态;通用组态;混合组态;网络手动盘", ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 19, 2, "可填: 标准组态;混合组态;通用组态;网络手动盘", ExcelService.CellStyleType.Data);
                 //除“回路”外的工作表名称，以‘分号’分隔                
                 excelService.SetMergeCells(lstSheetNames[0], lstMergeCellRange);//设置"摘要信息"合并单元格
                 //设置列宽               
                 excelService.SetColumnWidth(lstSheetNames[0], 0, 15f);
-                excelService.SetColumnWidth(lstSheetNames[0], 1, 15f );
-
+                excelService.SetColumnWidth(lstSheetNames[0], 1, 15f);
                 excelService.SetColumnWidth(lstSheetNames[0], 2, 40f);
-
-
-
                 //生成所有回路页签模板
                 for (int i = 1; i <= loopSheetAmount; i++)
                 {
@@ -994,10 +993,10 @@ namespace SCA.BusinessLib.BusinessLogic
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 0, 0, lstSheetNames[loopSheetAmount + currentIndex], ExcelService.CellStyleType.SubCaption);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 1, "动作常数", ExcelService.CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "A楼", ExcelService.CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "A区", ExcelService.CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "A层1", ExcelService.CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 5, "A层2", ExcelService.CellStyleType.TableHead);
+                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "A楼号", ExcelService.CellStyleType.TableHead);
+                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "A区号", ExcelService.CellStyleType.TableHead);
+                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "A层号1", ExcelService.CellStyleType.TableHead);
+                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 5, "A层号2", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 6, "类型A", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 7, "C分类", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 8, "C楼号", ExcelService.CellStyleType.TableHead);
@@ -1006,7 +1005,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 11, "C机号", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 12, "C回路号", ExcelService.CellStyleType.TableHead);
                     excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 13, "C编号", ExcelService.CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 14, "类型C", ExcelService.CellStyleType.TableHead);
+                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 14, "C类型", ExcelService.CellStyleType.TableHead);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 0;
                     mergeCellRange.LastRowIndex = 0;
@@ -1072,7 +1071,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     controllerInfo.MachineNumber = value;
                     break;
                 case "器件长度":
-                    controllerInfo.DeviceCodeLength = Convert.ToInt32(value);
+                    controllerInfo.DeviceAddressLength = Convert.ToInt32(value);
                     break;
                 case "串口号":
                     controllerInfo.PortName = value;
@@ -1081,17 +1080,25 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return controllerInfo;
         }
-        
-        public bool ReadEXCELTemplate(string strFilePath, IFileService fileService)
+        /// <summary>
+        /// 读取EXCEL模板中的数据
+        /// </summary>
+        /// <param name="strFilePath">打开文件路径</param>
+        /// <param name="fileService">文件操作对象</param>
+        /// <param name="targetController">目标控制器信息</param>
+        /// <param name="strErrorMessage">错误信息</param>
+        /// <returns></returns>
+        public ControllerModel ReadEXCELTemplate(string strFilePath, IFileService fileService,ControllerModel targetController,out string strErrorMessage)
         {
             ExcelService excelService = new ExcelService(strFilePath, fileService);
             ControllerConfig8001 config = new ControllerConfig8001();
+            DeviceService8001 deviceService = new DeviceService8001();
             ControllerNodeModel[] nodes = config.GetNodes();
             ColumnConfigInfo[] deviceColumnDefinitions = config.GetDeviceColumns();
             int maxDeviceAmount = config.GetMaxDeviceAmountValue(); //回路内器件信息最大数量
             //List<string> lstSheetName = new List<string>();//根据“摘要信息”取得所有数据的工作表名称
             Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”控制器设置的名称配置信息
-            Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”控制器设置的值的有效性
+            Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(targetController.DeviceAddressLength); ////取得“摘要信息页”控制器设置的值的有效性
             Dictionary<int, string> dictNameOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetNameOfLoopSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”回路设置的名称配置信息
             Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”回路设置的值的有效性
             Dictionary<int, string> dictNameOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetNameOfOtherSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”其它设置的名称配置信息
@@ -1114,8 +1121,8 @@ namespace SCA.BusinessLib.BusinessLogic
             summarySheetRowDefinition.Add(controllerSettingStartRow, 9);//控制器信息起始行定义 4为表头信息,
             summarySheetRowDefinition.Add(loopSettingStartRow, 15);//回路信息起始行定义
             summarySheetRowDefinition.Add(otherSettingStartRow, 19);//其它信息起始行定义
-            
-            DataTable dt=  excelService.OpenExcel(strFilePath,config.SummarySheetNameForExcelTemplate,summarySheetRowDefinition);
+            bool blnSheetExistFlag;
+            DataTable dt=  excelService.OpenExcel(strFilePath,config.SummarySheetNameForExcelTemplate,summarySheetRowDefinition,out blnSheetExistFlag);
             ControllerModel controller = new ControllerModel(); //存储"控制器配置"信息
             int loopAmount =1;//回路数量
             int loopGroup=1 ;//回路分组
@@ -1134,14 +1141,12 @@ namespace SCA.BusinessLib.BusinessLogic
                         break;                      
                 }
             }
-
-
             List<string> lstSheetNames = new List<string>();// 除“摘要信息”之外的页签名称
             for (int i = 0; i < dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count; i++)
             {
                 if (!(dt.Rows[i][0].ToString() == dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[controllerSettingStartRow + 1 + i])) //+1为跨过标题行
                 {
-                    strStatusInfo = "摘要信息-->控制器设置-->名称不正确";
+                    strStatusInfo = "摘要信息-->控制器设置-->模板名称不正确";
                     blnIsError = true;                    
                 }
                 else //名称一致，验证值的有效性
@@ -1152,7 +1157,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     Regex exminator = new Regex(verifingMessage.Rule);
                     if (!exminator.IsMatch(dt.Rows[i][1].ToString()))
                     {
-                        strStatusInfo += ";"+ verifingMessage.ErrorMessage;
+                        strStatusInfo += ";" + verifingMessage.ErrorMessage;
                         blnIsError = true;
                         continue;
                     }
@@ -1163,6 +1168,25 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                 }
             }
+            if (!blnIsError)
+            {
+                if (controller.DeviceAddressLength != targetController.DeviceAddressLength)
+                {
+                    strStatusInfo += ";模板器件长度("+controller.DeviceAddressLength+")与当前控制器器件长度("+targetController.DeviceAddressLength+")不一致";
+                    blnIsError = true;
+                }
+                if (controller.MachineNumber != targetController.MachineNumber)
+                {
+                    strStatusInfo += ";模板控制器机号(" + controller.MachineNumber + ")与当前控制器机号(" + targetController.MachineNumber + ")不一致";
+                    blnIsError = true;
+                }
+                if (controller.Type != targetController.Type)
+                {
+                    strStatusInfo += ";模板控制器类型(" + controller.Type.ToString() + ")与当前控制器类型(" + targetController.Type.ToString() + ")不一致";
+                    blnIsError = true;
+                }
+            }
+
             if (!blnIsError)//控制器配置信息正确
             {
                 //controller
@@ -1171,14 +1195,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     if (!(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == dictNameOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow  +1 + i]))//+1为跨过标题行
                     {
-                        strStatusInfo = "摘要信息-->回路设置-->名称不正确";
+                        strStatusInfo = "摘要信息-->回路设置-->模板名称不正确";
                         blnIsError = true;
                     }
                     else //名称一致，验证值的有效性
                     {
                         RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow +1 + i];
                         //verifingMessage.Rule
-                        //verifingMessage.ErrorMessage                     
+                        //verifingMessa、ge.ErrorMessage                     
                         Regex exminator = new Regex(verifingMessage.Rule);
                         if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
                         {
@@ -1190,7 +1214,6 @@ namespace SCA.BusinessLib.BusinessLogic
                         {
                             if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路数量")
                             {
-
                                 loopAmount = Convert.ToInt32(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString());
                             }
                             else if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路分组")
@@ -1200,19 +1223,17 @@ namespace SCA.BusinessLib.BusinessLogic
                         }
                     }
                 }
-
             }
             else
             {
                 string str = "TheErrorMessage";
             }
-
-            //分组信息>回路数量时，重置回路分组信息
-            if (loopGroup > loopAmount)
+            if (blnIsError) //存在错误，直接反回
             {
-                loopGroup = loopAmount;
+                strErrorMessage = strStatusInfo;
+                return controller;
             }
-            List<string> lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopAmount, loopGroup);//根据“摘要信息”取得所有回路数据的工作表名称
+
             List<string> lstOtherSheetName = new List<string>();//除“回路”外的其它工作表名称
             //if (lstLoopSheetName != null)
             //{
@@ -1236,7 +1257,7 @@ namespace SCA.BusinessLib.BusinessLogic
                         Regex exminator = new Regex(verifingMessage.Rule);
                         if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
                         {
-                            strStatusInfo += ";" + verifingMessage.ErrorMessage;
+                            strStatusInfo += ";摘要信息-->其它设置-->" + verifingMessage.ErrorMessage;
                             blnIsError = true;
                             continue;
                         }
@@ -1247,52 +1268,144 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                 }            
             }
-            string[] otherSheetNames = otherSettingValue.Split('\'');
+            if (blnIsError)
+            {
+                strErrorMessage = strStatusInfo;
+                return controller;
+            }
+            //分组信息>回路数量时，重置回路分组信息
+            if (loopGroup > loopAmount)
+            {
+                loopGroup = loopAmount;
+            }
+            List<string> lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopAmount, loopGroup);//根据“摘要信息”取得所有回路数据的工作表名称
+
+            string[] otherSheetNames = otherSettingValue.Split(';');
             for(int i=0;i<otherSheetNames.Length;i++)
             {
                 lstOtherSheetName.Add(otherSheetNames[i]);
             }
+
             //将EXCEL模板中的回路信息增加至Controller
             foreach (var sheetName in lstLoopSheetName)            
             {
-               List<LoopModel> lstLoops= GetLoopData(excelService, strFilePath, sheetName, maxDeviceAmount,controller.DeviceCodeLength);
-               foreach (var loop in lstLoops)
+               string loopDetailErrorInfo="";               
+               List<LoopModel> lstLoops= GetLoopData(excelService, strFilePath, sheetName, maxDeviceAmount,controller, out blnSheetExistFlag,out loopDetailErrorInfo);
+               if (lstLoops != null)
+               { 
+                   if (blnSheetExistFlag)
+                   {
+                       foreach (var loop in lstLoops)
+                       {
+                           deviceService.TheLoop = loop;
+                           if (deviceService.IsExistSameDeviceCode())
+                           {
+                               strStatusInfo += ";" + loop.Code +"回路存在重码";
+                           }
+                           else
+                           { 
+                                controller.Loops.Add(loop);
+                           }
+                       }                       
+                   }
+                   else
+                   {
+                       strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+                   }
+               }
+               if (loopDetailErrorInfo != "") //有错误信息，则直接返回调用
                {
-                   controller.Loops.Add(loop);
+                   strStatusInfo += ";" + loopDetailErrorInfo;
+                   strErrorMessage = strStatusInfo;
+                   return controller;
                }
             }
             foreach (var sheetName in lstOtherSheetName)
             {
                 config.GetMaxAmountForStandardLinkageConfig();
+                
                 switch (sheetName)
                 { 
                     case "标准组态":
-                         {
-                             DataTable dtStandard = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForStandardLinkageConfig());
-                             List<LinkageConfigStandard> lstStandardConfig = ConvertToStandardLinkageModelFromDataTable(dtStandard);
-                             foreach (var r in lstStandardConfig)
+                         {                             
+                             DataTable dtStandard = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForStandardLinkageConfig(),out blnSheetExistFlag);
+                             if (blnSheetExistFlag)
                              {
-                                 controller.StandardConfig.Add(r);
+                                 List<LinkageConfigStandard> lstStandardConfig = ConvertToStandardLinkageModelFromDataTable(dtStandard);
+                                 LinkageConfigStandardService standardConfigService = new LinkageConfigStandardService(controller);
+                                 if (standardConfigService.IsExistSameCode(lstStandardConfig))
+                                 {
+                                     strStatusInfo += ";" + sheetName + "存在重码";
+                                 }
+                                 else
+                                 { 
+                                     foreach (var r in lstStandardConfig)
+                                     {   
+                                            controller.StandardConfig.Add(r);
+                                     }
+                                 }                                 
+                             }
+                             else
+                             {
+                                 strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
                              }
                          }
                         break;
                     case "混合组态":
                         {
-                            DataTable dtMixed = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForMixedLinkageConfig());
-                            List<LinkageConfigMixed> lstMixedConfig = ConvertToStandardLinkageModelFromDataTable(dtMixed);
-                            foreach (var r in lstStandardConfig)
+                            DataTable dtMixed = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForMixedLinkageConfig(),out blnSheetExistFlag);
+                            if (blnSheetExistFlag)
                             {
-                                controller.StandardConfig.Add(r);
+                                List<LinkageConfigMixed> lstMixedConfig = ConvertToMixedLinkageModelFromDataTable(dtMixed);
+                                foreach (var r in lstMixedConfig)
+                                {
+                                    controller.MixedConfig.Add(r);
+                                }
+                            }
+                            else
+                            {
+                                strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
                             }
                         }
                         break;
                     case "通用组态":
+                        {
+                            DataTable dtGeneral = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(),out blnSheetExistFlag);
+                            if (blnSheetExistFlag)
+                            {
+                                List<LinkageConfigGeneral> lstGeneralConfig = ConvertToGeneralLinkageModelFromDataTable(dtGeneral);
+                                foreach (var r in lstGeneralConfig)
+                                {
+                                    controller.GeneralConfig.Add(r);
+                                }
+                            }
+                            else
+                            {
+                                strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+                            }
+                        }
                         break;
                     case "网络手动盘":
+                        {
+                            DataTable dtMCB = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(),out blnSheetExistFlag);
+                            if (blnSheetExistFlag)
+                            {
+                                List<ManualControlBoard> lstMCB = ConvertToManualControlBoardModelFromDataTable(dtMCB);
+                                foreach (var r in lstMCB)
+                                {
+                                    controller.ControlBoard.Add(r);
+                                }
+                            }
+                            else
+                            {
+                                strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+                            }
+                        }
                         break;
                 }
             }
-            return true;
+            strErrorMessage = strStatusInfo;
+            return controller;            
         }
         /// <summary>
         /// 读取EXEL,根据工作作名称，取得回路及器件信息
@@ -1303,28 +1416,26 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="maxDevcieAmount"></param>
         /// <param name="deviceCodeLength"></param>
         /// <returns></returns>
-        private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,int deviceCodeLength)
+        private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,ControllerModel controller,out bool sheetExistFlag,out string loopDetailErrorInfo)
         {
-            
             int[] loopRange = ParseLoopSheetName(sheetName);//取得回路编号范围
-            Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();
+            Dictionary<int, int> rowDefinition = new Dictionary<int, int>();
             int extraLines=2; //除数据外的其它行数
             for (int i = 0; i < (loopRange[1]-loopRange[0]+1); i++)
             {                
                 if (i == 0)
                 {
-                    summarySheetRowDefinition.Add(1, (i + 1) * maxDevcieAmount + (i+1) * extraLines-1);//控制器信息起始行定义 4为表头信息,                    
+                    rowDefinition.Add(1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
                 }
                 else
                 {
-                    summarySheetRowDefinition.Add(i*maxDevcieAmount +(i+1) * extraLines-1, (i+1) * maxDevcieAmount + (i+1)  * extraLines-1);//控制器信息起始行定义 4为表头信息,                    
-                }       
+                    rowDefinition.Add(i * maxDevcieAmount + (i + 1) * extraLines - 1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+                }
             }
             DataTable dt = new DataTable();
-            dt=excelService.OpenExcel(filePath , sheetName, summarySheetRowDefinition);
-            return ConvertToLoopModelFromDataTable(dt,deviceCodeLength);
-            //如果未找到指定sheetName的EXCEL数据，需要返回“页签错误”的信息
-            
+            dt = excelService.OpenExcel(filePath, sheetName, rowDefinition, out sheetExistFlag);
+            return ConvertToLoopModelFromDataTable(dt, controller,out loopDetailErrorInfo);
+            //如果未找到指定sheetName的EXCEL数据，需要返回“页签错误”的信息            
         }
         /// <summary>
         /// 将读出的回路及器件信息转换为LoopModel类型存储
@@ -1332,29 +1443,54 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="dt"></param>
         /// <param name="deviceCodeLength"></param>
         /// <returns></returns>
-        private List<LoopModel> ConvertToLoopModelFromDataTable(DataTable dt,int deviceCodeLength)
-        {
+        private List<LoopModel> ConvertToLoopModelFromDataTable(DataTable dt,ControllerModel controller,out string loopDetailErrorInfo)
+        {            
+            loopDetailErrorInfo = "";//Initialize
+            //取得当前控制器最大器件ID
+            int maxDeviceID = this.GetMaxDeviceID();
             ControllerConfig8001 config =new ControllerConfig8001();
+            //暂停对具体信息进行验证
+            //Dictionary<string, RuleAndErrorMessage> dictDeviceDataRule = config.GetDeviceInfoRegularExpression(controller.DeviceAddressLength);
             List<LoopModel> lstLoops = new List<LoopModel>();
+
+            
             string loopCode = "";
             LoopModel loop=null;
+            int[] loopIndexRange=ParseLoopSheetName(dt.TableName);
+            int loopCount = 0;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-               if (loopCode != dt.Rows[i]["编码"].ToString().Substring(0, deviceCodeLength - 3))//器件编码为3位
+               if (loopCode != dt.Rows[i]["编码"].ToString().Substring(0, controller.DeviceAddressLength - 3))//器件编码为3位
                {
                    //新建回路
-                   loopCode = dt.Rows[i]["编码"].ToString().Substring(0, deviceCodeLength - 3);
+                   loopCode = dt.Rows[i]["编码"].ToString().Substring(0, controller.DeviceAddressLength - 3);
                    loop = new LoopModel();
                    loop.Code = loopCode;
-                   lstLoops.Add(loop);
-                   #region 查到合适的地方初始化
-                   //loop.Controller
-                   //loop.DeviceAmount
-                   //loop.Name
-                   //loop.ID
-                   #endregion 
+                   loop.Name = loopCode;
+                   lstLoops.Add(loop);    
+                   string machineNumberOfDevice=loop.Code.Substring(0,controller.DeviceAddressLength-5);
+                   bool blnErrorFlag = false;
+                   if (controller.MachineNumber != machineNumberOfDevice)  //控制器机号验证
+                   {
+                       loopDetailErrorInfo += ";" + dt.TableName + "-器件(" + dt.Rows[i]["编码"].ToString() + ")机号(" + machineNumberOfDevice + ")与模板机号(" + controller.MachineNumber + ")不符";
+                       blnErrorFlag = true;
+                   }
+                   if (!blnErrorFlag)
+                   {
+                       if (loopIndexRange[loopCount].ToString().PadLeft(controller.LoopAddressLength,'0') == loop.Code.Substring(machineNumberOfDevice.Length)) //回路号验证
+                       {
+                           loopDetailErrorInfo += ";器件(" + dt.Rows[i]["编码"].ToString() + ")回路号(" + loop.Code.Substring(machineNumberOfDevice.Length) + ")与模板回路号(" + loopIndexRange[loopCount].ToString().PadLeft(controller.LoopAddressLength, '0') + ")不符";
+                           blnErrorFlag = true;
+                       }
+                   }
+                   if (blnErrorFlag)  //机号或回路号不正确，停止处理，返回调用
+                   {
+                       return null;
+                   }                   
                }
                DeviceInfo8001 device = new DeviceInfo8001();
+               maxDeviceID++;
+               device.ID = maxDeviceID;
                device.Code = dt.Rows[i]["编码"].ToString();
                device.TypeCode = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["器件类型"].ToString());
                if (dt.Rows[i]["特性"].ToString() == "")
@@ -1426,6 +1562,7 @@ namespace SCA.BusinessLib.BusinessLogic
                    //在合适位置设置
                    //device.LoopID
                    loop.SetDevice<DeviceInfo8001>(device);
+                   loop.DeviceAmount++;
                }
             }
             return lstLoops;            
@@ -1456,13 +1593,13 @@ namespace SCA.BusinessLib.BusinessLogic
             return loopIndex;
         }
 
-        private DataTable GetOtherSettingData(IExcelService excelService,string filePath, string sheetName,int maxRowIndex)
+        private DataTable GetOtherSettingData(IExcelService excelService,string filePath, string sheetName,int maxRowIndex,out bool sheetExistFlag)
         {
             
             Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();                      
             summarySheetRowDefinition.Add(1,maxRowIndex + 2 - 1); //2为标题+表头,由于从0开始记数，需要减1        
             DataTable dt = new DataTable();
-            dt = excelService.OpenExcel(filePath, sheetName, summarySheetRowDefinition);
+            dt = excelService.OpenExcel(filePath, sheetName, summarySheetRowDefinition,out sheetExistFlag);
             return dt;
         }
         /// <summary>
@@ -1475,16 +1612,20 @@ namespace SCA.BusinessLib.BusinessLogic
             List<LinkageConfigStandard> lstStandardLinkage = new List<LinkageConfigStandard>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
+                if (dt.Rows[i]["输出组号"].ToString() == "")//无输出组号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
                 LinkageConfigStandard lcs = new LinkageConfigStandard();
                 lcs.Code = dt.Rows[i]["输出组号"].ToString();
                 lcs.DeviceNo1 = dt.Rows[i]["联动模块1"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块2"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块3"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块4"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块5"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块6"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块7"].ToString();
-                lcs.DeviceNo1 = dt.Rows[i]["联动模块8"].ToString();
+                lcs.DeviceNo2 = dt.Rows[i]["联动模块2"].ToString();
+                lcs.DeviceNo3 = dt.Rows[i]["联动模块3"].ToString();
+                lcs.DeviceNo4 = dt.Rows[i]["联动模块4"].ToString();
+                lcs.DeviceNo5 = dt.Rows[i]["联动模块5"].ToString();
+                lcs.DeviceNo6 = dt.Rows[i]["联动模块6"].ToString();
+                lcs.DeviceNo7 = dt.Rows[i]["联动模块7"].ToString();
+                lcs.DeviceNo8 = dt.Rows[i]["联动模块8"].ToString();
                 lcs.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
                 lcs.LinkageNo1 = dt.Rows[i]["联动组1"].ToString();
                 lcs.LinkageNo2 = dt.Rows[i]["联动组2"].ToString();
@@ -1493,12 +1634,21 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return lstStandardLinkage;
         }
+        /// <summary>
+        /// 将读出的混合组态信息转换为LinkageConfigMixed类型存储
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         private List<LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dt)
         {
             ControllerConfig8001 config = new ControllerConfig8001();
             List<LinkageConfigMixed> lstMixedLinkage = new List<LinkageConfigMixed>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
                 LinkageConfigMixed lcm = new LinkageConfigMixed();
                 lcm.Code = dt.Rows[i]["编号"].ToString();
                 lcm.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
@@ -1576,42 +1726,151 @@ namespace SCA.BusinessLib.BusinessLogic
 
                 LinkageType lTypeC = lcm.TypeC;
                 Enum.TryParse<LinkageType>(dt.Rows[i]["C分类"].ToString(), out lTypeC);
-                lcm.TypeB = lTypeB;
+                lcm.TypeC = lTypeC;
 
                 if (dt.Rows[i]["C楼号"].ToString() == "")
                 {
-                    lcm.BuildingNoB = null;
+                    lcm.BuildingNoC = null;
                 }
                 else
                 {
-                    lcm.BuildingNoB = Convert.ToInt32(dt.Rows[i]["B楼号"].ToString());
+                    lcm.BuildingNoC = Convert.ToInt32(dt.Rows[i]["C楼号"].ToString());
                 }
-                if (dt.Rows[i]["B区号"].ToString() == "")
+                if (dt.Rows[i]["C区号"].ToString() == "")
                 {
-                    lcm.ZoneNoB = null;
+                    lcm.ZoneNoC = null;
                 }
                 else
                 {
-                    lcm.ZoneNoB = Convert.ToInt32(dt.Rows[i]["B区号"].ToString());
+                    lcm.ZoneNoC = Convert.ToInt32(dt.Rows[i]["C区号"].ToString());
                 }
-                if (dt.Rows[i]["B层号"].ToString() == "")
+                if (dt.Rows[i]["C层号"].ToString() == "")
                 {
-                    lcm.LayerNoB = null;
+                    lcm.LayerNoC = null;
                 }
                 else
                 {
-                    lcm.LayerNoB = Convert.ToInt32(dt.Rows[i]["B层号"].ToString());
+                    lcm.LayerNoC = Convert.ToInt32(dt.Rows[i]["C层号"].ToString());
                 }
-                lcm.LoopNoB = dt.Rows[i]["B路号"].ToString();
-                lcm.DeviceCodeB = dt.Rows[i]["B编号"].ToString();
-
-                lcm.DeviceTypeCodeB = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["B类型"].ToString()); 
-
-
-
+                lcm.MachineNoC = dt.Rows[i]["C机号"].ToString();
+                lcm.LoopNoC = dt.Rows[i]["C回路号"].ToString();
+                lcm.DeviceCodeC = dt.Rows[i]["C编号"].ToString();
+                lcm.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString()); 
                 lstMixedLinkage.Add(lcm);
             }
             return lstMixedLinkage;
+        }
+        /// <summary>
+        /// 将读出的通用组态信息转换为LinkageConfigGeneral类型存储
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        private List<LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dt)
+        {
+            ControllerConfig8001 config = new ControllerConfig8001();
+            List<LinkageConfigGeneral> lstGeneralLinkage = new List<LinkageConfigGeneral>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
+                LinkageConfigGeneral lcg = new LinkageConfigGeneral();
+                lcg.Code = dt.Rows[i]["编号"].ToString();
+                lcg.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
+                if (dt.Rows[i]["A楼号"].ToString() == "")
+                {
+                    lcg.BuildingNoA = null;
+                }
+                else
+                {
+                    lcg.BuildingNoA = Convert.ToInt32(dt.Rows[i]["A楼号"].ToString());
+                }
+                if (dt.Rows[i]["A区号"].ToString() == "")
+                {
+                    lcg.ZoneNoA = null;
+                }
+                else
+                {
+                    lcg.ZoneNoA = Convert.ToInt32(dt.Rows[i]["A区号"].ToString());
+                }
+                if (dt.Rows[i]["A层号1"].ToString() == "")
+                {
+                    lcg.LayerNoA1 = null;
+                }
+                else
+                {
+                    lcg.LayerNoA1 = Convert.ToInt32(dt.Rows[i]["A层号1"].ToString());
+                }
+                if (dt.Rows[i]["A层号2"].ToString() == "")
+                {
+                    lcg.LayerNoA2 = null;
+                }
+                else
+                {
+                    lcg.LayerNoA2 = Convert.ToInt32(dt.Rows[i]["A层号2"].ToString());
+                }
+
+                lcg.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["类型A"].ToString());
+                LinkageType lTypeC = lcg.TypeC;
+                Enum.TryParse<LinkageType>(dt.Rows[i]["C分类"].ToString(), out lTypeC);
+                lcg.TypeC = lTypeC;
+                if (dt.Rows[i]["C楼号"].ToString() == "")
+                {
+                    lcg.BuildingNoC = null;
+                }
+                else
+                {
+                    lcg.BuildingNoC = Convert.ToInt32(dt.Rows[i]["C楼号"].ToString());
+                }
+                if (dt.Rows[i]["C区号"].ToString() == "")
+                {
+                    lcg.ZoneNoC = null;
+                }
+                else
+                {
+                    lcg.ZoneNoC = Convert.ToInt32(dt.Rows[i]["C区号"].ToString());
+                }
+                if (dt.Rows[i]["C层号"].ToString() == "")
+                {
+                    lcg.LayerNoC = null;
+                }
+                else
+                {
+                    lcg.LayerNoC = Convert.ToInt32(dt.Rows[i]["C层号"].ToString());
+                }
+                lcg.MachineNoC = dt.Rows[i]["C机号"].ToString();
+                lcg.LoopNoC = dt.Rows[i]["C回路号"].ToString();
+                lcg.DeviceCodeC = dt.Rows[i]["C编号"].ToString();
+                lcg.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString());
+                lstGeneralLinkage.Add(lcg);
+            }
+            return lstGeneralLinkage;
+        }
+        /// <summary>
+        /// 将读出的网络手动盘信息转换为ManualControlBoard类型存储
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        private List<ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dt)
+        {
+            //ControllerConfig8001 config = new ControllerConfig8001();
+            List<ManualControlBoard> lstManualControlBoard = new List<ManualControlBoard>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
+                ManualControlBoard mcb = new ManualControlBoard();
+                mcb.Code = Convert.ToInt32(dt.Rows[i]["编号"].ToString().NullToZero());
+                mcb.BoardNo = Convert.ToInt32(dt.Rows[i]["板卡号"].ToString().NullToZero());
+                mcb.SubBoardNo = Convert.ToInt32(dt.Rows[i]["手盘号"].ToString().NullToZero());
+                mcb.KeyNo = Convert.ToInt32(dt.Rows[i]["手键号"].ToString().NullToZero());
+                mcb.DeviceCode = dt.Rows[i]["地编号"].ToString().NullToZero();
+                lstManualControlBoard.Add(mcb);
+            }
+            return lstManualControlBoard;
         }
         private CellStyle GetCaptionCellStyle()
         {
@@ -1678,6 +1937,7 @@ namespace SCA.BusinessLib.BusinessLogic
             style.FontHeightInPoints = 9;
             return style;
         }
+        //private void SetDeviceID
 
     }
 }

@@ -166,6 +166,50 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return result;
         }
+        public bool IsExistSameDeviceCode()
+        {
+            if (TheLoop != null)
+            {
+                bool existFlag = false;
+                foreach (var device in TheLoop.GetDevices<DeviceInfo8001>())
+                {
+                    existFlag = IsExistSameDeviceCode(device.Code);
+                    if (existFlag)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 在回路内是否存在相同的器件代码
+        /// </summary>
+        /// <param name="deviceCode"></param>
+        /// <returns></returns>
+        public bool IsExistSameDeviceCode(string deviceCode)
+        {
+            if (TheLoop != null)
+            {
+                int deviceCount=TheLoop.GetDevices<DeviceInfo8001>().Count((d) => d.Code == deviceCode);
+                if (deviceCount > 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else //TheLoop不应为空
+            {
+                return true ;
+            }
+        }
 
 
    

@@ -28,7 +28,7 @@ namespace SCA.Model
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
         private int _baudRate = 38400;
         private bool _primaryFlag = false;
-        private int _deviceCodeLength = 3;//器件编码长度，默认3
+        //private int _deviceCodeLength = 3;//器件编码长度，默认3
         public ControllerModel()
         { 
         
@@ -88,18 +88,18 @@ namespace SCA.Model
         ///// </summary>
         public int LoopAddressLength { get; set; }
 
-        public int DeviceCodeLength
-        {
+        //public int DeviceCodeLength
+        //{
 
-            get
-            {
-                return _deviceCodeLength;
-            }
-            set
-            {
-                _deviceCodeLength = value;
-            }
-        }
+        //    get
+        //    {
+        //        return _deviceCodeLength;
+        //    }
+        //    set
+        //    {
+        //        _deviceCodeLength = value;
+        //    }
+        //}
 
         public ControllerType Type { get; set; }
 

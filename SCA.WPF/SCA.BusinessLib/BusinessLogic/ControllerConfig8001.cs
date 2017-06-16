@@ -37,18 +37,25 @@ namespace SCA.BusinessLib.BusinessLogic
         ///  EXCEL模板->摘要信息->控制器设置->行数，值验证规则
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate()
+        public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(int deviceAddressLength)
         {
             Dictionary<int, RuleAndErrorMessage> dictValueRule = new Dictionary<int, RuleAndErrorMessage>();
-            dictValueRule.Add(5, new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF]{0,10}$", "控制器名称为数字、字母、汉字,最长10个字符"));
+            dictValueRule.Add(5, new RuleAndErrorMessage("^[A-Za-z0-9_\u4E00-\u9FFF]{0,10}$", "控制器名称为数字、字母、汉字、下划线,最长10个字符"));
             string [] compatibleControllerTypeArray=base.CompatibleControllerTypeForExcelTemplate.Split(',');
             string compatibleControllerType = "(";
             for (int i = 0; i < compatibleControllerTypeArray.Length; i++)
             {
-                compatibleControllerType += "" + compatibleControllerTypeArray[i] + "|";                
+                compatibleControllerType += "^" + compatibleControllerTypeArray[i] + "$|";                
             }
             dictValueRule.Add(6, new RuleAndErrorMessage("" + compatibleControllerType.Substring(0,compatibleControllerType.LastIndexOf('|')) + "){1}", "控制器类型不正确"));//此验证取每一个匹配对象
-            dictValueRule.Add(7, new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+            if (deviceAddressLength == 7)
+            {
+                dictValueRule.Add(7, new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+            }
+            else
+            {
+                dictValueRule.Add(7, new RuleAndErrorMessage("^([0-1][0-9][0-9])$", "机号范围为000~199"));
+            }
             dictValueRule.Add(8, new RuleAndErrorMessage("^([78])$", "器件长度取值范围为7或8"));
             dictValueRule.Add(9, new RuleAndErrorMessage("^(COM([1-9]|10))$", "串口号取值范围为COM1-COM10"));
             return dictValueRule;
@@ -72,8 +79,8 @@ namespace SCA.BusinessLib.BusinessLogic
         public Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate()
         {
             Dictionary<int, RuleAndErrorMessage> dictValueRule = new Dictionary<int, RuleAndErrorMessage>();
-            dictValueRule.Add(13, new RuleAndErrorMessage("^[1-9]|[1-5][0-9]|6[0-4]$", "回路数量取值为1-64"));            
-            dictValueRule.Add(14, new RuleAndErrorMessage("^[1-9]|[1-5][0-9]|6[0-4]$", "回路分组取值为1-64"));
+            dictValueRule.Add(13, new RuleAndErrorMessage("^[1-9]$|^[1-5][0-9]$|^6[0-4]$", "回路数量取值为1-64"));
+            dictValueRule.Add(14, new RuleAndErrorMessage("^[1-9]$|^[1-5][0-9]$|^6[0-4]$", "回路分组取值为1-64"));
             List<DeviceType> lstDeviceType = GetDeviceTypeInfo();
             string devTypeExp = "(";
             foreach(var devType in lstDeviceType)
@@ -237,11 +244,18 @@ namespace SCA.BusinessLib.BusinessLogic
             return 64;
         }
 
-        public short GetMaxMachineAmountValue()
+        public short GetMaxMachineAmountValue(int addressLength)
         {
             //如果控制器位数为7位，最大机号63
             //8位，最大机号199
-            return 63;
+            if (addressLength == 7)
+            {
+                return 63;
+            }
+            else
+            {
+                return 199;
+            }
         }
 
         public short GetMaxDeviceAmountValue()
@@ -267,14 +281,17 @@ namespace SCA.BusinessLib.BusinessLogic
        {
            Dictionary<string, RuleAndErrorMessage> dictDeviceInfoRE = new Dictionary<string, RuleAndErrorMessage>();
            //器件编码 自动生成，不需要验证
-           //if (addressLength == 7)
-           //{
-           //    dictDeviceInfoRE.Add("DeviceCode", new RuleAndErrorMessage("^([06][0-3])$","器件编码为0~63"));
-           //}
-           //else
-           //{
-           //    dictDeviceInfoRE.Add("DeviceCode", new RuleAndErrorMessage("^([01][0-9][0-9])$", "器件编码为0~199"));
-           //}
+           if (addressLength == 7)
+           {
+               dictDeviceInfoRE.Add("DeviceCode", new RuleAndErrorMessage("^([06][0-3])$", "器件编码为0~63"));
+               dictDeviceInfoRE.Add("DeviceCodeLength", new RuleAndErrorMessage("^([06][0-3])$", "器件编码为0~63"));
+           }
+           else
+           {
+               dictDeviceInfoRE.Add("DeviceCode", new RuleAndErrorMessage("^([01][0-9][0-9])$", "器件编码为0~199"));
+               dictDeviceInfoRE.Add("DeviceCodeLength", new RuleAndErrorMessage("^([01][0-9][0-9])$", "器件编码为0~199"));
+           }
+
            //器件类型为“下拉框”，不需要验证
 
 

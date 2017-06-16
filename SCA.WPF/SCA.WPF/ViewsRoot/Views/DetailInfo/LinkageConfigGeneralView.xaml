@@ -256,7 +256,7 @@
                                        Binding="{Binding Path=DeviceTypeCodeC}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>-->
 
-                    <dg:DataGridComboBoxColumn Header="类型C" 
+                    <dg:DataGridComboBoxColumn Header="C类型" 
                                                Width="*"
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
