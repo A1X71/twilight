@@ -22,3 +22,5 @@ SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.DomainInterface.dll
 SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.DomainInterface.pdb
 SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.Model.dll
 SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.Model.pdb
+SCA.WPF/SCA.Model/bin/x86/Release/SCA.Model.dll
+SCA.WPF/SCA.Model/bin/x86/Release/SCA.Model.pdb
