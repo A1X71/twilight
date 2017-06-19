@@ -28,8 +28,8 @@ namespace SCA.BusinessLib.BusinessLogic
             Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = new Dictionary<int, string>();
             dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(5, "控制器名称");
             dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(6, "控制器类型");
-            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(7, "控制器机号");
-            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(8, "器件长度");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(7, "器件长度");
+            dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(8, "控制器机号");            
             dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Add(9, "串口号");
             return dictNameOfControllerSettingInSummaryInfoOfExcelTemplate;
         }
@@ -47,16 +47,24 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 compatibleControllerType += "^" + compatibleControllerTypeArray[i] + "$|";                
             }
-            dictValueRule.Add(6, new RuleAndErrorMessage("" + compatibleControllerType.Substring(0,compatibleControllerType.LastIndexOf('|')) + "){1}", "控制器类型不正确"));//此验证取每一个匹配对象
+            dictValueRule.Add(6, new RuleAndErrorMessage("" + compatibleControllerType.Substring(0,compatibleControllerType.LastIndexOf('|')) + "){1}", "控制器类型不正确"));//此验证取每一个匹配对象            
+            
             if (deviceAddressLength == 7)
             {
-                dictValueRule.Add(7, new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+                dictValueRule.Add(7, new RuleAndErrorMessage("^([7])$", "器件长度取值范围为7"));
+                dictValueRule.Add(8, new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+            }
+            else if (deviceAddressLength == 8)
+            {
+                dictValueRule.Add(7, new RuleAndErrorMessage("^([8])$", "器件长度取值范围为8"));
+                dictValueRule.Add(8, new RuleAndErrorMessage("^([0-1][0-9][0-9])$", "机号范围为000~199"));
             }
             else
             {
-                dictValueRule.Add(7, new RuleAndErrorMessage("^([0-1][0-9][0-9])$", "机号范围为000~199"));
+                dictValueRule.Add(7, new RuleAndErrorMessage("^([78])$", "器件长度取值范围为7或8"));
+                dictValueRule.Add(8, new RuleAndErrorMessage("(^([0-5][0-9]|6[0-3])$)|(^([0-1][0-9][0-9])$)", "机号范围为00~63或000~199"));                
             }
-            dictValueRule.Add(8, new RuleAndErrorMessage("^([78])$", "器件长度取值范围为7或8"));
+            
             dictValueRule.Add(9, new RuleAndErrorMessage("^(COM([1-9]|10))$", "串口号取值范围为COM1-COM10"));
             return dictValueRule;
         }

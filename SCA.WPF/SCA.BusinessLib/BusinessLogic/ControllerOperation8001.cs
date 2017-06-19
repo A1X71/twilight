@@ -808,12 +808,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetCellValue(lstSheetNames[0], 6, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[6], ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 6, 1, "NT8001", ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 6, 2, "可填: "+config.CompatibleControllerTypeForExcelTemplate, ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[7], ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 1, defaultMachineNo, ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: 7位编码(00-" + config.GetMaxMachineAmountValue(7).ToString() + ");8位编码(000-" + config.GetMaxMachineAmountValue(8).ToString()+")", ExcelService.CellStyleType.Data);
+
                 excelService.SetCellValue(lstSheetNames[0], 8, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[8], ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 8, 1, defaultDeviceCodeLength.ToString(), ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 8, 2, "可填: " + strDeviceCodeLength, ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 8, 1, defaultMachineNo, ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 8, 2, "可填: 7位编码(00-" + config.GetMaxMachineAmountValue(7).ToString() + ");8位编码(000-" + config.GetMaxMachineAmountValue(8).ToString()+")", ExcelService.CellStyleType.Data);
+
+                excelService.SetCellValue(lstSheetNames[0], 7, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[7], ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 7, 1, defaultDeviceCodeLength.ToString(), ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: " + strDeviceCodeLength, ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 9, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[9], ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 9, 1, serialPort, ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 9, 2, "可填: COM1-COM10", ExcelService.CellStyleType.Data);
@@ -896,8 +898,8 @@ namespace SCA.BusinessLib.BusinessLogic
                         //回路默认器件信息
                         for (int k = 0; k < maxDeviceAmount; k++)
                         {
-                            string deviceCode = (k + 1).ToString().PadLeft(defaultDeviceCodeLength - defaultLoopCodeLength - defaultMachineNoLength,'0');                      
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 0, loopCode+deviceCode, ExcelService.CellStyleType.Data); //器件编码
+                            string deviceCode = (k + 1).ToString().PadLeft(defaultDeviceCodeLength - defaultLoopCodeLength - defaultMachineNoLength,'0');
+                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 0, "\'" + loopCode + deviceCode , ExcelService.CellStyleType.Data); //器件编码
                             excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 1, defaultDeviceType.Name, ExcelService.CellStyleType.Data); //器件类型
                             excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 2, null, ExcelService.CellStyleType.Data);
                             excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 3, "0", ExcelService.CellStyleType.Data); //屏蔽
@@ -1164,7 +1166,6 @@ namespace SCA.BusinessLib.BusinessLogic
                     else
                     {
                         GetControllerViaExcelTemplate(dt.Rows[i][0].ToString(),dt.Rows[i][1].ToString(),controller);
-
                     }
                 }
             }
@@ -1186,7 +1187,6 @@ namespace SCA.BusinessLib.BusinessLogic
                     blnIsError = true;
                 }
             }
-
             if (!blnIsError)//控制器配置信息正确
             {
                 //controller
@@ -1285,7 +1285,6 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 lstOtherSheetName.Add(otherSheetNames[i]);
             }
-
             //将EXCEL模板中的回路信息增加至Controller
             foreach (var sheetName in lstLoopSheetName)            
             {
