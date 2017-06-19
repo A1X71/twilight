@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{161D5097-FF35-41A1-B45C-1D5BCBE52902}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SCA.BusinessLib</RootNamespace>
+    <AssemblyName>SCA.BusinessLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=3.0.3.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.3.0.3\lib\net40\Caliburn.Micro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=3.0.3.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.0.3\lib\net40\Caliburn.Micro.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\0 ConceptPractice\VS2013\SuperSocket\FileUpload\SuperSocketRelease\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Debug\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.0.3\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessLogic\ControllerConfig8000.cs" />
+    <Compile Include="BusinessLogic\ControllerConfig8001.cs" />
+    <Compile Include="BusinessLogic\ControllerConfig8003.cs" />
+    <Compile Include="BusinessLogic\ControllerConfig8021.cs" />
+    <Compile Include="BusinessLogic\ControllerConfigBase.cs" />
+    <Compile Include="BusinessLogic\ControllerConfig8007.cs" />
+    <Compile Include="BusinessLogic\ControllerConfig8036.cs" />
+    <Compile Include="BusinessLogic\ControllerConfigManager.cs" />
+    <Compile Include="BusinessLogic\ControllerConfigNone.cs" />
+    <Compile Include="BusinessLogic\ControllerManager.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8000.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8001.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8003.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8007.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8021.cs" />
+    <Compile Include="BusinessLogic\ControllerOperationBase.cs" />
+    <Compile Include="BusinessLogic\ControllerOperationCommon.cs" />
+    <Compile Include="BusinessLogic\ControllerOperation8036.cs" />
+    <Compile Include="BusinessLogic\DeviceService8000.cs" />
+    <Compile Include="BusinessLogic\DeviceService8001.cs" />
+    <Compile Include="BusinessLogic\DeviceService8003.cs" />
+    <Compile Include="BusinessLogic\DeviceService8007.cs" />
+    <Compile Include="BusinessLogic\DeviceService8021.cs" />
+    <Compile Include="BusinessLogic\DeviceService8036.cs" />
+    <Compile Include="BusinessLogic\DeviceServiceManager.cs" />
+    <Compile Include="BusinessLogic\GeneralConfiguration.cs" />
+    <Compile Include="BusinessLogic\InvokeControllerCom.cs" />
+    <Compile Include="BusinessLogic\LinkageConfigGeneralService.cs" />
+    <Compile Include="BusinessLogic\LinkageConfigMixedService.cs" />
+    <Compile Include="BusinessLogic\LinkageConfigStandardService.cs" />
+    <Compile Include="BusinessLogic\LoopService.cs" />
+    <Compile Include="BusinessLogic\ManualControlBoardService.cs" />
+    <Compile Include="BusinessLogic\ProjectManager.cs" />
+    <Compile Include="BusinessLogic\ProjectService.cs" />
+    <Compile Include="BusinessLogic\SerialPortHelper.cs" />
+    <Compile Include="BusinessLogic\SerialPortHelper2.cs" />
+    <Compile Include="BusinessLogic\LinkageEmulatorService.cs" />
+    <Compile Include="ComCommunication\Buffer\BufferManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\Command33.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\Command66.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandBD.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandBE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandBF.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandC8.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandC9.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandCA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandCC.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandCD.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\CommandCF.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\ICommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\Invoker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Command\ProcessCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Driver\IProtocolDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Driver\ProtocolDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComCommunication\Driver\ProtocolDriver8036.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller\ControllerType8000.cs" />
+    <Compile Include="Controller\ControllerType8001.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller\ControllerType8003.cs" />
+    <Compile Include="Controller\ControllerType8007.cs" />
+    <Compile Include="Controller\ControllerType8021.cs" />
+    <Compile Include="Controller\ControllerType8036.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller\ControllerTypeBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller\ControllerTypeUnknown.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\ExcelService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility\ExtendMethod.cs" />
+    <Compile Include="Utility\SerialComManager.cs" />
+    <Compile Include="ModelOperation\ControllerModelOperation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\Base64Encoding.cs" />
+    <Compile Include="Utility\BHexString.cs" />
+    <Compile Include="Utility\BytesOperation.cs" />
+    <Compile Include="Utility\BytesUtility.cs" />
+    <Compile Include="Utility\FileService.cs" />
+    <Compile Include="Utility\LogRecorder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SCA.DatabaseAccess\SCA.DatabaseAccess.csproj">
+      <Project>{b69661ad-cbbd-4034-b865-f80734601e34}</Project>
+      <Name>SCA.DatabaseAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SCA.DomainInterface\SCA.Interface.csproj">
+      <Project>{565eb552-e694-4cb9-9ccd-0714a759134f}</Project>
+      <Name>SCA.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SCA.Model\SCA.Model.csproj">
+      <Project>{0e23cc32-8681-4607-8a02-73e3319f797f}</Project>
+      <Name>SCA.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="controlltype8001.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
