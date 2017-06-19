@@ -33,7 +33,4 @@ SCA.WPF/SCA.Model/SCA.Model.csproj
 SCA.WPF/SCA.Model/SCA.Model.csproj.user
 SCA.WPF/SCA.BusinessLib/SCA.BusinessLib.csproj
 SCA.WPF/SCA.BusinessLib/SCA.BusinessLib.csproj.user
-SCA.WPF/SCA.DatabaseAccess/SCA.DatabaseAccess.csproj
-SCA.WPF/SCA.DatabaseAccess/SCA.DatabaseAccess.csproj.user
-SCA.DomainInterface/SCA.Interface.csproj
-SCA.DomainInterface/SCA.Interface.csproj.user
+
