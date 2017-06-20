@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.ComponentModel;
 using SCA.Interface;
 using SCA.Model;
 /* ==============================
@@ -205,6 +207,37 @@ namespace SCA.BusinessLib.BusinessLogic
 
             string deviceType = GetDeviceTypeCodeInfo();
             return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
+        }
+        public List<DeviceType> GetDeviceTypeInfoWithAnyAlarm()
+        {
+            FieldInfo fi = SpecialValue.AnyAlarm.GetType().GetField(SpecialValue.AnyAlarm.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            string alarmName = "初始化";
+            if (attributes.Length > 0)
+            {
+                alarmName = attributes[0].Description;
+            }
+            DeviceType anyAlarmType = new DeviceType();
+            anyAlarmType.Code = (int)SpecialValue.AnyAlarm;
+            anyAlarmType.Name = alarmName;
+            
+            List<DeviceType> lstDeviceType = this.GetDeviceTypeInfo();
+            lstDeviceType.Add(anyAlarmType);
+            return lstDeviceType;
+        }
+        /// <summary>
+        /// 取得除报火警器件之外的器件信息
+        /// </summary>
+        /// <returns></returns>
+        public List<DeviceType> GetDeviceTypeInfoWithoutFireDevice()
+        {
+            
+            List<DeviceType> lstDeviceType = this.GetDeviceTypeInfo();
+            foreach (var r in this.GetAllowedDeviceTypeInfoForAnyAlarm())//报火警器件，不可作为启动器件
+            {
+                lstDeviceType.RemoveAll((d) => d.Code == r.Code);
+            }
+            return lstDeviceType;
         }
         public List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm()
         {

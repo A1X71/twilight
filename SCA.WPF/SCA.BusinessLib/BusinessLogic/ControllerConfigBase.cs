@@ -258,6 +258,33 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return lstLinkageType;
         }
+        public List<string> GetFeatureList()
+        {
+            List<string> lstFeature = new List<string>();
+            for (int i = 0; i < 4; i++)
+            {
+                lstFeature.Add(i.ToString());
+            }
+            return lstFeature;
+        }
+        public List<string> GetDisableList()
+        {
+            List<string> lstDisable = new List<string>();
+            for(int i=0;i<2;i++)
+            {
+                lstDisable.Add(i.ToString());
+            }
+            return lstDisable;
+        }
+        public List<string> GetSensitiveLevelList()
+        {
+            List<string> lstSensitiveLevel = new List<string>();
+            for (int i = 1; i < 4; i++)
+            {
+                lstSensitiveLevel.Add(i.ToString());
+            }
+            return lstSensitiveLevel;
+        }
     }
     public enum RefereceRegionName
     {         
@@ -268,6 +295,13 @@ namespace SCA.BusinessLib.BusinessLogic
         ActionCoefficient=5, //动作常数
         ActionType=6,//动作类型
         LinkageTypeAll=7,//联动类型(全部)
-        LinkageTypeCastration=8//联动类型(精简)
+        LinkageTypeCastration=8,//联动类型(精简)
+        Feature=9,//特性
+        Disable=10,//屏蔽
+        SensitiveLevel=11, //灵敏度
+        DeviceTypeWithAnyAlarm=12,//器件类型(包含任意火警)
+        DeviceTypeWithoutFireDevice=13 //器件类型（不包含可报火警的器件）
+
+
     }
 }

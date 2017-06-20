@@ -465,8 +465,12 @@ namespace SCA.BusinessLib.Utility
                     break;
             }
             //设置单元格是否换行
+            #region 设置为文本
             style.WrapText = paramCellStyle.WrapText;
-
+            XSSFDataFormat format = (XSSFDataFormat)_workbook.GetCreationHelper().CreateDataFormat();
+            short index = format.GetFormat("@");
+            style.DataFormat = index;
+            #endregion 
             return style;
         }
 
