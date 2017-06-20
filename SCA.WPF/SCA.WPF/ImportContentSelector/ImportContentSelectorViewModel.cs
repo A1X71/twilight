@@ -257,7 +257,7 @@ namespace SCA.WPF.ImportContentSelector
 
             List<CheckItem> lstOtherSetting = OtherSettingsCollection.Where((d) => d.IsChecked == true).ToList<CheckItem>();
             int selectedStandardCount = lstOtherSetting.Count((d) => d.Value == "标准组态");
-            if (selectedStandardCount > 0) //未勾选的回路，放弃导入
+            if (selectedStandardCount > 0) //未勾选，放弃导入
             {
                 //比对组态信息，按编号比对
                 foreach (var importConfig in controller.StandardConfig)
@@ -277,9 +277,75 @@ namespace SCA.WPF.ImportContentSelector
                         TheController.StandardConfig.Add(importConfig);
                     }
                 }
-            }  
+            }
+            int selectedMixedCount = lstOtherSetting.Count((d) => d.Value == "混合组态");
+            if (selectedMixedCount > 0) //未勾选，放弃导入
+            {
+                //比对组态信息，按编号比对
+                foreach (var importConfig in controller.MixedConfig)
+                {
+                    int amount = TheController.MixedConfig.Count((d) => d.Code == importConfig.Code);
+                    if (amount > 0)
+                    {
+                        string strPromptInfo = "控制器" + TheController.Name + ":已经存在混合组态" + importConfig.Code + ",覆盖吗?";
+                        if (MessageBox.Show(strPromptInfo, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            TheController.MixedConfig.RemoveAll((d) => d.Code == importConfig.Code);
+                            TheController.MixedConfig.Add(importConfig);
+                        }
+                    }
+                    else
+                    {
+                        TheController.MixedConfig.Add(importConfig);
+                    }
+                }
+            }
 
-            //比对手动盘信息，按编号比对            
+            int selectedGeneralCount = lstOtherSetting.Count((d) => d.Value == "通用组态");
+            if (selectedGeneralCount > 0) //未勾选，放弃导入
+            {
+                //比对组态信息，按编号比对
+                foreach (var importConfig in controller.GeneralConfig)
+                {
+                    int amount = TheController.GeneralConfig.Count((d) => d.Code == importConfig.Code);
+                    if (amount > 0)
+                    {
+                        string strPromptInfo = "控制器" + TheController.Name + ":已经存在通用组态" + importConfig.Code + ",覆盖吗?";
+                        if (MessageBox.Show(strPromptInfo, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            TheController.GeneralConfig.RemoveAll((d) => d.Code == importConfig.Code);
+                            TheController.GeneralConfig.Add(importConfig);
+                        }
+                    }
+                    else
+                    {
+                        TheController.GeneralConfig.Add(importConfig);
+                    }
+                }
+            }
+
+            int selectedMCBCount = lstOtherSetting.Count((d) => d.Value == "网络手动盘");
+            if (selectedMCBCount > 0) //未勾选，放弃导入            {
+            {
+                foreach (var importConfig in controller.ControlBoard)
+                {
+                    int amount = TheController.ControlBoard.Count((d) => d.Code == importConfig.Code);
+                    if (amount > 0)
+                    {
+                        string strPromptInfo = "控制器" + TheController.Name + ":已经存在网络手动盘" + importConfig.Code + ",覆盖吗?";
+                        if (MessageBox.Show(strPromptInfo, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            TheController.ControlBoard.RemoveAll((d) => d.Code == importConfig.Code);
+                            TheController.ControlBoard.Add(importConfig);
+                        }
+                    }
+                    else
+                    {
+                        TheController.ControlBoard.Add(importConfig);
+                    }
+                }
+            }
+            
             //导入完成，导入信息清除
             //ProjectManager.GetInstance.TheControllerViaImporting = null; 如设置为空，需要关闭本页
             EventMediator.NotifyColleagues("RefreshNavigator", TheController);

@@ -21,5 +21,12 @@ namespace SCA.Interface.BusinessLogic
         void DownloadExecute(List<LinkageConfigStandard> lstLinkageConfigStandard);
 
         //void DataRecordSetFlag(bool flag);
+        /// <summary>
+        /// 在控制器内是否存在相同的组号编码
+        /// </summary>
+        /// <param name="lstStandardConfig">标准组态集合</param>
+        /// <returns></returns>
+        bool IsExistSameCode(List<SCA.Model.LinkageConfigStandard> lstStandardConfig);
+        
     }
 }

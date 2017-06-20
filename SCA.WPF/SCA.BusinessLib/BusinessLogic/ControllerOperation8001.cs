@@ -1692,9 +1692,17 @@ namespace SCA.BusinessLib.BusinessLogic
                             if (blnSheetExistFlag)
                             {
                                 List<LinkageConfigMixed> lstMixedConfig = ConvertToMixedLinkageModelFromDataTable(dtMixed);
-                                foreach (var r in lstMixedConfig)
+                                LinkageConfigMixedService mixedConfigService = new LinkageConfigMixedService(controller);
+                                if (mixedConfigService.IsExistSameCode(lstMixedConfig))
                                 {
-                                    controller.MixedConfig.Add(r);
+                                    strStatusInfo += ";" + sheetName + "存在重码";
+                                }
+                                else
+                                { 
+                                    foreach (var r in lstMixedConfig)
+                                    {
+                                        controller.MixedConfig.Add(r);
+                                    }
                                 }
                             }
                             else
@@ -1989,11 +1997,12 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcm.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
 
                 LinkageActionType lActiontype = lcm.ActionType;
-                Enum.TryParse<LinkageActionType>(dt.Rows[i]["动作类型"].ToString(),out lActiontype);
+                Enum.TryParse<LinkageActionType>(EnumUtility.GetEnumName(lActiontype.GetType(), dt.Rows[i]["动作类型"].ToString()), out lActiontype);
+                
                 lcm.ActionType = lActiontype;
 
                 LinkageType lTypeA = lcm.TypeA;
-                Enum.TryParse<LinkageType>(dt.Rows[i]["A分类"].ToString(), out lTypeA);
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeA.GetType(),dt.Rows[i]["A分类"].ToString()), out lTypeA);
                 lcm.TypeA = lTypeA;
 
                 if (dt.Rows[i]["A楼号"].ToString() == "")
@@ -2026,7 +2035,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcm.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["A类型"].ToString());
 
                 LinkageType lTypeB = lcm.TypeB;
-                Enum.TryParse<LinkageType>(dt.Rows[i]["B分类"].ToString(), out lTypeB);
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeB.GetType(),dt.Rows[i]["B分类"].ToString()), out lTypeB);
                 lcm.TypeB = lTypeB;
 
                 if (dt.Rows[i]["B楼号"].ToString() == "")
@@ -2060,7 +2069,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
                 LinkageType lTypeC = lcm.TypeC;
-                Enum.TryParse<LinkageType>(dt.Rows[i]["C分类"].ToString(), out lTypeC);
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeC.GetType(),dt.Rows[i]["C分类"].ToString()), out lTypeC);
                 lcm.TypeC = lTypeC;
 
                 if (dt.Rows[i]["C楼号"].ToString() == "")
