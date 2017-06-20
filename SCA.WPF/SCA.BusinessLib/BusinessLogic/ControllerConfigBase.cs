@@ -176,6 +176,98 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return deviceCode;
         }
- 
+        /// <summary>
+        /// 去掉ControllerType的None及UNCOMPATIBLE值
+        /// </summary>
+        /// <returns></returns>
+        public List<Model.ControllerType> GetControllerType()
+        {
+            List<Model.ControllerType> lstControllerType = new List<Model.ControllerType>();
+            foreach (Model.ControllerType type in Enum.GetValues(typeof(Model.ControllerType)))
+            {
+                if (type != Model.ControllerType.NONE && type != Model.ControllerType.UNCOMPATIBLE)
+                {
+                    lstControllerType.Add(type);
+                }
+            }
+            return lstControllerType;
+        }
+        public List<string> GetSerialPortNumber()
+        {
+            List<string> lstComInfo = new List<string>();
+            for (int i = 1; i < 10; i++)
+            {
+                lstComInfo.Add("COM" + i.ToString());
+            }
+            return lstComInfo;
+        }
+        public List<int> GetActionCoefficient()
+        {
+            List<int> lstActionCoefficient = new List<int>();
+            for (int i = 0; i < 6; i++)
+            {
+                lstActionCoefficient.Add(i);
+            }
+            return lstActionCoefficient;
+        }
+        /// <summary>
+        /// 动作类型
+        /// </summary>
+        /// <returns></returns>
+        public List<LinkageActionType> GetLinkageActionType()
+        {
+            List<LinkageActionType> lstLinkageType = new List<LinkageActionType>();
+            foreach (LinkageActionType type in Enum.GetValues(typeof(LinkageActionType)))
+            {
+                if (type != LinkageActionType.NONE)
+                {
+                    lstLinkageType.Add(type);
+                }
+            }
+            return lstLinkageType;
+        }
+        /// <summary>
+        /// 去掉LinkageType的None值,本层,邻层
+        /// </summary>
+        /// <returns></returns>
+        public List<Model.LinkageType> GetLinkageTypeWithCastration()
+        {
+            List<Model.LinkageType> lstLinkageType = new List<Model.LinkageType>();
+            foreach (Model.LinkageType type in Enum.GetValues(typeof(Model.LinkageType)))
+            {
+                if (type != Model.LinkageType.None && type !=Model.LinkageType.SameLayer && type!=Model.LinkageType.AdjacentLayer)
+                {
+                    lstLinkageType.Add(type);
+                }
+            }
+            return lstLinkageType;
+        }
+        /// <summary>
+        /// 去掉LinkageType的None值
+        /// </summary>
+        /// <returns></returns>
+        public List<Model.LinkageType> GetLinkageType()
+        {
+            List<Model.LinkageType> lstLinkageType = new List<Model.LinkageType>();
+            foreach (Model.LinkageType type in Enum.GetValues(typeof(Model.LinkageType)))
+            {
+                if (type != Model.LinkageType.None)
+                {
+                    lstLinkageType.Add(type);
+                }
+            }
+            return lstLinkageType;
+        }
+    }
+    public enum RefereceRegionName
+    {         
+        DeviceType=0, //器件类型
+        ControllerType=1, //控制器类型
+        DeviceCodeLength=3, //器件编码长度
+        SerialPortNumber=4, //串口号
+        ActionCoefficient=5, //动作常数
+        ActionType=6,//动作类型
+        LinkageTypeAll=7,//联动类型(全部)
+        LinkageTypeCastration=8//联动类型(精简)
     }
 }

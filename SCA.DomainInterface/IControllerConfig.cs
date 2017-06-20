@@ -102,6 +102,16 @@ namespace SCA.Interface
        List<DeviceType> GetDeviceTypeInfo();
        List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm(); 
        List<DeviceType> GetAllowedDeviceTypeInfoForLinkageGroup8000();
+       /// <summary>
+       /// 取得控制器类型
+       /// </summary>
+       /// <returns></returns>
+       List<Model.ControllerType> GetControllerType();
+       /// <summary>
+       /// 取得可设置的端口号
+       /// </summary>
+       /// <returns></returns>
+       List<string> GetSerialPortNumber();
        
     }
 }
