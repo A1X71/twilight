@@ -87,6 +87,10 @@ namespace SCA.Interface
         /// <param name="strCellValue">数据值</param>
         /// <param name="paramCellStyle">单元格样式</param>
         void SetCellValue(string strSheetName, int intRowNumber, int intCellNumber, object strCellValue, CellStyleType styleType);
+       /// <summary>
+       /// 设置区域名称
+       /// </summary>
+        void SetRangeName(string rangeName,string formula);
         
     }
     /// <summary>

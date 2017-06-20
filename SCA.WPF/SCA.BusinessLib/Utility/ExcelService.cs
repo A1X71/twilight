@@ -3,6 +3,7 @@ using SCA.Interface;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Util;
 using SCA.Interface;
 using System.IO;
 using System.Data;
@@ -490,6 +491,32 @@ namespace SCA.BusinessLib.Utility
         public void SetCellValue(string strSheetName, int intRowNumber, int intCellNumber, object strCellValue, Interface.CellStyleType styleType)
         {
             throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 创建区域名称
+        /// </summary>
+        /// <param name="rangeName">区域名称</param>
+        /// <param name="formula">区域公式</param>
+        public void SetRangeName(string rangeName, string formula)
+        {
+            IName range = _workbook.CreateName();
+            range.RefersToFormula = formula;
+            range.NameName = rangeName;
+        }
+        /// <summary>
+        /// 为页签序列验证
+        /// </summary>
+        /// <param name="sheetName">目标Sheet</param>
+        /// <param name="rangeName">值域名称</param>
+        /// <param name="cellRange">应用此验证的范围</param>
+        public void SetSheetValidationForListConstraint(string sheetName,string rangeName,MergeCellRange cellRange)
+        {
+            CellRangeAddressList rangeList =new CellRangeAddressList(cellRange.FirstRowIndex,cellRange.LastRowIndex,cellRange.FirstColumnIndex,cellRange.LastColumnIndex);
+            ISheet sheet = _workbook.GetSheet(sheetName);
+            IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
+            IDataValidationConstraint constraint = dataValidationHelper.CreateFormulaListConstraint(rangeName);
+            XSSFDataValidation validation = (XSSFDataValidation)dataValidationHelper.CreateValidation(constraint, rangeList);
+            sheet.AddValidationData(validation);
         }
     }
     /// <summary>
