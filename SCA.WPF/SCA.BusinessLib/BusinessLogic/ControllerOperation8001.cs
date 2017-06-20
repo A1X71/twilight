@@ -471,7 +471,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <returns></returns>
         private int CalculateSheetRelativeIndex(ControllerNodeType nodeType,bool standardFlag, bool mixedFlag, bool generalFlag, bool mcbFlag)
         {
-            int result = 1;
+            int result = 2;
             switch (nodeType)
             { 
                 case ControllerNodeType.Standard:
@@ -548,7 +548,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                     break;
             }
-            return result;
+            return result+1;// +1为新增加了一个“设备类型”页签
         }
         /// <summary>
         /// 根据“回路数量”及“回路分组”取得回路名称集合
@@ -686,6 +686,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 //每回路可设置最大器件数量
                 int maxDeviceAmount = config.GetMaxDeviceAmountValue();
                 string summarySheetName = "摘要信息";
+                string deviceTypeSheetName = "设备类型";
                 //模板工作薄的Sheet页构成为：
                 //摘要信息页签
                 //各回路页签
@@ -696,27 +697,13 @@ namespace SCA.BusinessLib.BusinessLogic
               //  int totalSheetAmount = FIXED_SHEET_AMOUNT + loopSheetAmount;//所有页签数量
                 List<string> lstSheetNames = new List<string>();
                 lstSheetNames.Add(summarySheetName);
-                #region 可正确生成模板后删掉
-                //for (int i = 1; i <= loopSheetAmount; i++)
-                //{
-                //    string loopNameEndIndex;
-                //    if ((i * loopAmountPerSheet) > loopTotalAmount)
-                //    {
-                //        loopNameEndIndex = loopTotalAmount.ToString();
-                //    }
-                //    else
-                //    {
-                //        loopNameEndIndex = (i * loopAmountPerSheet).ToString();
-                //    }
-                //    lstSheetNames.Add(loopSheetNamePrefix + "(" + (((i - 1) * loopAmountPerSheet) + 1).ToString() + "-" + loopNameEndIndex + ")");
-                //}
-                #endregion
+                lstSheetNames.Add(deviceTypeSheetName);                
                 List<string> lstLoopSheetName;
                 if (customizedInfo == null) //默认模板
                 {
                     lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopTotalAmount, loopAmountPerSheet);
                 }
-                else
+                else  //自定义模板
                 {
                     lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopTotalAmount, customizedInfo.LoopGroupAmount);
                 }
@@ -791,6 +778,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lstMergeCellRange.Add(mergeCellRange);
 
                 #endregion
+                #region 设置摘要页签数据模板
                 excelService.RowHeight = 20;//到下一个高度设置前，使用该高度
                 excelService.SetCellValue(lstSheetNames[0], 0, 0, "NT8001系列控制器配置数据导入模板", ExcelService.CellStyleType.Caption);
                 excelService.RowHeight = 15;
@@ -851,8 +839,114 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetColumnWidth(lstSheetNames[0], 0, 15f);
                 excelService.SetColumnWidth(lstSheetNames[0], 1, 15f);
                 excelService.SetColumnWidth(lstSheetNames[0], 2, 40f);
-                //生成所有回路页签模板
-                for (int i = 1; i <= loopSheetAmount; i++)
+                #endregion
+                #region 生成《设备类型》页签模板
+                lstMergeCellRange.Clear();
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfo();
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = 1;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.RowHeight = 20;//到下一个高度设置前，使用该高度
+                excelService.SetCellValue(lstSheetNames[1], 0, 0, "设备类型", ExcelService.CellStyleType.Caption);
+                excelService.RowHeight = 15;
+                excelService.CellSubCaptionStyle = GetSubCaptionCellStyle();
+                excelService.SetCellValue(lstSheetNames[1], 1, 0, " 编号", ExcelService.CellStyleType.SubCaption);
+                excelService.SetCellValue(lstSheetNames[1], 1, 1, " 名称", ExcelService.CellStyleType.SubCaption);
+                int rowNumber = 1;
+                string regionNameStartIndex = "30002";
+                foreach (var deviceType in lstDeviceType)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 0, deviceType.Code, ExcelService.CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 1, deviceType.Name, ExcelService.CellStyleType.Data);
+                }
+                excelService.SetMergeCells(lstSheetNames[1], lstMergeCellRange);//设置"摘要信息"合并单元格
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.DeviceType.ToString(), string.Format("'{0}'!$B$3:$B${1}", lstSheetNames[1], (lstDeviceType.Count + 2).ToString()));
+//                excelService.SetSheetValidationForListConstraint(lstSheetNames[1],"DeviceType",;
+                //写入控制器类型数据
+                List<ControllerType> lstControllerType = config.GetControllerType();                
+                excelService.SetCellValue(lstSheetNames[1], 30000, 3, "控制器类型", ExcelService.CellStyleType.SubCaption);
+                rowNumber=30000;
+                foreach (var controllerType in lstControllerType)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber , 3, controllerType.ToString() , ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.ControllerType.ToString(), string.Format("'{0}'!$D$" + regionNameStartIndex + ":$D${1}", lstSheetNames[1], (lstControllerType.Count + 30001).ToString()));
+                //写入器件长度
+                excelService.SetCellValue(lstSheetNames[1], 30000, 5, "器件长度", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                foreach (var codeLength in lstDeviceCodeLength)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 5, codeLength.ToString(), ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.DeviceCodeLength.ToString(), string.Format("'{0}'!$F$" + regionNameStartIndex + ":$F${1}", lstSheetNames[1], (lstDeviceCodeLength.Count + 30001).ToString()));
+                //写入串口号
+                excelService.SetCellValue(lstSheetNames[1], 30000, 7, "串口号", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                List<string> lstSerialPort = config.GetSerialPortNumber();
+                foreach (var sp in lstSerialPort)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 7, sp, ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.SerialPortNumber.ToString(), string.Format("'{0}'!$H$" + regionNameStartIndex + ":$H${1}", lstSheetNames[1], (lstSerialPort.Count + 30001).ToString()));
+                //写入动作常数
+                excelService.SetCellValue(lstSheetNames[1], 30000, 9, "动作常数", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                List<int> lstActionCoefficient = config.GetActionCoefficient();
+                foreach (var actionCoefficient in lstActionCoefficient)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 9, actionCoefficient.ToString(), ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.ActionCoefficient.ToString(), string.Format("'{0}'!$J$" + regionNameStartIndex + ":$J${1}", lstSheetNames[1], (lstActionCoefficient.Count + 30001).ToString()));
+                //写入动作类型
+                excelService.SetCellValue(lstSheetNames[1], 30000, 11, "动作类型", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                List<LinkageActionType> lstActionType = config.GetLinkageActionType();
+                foreach (var actionType in lstActionType)
+                {
+                    rowNumber++;
+
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 11, actionType.GetDescription(), ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.ActionType.ToString(), string.Format("'{0}'!$L$" + regionNameStartIndex + ":$L${1}", lstSheetNames[1], (lstActionType.Count + 30001).ToString()));
+                //写入联动分类（全部）
+                excelService.SetCellValue(lstSheetNames[1], 30000, 13, "联动分类(全部)", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                List<LinkageType> lstLinkageType = config.GetLinkageType();
+                foreach (var linkageType in lstLinkageType)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 13, linkageType.GetDescription(), ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.LinkageTypeAll.ToString(), string.Format("'{0}'!$N$" + regionNameStartIndex + ":$N${1}", lstSheetNames[1], (lstLinkageType.Count + 30001).ToString()));
+                //写入联动分类（精简）
+                excelService.SetCellValue(lstSheetNames[1], 30000, 15, "联动分类(精简)", ExcelService.CellStyleType.SubCaption);
+                rowNumber = 30000;
+                lstLinkageType = config.GetLinkageTypeWithCastration();
+                foreach (var linkageType in lstLinkageType)
+                {
+                    rowNumber++;
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 15, linkageType.GetDescription(), ExcelService.CellStyleType.Data);
+                }
+                //设置区域名
+                excelService.SetRangeName(RefereceRegionName.LinkageTypeCastration.ToString(), string.Format("'{0}'!$P$" + regionNameStartIndex + ":$P${1}", lstSheetNames[1], (lstLinkageType.Count + 30001).ToString()));
+                #endregion
+                #region 生成所有回路页签模板
+                for (int i = 2; i <= loopSheetAmount; i++)
                 {
                     lstMergeCellRange.Clear();
                     for (int j = 0; j < loopAmountPerSheet; j++)
@@ -918,6 +1012,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                     excelService.SetMergeCells(lstSheetNames[i], lstMergeCellRange);//设置"回路页签"合并单元格
                 }
+                #endregion
                 #region 标准组态表头
                 if (blnStandardLinkageFlag)
                 { 
