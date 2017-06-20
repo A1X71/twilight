@@ -393,22 +393,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-
-                FieldInfo fi=SpecialValue.AnyAlarm.GetType().GetField(SpecialValue.AnyAlarm.ToString());
-                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                string alarmName="初始化";
-                if (attributes.Length > 0)
-                { 
-                    alarmName = attributes[0].Description;
-                }
-                DeviceType anyAlarmType = new DeviceType();
-                anyAlarmType.Code = (int)SpecialValue.AnyAlarm;
-                anyAlarmType.Name = alarmName;
-
                 SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
-                List<DeviceType> lstDeviceType=config.GetDeviceTypeInfo();
-                lstDeviceType.Add(anyAlarmType);
-                
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithAnyAlarm();                
                 return lstDeviceType;
        
             }
@@ -418,12 +404,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             get
             {
                 SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
-                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfo(); 
-                foreach (var r in config.GetAllowedDeviceTypeInfoForAnyAlarm())//报火警器件，不可作为启动器件
-                {
-                    lstDeviceType.RemoveAll((d) => d.Code == r.Code);
-                }
-
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithoutFireDevice();                 
                 return lstDeviceType;
             }
         }
