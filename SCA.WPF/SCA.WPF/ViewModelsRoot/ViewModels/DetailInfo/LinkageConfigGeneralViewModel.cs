@@ -280,15 +280,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <returns></returns>
         public List<Model.LinkageType> GetLinkageType()
         {
-            List<Model.LinkageType> lstLinkageType = new List<Model.LinkageType>();
-            foreach (Model.LinkageType type in Enum.GetValues(typeof(Model.LinkageType)))
-            {
-                if (type != Model.LinkageType.None)
-                {
-                    lstLinkageType.Add(type);
-                }
-            }
-            return lstLinkageType;
+            ControllerConfigBase config = new ControllerConfigBase();
+            return config.GetLinkageType();
         }
 
         public int AddedAmount

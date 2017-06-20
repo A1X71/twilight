@@ -26,24 +26,13 @@ namespace SCA.WPF.CreateController
         /// <returns></returns>
         public List<Model.ControllerType> GetControllerType()
         {
-            List<Model.ControllerType> lstControllerType = new List<Model.ControllerType>();
-            foreach (Model.ControllerType type in Enum.GetValues(typeof(Model.ControllerType)))
-            {
-                if (type != Model.ControllerType.NONE && type != Model.ControllerType.UNCOMPATIBLE)
-                {
-                    lstControllerType.Add(type);
-                }
-            }            
-            return lstControllerType;
+            ControllerConfigBase config = new ControllerConfigBase();
+            return config.GetControllerType();            
         }
         public List<string> GetSerialPortNumber()
         {
-            List<string> lstComInfo = new List<string>();            
-            for (int i = 1; i < 10; i++)
-            {
-                lstComInfo.Add("COM" + i.ToString());
-            }
-            return lstComInfo;
+            ControllerConfigBase config = new ControllerConfigBase();
+            return config.GetSerialPortNumber();                        
         }
         public List<int> DeviceCodeLength
         {

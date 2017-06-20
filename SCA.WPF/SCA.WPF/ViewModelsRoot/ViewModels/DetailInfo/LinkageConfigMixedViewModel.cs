@@ -403,15 +403,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <returns></returns>
         public List<Model.LinkageType> GetLinkageType()
         {
-            List<Model.LinkageType> lstLinkageType = new List<Model.LinkageType>();
-            foreach (Model.LinkageType type in Enum.GetValues(typeof(Model.LinkageType)))
-            {
-                if (type != Model.LinkageType.None && type !=Model.LinkageType.SameLayer && type!=Model.LinkageType.AdjacentLayer)
-                {
-                    lstLinkageType.Add(type);
-                }
-            }
-            return lstLinkageType;
+            ControllerConfigBase config = new ControllerConfigBase();
+            return config.GetLinkageTypeWithCastration();
         }
 
         /// <summary>
@@ -427,15 +420,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public  List<LinkageActionType> GetLinkageActionType()
         {
-            List<LinkageActionType> lstLinkageType = new List<LinkageActionType>();
-            foreach (LinkageActionType type in Enum.GetValues(typeof(LinkageActionType)))
-            {
-                if (type != LinkageActionType.NONE)
-                {
-                    lstLinkageType.Add(type);
-                }
-            }
-            return lstLinkageType;
+            ControllerConfigBase config = new ControllerConfigBase();
+            return config.GetLinkageActionType();
         }
 
         public EditableLinkageConfigMixeds MixedLinkageConfigInfoObservableCollection
