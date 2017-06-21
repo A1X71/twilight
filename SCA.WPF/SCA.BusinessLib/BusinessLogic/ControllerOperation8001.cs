@@ -806,7 +806,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: " + strDeviceCodeLength, ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 9, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[9], ExcelService.CellStyleType.Data);
                 excelService.SetCellValue(lstSheetNames[0], 9, 1, serialPort, ExcelService.CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 9, 2, "可填: COM1-COM10", ExcelService.CellStyleType.Data);
+                excelService.SetCellValue(lstSheetNames[0], 9, 2, "可填: COM1-COM9", ExcelService.CellStyleType.Data);
 
                 excelService.SetCellValue(lstSheetNames[0], 11, 0, "回路设置", ExcelService.CellStyleType.SubCaption);
 
@@ -979,10 +979,10 @@ namespace SCA.BusinessLib.BusinessLogic
                 excelService.SetCellValue(lstSheetNames[1], 30000, 21, "灵敏度", ExcelService.CellStyleType.SubCaption);
                 rowNumber = 30000;
                 List<string> lstSensitiveLevel = config.GetSensitiveLevelList();
-                foreach (var disable in lstDisable)
+                foreach (var sensitiveLevel in lstSensitiveLevel)
                 {
                     rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 21, disable, ExcelService.CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 21, sensitiveLevel, ExcelService.CellStyleType.Data);
                 }
                 excelService.SetRangeName(RefereceRegionName.SensitiveLevel.ToString(), string.Format("'{0}'!$V$" + regionNameStartIndex + ":$V${1}", lstSheetNames[1], (lstSensitiveLevel.Count + 30001).ToString()));
 
@@ -1010,13 +1010,15 @@ namespace SCA.BusinessLib.BusinessLogic
                 #endregion
                 
                 #region 生成所有回路页签模板
-                for (int i = 2; i <= loopSheetAmount+1; i++)
+                int currentLoopStartIndex = 2;
+                for (int i = currentLoopStartIndex; i <= loopSheetAmount + 1; i++)
                 {
                     lstMergeCellRange.Clear();
+                    
                     for (int j = 0; j < loopAmountPerSheet; j++)
                     {
                         //  string deviceCode=defaultMachineNo+ defaultLoopCodeLength
-                        string loopCode=defaultMachineNo + (j + 1 + (i - 1) * loopAmountPerSheet).ToString().PadLeft(defaultLoopCodeLength,'0');
+                        string loopCode=defaultMachineNo + (j + 1 + (i - currentLoopStartIndex) * loopAmountPerSheet).ToString().PadLeft(defaultLoopCodeLength,'0');
                         int extraLine = 0;
                         if (j != 0)
                         {
@@ -1716,10 +1718,19 @@ namespace SCA.BusinessLib.BusinessLogic
                             DataTable dtGeneral = GetOtherSettingData(excelService, strFilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(),out blnSheetExistFlag);
                             if (blnSheetExistFlag)
                             {
+
                                 List<LinkageConfigGeneral> lstGeneralConfig = ConvertToGeneralLinkageModelFromDataTable(dtGeneral);
-                                foreach (var r in lstGeneralConfig)
+                                LinkageConfigGeneralService generalConfigService = new LinkageConfigGeneralService(controller);
+                                if (generalConfigService.IsExistSameCode(lstGeneralConfig))
                                 {
-                                    controller.GeneralConfig.Add(r);
+                                    strStatusInfo += ";" + sheetName + "存在重码";
+                                }
+                                else
+                                {
+                                    foreach (var r in lstGeneralConfig)
+                                    {
+                                        controller.GeneralConfig.Add(r);
+                                    }
                                 }
                             }
                             else
@@ -1734,10 +1745,18 @@ namespace SCA.BusinessLib.BusinessLogic
                             if (blnSheetExistFlag)
                             {
                                 List<ManualControlBoard> lstMCB = ConvertToManualControlBoardModelFromDataTable(dtMCB);
-                                foreach (var r in lstMCB)
+                                ManualControlBoardService mcbService = new ManualControlBoardService(controller);
+                                if (mcbService.IsExistSameCode(lstMCB))
                                 {
-                                    controller.ControlBoard.Add(r);
+                                    strStatusInfo += ";" + sheetName + "存在重码";
                                 }
+                                else
+                                {
+                                    foreach (var r in lstMCB)
+                                    {
+                                        controller.ControlBoard.Add(r);
+                                    }
+                                }                                
                             }
                             else
                             {
@@ -2157,7 +2176,8 @@ namespace SCA.BusinessLib.BusinessLogic
 
                 lcg.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["类型A"].ToString());
                 LinkageType lTypeC = lcg.TypeC;
-                Enum.TryParse<LinkageType>(dt.Rows[i]["C分类"].ToString(), out lTypeC);
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeC.GetType(),dt.Rows[i]["C分类"].ToString()), out lTypeC);                
+
                 lcg.TypeC = lTypeC;
                 if (dt.Rows[i]["C楼号"].ToString() == "")
                 {

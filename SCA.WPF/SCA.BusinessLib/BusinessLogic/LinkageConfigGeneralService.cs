@@ -194,5 +194,25 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
         }
+        /// <summary>
+        /// 在控制器内是否存在相同的组号编码
+        /// </summary>
+        /// <param name="lstMixedConfig">通用组态集合</param>
+        /// <returns></returns>
+        public bool IsExistSameCode(List<SCA.Model.LinkageConfigGeneral> lstGeneralConfig)
+        {
+            if (lstGeneralConfig != null)
+            {
+                foreach (var config in lstGeneralConfig)
+                {
+                    int configCount = lstGeneralConfig.Count((d) => d.Code == config.Code);
+                    if (configCount > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
