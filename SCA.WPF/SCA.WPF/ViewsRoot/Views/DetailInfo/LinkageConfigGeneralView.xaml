@@ -249,7 +249,7 @@
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
                                        Header="C编号" 
-                                       Binding="{Binding Path=DeviceNoC, ValidatesOnDataErrors=True}" 
+                                       Binding="{Binding Path=DeviceCodeC, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <!--<dg:DataGridTextColumn Width="Auto" 
