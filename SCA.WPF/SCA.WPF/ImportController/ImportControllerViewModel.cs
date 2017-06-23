@@ -14,6 +14,7 @@ using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Utility;
 using SCA.Interface;
 using SCA.WPF.ImportContentSelector;
+using System.ComponentModel;
 /* ==============================
 *
 * Author     : William
@@ -59,6 +60,7 @@ namespace SCA.WPF.ImportController
         private ImportContentSelectorViewModel _importContentSelectorDataContext;//选择面板DataContext
         private Visibility _configSection = Visibility.Visible;   //配置部分的显示属性
         private Visibility _importSection = Visibility.Collapsed; //导入部分的显示属性
+        private EXCELVersion _excelVersionForTemplate = EXCELVersion.EXCEL2003; //EXCEL模板版本
         public ControllerModel TheController { get; set; }//当前控制器
         public bool ExcelFormatState
         {
@@ -70,6 +72,18 @@ namespace SCA.WPF.ImportController
             {
                 _excelFormatState = value;
                 ToggleFileFormatDisplayContent();
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public EXCELVersion ExcelVersionForTemplate
+        {
+            get
+            {
+                return _excelVersionForTemplate;
+            }
+            set
+            {
+                _excelVersionForTemplate = value;
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -433,10 +447,19 @@ namespace SCA.WPF.ImportController
             dialog.ShowDialog();
             string strFilePath = dialog.SelectedPath;
             FileService fileService=new FileService();
+            string suffixString = "";
+            if (ExcelVersionForTemplate == EXCELVersion.EXCEL2003)
+            {
+                suffixString = ")模板文件.xls";
+            }
+            else
+            {
+                suffixString = ")模板文件.xlsx";
+            }
             if (DefaultTemplateState)
             {                
                 ControllerOperation8001 operation = new ControllerOperation8001();
-                operation.DownloadDefaultEXCELTemplate(strFilePath + "//" + "默认(" + SelectedControllerType.ToString() + ")模板文件.xlsx", fileService, null);
+                operation.DownloadDefaultEXCELTemplate(strFilePath + "//" + "默认(" + SelectedControllerType.ToString() + suffixString, fileService, null);
             }
             else if (CustomizedTemplateState)
             {
@@ -456,11 +479,11 @@ namespace SCA.WPF.ImportController
                 string fileName="";
                 if(ControllerName.Length>10)
                 {
-                    fileName = fileName + ControllerName.Substring(0, 10) + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xlsx";
+                    fileName = fileName + ControllerName.Substring(0, 10) + "控制器(" + SelectedControllerType.ToString() + suffixString;
                 }
                 else
                 {
-                    fileName = fileName + ControllerName + "控制器(" + SelectedControllerType.ToString() + ")模板文件.xlsx";
+                    fileName = fileName + ControllerName + "控制器(" + SelectedControllerType.ToString() + suffixString;
                 }
 
                 operation.DownloadDefaultEXCELTemplate(strFilePath + "//" +fileName , fileService, customizedInfo);
@@ -538,6 +561,16 @@ namespace SCA.WPF.ImportController
                 _importSection = value;
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
+        }
+        //取得EXCEL版本
+        public List<EXCELVersion> GetExcelVersion()
+        {
+            List<EXCELVersion> lstExcelVersion = new List<EXCELVersion>();
+            foreach ( EXCELVersion version in Enum.GetValues(typeof(EXCELVersion)))
+            {
+                lstExcelVersion.Add(version);
+            }
+            return lstExcelVersion;
         }
         #endregion
         #region 私有方法

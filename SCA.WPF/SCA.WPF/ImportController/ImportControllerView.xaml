@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              xmlns:VM="clr-namespace:SCA.WPF.CreateController"
+             xmlns:DContext="clr-namespace:SCA.WPF.ImportController"
              xmlns:View="clr-namespace:SCA.WPF.ViewsRoot.Views"        
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
@@ -19,6 +20,9 @@
 
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="SerialPortNumberEnumDS" ObjectType="{x:Type VM:CreateControllerViewModel}" MethodName="GetSerialPortNumber">
+
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="ExcelVersionEnumDS"  ObjectType="{x:Type DContext:ImportControllerViewModel}" MethodName="GetExcelVersion">
 
         </ObjectDataProvider>
     </UserControl.Resources>
@@ -209,18 +213,29 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                        <ColumnDefinition />
                         <ColumnDefinition Width="20px"/>
-                        <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="文件位置"  Foreground="Black"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" Text="{Binding Path=ExcelFilePath,Mode=TwoWay}" />
-                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="0" Grid.Column="2" Width="20px" Command="{Binding Path=SelectExcelPathCommand}">...</Button>
-                    <Button x:Name="ImportExcelButton"  Grid.Row="0" Grid.Column="3" Command="{Binding Path=ImportDataFromExcelCommand}">读取</Button>
-                    <Button x:Name="DownloadExcelTemplateButton"  Grid.Row="0" Grid.Column="4" Command="{Binding Path=DownloadExcelTemplateCommand}">下载模板</Button>
+                    <TextBlock Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180px" Margin="5,0,0,0" Text="{Binding Path=ExcelFilePath,Mode=TwoWay}" />
+                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="0" Grid.Column="3"  Width="20px" Command="{Binding Path=SelectExcelPathCommand}">...</Button>
+                    <Button x:Name="ImportExcelButton"  Grid.Row="0" Grid.Column="4" Command="{Binding Path=ImportDataFromExcelCommand}">读取</Button>
+                    <Label Grid.Row="1" Grid.Column="0" Content="EXCEL版本"  Foreground="Black"/>
+                    <ComboBox IsSynchronizedWithCurrentItem="False" 
+                                          ItemsSource="{Binding Source={StaticResource ExcelVersionEnumDS}}"
+                                          SelectedItem="{Binding Path=ExcelVersionForTemplate,Mode=TwoWay}"
+                                          x:Name="ExcelVersionComboBox"                               
+                                          Grid.Column="1" 
+                                          Width="100px"
+                                           Grid.ColumnSpan="2"
+                                          Grid.Row="1" HorizontalAlignment="Left" />
+                        
+                        <Button x:Name="DownloadExcelTemplateButton"  Grid.Row="1" Grid.Column="4" Command="{Binding Path=DownloadExcelTemplateCommand}">下载模板</Button>
                 </Grid>
             </Grid>
 

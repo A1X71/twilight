@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+
 namespace SCA.Interface
 {
     /// <summary>
@@ -12,6 +13,32 @@ namespace SCA.Interface
     /// </summary>
    public  interface IExcelService:IDisposable
     {
+       //private CellStyle _subCaptionStyle; //副标题样式
+       EXCELVersion Version{get;}//EXCEL版本
+       /// <summary>
+       /// 设置标题样式
+       /// </summary>
+       CellStyle CellCaptionStyle { get; set; }
+       /// <summary>
+       /// 设置副标题样式
+       /// </summary>
+       CellStyle CellSubCaptionStyle { get; set; }     
+       /// <summary>
+       /// 设置数据样式
+       /// </summary>
+       CellStyle CellDataStyle { get; set; }
+       /// <summary>
+       /// 设置表头样式
+       /// </summary>
+       CellStyle CellTableHeadStyle { get; set; }
+       
+           //  get { return CellSubCaptionStyle; } 
+           //set 
+           //{ 
+           //    _subCaptionStyle = value; 
+           //    //_xssfSubCaptionCellStyle = PhaseCellStyle(_subCaptionStyle); 
+           //    PhaseCellStyle(_subCaptionStyle,Version);
+           //} 
         /// <summary>
         /// 工作薄存储路径
         /// </summary>
@@ -21,13 +48,7 @@ namespace SCA.Interface
        /// </summary>
         short RowHeight { get; set; }
         
-        /// <summary>
-        /// 返回工作薄内指定的Sheet页数据
-        /// </summary>
-        /// <param name="excelPath"></param>
-        /// <param name="lstSheetNames">工作表名称</param>
-        /// <returns></returns>
-        DataSet OpenExcel(string excelPath, List<string> lstSheetNames);
+        
         /// <summary>
         /// 打开EXCEL
         /// </summary>
@@ -87,16 +108,24 @@ namespace SCA.Interface
         /// <param name="strCellValue">数据值</param>
         /// <param name="paramCellStyle">单元格样式</param>
         void SetCellValue(string strSheetName, int intRowNumber, int intCellNumber, object strCellValue, CellStyleType styleType);
+        
        /// <summary>
        /// 设置区域名称
        /// </summary>
-        void SetRangeName(string rangeName,string formula);
-        
+        void SetRangeName(string rangeName,string formula);        
+        /// <summary>
+        /// 为页签序列验证
+        /// </summary>
+        /// <param name="sheetName">目标Sheet</param>
+        /// <param name="rangeName">值域名称</param>
+        /// <param name="cellRange">应用此验证的范围</param>
+        void SetSheetValidationForListConstraint(string sheetName, string rangeName, MergeCellRange cellRange);
+        //object PhaseCellStyle(CellStyle paramCellStyle);
     }
     /// <summary>
     /// 单元格样式
     /// </summary>
-    public enum CellStyleType { Caption, SubCaption, Data, None };
+   public enum CellStyleType { Caption, SubCaption, Data, TableHead, None };
     /// <summary>
         /// 单元格合并信息
         /// </summary>
@@ -119,4 +148,48 @@ namespace SCA.Interface
             /// </summary>
             public int LastColumnIndex { get; set; }
         }
+    
+             
+    
+    public enum EXCELVersion
+    { 
+        
+        EXCEL2003=0,
+        EXCEL2007=1
+    }
+    /// <summary>
+    /// 自定义样式类
+    /// </summary>
+    public class CellStyle
+    {
+        /// <summary>
+        /// 字体
+        /// </summary>
+        public enum FontNameValue
+        {
+            黑体,
+            宋体,
+            //[EnumMember(Value = "Times New Roman")]
+            //System.Runtime.Serialization.
+            TimesNewRoman
+        };
+
+        /// <summary>
+        /// 设置字体加粗值
+        /// </summary>
+        private bool fontBoldFlag = false;
+        public bool FontBoldFlag { get { return fontBoldFlag; } set { fontBoldFlag = value; } }
+        public enum HorizontalAlignmentValue { Center, Left, Right };
+        public enum VerticalAlignmentValue { Center, Top, Bottom };
+        public enum BorderStyleValue { Thin, None };
+        public enum BorderColorValue { Black, None };
+        public FontNameValue FontName { set; get; }
+        public short FontHeightInPoints { get; set; }
+
+        public BorderStyleValue BorderStyle { set; get; }
+        public HorizontalAlignmentValue HorizontalAlignment { set; get; }
+        public VerticalAlignmentValue VerticalAlignment { set; get; }
+        public BorderColorValue BorderColor { get; set; }
+        public bool WrapText { get; set; }
+    }
 }
