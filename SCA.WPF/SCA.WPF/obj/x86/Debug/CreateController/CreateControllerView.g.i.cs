@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using SCA.WPF;
 using SCA.WPF.CreateController;
 using System;
 using System.Diagnostics;

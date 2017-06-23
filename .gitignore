@@ -24,6 +24,11 @@ SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.Model.dll
 SCA.WPF/SCA.BusinessLib/bin/x86/Release/SCA.Model.pdb
 SCA.WPF/SCA.Model/bin/x86/Release/SCA.Model.dll
 SCA.WPF/SCA.Model/bin/x86/Release/SCA.Model.pdb
+SCA.DatabaseAccess/bin/x86/Debug
+SCA.DomainInterface/bin/x86/Debug
+SCA.WPF/SCA.BusinessLib/bin/x86/Debug
+SCA.WPF/SCA.Model/bin/x86/Debug
+SCA.WPF/SCA.WPF/bin/x86/Debug
 SCA.WPF/NT8001SeriesControllerAssistant.sln
 SCA.WPF/NT8001SeriesControllerAssistant.suo
 SCA.WPF/NT8001SeriesControllerAssistant.v12.suo
