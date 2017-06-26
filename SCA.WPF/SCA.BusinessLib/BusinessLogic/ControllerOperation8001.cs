@@ -23,6 +23,8 @@ namespace SCA.BusinessLib.BusinessLogic
     public class ControllerOperation8001:ControllerOperationBase,IControllerOperation
     {
 
+        public event Action<int, int> UpdateProgressBarEvent;        
+
         public ControllerOperation8001()
         { 
         
@@ -207,23 +209,24 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public int GetMaxDeviceID()
         { 
-            var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers  where r.Type==ControllerType.NT8001 select r;
-            int maxDeviceID = 0;
-            foreach (var c in controllers)
-            {
-                foreach (var l in c.Loops)
-                {
-                    List<DeviceInfo8001> lstDeviceInfo8001=l.GetDevices<DeviceInfo8001>();
-                    if(lstDeviceInfo8001.Count>0)
-                    {
-                        int currentLoopMaxDeviceID=lstDeviceInfo8001.Max(device=>device.ID);
-                        if(currentLoopMaxDeviceID>maxDeviceID)
-                        {
-                            maxDeviceID = currentLoopMaxDeviceID;
-                        }                    
-                    }                        
-                }
-            }
+            //更改于2017-06-23 采用属性值记录
+            //var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers  where r.Type==ControllerType.NT8001 select r;
+            int maxDeviceID = ProjectManager.GetInstance.MaxDeviceIDInController8001;
+            //foreach (var c in controllers)
+            //{
+            //    foreach (var l in c.Loops)
+            //    {
+            //        List<DeviceInfo8001> lstDeviceInfo8001=l.GetDevices<DeviceInfo8001>();
+            //        if(lstDeviceInfo8001.Count>0)
+            //        {
+            //            int currentLoopMaxDeviceID=lstDeviceInfo8001.Max(device=>device.ID);
+            //            if(currentLoopMaxDeviceID>maxDeviceID)
+            //            {
+            //                maxDeviceID = currentLoopMaxDeviceID;
+            //            }                    
+            //        }                        
+            //    }
+            //}
             return maxDeviceID;
         }
 
@@ -1471,7 +1474,9 @@ namespace SCA.BusinessLib.BusinessLogic
             Dictionary<int, string> dictNameOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetNameOfOtherSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”其它设置的名称配置信息
             Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”其它设置的值的有效性
 
-
+            int elapsedCumulativeTime = 5;
+            int totalTime = 30;
+            UpdateProgressBarEvent(elapsedCumulativeTime, totalTime);
             string strStatusInfo = ""; //状态描述信息
             bool blnIsError=false;     //错误标志
             //读取摘要页的列配置信息
@@ -1489,6 +1494,7 @@ namespace SCA.BusinessLib.BusinessLogic
             summarySheetRowDefinition.Add(loopSettingStartRow, 15);//回路信息起始行定义
             summarySheetRowDefinition.Add(otherSettingStartRow, 19);//其它信息起始行定义
             bool blnSheetExistFlag;
+
             DataTable dt=  excelService.OpenExcel(strFilePath,config.SummarySheetNameForExcelTemplate,summarySheetRowDefinition,out blnSheetExistFlag);
             ControllerModel controller = new ControllerModel(); //存储"控制器配置"信息
             int loopAmount =1;//回路数量
@@ -1593,7 +1599,7 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 string str = "TheErrorMessage";
             }
-            if (blnIsError) //存在错误，直接反回
+            if (blnIsError) //存在错误，直接返回
             {
                 strErrorMessage = strStatusInfo;
                 return controller;
@@ -1638,6 +1644,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 strErrorMessage = strStatusInfo;
                 return controller;
             }
+
+           
             //分组信息>回路数量时，重置回路分组信息
             if (loopGroup > loopAmount)
             {
@@ -1653,8 +1661,30 @@ namespace SCA.BusinessLib.BusinessLogic
             //将EXCEL模板中的回路信息增加至Controller
             foreach (var sheetName in lstLoopSheetName)            
             {
-               string loopDetailErrorInfo="";               
-               List<LoopModel> lstLoops= GetLoopData(excelService, strFilePath, sheetName, maxDeviceAmount,controller, out blnSheetExistFlag,out loopDetailErrorInfo);
+               string loopDetailErrorInfo="";
+               int initialCount = 0;//Sheet计数，用于判断是否为每一次读取
+               List<LoopModel> lstLoops=null;//从EXCEL文件中取得数据
+               int elapsedSingleSheetTime;
+               elapsedCumulativeTime=0;
+               totalTime=0;                               
+
+               if (initialCount == 0)
+               {
+                   lstLoops = GetLoopData(excelService, strFilePath, sheetName, maxDeviceAmount, controller, out blnSheetExistFlag, out loopDetailErrorInfo,out elapsedSingleSheetTime);
+                   totalTime = elapsedSingleSheetTime * (lstLoopSheetName.Count + lstOtherSheetName.Count);                   
+               }
+               else
+               {
+                   lstLoops = GetLoopData(excelService, strFilePath, sheetName, maxDeviceAmount, controller, out blnSheetExistFlag, out loopDetailErrorInfo,out elapsedSingleSheetTime);
+               }
+               UpdateProgressBarEvent(elapsedCumulativeTime,totalTime);
+               //elapsedCumulativeTime += elapsedSingleSheetTime;
+               // object[] args=new [2];
+               // args[0]=elapsedCumulativeTime;
+               // args[1]=totalTime;
+               //SCA.EventMediator("UpdateProgressBarStatusForExcelReading", args);//读取EXCEL时的进度条
+                
+                //System.ComponentModel.BackgroundWorker
                if (lstLoops != null)
                { 
                    if (blnSheetExistFlag)
@@ -1683,6 +1713,7 @@ namespace SCA.BusinessLib.BusinessLogic
                    strErrorMessage = strStatusInfo;
                    return controller;
                }
+               initialCount++;
             }
             foreach (var sheetName in lstOtherSheetName)
             {
@@ -1793,7 +1824,7 @@ namespace SCA.BusinessLib.BusinessLogic
                         break;
                 }
             }
-            strErrorMessage = strStatusInfo;
+            strErrorMessage = strStatusInfo;            
             return controller;            
         }
         /// <summary>
@@ -1805,13 +1836,24 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="maxDevcieAmount"></param>
         /// <param name="deviceCodeLength"></param>
         /// <returns></returns>
-        private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,ControllerModel controller,out bool sheetExistFlag,out string loopDetailErrorInfo)
+        private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,ControllerModel controller,out bool sheetExistFlag,out string loopDetailErrorInfo,out int elapsedTime)
         {
             int[] loopRange = ParseLoopSheetName(sheetName);//取得回路编号范围
             Dictionary<int, int> rowDefinition = new Dictionary<int, int>();
             int extraLines=2; //除数据外的其它行数
-            for (int i = 0; i < (loopRange[1]-loopRange[0]+1); i++)
-            {                
+            //for (int i = loopRange[0]; i <= loopRange[loopRange.Length-1]; i++)
+            //{
+            //    if (i == 1)
+            //    {
+            //        rowDefinition.Add(1, i * maxDevcieAmount + i  * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+            //    }
+            //    else
+            //    {
+            //        rowDefinition.Add(i * maxDevcieAmount + (i ) * extraLines - 1, (i ) * maxDevcieAmount + (i) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+            //    }
+            //}
+            for (int i = 0; i < (loopRange[1] - loopRange[0] + 1); i++)
+            {
                 if (i == 0)
                 {
                     rowDefinition.Add(1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
@@ -1822,7 +1864,9 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
             DataTable dt = new DataTable();
-            dt = excelService.OpenExcel(filePath, sheetName, rowDefinition, out sheetExistFlag);
+            int intElapsedTime;
+            dt = excelService.OpenExcel(filePath, sheetName, rowDefinition, out sheetExistFlag, out intElapsedTime);
+            elapsedTime = intElapsedTime;
             return ConvertToLoopModelFromDataTable(dt, controller,out loopDetailErrorInfo);
             //如果未找到指定sheetName的EXCEL数据，需要返回“页签错误”的信息            
         }
@@ -1844,13 +1888,20 @@ namespace SCA.BusinessLib.BusinessLogic
 
             
             string loopCode = "";
-            LoopModel loop=null;
-            int[] loopIndexRange=ParseLoopSheetName(dt.TableName);
+            LoopModel loop=null;            
+            int[] loopIndexRange=ParseLoopSheetName(dt.TableName);//取得工作表内回路的起始编号
+            int loopsAmount=loopIndexRange[1] - loopIndexRange[0] + 1;
+            int[] loopIndex = new int[loopsAmount];
+            for (int i = 0; i < loopsAmount; i++)
+            {
+                loopIndex[i] = loopIndexRange[0]+i;
+            }
             int loopCount = 0;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                if (loopCode != dt.Rows[i]["编码"].ToString().Substring(0, controller.DeviceAddressLength - 3))//器件编码为3位
-               {
+               {     
+
                    //新建回路
                    loopCode = dt.Rows[i]["编码"].ToString().Substring(0, controller.DeviceAddressLength - 3);
                    loop = new LoopModel();
@@ -1866,16 +1917,17 @@ namespace SCA.BusinessLib.BusinessLogic
                    }
                    if (!blnErrorFlag)
                    {
-                       if (loopIndexRange[loopCount].ToString().PadLeft(controller.LoopAddressLength,'0') == loop.Code.Substring(machineNumberOfDevice.Length)) //回路号验证
+                       if (loopIndex[loopCount].ToString().PadLeft(controller.LoopAddressLength, '0') != loop.Code.Substring(machineNumberOfDevice.Length)) //回路号验证
                        {
-                           loopDetailErrorInfo += ";器件(" + dt.Rows[i]["编码"].ToString() + ")回路号(" + loop.Code.Substring(machineNumberOfDevice.Length) + ")与模板回路号(" + loopIndexRange[loopCount].ToString().PadLeft(controller.LoopAddressLength, '0') + ")不符";
+                           loopDetailErrorInfo += ";器件(" + dt.Rows[i]["编码"].ToString() + ")回路号(" + loop.Code.Substring(machineNumberOfDevice.Length) + ")与模板回路号(" + loopIndex[loopCount].ToString().PadLeft(controller.LoopAddressLength, '0') + ")不符";
                            blnErrorFlag = true;
                        }
                    }
                    if (blnErrorFlag)  //机号或回路号不正确，停止处理，返回调用
                    {
                        return null;
-                   }                   
+                   }
+                   loopCount++;
                }
                DeviceInfo8001 device = new DeviceInfo8001();
                maxDeviceID++;
@@ -1954,12 +2006,14 @@ namespace SCA.BusinessLib.BusinessLogic
                    loop.DeviceAmount++;
                }
             }
+            //更新最大器件ID
+            ProjectManager.GetInstance.MaxDeviceIDInController8001 = maxDeviceID;
             return lstLoops;            
         }
 
         
         /// <summary>
-        /// 解析回路工作表的名称，取得回路起始号及终止号
+        /// 解析回路工作表的名称，取得回路号范围 
         /// </summary>
         /// <param name="sheetName"></param>
         /// <returns></returns>
@@ -1968,17 +2022,28 @@ namespace SCA.BusinessLib.BusinessLogic
             int lineCharIndex = sheetName.IndexOf('-');
             int leftParenthesis = sheetName.IndexOf('(');
             int rightParenthesis = sheetName.IndexOf(')');
-            int[] loopIndex = new int[2];
+            
             string strLoopStartIndex = sheetName.Substring(leftParenthesis + 1, lineCharIndex-leftParenthesis-1);
             string strLoopEndIndex = sheetName.Substring(lineCharIndex + 1, rightParenthesis- lineCharIndex-1);
+            int loopStartIndex=1;
+            int loopEndIndex=1;
             if (strLoopStartIndex != "")
             { 
-                loopIndex[0] = Convert.ToInt32(strLoopStartIndex);
+                loopStartIndex = Convert.ToInt32(strLoopStartIndex);
             }
             if (strLoopEndIndex != "")
             {
-                loopIndex[1] = Convert.ToInt32(strLoopEndIndex);
+                loopEndIndex = Convert.ToInt32(strLoopEndIndex);
             }
+            //loopStartIndex = loopStartIndex == 0 ? 1 : loopStartIndex;
+            //loopEndIndex = loopEndIndex == 0 ? 1 : loopEndIndex;
+            int[] loopIndex = new int[2];
+            //for(int i=loopStartIndex-1;i<=loopEndIndex-1 ;i++)
+            //{
+            //    loopIndex[i] = i+1;
+            //}         
+            loopIndex[0] = loopStartIndex;
+            loopIndex[1] = loopEndIndex;
             return loopIndex;
         }
 
@@ -1999,13 +2064,16 @@ namespace SCA.BusinessLib.BusinessLogic
         private List<LinkageConfigStandard> ConvertToStandardLinkageModelFromDataTable(DataTable dt)
         {
             List<LinkageConfigStandard> lstStandardLinkage = new List<LinkageConfigStandard>();
+            int maxID = ProjectManager.GetInstance.MaxIDForStandardLinkageConfig;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 if (dt.Rows[i]["输出组号"].ToString() == "")//无输出组号值，认为此工作表已不存在有效数据
                 {
                     break;
                 }
+                maxID++;
                 LinkageConfigStandard lcs = new LinkageConfigStandard();
+                lcs.ID = maxID;
                 lcs.Code = dt.Rows[i]["输出组号"].ToString();
                 lcs.DeviceNo1 = dt.Rows[i]["联动模块1"].ToString();
                 lcs.DeviceNo2 = dt.Rows[i]["联动模块2"].ToString();
@@ -2021,6 +2089,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcs.LinkageNo3 = dt.Rows[i]["联动组3"].ToString();
                 lstStandardLinkage.Add(lcs);
             }
+            ProjectManager.GetInstance.MaxIDForStandardLinkageConfig = maxID;
             return lstStandardLinkage;
         }
         /// <summary>
@@ -2032,13 +2101,16 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             ControllerConfig8001 config = new ControllerConfig8001();
             List<LinkageConfigMixed> lstMixedLinkage = new List<LinkageConfigMixed>();
+            int maxID = ProjectManager.GetInstance.MaxIDForMixedLinkageConfig;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
                 {
                     break;
                 }
+                maxID++;
                 LinkageConfigMixed lcm = new LinkageConfigMixed();
+                lcm.ID = maxID;
                 lcm.Code = dt.Rows[i]["编号"].ToString();
                 lcm.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
 
@@ -2148,6 +2220,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcm.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString()); 
                 lstMixedLinkage.Add(lcm);
             }
+            ProjectManager.GetInstance.MaxIDForMixedLinkageConfig = maxID;
             return lstMixedLinkage;
         }
         /// <summary>
@@ -2159,13 +2232,16 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             ControllerConfig8001 config = new ControllerConfig8001();
             List<LinkageConfigGeneral> lstGeneralLinkage = new List<LinkageConfigGeneral>();
+            int maxID = ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
                 {
                     break;
                 }
+                maxID++;
                 LinkageConfigGeneral lcg = new LinkageConfigGeneral();
+                lcg.ID = maxID;
                 lcg.Code = dt.Rows[i]["编号"].ToString();
                 lcg.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
                 if (dt.Rows[i]["A楼号"].ToString() == "")
@@ -2236,6 +2312,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcg.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString());
                 lstGeneralLinkage.Add(lcg);
             }
+            ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig = maxID;
             return lstGeneralLinkage;
         }
         /// <summary>
@@ -2247,13 +2324,16 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             //ControllerConfig8001 config = new ControllerConfig8001();
             List<ManualControlBoard> lstManualControlBoard = new List<ManualControlBoard>();
+            int maxID = ProjectManager.GetInstance.MaxIDForManualControlBoard;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
                 {
                     break;
                 }
+                maxID++;
                 ManualControlBoard mcb = new ManualControlBoard();
+                mcb.ID = maxID;
                 mcb.Code = Convert.ToInt32(dt.Rows[i]["编号"].ToString().NullToZero());
                 mcb.BoardNo = Convert.ToInt32(dt.Rows[i]["板卡号"].ToString().NullToZero());
                 mcb.SubBoardNo = Convert.ToInt32(dt.Rows[i]["手盘号"].ToString().NullToZero());
@@ -2261,6 +2341,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 mcb.DeviceCode = dt.Rows[i]["地编号"].ToString().NullToZero();
                 lstManualControlBoard.Add(mcb);
             }
+            ProjectManager.GetInstance.MaxIDForManualControlBoard = maxID;
             return lstManualControlBoard;
         }
         private CellStyle GetCaptionCellStyle()
