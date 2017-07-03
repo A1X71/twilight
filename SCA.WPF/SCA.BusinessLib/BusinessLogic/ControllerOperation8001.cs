@@ -482,956 +482,453 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return lstDeviceSimulator;
         }
-        /// <summary>
-        /// 计算节点所在页签的相对位置
-        /// </summary>
-        /// <param name="nodeType"></param>
-        /// <param name="standardFlag"></param>
-        /// <param name="mixedFlag"></param>
-        /// <param name="generalFlag"></param>
-        /// <param name="mcbFlag"></param>
-        /// <returns></returns>
-        private int CalculateSheetRelativeIndex(ControllerNodeType nodeType,bool standardFlag, bool mixedFlag, bool generalFlag, bool mcbFlag)
-        {
-            int result = 2;
-            switch (nodeType)
-            { 
-                case ControllerNodeType.Standard:
-                    if (standardFlag)
-                    {
-                        result = 1;
-                    }
-                    else
-                    {
-                        result = 0;
-                    }
-                    break;
-                case ControllerNodeType.Mixed:
-                    if (mixedFlag)
-                    {
-                        if (standardFlag)
-                        {
-                            result = 2;
-                        }
-                        else
-                        {
-                            result = 1;
-                        }
-                    }
-                    else
-                    {
-                        result = 0;
-                    }
-                    break;
-                case ControllerNodeType.General:
-                    if (generalFlag)
-                    {
-                        if (standardFlag && mixedFlag)
-                        {
-                            result = 3;
-                        }
-                        else if ((standardFlag && mixedFlag == false) || (standardFlag == false && mixedFlag))
-                        {
-                            result = 2;
-                        }
-                        else
-                        {
-                            result = 1;
-                        }
-                    }
-                    else
-                    {
-                        result = 0;
-                    }
-                    break;
-                case ControllerNodeType.Board:
-                    if (mcbFlag)
-                    {
-                        if (standardFlag && mixedFlag && generalFlag)
-                        {
-                            result = 4;
-                        }
-                        else if ((standardFlag && mixedFlag && generalFlag == false) || (standardFlag && mixedFlag == false && generalFlag) || (standardFlag == false && mixedFlag && generalFlag))
-                        {
-                            result = 3;
-                        }
-                        else if ((standardFlag && mixedFlag == false && generalFlag == false) || (standardFlag == false && mixedFlag && generalFlag == false) || (standardFlag == false && mixedFlag == false && generalFlag))
-                        {
-                            result = 2;
-                        }
-                        else
-                        {
-                            result = 1;
-                        }
-                    }
-                    else
-                    {
-                        result = 0;
-                    }
-                    break;
-            }
-            return result+1;// +1为新增加了一个“设备类型”页签
-        }
-        /// <summary>
-        /// 根据“回路数量”及“回路分组”取得回路名称集合
-        /// </summary>
-        /// <param name="loopSheetNamePrefix">回路页签命名前缀</param>
-        /// <param name="loopAmount">回路数量</param>
-        /// <param name="loopGroupAmount">回路分组</param>
-        /// <returns></returns>
-        private List<string> GetSheetNameForLoop(string loopSheetNamePrefix, int loopAmount, int loopGroupAmount)
-        {
-            int loopAmountPerSheet = Convert.ToInt32(Math.Ceiling((float)loopAmount / loopGroupAmount));
-            //回路页签数量
-            int loopSheetAmount = Convert.ToInt32(Math.Ceiling((float)loopAmount / loopAmountPerSheet));
-            List<string> lstSheetNames = new List<string>();            
-            for (int i = 1; i <= loopSheetAmount; i++)
-            {
-                string loopNameEndIndex;
-                if ((i * loopAmountPerSheet) > loopAmount)
-                {
-                    loopNameEndIndex = loopAmount.ToString();
-                }
-                else
-                {
-                    loopNameEndIndex = (i * loopAmountPerSheet).ToString();
-                }
-                lstSheetNames.Add(loopSheetNamePrefix + "(" + (((i - 1) * loopAmountPerSheet) + 1).ToString() + "-" + loopNameEndIndex + ")");
-            }
-            return lstSheetNames;
-        }
-        /// <summary>
-        /// 取得EXCEL版本
-        /// </summary>
-        /// <param name="strFilePath"></param>
-        /// <returns></returns>
-        private SCA.Interface.EXCELVersion GetExcelVersion(string strFilePath)
-        {
-            string extentionName = strFilePath.Substring(strFilePath.LastIndexOf('.')+1);
-            if (extentionName == "xlsx")
-            {
-                return EXCELVersion.EXCEL2007;
-            }
-            else
-            {
-                return EXCELVersion.EXCEL2003;
-            }
-        }
 
-        public bool DownloadDefaultEXCELTemplate(string strFilePath,IFileService fileService,ExcelTemplateCustomizedInfo customizedInfo)
+
+        protected override bool GenerateExcelTemplateLoopSheet(List<string> sheetNames, IControllerConfig config,ExcelTemplateCustomizedInfo summaryInfo, ref IExcelService excelService)
         {
             try
             {
-                EXCELVersion version = GetExcelVersion(strFilePath);
-
-                //const int FIXED_SHEET_AMOUNT = 5;//摘要信息,标准组态,通用组态,混合组态,网络手动盘
-                ControllerConfig8001 config = new ControllerConfig8001();
-                List<int> lstDeviceCodeLength=config.GetDeviceCodeLength(); //器件编码长度集合
-                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetDeviceColumns(); //取得器件的列定义信息
-                Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”控制器设置的配置信息
-                string strDeviceCodeLength = ""; //器件编码长度字符串
+                #region 生成所有回路页签模板
+                int currentLoopStartIndex = 2;
+                int defaultLoopCodeLength = 2;//默认回路编码长度
+                string loopSheetNamePrefix = "";//回路页签名称前缀
+                short maxDeviceAmount = config.GetMaxDeviceAmountValue();
                 int defaultDeviceTypeCode = config.DefaultDeviceTypeCode;//默认器件编码                
                 DeviceType defaultDeviceType = config.GetDeviceTypeViaDeviceCode(defaultDeviceTypeCode);//默认器件类型
-                string defaultMachineNo = "00";//默认机器号
-                int defaultMachineNoLength=defaultMachineNo.Length;  //默认机器号长度
-                int defaultLoopCodeLength = 2;//默认回路编码长度
-                int defaultDeviceCodeLength = 7;//默认器件编码长度
-                int loopMaxLoopAmount=config.GetMaxLoopAmountValue();
+                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetDeviceColumns(); //取得器件的列定义信息
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
                 ControllerNodeModel[] nodes = config.GetNodes();
-                string loopSheetNamePrefix="";//回路页签名称前缀
-                string standardLinkageSheetName="";//标准组态页签名称
-                string generalLinkageSheetName="";//通用组态页签名称
-                string mixedLinkageSheetName="";//混合组态页签名称
-                string manualControlBoardSheetName = "";//网络手动盘页签名称
-                foreach (var r in lstDeviceCodeLength)
-                {
-                    strDeviceCodeLength += r.ToString()+",";
-                }
-                strDeviceCodeLength = strDeviceCodeLength.Substring(0, strDeviceCodeLength.LastIndexOf(","));
                 for (int i = 0; i < nodes.Length; i++)
                 {
-                    switch(nodes[i].Type)
+                    switch (nodes[i].Type)
                     {
                         case ControllerNodeType.Loop:
                             loopSheetNamePrefix = nodes[i].Name;
                             break;
-                        case ControllerNodeType.Standard:
-                            standardLinkageSheetName = nodes[i].Name;
-                            break;
-                        case ControllerNodeType.General:
-                            generalLinkageSheetName = nodes[i].Name;
-                            break;
-                        case ControllerNodeType.Mixed:
-                            mixedLinkageSheetName = nodes[i].Name;
-                            break;
-                        case ControllerNodeType.Board:
-                            manualControlBoardSheetName = nodes[i].Name;
-                            break;
                     }
                 }
-
-                //此控制器可设置的回路总数量                
-                int loopTotalAmount = loopMaxLoopAmount;                
-                string controllerName = "默认名称NT8001";
-                string serialPort = "COM1";
-                //每页签内的回路数量
-                int loopAmountPerSheet = 8;
-                bool blnStandardLinkageFlag = true;
-                bool blnMixedLinkageFlag = true;
-                bool blnGeneralLinkageFlag = true;
-                bool blnManualControlBoardFlag = true;
-                if (customizedInfo != null)
+                for (int i = currentLoopStartIndex; i <= summaryInfo.LoopSheetAmount + 1; i++)
                 {
-                    defaultDeviceCodeLength = customizedInfo.SelectedDeviceCodeLength;
-                    switch(defaultDeviceCodeLength)
-                    {
-                        case 8:
-                            defaultMachineNoLength = 3;                                                        
-                            defaultMachineNo = customizedInfo.MachineNumber.ToString().PadLeft(defaultMachineNoLength, '0');
-                            break;
-                        case 7:
-                            defaultMachineNoLength = 2;                            
-                            defaultMachineNo = customizedInfo.MachineNumber.ToString().PadLeft(defaultMachineNoLength, '0');
-                            break;
-                        default:
-                            break;
-                    }
 
-                    if (customizedInfo.LoopAmount > loopMaxLoopAmount || customizedInfo.LoopAmount <=0 )//确保回路信息在合理范围内
-                    {
-                        loopTotalAmount = loopMaxLoopAmount;
-                    }
-                    else
-                    {
-                        loopTotalAmount = customizedInfo.LoopAmount;
-                    }
-                    //分组信息<0或大于最大回路数，或大于设置的回路总数时，所有回路仅分为1组
-                    if (customizedInfo.LoopGroupAmount < 0 || customizedInfo.LoopGroupAmount > loopMaxLoopAmount || customizedInfo.LoopGroupAmount > loopTotalAmount)
-                    {
-                        loopAmountPerSheet = loopTotalAmount;
-                    }
-                    else
-                    {
-                        loopAmountPerSheet = Convert.ToInt32(Math.Ceiling((float)loopTotalAmount / customizedInfo.LoopGroupAmount));
-                    }
-                    
-                    controllerName = customizedInfo.ControllerName;
-                    serialPort = customizedInfo.SerialPortNumber;
-                    blnStandardLinkageFlag = customizedInfo.StandardLinkageFlag;
-                    blnMixedLinkageFlag = customizedInfo.MixedLinkageFlag;
-                    blnGeneralLinkageFlag = customizedInfo.GeneralLinkageFlag;
-                    blnManualControlBoardFlag = customizedInfo.ManualControlBoardFlag;
-                }
-                //回路页签数量
-                int loopSheetAmount = Convert.ToInt32(Math.Ceiling((float)loopTotalAmount / loopAmountPerSheet));
-                //每回路可设置最大器件数量
-                int maxDeviceAmount = config.GetMaxDeviceAmountValue();
-                string summarySheetName = "摘要信息";
-                string deviceTypeSheetName = "设备类型";
-                //模板工作薄的Sheet页构成为：
-                //摘要信息页签
-                //各回路页签
-                //标准组态页签
-                //通用组态页签
-                //混合组态页签
-                //网络手动盘页签          
-              //  int totalSheetAmount = FIXED_SHEET_AMOUNT + loopSheetAmount;//所有页签数量
-                List<string> lstSheetNames = new List<string>();
-                lstSheetNames.Add(summarySheetName);
-                lstSheetNames.Add(deviceTypeSheetName);                
-                List<string> lstLoopSheetName;
-                if (customizedInfo == null) //默认模板
-                {
-                    lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopTotalAmount, loopAmountPerSheet);
-                }
-                else  //自定义模板
-                {
-                    lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopTotalAmount, customizedInfo.LoopGroupAmount);
-                }
-                
-                foreach (var r in lstLoopSheetName)
-                {
-                    lstSheetNames.Add(r);
-                }
-                //sheetNames[loopSheetAmount + 1] = "标准组态";
-                //sheetNames[loopSheetAmount + 2] = "混合组态";
-                //sheetNames[loopSheetAmount + 3] = "通用组态";                
-                //sheetNames[loopSheetAmount + 4] = "网络手动盘";
-                //注意：在此版本中工作表的顺序不可变
-                if (blnStandardLinkageFlag) { lstSheetNames.Add(standardLinkageSheetName); }
-                if (blnMixedLinkageFlag) { lstSheetNames.Add(mixedLinkageSheetName); }
-                if(blnGeneralLinkageFlag){lstSheetNames.Add(generalLinkageSheetName);}                
-                if (blnManualControlBoardFlag) { lstSheetNames.Add(manualControlBoardSheetName); }
-
-                string sheetNamesWithoutLoopName = "";//除“所有回路页签名称”外的其它页签名称
-                int sheetNamesWithoutLoopNameIndex = CalculateSheetRelativeIndex(ControllerNodeType.Standard, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                if (sheetNamesWithoutLoopNameIndex != 0) { sheetNamesWithoutLoopName += lstSheetNames[loopSheetAmount + sheetNamesWithoutLoopNameIndex]+";"; }
-                sheetNamesWithoutLoopNameIndex = CalculateSheetRelativeIndex(ControllerNodeType.Mixed, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                if (sheetNamesWithoutLoopNameIndex != 0) { sheetNamesWithoutLoopName += lstSheetNames[loopSheetAmount + sheetNamesWithoutLoopNameIndex] + ";"; }
-                sheetNamesWithoutLoopNameIndex = CalculateSheetRelativeIndex(ControllerNodeType.General, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                if (sheetNamesWithoutLoopNameIndex != 0) { sheetNamesWithoutLoopName += lstSheetNames[loopSheetAmount + sheetNamesWithoutLoopNameIndex] + ";"; }
-                sheetNamesWithoutLoopNameIndex = CalculateSheetRelativeIndex(ControllerNodeType.Board, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                if (sheetNamesWithoutLoopNameIndex != 0) { sheetNamesWithoutLoopName += lstSheetNames[loopSheetAmount + sheetNamesWithoutLoopNameIndex] + ";"; }
-
-                IExcelService excelService = ExcelServiceManager.GetExcelService(version,strFilePath, fileService);
-                //Excel2007Service excelService = new Excel2007Service(strFilePath, fileService);                
-                excelService.CreateExcelSheets(lstSheetNames);
-
-                #region 设置单元格样式
-                CellStyle cellCaptionStyle = GetCaptionCellStyle();
-                CellStyle cellSubCaptionStyle = GetSubCaptionCellStyle();
-                CellStyle cellDataStyle = GetDataCellStyle("Left", false);
-                CellStyle cellTableHeadStyle = GetTableHeadCellStyle();
-                excelService.CellCaptionStyle = cellCaptionStyle;
-                excelService.CellSubCaptionStyle = cellSubCaptionStyle;
-                excelService.CellDataStyle = cellDataStyle;
-                excelService.CellTableHeadStyle = cellTableHeadStyle;
-                #endregion
-                #region  摘要信息页签合并单元格
-                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
-                MergeCellRange mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 0;
-                mergeCellRange.LastRowIndex = 1;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 2;
-                lstMergeCellRange.Add(mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 2;
-                mergeCellRange.LastRowIndex = 2;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 2;
-                lstMergeCellRange.Add(mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 3;
-                mergeCellRange.LastRowIndex = 3;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 2;
-                lstMergeCellRange.Add(mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 11;
-                mergeCellRange.LastRowIndex = 11;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 2;
-                lstMergeCellRange.Add(mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 17;
-                mergeCellRange.LastRowIndex = 17;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 2;
-                lstMergeCellRange.Add(mergeCellRange);
-
-                #endregion
-                #region 设置摘要页签数据模板
-                excelService.RowHeight = (short)20;//到下一个高度设置前，使用该高度
-                excelService.SetCellValue(lstSheetNames[0], 0, 0, "NT8001系列控制器配置数据导入模板", CellStyleType.Caption);
-                excelService.RowHeight = (short)15;
-                excelService.CellSubCaptionStyle = GetSubCaptionCellStyle();
-                excelService.SetCellValue(lstSheetNames[0], 2, 0, "<适应软件版本" + config.CompatibleSoftwareVersionForExcelTemplate + ">", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 2, 1, null, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 2, 2, null, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 3, 0, "控制器设置", CellStyleType.SubCaption);
-                excelService.SetCellValue(lstSheetNames[0], 4, 0, "名称", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 4, 1, "值", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 4, 2, "填写说明", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 5, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[5], CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 5, 1, controllerName, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 5, 2, "最多10个字符", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 6, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[6], CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 6, 1, "NT8001", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 6, 2, "可填: "+config.CompatibleControllerTypeForExcelTemplate, CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 8, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[8], CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 8, 1, defaultMachineNo, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 8, 2, "可填: 7位编码(00-" + config.GetMaxMachineAmountValue(7).ToString() + ");8位编码(000-" + config.GetMaxMachineAmountValue(8).ToString()+")", CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 7, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[7], CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 1, defaultDeviceCodeLength.ToString(), CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 7, 2, "可填: " + strDeviceCodeLength, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 9, 0, dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[9], CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 9, 1, serialPort, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 9, 2, "可填: COM1-COM9", CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 11, 0, "回路设置", CellStyleType.SubCaption);
-
-                excelService.SetCellValue(lstSheetNames[0], 12, 0, "名称", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 12, 1, "值", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 12, 2, "填写说明", CellStyleType.TableHead);
-
-                excelService.SetCellValue(lstSheetNames[0], 13, 0, "回路数量", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 13, 1, loopTotalAmount.ToString(), CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 13, 2, "可填: 1-" + loopTotalAmount.ToString(), CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 14, 0, "回路分组", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 14, 1, loopSheetAmount.ToString(), CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 14, 2, "可填: 1-" + loopTotalAmount.ToString(), CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 15, 0, "默认器件类型", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 15, 1, defaultDeviceType.Name, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 15, 2, "可填: 有效设备编号", CellStyleType.Data);
-
-                excelService.SetCellValue(lstSheetNames[0], 17, 0, " 其它设置", CellStyleType.SubCaption);
-                excelService.SetCellValue(lstSheetNames[0], 18, 0, "名称", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 18, 1, "值", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 18, 2, "填写说明", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[0], 19, 0, "工作表名称", CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 19, 1, sheetNamesWithoutLoopName, CellStyleType.Data);
-                excelService.SetCellValue(lstSheetNames[0], 19, 2, "可填: 标准组态;混合组态;通用组态;网络手动盘", CellStyleType.Data);
-                //除“回路”外的工作表名称，以‘分号’分隔                
-                excelService.SetMergeCells(lstSheetNames[0], lstMergeCellRange);//设置"摘要信息"合并单元格
-                //设置列宽               
-                excelService.SetColumnWidth(lstSheetNames[0], 0, 15f);
-                excelService.SetColumnWidth(lstSheetNames[0], 1, 15f);
-                excelService.SetColumnWidth(lstSheetNames[0], 2, 40f);                
-                
-                #endregion
-                #region 生成《设备类型》页签模板
-                lstMergeCellRange.Clear();
-                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfo();
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 0;
-                mergeCellRange.LastRowIndex = 0;
-                mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 1;
-                lstMergeCellRange.Add(mergeCellRange);
-                excelService.RowHeight = (short)20;//到下一个高度设置前，使用该高度
-                excelService.SetCellValue(lstSheetNames[1], 0, 0, "设备类型", CellStyleType.SubCaption);
-                excelService.RowHeight = (short)15;
-                excelService.CellSubCaptionStyle = GetSubCaptionCellStyle();
-                excelService.SetCellValue(lstSheetNames[1], 1, 0, " 编号", CellStyleType.TableHead);
-                excelService.SetCellValue(lstSheetNames[1], 1, 1, " 名称", CellStyleType.TableHead);
-                int rowNumber = 1;
-                string regionNameStartIndex = "30002";
-                foreach (var deviceType in lstDeviceType)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 0, deviceType.Code.ToString(), CellStyleType.Data);
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 1, deviceType.Name, CellStyleType.Data);
-                }
-                excelService.SetMergeCells(lstSheetNames[1], lstMergeCellRange);//设置"摘要信息"合并单元格
-                excelService.SetColumnWidth(lstSheetNames[1], 1, 15f);                                
-                excelService.SetRangeName(RefereceRegionName.DeviceType.ToString(), string.Format("'{0}'!$B$3:$B${1}", lstSheetNames[1], (lstDeviceType.Count + 2).ToString()));
-
-                //写入控制器类型数据
-                List<ControllerType> lstControllerType = config.GetControllerType();                
-                excelService.SetCellValue(lstSheetNames[1], 30000, 3, "控制器类型", CellStyleType.SubCaption);
-                rowNumber=30000;
-                foreach (var controllerType in lstControllerType)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber , 3, controllerType.ToString() , CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.ControllerType.ToString(), string.Format("'{0}'!$D$" + regionNameStartIndex + ":$D${1}", lstSheetNames[1], (lstControllerType.Count + 30001).ToString()));
-                //写入器件长度
-                
-                excelService.SetCellValue(lstSheetNames[1], 30000, 5, "器件长度", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                foreach (var codeLength in lstDeviceCodeLength)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 5, codeLength.ToString(), CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.DeviceCodeLength.ToString(), string.Format("'{0}'!$F$" + regionNameStartIndex + ":$F${1}", lstSheetNames[1], (lstDeviceCodeLength.Count + 30001).ToString()));
-                //写入串口号
-                excelService.SetCellValue(lstSheetNames[1], 30000, 7, "串口号", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<string> lstSerialPort = config.GetSerialPortNumber();
-                foreach (var sp in lstSerialPort)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 7, sp, CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.SerialPortNumber.ToString(), string.Format("'{0}'!$H$" + regionNameStartIndex + ":$H${1}", lstSheetNames[1], (lstSerialPort.Count + 30001).ToString()));
-                //写入动作常数
-                excelService.SetCellValue(lstSheetNames[1], 30000, 9, "动作常数", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<int> lstActionCoefficient = config.GetActionCoefficient();
-                foreach (var actionCoefficient in lstActionCoefficient)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 9, actionCoefficient.ToString(), CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.ActionCoefficient.ToString(), string.Format("'{0}'!$J$" + regionNameStartIndex + ":$J${1}", lstSheetNames[1], (lstActionCoefficient.Count + 30001).ToString()));
-                //写入动作类型
-                excelService.SetCellValue(lstSheetNames[1], 30000, 11, "动作类型", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<LinkageActionType> lstActionType = config.GetLinkageActionType();
-                foreach (var actionType in lstActionType)
-                {
-                    rowNumber++;
-
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 11, actionType.GetDescription(), CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.ActionType.ToString(), string.Format("'{0}'!$L$" + regionNameStartIndex + ":$L${1}", lstSheetNames[1], (lstActionType.Count + 30001).ToString()));
-                //写入联动分类（全部）
-                excelService.SetCellValue(lstSheetNames[1], 30000, 13, "联动分类(全部)", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<LinkageType> lstLinkageType = config.GetLinkageType();
-                foreach (var linkageType in lstLinkageType)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 13, linkageType.GetDescription(), CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.LinkageTypeAll.ToString(), string.Format("'{0}'!$N$" + regionNameStartIndex + ":$N${1}", lstSheetNames[1], (lstLinkageType.Count + 30001).ToString()));
-                //写入联动分类（精简）
-                excelService.SetCellValue(lstSheetNames[1], 30000, 15, "联动分类(精简)", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                lstLinkageType = config.GetLinkageTypeWithCastration();
-                foreach (var linkageType in lstLinkageType)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 15, linkageType.GetDescription(), CellStyleType.Data);
-                }                
-                excelService.SetRangeName(RefereceRegionName.LinkageTypeCastration.ToString(), string.Format("'{0}'!$P$" + regionNameStartIndex + ":$P${1}", lstSheetNames[1], (lstLinkageType.Count + 30001).ToString()));
-                //写入特性
-                excelService.SetCellValue(lstSheetNames[1], 30000, 17, "特性", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<string> lstFeature = config.GetFeatureList();
-                foreach (var feature in lstFeature)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 17, feature, CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.Feature.ToString(), string.Format("'{0}'!$R$" + regionNameStartIndex + ":$R${1}", lstSheetNames[1], (lstFeature.Count + 30001).ToString()));
-                //写入屏蔽
-                excelService.SetCellValue(lstSheetNames[1], 30000, 19, "屏蔽", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<string> lstDisable = config.GetDisableList();
-                foreach (var disable in lstDisable)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 19, disable, CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.Disable.ToString(), string.Format("'{0}'!$T$" + regionNameStartIndex + ":$T${1}", lstSheetNames[1], (lstDisable.Count + 30001).ToString()));
-                //写入灵敏度
-                excelService.SetCellValue(lstSheetNames[1], 30000, 21, "灵敏度", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<string> lstSensitiveLevel = config.GetSensitiveLevelList();
-                foreach (var sensitiveLevel in lstSensitiveLevel)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 21, sensitiveLevel, CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.SensitiveLevel.ToString(), string.Format("'{0}'!$V$" + regionNameStartIndex + ":$V${1}", lstSheetNames[1], (lstSensitiveLevel.Count + 30001).ToString()));
-
-                //写入具有任意火警的器件名称                
-                excelService.SetCellValue(lstSheetNames[1], 30000, 23, "器件类型(任意火警)", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<DeviceType> lstDeviceTypeWithAnyAlarm= config.GetDeviceTypeInfoWithAnyAlarm();
-                foreach (var deviceType in lstDeviceTypeWithAnyAlarm)
-                {
-                    rowNumber++;                    
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 23, deviceType.Name, CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.DeviceTypeWithAnyAlarm.ToString(), string.Format("'{0}'!$X$" + regionNameStartIndex + ":$X${1}", lstSheetNames[1], (lstDeviceTypeWithAnyAlarm.Count + 30001).ToString()));
-
-                //写入具有非报警器件的器件名称                
-                excelService.SetCellValue(lstSheetNames[1], 30000, 25, "器件类型(非火警器件)", CellStyleType.SubCaption);
-                rowNumber = 30000;
-                List<DeviceType> lstDeviceTypeWithoutFireAlarm = config.GetDeviceTypeInfoWithoutFireDevice();
-                foreach (var deviceType in lstDeviceTypeWithoutFireAlarm)
-                {
-                    rowNumber++;
-                    excelService.SetCellValue(lstSheetNames[1], rowNumber, 25, deviceType.Name, CellStyleType.Data);
-                }
-                excelService.SetRangeName(RefereceRegionName.DeviceTypeWithoutFireDevice.ToString(), string.Format("'{0}'!$Z$" + regionNameStartIndex + ":$Z${1}", lstSheetNames[1], (lstDeviceTypeWithoutFireAlarm.Count + 30001).ToString()));
-                #endregion
-
-                #region 设置摘要页的序列验证
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 6;
-                mergeCellRange.LastRowIndex = 6;
-                mergeCellRange.FirstColumnIndex = 1;
-                mergeCellRange.LastColumnIndex = 1;
-                excelService.SetSheetValidationForListConstraint(lstSheetNames[0], RefereceRegionName.ControllerType.ToString(), mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 7;
-                mergeCellRange.LastRowIndex = 7;
-                mergeCellRange.FirstColumnIndex = 1;
-                mergeCellRange.LastColumnIndex = 1;
-                excelService.SetSheetValidationForListConstraint(lstSheetNames[0], RefereceRegionName.DeviceCodeLength.ToString(), mergeCellRange);
-                mergeCellRange = new MergeCellRange();
-                mergeCellRange.FirstRowIndex = 9;
-                mergeCellRange.LastRowIndex = 9;
-                mergeCellRange.FirstColumnIndex = 1;
-                mergeCellRange.LastColumnIndex = 1;
-                excelService.SetSheetValidationForListConstraint(lstSheetNames[0], RefereceRegionName.SerialPortNumber.ToString(), mergeCellRange);                
-                #endregion
-                #region 生成所有回路页签模板
-                int currentLoopStartIndex = 2;
-                for (int i = currentLoopStartIndex; i <= loopSheetAmount + 1; i++)
-                {
-                    lstMergeCellRange.Clear();
-                    
-                    for (int j = 0; j < loopAmountPerSheet; j++)
+                    for (int j = 0; j < summaryInfo.LoopAmountPerSheet; j++)
                     {
                         //  string deviceCode=defaultMachineNo+ defaultLoopCodeLength
-                        string loopCode=defaultMachineNo + (j + 1 + (i - currentLoopStartIndex) * loopAmountPerSheet).ToString().PadLeft(defaultLoopCodeLength,'0');
+                        string loopCode = summaryInfo.MachineNumberFormatted + (j + 1 + (i - currentLoopStartIndex) * summaryInfo.LoopAmountPerSheet).ToString().PadLeft(defaultLoopCodeLength, '0');
                         int extraLine = 0;
                         if (j != 0)
                         {
                             extraLine = 2;
                         }
                         //回路标题：回路1                        
-                        excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount+ j  * extraLine, 0, loopSheetNamePrefix + ":" +loopCode , CellStyleType.SubCaption);
+                        excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + j * extraLine, 0, loopSheetNamePrefix + ":" + loopCode, CellStyleType.SubCaption);
                         for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
                         {
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1 + j * extraLine , devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1 + j * extraLine, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
                         }
                         #region Obsolete
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 0, "编码", CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 1, "器件类型", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 2, "特性", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 3, "屏蔽", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 4, "灵敏度", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 5, "输出组1", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 6, "输出组2", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 7, "输出组3", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 8, "延时", Excel2007Service.CellStyleType.TableHead);
-                        
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 9, "广播分区", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 10, "楼号", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 11, "区号", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 12, "层号", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 13, "房间号", Excel2007Service.CellStyleType.TableHead);
-                        //excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + 1, 14, "安装地点", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 0, "编码", CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 1, "器件类型", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 2, "特性", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 3, "屏蔽", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 4, "灵敏度", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 5, "输出组1", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 6, "输出组2", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 7, "输出组3", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 8, "延时", Excel2007Service.CellStyleType.TableHead);
+
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 9, "广播分区", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 10, "楼号", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 11, "区号", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 12, "层号", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 13, "房间号", Excel2007Service.CellStyleType.TableHead);
+                        //excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + 1, 14, "安装地点", Excel2007Service.CellStyleType.TableHead);
                         #endregion
                         //回路标题行合并
-                        mergeCellRange = new MergeCellRange();
+                        MergeCellRange mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + j * extraLine;
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + j * extraLine;
                         mergeCellRange.FirstColumnIndex = 0;
-                        mergeCellRange.LastColumnIndex = 14;
+                        mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length;
                         lstMergeCellRange.Add(mergeCellRange);
                         //回路默认器件信息
                         for (int k = 0; k < maxDeviceAmount; k++)
                         {
-                            string deviceCode = (k + 1).ToString().PadLeft(defaultDeviceCodeLength - defaultLoopCodeLength - defaultMachineNoLength,'0');
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 0, loopCode + deviceCode , CellStyleType.Data); //器件编码
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 1, defaultDeviceType.Name, CellStyleType.Data); //器件类型
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 2, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 3, "0", CellStyleType.Data); //屏蔽
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 4, "2", CellStyleType.Data); //灵敏度
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 5, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 6, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 7, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 8, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 9, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 10, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 11, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 12, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 13, null, CellStyleType.Data);
-                            excelService.SetCellValue(lstSheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 14, null, CellStyleType.Data); 
+
+                            string deviceCode = (k + 1).ToString().PadLeft(summaryInfo.SelectedDeviceCodeLength - defaultLoopCodeLength - summaryInfo.MachineNumberFormatted.Length, '0');
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 0, loopCode + deviceCode, CellStyleType.Data); //器件编码
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 1, defaultDeviceType.Name, CellStyleType.Data); //器件类型
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 2, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 3, "0", CellStyleType.Data); //屏蔽
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 4, "2", CellStyleType.Data); //灵敏度
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 5, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 6, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 7, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 8, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 9, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 10, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 11, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 12, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 13, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 14, null, CellStyleType.Data);
                         }
                         mergeCellRange = new MergeCellRange();
-                        mergeCellRange.FirstRowIndex = j * maxDeviceAmount  + (j * extraLine + 2);
-                        mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2)+maxDeviceAmount-1;
+                        mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
+                        mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 1;
                         mergeCellRange.LastColumnIndex = 1;
-                        excelService.SetSheetValidationForListConstraint(lstSheetNames[i], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
                         mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 2;
                         mergeCellRange.LastColumnIndex = 2;
-                        excelService.SetSheetValidationForListConstraint(lstSheetNames[i], RefereceRegionName.Feature.ToString(), mergeCellRange);
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.Feature.ToString(), mergeCellRange);
                         mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 3;
                         mergeCellRange.LastColumnIndex = 3;
-                        excelService.SetSheetValidationForListConstraint(lstSheetNames[i], RefereceRegionName.Disable.ToString(), mergeCellRange);
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.Disable.ToString(), mergeCellRange);
                         mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 4;
                         mergeCellRange.LastColumnIndex = 4;
-                        excelService.SetSheetValidationForListConstraint(lstSheetNames[i], RefereceRegionName.SensitiveLevel.ToString(), mergeCellRange);
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.SensitiveLevel.ToString(), mergeCellRange);
                     }
-                    
-                    excelService.SetMergeCells(lstSheetNames[i], lstMergeCellRange);//设置"回路页签"合并单元格
+                    excelService.SetColumnWidth(sheetNames[i], 1, 15f);                    
+                    excelService.SetMergeCells(sheetNames[i], lstMergeCellRange);//设置"回路页签"合并单元格
                 }
                 #endregion
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;        
+        }
+        protected override bool GenerateExcelTemplateStandardSheet(List<string> sheetNames, int currentIndex,int loopSheetAmount,int maxLinkageAmount, ref IExcelService excelService)
+        {
+            try
+            {
                 #region 标准组态表头
-                if (blnStandardLinkageFlag)
-                { 
-                    lstMergeCellRange.Clear();
-                    // 加的1页，为“摘要页”
-                    int currentIndex = CalculateSheetRelativeIndex(ControllerNodeType.Standard, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 0, 0, lstSheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 0, "输出组号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 1, "联动模块1", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "联动模块2", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "联动模块3", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "联动模块4", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 5, "联动模块5", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 6, "联动模块6", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 7, "联动模块7", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 8, "联动模块8", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 9, "动作常数", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 10, "联动组1", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 11, "联动组2", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 12, "联动组3", CellStyleType.TableHead);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 0;
-                    mergeCellRange.LastRowIndex = 0;
-                    mergeCellRange.FirstColumnIndex = 0;
-                    mergeCellRange.LastColumnIndex = 12;
-                    lstMergeCellRange.Add(mergeCellRange);
-                    excelService.SetMergeCells(lstSheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"标准组态页签"合并单元格
-                    int maxStandardLinkageAmount = config.GetMaxAmountForStandardLinkageConfig();
-                    for (int i = 2; i < maxStandardLinkageAmount+3; i++)
-                    {
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);  
-                    }
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxStandardLinkageAmount+2;
-                    mergeCellRange.FirstColumnIndex =  9;
-                    mergeCellRange.LastColumnIndex = 9;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
-                    
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                lstMergeCellRange.Clear();
+                // 加的1页，为“摘要页”                
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "输出组号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "联动模块1", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "联动模块2", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "联动模块3", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "联动模块4", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 5, "联动模块5", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 6, "联动模块6", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 7, "联动模块7", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 8, "联动模块8", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 9, "动作常数", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 10, "联动组1", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 11, "联动组2", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 12, "联动组3", CellStyleType.TableHead);
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = 12;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"标准组态页签"合并单元格
+                //int maxStandardLinkageAmount = config.GetMaxAmountForStandardLinkageConfig();
+                for (int i = 2; i < maxLinkageAmount + 3; i++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
                 }
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 9;
+                mergeCellRange.LastColumnIndex = 9;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
+
                 #endregion
-                #region 混合组态表头
-                if (blnMixedLinkageFlag)
-                { 
-                    lstMergeCellRange.Clear();
-                    int currentIndex = CalculateSheetRelativeIndex(ControllerNodeType.Mixed, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 0, 0, lstSheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 1, "动作常数", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "动作类型", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "A分类", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "A楼号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 5, "A区号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 6, "A层号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 7, "A路号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 8, "A编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 9, "A类型", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 10, "B分类", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 11, "B楼号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 12, "B区号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 13, "B层号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 14, "B路号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 15, "B编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 16, "B类型", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 17, "C分类", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 18, "C楼号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 19, "C区号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 20, "C层号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 21, "C机号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 22, "C回路号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 23, "C编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 24, "C类型", CellStyleType.TableHead);
-                    mergeCellRange = new MergeCellRange();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+        protected override bool GenerateExcelTemplateMixedSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
+        {
+            try
+            { 
+            #region 混合组态表头
+                    List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "动作常数", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "动作类型", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "A分类", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "A楼号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 5, "A区号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 6, "A层号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 7, "A路号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 8, "A编号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 9, "A类型", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 10, "B分类", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 11, "B楼号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 12, "B区号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 13, "B层号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 14, "B路号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 15, "B编号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 16, "B类型", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 17, "C分类", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 18, "C楼号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 19, "C区号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 20, "C层号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 21, "C机号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 22, "C回路号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 23, "C编号", CellStyleType.TableHead);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 24, "C类型", CellStyleType.TableHead);
+                    MergeCellRange mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 0;
                     mergeCellRange.LastRowIndex = 0;
                     mergeCellRange.FirstColumnIndex = 0;
                     mergeCellRange.LastColumnIndex = 24;
                     lstMergeCellRange.Add(mergeCellRange);
-                    excelService.SetMergeCells(lstSheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"混合组态页签"合并单元格
-                    int maxMixedLinkageAmount = config.GetMaxAmountForMixedLinkageConfig();
-                    for (int i = 2; i < maxMixedLinkageAmount + 3; i++)
+                    excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"混合组态页签"合并单元格
+                    //int maxLinkageAmount = config.GetMaxAmountForMixedLinkageConfig();
+                    for (int i = 2; i < maxLinkageAmount + 3; i++)
                     {
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 15, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 16, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 17, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 18, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 19, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 20, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 21, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 22, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 23, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 24, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 15, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 16, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 17, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 18, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 19, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 20, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 21, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 22, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 23, null, CellStyleType.Data);
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 24, null, CellStyleType.Data);
                     }
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 1;
                     mergeCellRange.LastColumnIndex = 1;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 2;
                     mergeCellRange.LastColumnIndex = 2;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionType.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionType.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 3;
                     mergeCellRange.LastColumnIndex = 3;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 9;
                     mergeCellRange.LastColumnIndex = 9;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 10;
                     mergeCellRange.LastColumnIndex = 10;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 16;
                     mergeCellRange.LastColumnIndex = 16;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 17;
                     mergeCellRange.LastColumnIndex = 17;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxMixedLinkageAmount + 2;
+                    mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                     mergeCellRange.FirstColumnIndex = 24;
                     mergeCellRange.LastColumnIndex = 24;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
-                }
+                    excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                
                 #endregion
-                #region 通用组态表头
-                if (blnGeneralLinkageFlag)
-                { 
-                    lstMergeCellRange.Clear();
-                    int currentIndex = CalculateSheetRelativeIndex(ControllerNodeType.General, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 0, 0, lstSheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 1, "动作常数", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "A楼号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "A区号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "A层号1", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 5, "A层号2", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 6, "类型A", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 7, "C分类", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 8, "C楼号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 9, "C区号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 10, "C层号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 11, "C机号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 12, "C回路号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 13, "C编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 14, "C类型", CellStyleType.TableHead);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 0;
-                    mergeCellRange.LastRowIndex = 0;
-                    mergeCellRange.FirstColumnIndex = 0;
-                    mergeCellRange.LastColumnIndex = 14;
-                    lstMergeCellRange.Add(mergeCellRange);
-                    excelService.SetMergeCells(lstSheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"通用组态页签"合并单元格                    
-                    int maxGeneralLinkageAmount = config.GetMaxAmountForGeneralLinkageConfig();
-                    for (int i = 2; i < maxGeneralLinkageAmount + 3; i++)
-                    {
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
-                    }
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxGeneralLinkageAmount + 2;
-                    mergeCellRange.FirstColumnIndex = 1;
-                    mergeCellRange.LastColumnIndex = 1;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxGeneralLinkageAmount + 2;
-                    mergeCellRange.FirstColumnIndex = 6;
-                    mergeCellRange.LastColumnIndex = 6;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithAnyAlarm.ToString(), mergeCellRange);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxGeneralLinkageAmount + 2;
-                    mergeCellRange.FirstColumnIndex = 7;
-                    mergeCellRange.LastColumnIndex = 7;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeAll.ToString(), mergeCellRange);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 2;
-                    mergeCellRange.LastRowIndex = maxGeneralLinkageAmount + 2;
-                    mergeCellRange.FirstColumnIndex = 14;
-                    mergeCellRange.LastColumnIndex = 14;
-                    excelService.SetSheetValidationForListConstraint(lstSheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithoutFireDevice.ToString(), mergeCellRange);
+             }
+            catch(Exception ex )
+            {
+                return false;
+            }
+            return true;
+
+        }
+        protected override bool GenerateExcelTemplateGeneralSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
+        {
+            try
+            {
+            #region 通用组态表头      
+                List<MergeCellRange> lstMergeCellRange=new List<MergeCellRange>();                
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "动作常数", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "A楼号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "A区号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "A层号1", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 5, "A层号2", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 6, "类型A", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 7, "C分类", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 8, "C楼号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 9, "C区号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 10, "C层号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 11, "C机号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 12, "C回路号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 13, "C编号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 14, "C类型", CellStyleType.TableHead);
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = 14;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"通用组态页签"合并单元格                    
+                
+                for (int i = 2; i < maxLinkageAmount + 3; i++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
                 }
-                #endregion
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 1;
+                mergeCellRange.LastColumnIndex = 1;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 6;
+                mergeCellRange.LastColumnIndex = 6;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithAnyAlarm.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 7;
+                mergeCellRange.LastColumnIndex = 7;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeAll.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 14;
+                mergeCellRange.LastColumnIndex = 14;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithoutFireDevice.ToString(), mergeCellRange);
+            }
+            #endregion
+            
+        catch(Exception ex)
+         {
+            return false;
+         }
+
+        return true;
+        }
+        protected override bool GenerateExcelTemplateManualControlBoardSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxAmount, ref IExcelService excelService)
+        {
+            try
+            {
                 #region 网络手动盘表头
-                if (blnManualControlBoardFlag)
-                { 
-                    lstMergeCellRange.Clear();
-                    int currentIndex = CalculateSheetRelativeIndex(ControllerNodeType.Board, blnStandardLinkageFlag, blnMixedLinkageFlag, blnGeneralLinkageFlag, blnManualControlBoardFlag);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 0, 0, lstSheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 1, "板卡号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 2, "手盘号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 3, "手键号", CellStyleType.TableHead);
-                    excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], 1, 4, "地编号", CellStyleType.TableHead);
-                    mergeCellRange = new MergeCellRange();
-                    mergeCellRange.FirstRowIndex = 0;
-                    mergeCellRange.LastRowIndex = 0;
-                    mergeCellRange.FirstColumnIndex = 0;
-                    mergeCellRange.LastColumnIndex = 4;
-                    lstMergeCellRange.Add(mergeCellRange);
-                    excelService.SetMergeCells(lstSheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"网络手动盘页签"合并单元格
-                    int maxMCBAmount = config.GetMaxAmountForManualControlBoardConfig();
-                    for (int i = 2; i < maxMCBAmount + 3; i++)
-                    {
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                        excelService.SetCellValue(lstSheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                    }
+
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "板卡号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "手盘号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "手键号", CellStyleType.TableHead);
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "地编号", CellStyleType.TableHead);
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = 4;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"网络手动盘页签"合并单元格
+
+                for (int i = 2; i < maxAmount + 3; i++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
                 }
+
                 #endregion
-                excelService.SaveToFile();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        public bool DownloadDefaultEXCELTemplate(string strFilePath,IFileService fileService,ExcelTemplateCustomizedInfo customizedInfo)
+        {
+            try
+            {
+                DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, ControllerType.NT8001);                
                 return true;
             }
             catch(Exception ex)
             {
                 string message = ex.Message;
                 return false;
-            }
-            
+            }            
         }
         /// <summary>
         /// 通过EXCEL模板的设定值取得Controller对象
@@ -1491,7 +988,10 @@ namespace SCA.BusinessLib.BusinessLogic
             worker.WorkerSupportsCancellation = true;
             worker.RunWorkerAsync(inArgs);    
         }
+        private void ReadingExcelSummarySheet(object sender, System.ComponentModel.DoWorkEventArgs e)
+        { 
         
+        }
         #region 为异步执行而增加
         private void ReadingEXCELDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -2476,72 +1976,11 @@ namespace SCA.BusinessLib.BusinessLogic
             ProjectManager.GetInstance.MaxIDForManualControlBoard = maxID;
             return lstManualControlBoard;
         }
-        private CellStyle GetCaptionCellStyle()
-        {
-            CellStyle style = new CellStyle();
-            style.HorizontalAlignment = CellStyle.HorizontalAlignmentValue.Center;
-            style.VerticalAlignment = CellStyle.VerticalAlignmentValue.Center;
-            style.FontName = CellStyle.FontNameValue.黑体;
-            style.FontHeightInPoints = 22;
-            style.BorderStyle = CellStyle.BorderStyleValue.None;
-            style.BorderColor = CellStyle.BorderColorValue.None;
-            return style;
-        }
-        /// <summary>
-        /// 副标题文字样式
-        /// </summary>
-        /// <param name="p_workbook"></param>
-        /// <returns></returns>
-        private CellStyle GetSubCaptionCellStyle()
-        {
-            CellStyle style = new CellStyle();
-            style.HorizontalAlignment = CellStyle.HorizontalAlignmentValue.Center;
-            style.VerticalAlignment = CellStyle.VerticalAlignmentValue.Center;
-            style.BorderStyle = CellStyle.BorderStyleValue.None;
-            style.BorderColor = CellStyle.BorderColorValue.None;
-            style.FontName = CellStyle.FontNameValue.宋体;
-            style.FontHeightInPoints = 12;
-            style.FontBoldFlag = true;
-            return style;
-        }
-        /// <summary>
-        /// 表格头文字样式
-        /// </summary>
-        /// <param name="p_workbook"></param>
-        /// <returns></returns>
-        private CellStyle GetTableHeadCellStyle()
-        {
-            CellStyle style = new CellStyle();
-            style.HorizontalAlignment = CellStyle.HorizontalAlignmentValue.Center;
-            style.VerticalAlignment = CellStyle.VerticalAlignmentValue.Center;
-            style.BorderStyle = CellStyle.BorderStyleValue.Thin;
-            style.BorderColor = CellStyle.BorderColorValue.Black;
-            style.FontName = CellStyle.FontNameValue.宋体;
-            style.FontHeightInPoints = 9;
-            style.FontBoldFlag = true;
-            return style;
-        }
-        private CellStyle GetDataCellStyle(string pAlignment, bool pBoldFlag)
-        {
-            CellStyle style = new CellStyle();
-            if (pAlignment == "Left")
-            {
-                style.HorizontalAlignment = CellStyle.HorizontalAlignmentValue.Left;
-            }
-            else if (pAlignment == "Center")
-            {
-                style.HorizontalAlignment = CellStyle.HorizontalAlignmentValue.Center;
-            }
-            style.FontBoldFlag = pBoldFlag;
-            style.VerticalAlignment = CellStyle.VerticalAlignmentValue.Center;
-            style.BorderStyle = CellStyle.BorderStyleValue.Thin;
-            style.BorderColor = CellStyle.BorderColorValue.Black;
-            style.WrapText = true;
-            style.FontName = CellStyle.FontNameValue.宋体;
-            style.FontHeightInPoints = 9;
-            return style;
-        }
         //private void SetDeviceID
-
+        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType)
+        {
+            return base.DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, controllerType);
+        }
+        
     }
 }

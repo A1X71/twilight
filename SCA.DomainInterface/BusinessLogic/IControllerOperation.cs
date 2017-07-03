@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SCA.Model;
 using SCA.Interface.DatabaseAccess;
+using SCA.Model.BussinessModel;
 /* ==============================
 *
 * Author     : William
@@ -24,6 +25,7 @@ namespace SCA.Interface
     /// </summary>
     public interface IControllerOperation
     {
+    //    event Action<int, int> UpdateProgressBarEvent; 
         #region 控制器节点
         /// <summary>
         /// 获取控制器的导航节点
@@ -121,6 +123,11 @@ namespace SCA.Interface
         /// <returns></returns>
         ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldVersionSoftwareDBService);
         #endregion        
+        #region EXCEL操作
+
+        bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType);
+        
+        #endregion
         ControllerType GetControllerType();
         //OrganizeControllerInfoFromOldVersionSoftwareDataFile
     }
