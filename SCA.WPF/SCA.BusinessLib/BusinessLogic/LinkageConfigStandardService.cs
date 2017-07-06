@@ -179,7 +179,7 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return result;
         }
-        private int GetMaxID()
+        public int GetMaxID()
         {   
             var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers  select r;
             int maxID = 0;

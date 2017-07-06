@@ -27,6 +27,7 @@ namespace SCA.Interface.BusinessLogic
         /// <param name="lstStandardConfig">标准组态集合</param>
         /// <returns></returns>
         bool IsExistSameCode(List<SCA.Model.LinkageConfigStandard> lstStandardConfig);
+        int GetMaxID();
         
     }
 }

@@ -25,7 +25,7 @@ namespace SCA.Model
         private Int16? _type;
         private Int16? _zoneNo;
         private string _location;
-        private Int16? _disable=0;
+        private bool? _disable=false;
         private float? _alertValue;
         private float? _forcastValue;
         private string _linkageGroup1;
@@ -86,7 +86,7 @@ namespace SCA.Model
         public Int16 TypeCode { get; set; }
 
 
-        public Int16? Disable { get { return _disable; } set { _disable = value; } }
+        public bool? Disable { get { return _disable; } set { _disable = value; } }
         public LoopModel Loop
         {
             get

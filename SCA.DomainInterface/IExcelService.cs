@@ -63,6 +63,18 @@ namespace SCA.Interface
        /// <param name="dictRowsDefinition">读取的数据表的行定义</param>
        /// <returns></returns>
         DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition,out bool sheetExistFlag);
+
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="excelPath"></param>
+       /// <param name="sheetName"></param>
+       /// <param name="dictRowsDefinition"></param>
+       /// <param name="sheetExistFlag"></param>
+       /// <param name="elapsedTime">返回工作表的读取时间</param>
+       /// <returns></returns>
+       DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition, out bool sheetExistFlag, out int elapsedTime);
+
         /// <summary>
         /// 打开EXCEL
         /// </summary>

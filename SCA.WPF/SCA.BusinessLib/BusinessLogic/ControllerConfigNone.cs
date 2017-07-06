@@ -92,7 +92,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
 
-        public List<Model.DeviceType> GetDeviceTypeInfo()
+        public override List<Model.DeviceType> GetDeviceTypeInfo()
         {
             throw new NotImplementedException();
         }
@@ -140,6 +140,37 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 throw new NotImplementedException();
             }
+        }
+
+
+        public List<int> GetActionCoefficient()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Model.LinkageActionType> GetLinkageActionType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Model.LinkageType> GetLinkageTypeWithCastration()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Model.LinkageType> GetLinkageType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Model.DeviceType> GetDeviceTypeInfoWithAnyAlarm()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Model.DeviceType> GetDeviceTypeInfoWithoutFireDevice()
+        {
+            throw new NotImplementedException();
         }
     }
 }

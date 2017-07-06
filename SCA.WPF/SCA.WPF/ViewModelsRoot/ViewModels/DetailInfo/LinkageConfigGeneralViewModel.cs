@@ -280,7 +280,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <returns></returns>
         public List<Model.LinkageType> GetLinkageType()
         {
-            ControllerConfigBase config = new ControllerConfigBase();
+            ControllerConfigNone config = new ControllerConfigNone();
             return config.GetLinkageType();
         }
 

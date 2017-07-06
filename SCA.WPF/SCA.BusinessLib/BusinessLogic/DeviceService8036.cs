@@ -27,13 +27,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 DeviceInfo8036 devInfo = new DeviceInfo8036();
                 devInfo.Code = j.ToString("#000");
                 devInfo.TypeCode = 9; //此处默认值可为各个控制器进行配置。
-                devInfo.Disable = 0;
+                devInfo.Disable = false;
                 lstDevInfo.Add(devInfo);
             }
             return lstDevInfo;
         } 
         public LoopModel TheLoop { get; set; }
 
+        //commented by william at 2017-06-23 because of no using
         public List<DeviceInfo8036> Create(int amount)
         {
             List<DeviceInfo8036> lstDeviceInfo8036 = new List<DeviceInfo8036>();
@@ -128,6 +129,50 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
             return result;
+        }
+        public bool IsExistSameDeviceCode()
+        {
+            if (TheLoop != null)
+            {
+                bool existFlag = false;
+                foreach (var device in TheLoop.GetDevices<DeviceInfo8036>())
+                {
+                    existFlag = IsExistSameDeviceCode(device.Code);
+                    if (existFlag)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 在回路内是否存在相同的器件代码
+        /// </summary>
+        /// <param name="deviceCode"></param>
+        /// <returns></returns>
+        public bool IsExistSameDeviceCode(string deviceCode)
+        {
+            if (TheLoop != null)
+            {
+                int deviceCount = TheLoop.GetDevices<DeviceInfo8036>().Count((d) => d.Code == deviceCode);
+                if (deviceCount > 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else //TheLoop不应为空
+            {
+                return true;
+            }
         }
     }
 }

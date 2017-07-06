@@ -17,6 +17,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class ControllerConfig8003 : ControllerConfigBase, IControllerConfig
     {
+        private int _defaultDeviceTypeCode = 4;
         public ControllerNodeModel[] GetNodes()
         {
             return new ControllerNodeModel[]
@@ -27,7 +28,29 @@ namespace SCA.BusinessLib.BusinessLogic
         }
         public Model.ColumnConfigInfo[] GetDeviceColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[10];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编码";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "器件类型";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "特性";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "屏蔽";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "灵敏度";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "输出组1";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "输出组2"; 
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "延时";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "区号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "安装地点";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
@@ -44,22 +67,24 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        public List<DeviceType> GetDeviceTypeInfo()
+        public override List<DeviceType> GetDeviceTypeInfo()
         {
 
+            //string deviceType = GetDeviceTypeCodeInfo();
+            //string[] validCode = deviceType.Split(',');
+
+            //List<DeviceType> lstAllTypeInfo = base.GetALLDeviceTypeInfo(null);
+
+            //List<DeviceType> lstResult = new List<DeviceType>();
+
+            //for (int i = 0; i < validCode.Length; i++)
+            //{
+            //    var result = from t in lstAllTypeInfo where t.Code == Convert.ToInt32(validCode[i]) select t;
+            //    lstResult.Add(result.FirstOrDefault());
+            //}
+            //return lstResult;
             string deviceType = GetDeviceTypeCodeInfo();
-            string[] validCode = deviceType.Split(',');
-
-            List<DeviceType> lstAllTypeInfo = base.GetALLDeviceTypeInfo(null);
-
-            List<DeviceType> lstResult = new List<DeviceType>();
-
-            for (int i = 0; i < validCode.Length; i++)
-            {
-                var result = from t in lstAllTypeInfo where t.Code == Convert.ToInt32(validCode[i]) select t;
-                lstResult.Add(result.FirstOrDefault());
-            }
-            return lstResult;
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
         }
         public string GetDeviceTypeCodeInfo()
         {
@@ -175,24 +200,53 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public List<DeviceType> GetAllowedDeviceTypeInfoForLinkageGroup8000()
         {
-            throw new NotImplementedException();
+            string deviceType = base.GetAllowedDeviceTypeCodeInfoForLinkageGroup8000();
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
         }
 
         public int DefaultDeviceTypeCode
         {
             get
             {
-                throw new NotImplementedException();
+                return _defaultDeviceTypeCode;
             }
             set
             {
-                throw new NotImplementedException();
+                _defaultDeviceTypeCode = value;
             }
+        }
+
+
+
+
+        public override List<LinkageActionType> GetLinkageActionType()
+        {
+            return null;
+        }
+
+        public override List<LinkageType> GetLinkageTypeWithCastration()
+        {
+            return null;
+        }
+
+        public override List<LinkageType> GetLinkageType()
+        {
+            return null;
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoWithAnyAlarm()
+        {
+            return null;
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoWithoutFireDevice()
+        {
+            return null;
         }
     }
 }

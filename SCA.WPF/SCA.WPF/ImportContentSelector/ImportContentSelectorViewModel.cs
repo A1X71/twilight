@@ -208,13 +208,15 @@ namespace SCA.WPF.ImportContentSelector
         }
         public void ImportExecute()
         {
-            ControllerOperationCommon controllerBase = new ControllerOperationCommon();
-            int maxLoopID=controllerBase.GetMaxLoopID();
-            List<CheckItem> selectedLoops = LoopNameCollection.Where((d)=>d.IsChecked==true).ToList<CheckItem>();
-            
-
             //得到需要导入的控制器的信息
             ControllerModel controller = ProjectManager.GetInstance.TheControllerViaImporting;
+
+            ControllerOperationCommon controllerBase = new ControllerOperationCommon();
+            LinkageConfigStandardService standardLinkageService = new LinkageConfigStandardService(TheController);
+            LinkageConfigMixedService mixedLinkageService = new LinkageConfigMixedService(TheController);
+            LinkageConfigGeneralService gerneralLinkageService = new LinkageConfigGeneralService(TheController);
+            int maxLoopID=controllerBase.GetMaxLoopID();
+            List<CheckItem> selectedLoops = LoopNameCollection.Where((d)=>d.IsChecked==true).ToList<CheckItem>();
 
             //比对回路信息是否已经存在：提示，是否覆盖
             foreach (var loop in controller.Loops)
@@ -231,37 +233,33 @@ namespace SCA.WPF.ImportContentSelector
                     string strPromptInfo = "控制器" + TheController.Name + ":已经存在" + loop.Code + ",覆盖吗?";
                     if (MessageBox.Show(strPromptInfo, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        TheController.Loops.RemoveAll((d) => d.Code == loop.Code);
-                        #region 查到合适的地方初始化
+                        TheController.Loops.RemoveAll((d) => d.Code == loop.Code);                        
                         loop.Controller = TheController;
                         loop.ControllerID = TheController.ID;
                         loop.ID = existLoop.ID;
-                        //对于导入的数据如何设置ID
-                        //loop.ID
-                        //在合适位置设置器件信息的Loop及LoopID
-                        //device.LoopID
-                        TheController.Loops.Add(loop);   
-                        #endregion 
+                        TheController.Loops.Add(loop);
                     }
                 }
                 else
                 {
-                    maxLoopID++;
-                    int loopID = maxLoopID; 
+                    maxLoopID++;                    
                     loop.Controller = TheController;
                     loop.ControllerID = TheController.ID;
-                    loop.ID = loopID++;
+                    loop.ID = maxLoopID;
                     TheController.Loops.Add(loop);
                 }
             }
 
             List<CheckItem> lstOtherSetting = OtherSettingsCollection.Where((d) => d.IsChecked == true).ToList<CheckItem>();
             int selectedStandardCount = lstOtherSetting.Count((d) => d.Value == "标准组态");
+
+            int maxStandardLinkageConfigID = standardLinkageService.GetMaxID();
             if (selectedStandardCount > 0) //未勾选，放弃导入
             {
                 //比对组态信息，按编号比对
                 foreach (var importConfig in controller.StandardConfig)
                 {
+                    LinkageConfigStandard existConfig = TheController.StandardConfig.Where((d) => d.Code == importConfig.Code).FirstOrDefault();                
                     int amount = TheController.StandardConfig.Count((d) => d.Code == importConfig.Code);
                     if (amount > 0)
                     {
@@ -269,11 +267,18 @@ namespace SCA.WPF.ImportContentSelector
                         if (MessageBox.Show(strPromptInfo, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
                             TheController.StandardConfig.RemoveAll((d) => d.Code == importConfig.Code);
+                            importConfig.Controller = TheController;
+                            importConfig.ControllerID = TheController.ID;
+                            importConfig.ID = existConfig.ID;
                             TheController.StandardConfig.Add(importConfig);
                         }
                     }
                     else
                     {
+                        maxStandardLinkageConfigID++;
+                        importConfig.Controller = TheController;
+                        importConfig.ControllerID = TheController.ID;
+                        importConfig.ID = maxStandardLinkageConfigID;
                         TheController.StandardConfig.Add(importConfig);
                     }
                 }
@@ -345,9 +350,10 @@ namespace SCA.WPF.ImportContentSelector
                     }
                 }
             }
-            
-            //导入完成，导入信息清除
-            //ProjectManager.GetInstance.TheControllerViaImporting = null; 如设置为空，需要关闭本页
+
+            CloseExecute();
+            ProjectManager.GetInstance.TheControllerViaImporting = null;
+            //导入完成，导入信息清除            
             EventMediator.NotifyColleagues("RefreshNavigator", TheController);
         }
         public ICommand CloseCommand
@@ -356,7 +362,7 @@ namespace SCA.WPF.ImportContentSelector
         }
         public void CloseExecute()
         {
-            
+            SelfVisibility = Visibility.Collapsed;
         }
         #endregion
         /// <summary>
@@ -441,7 +447,8 @@ namespace SCA.WPF.ImportContentSelector
             {
                 foreach (var loop in controller.Loops)
                 {
-                    List<DeviceInfo8001> lstDevices = loop.GetDevices<DeviceInfo8001>();
+                    
+                   // List<DeviceInfo8001> lstDevices = loop.GetDevices<DeviceInfo8001>();
                     //foreach (var device in lstDevices)
                     //{
                         CheckItem item = new CheckItem();

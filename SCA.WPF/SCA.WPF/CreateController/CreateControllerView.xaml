@@ -6,9 +6,11 @@
              xmlns:VM="clr-namespace:SCA.WPF.CreateController"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"       
              xmlns:local="clr-namespace:SCA.WPF.CreateController"
+             xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              mc:Ignorable="d" d:DesignWidth="300" 
              >
     <UserControl.Resources>
+        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
         <!-- Data provider for binding to the relationship types enum values -->
         <ObjectDataProvider x:Key="ControllerTypeEnumDS" ObjectType="{x:Type VM:CreateControllerViewModel}" MethodName="GetControllerType">
 
@@ -38,7 +40,8 @@
             <TextBlock Text="Add" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
         </Border>-->
         <!-- Content -->
-        <Grid  x:Name="AddControllerGrid" Margin="-1,0,1,0">
+        <CheckBox Content="从外部文件创建"  IsChecked="{Binding Path=CreateFromExternalFileFlag}"/>
+        <Grid  x:Name="AddControllerGrid" Margin="-1,0,1,0"   Visibility="{Binding Data.StandardStyleVisibility, Source={StaticResource proxy} }">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="6*"/>
@@ -120,6 +123,30 @@
                 <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CancelButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>
         </Grid>
-        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+        <Grid  x:Name="AddByExternalFileGrid" Margin="-1,0,1,0"   Visibility="{Binding Data.ExternalFileStyleVisibility, Source={StaticResource proxy} }">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="20px"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="文件位置"  Foreground="Black"/>
+            <TextBlock Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180px" Margin="5,0,0,0" Text="{Binding Path=FilePath,Mode=TwoWay}" />
+            <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="0" Grid.Column="3"  Width="20px" Command="{Binding Path=SelectFilePathCommand}">...</Button>
+            <StackPanel  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <Button Content="确定" x:Name="ImportButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left"  TabIndex="140" Width="64"  Command="{Binding Path=ImportCommand}"/>
+                <Button Content="取消" x:Name="CancelButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60" Command="{Binding Path=CancelCommand}"/>
+            </StackPanel>
+            <!--<Button x:Name="ImportButton"  Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>            
+            <Button x:Name="CancelButton"  Grid.Row="1" Grid.Column="2"  IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>-->
+            
+
+        </Grid>
+
+                <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
     </StackPanel>
 </UserControl>

@@ -389,5 +389,95 @@ namespace SCA.BusinessLib.Utility
         {
             throw new NotImplementedException();
         }
+
+
+        public DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition, out bool sheetExistFlag, out int elapsedTime)
+        {
+            _workbook = null;
+            sheetExistFlag = false;
+            FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read);
+            ISheet sheet = null;
+            DataTable data = new DataTable();
+            string strStatus = "";
+            int sheetsAmount;//所有的Sheet数量
+            int startRow = 0;
+
+            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();
+            _workbook = new HSSFWorkbook(fs);
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            int intElapsedTime = ts.Hours * 60*60*1000 + ts.Minutes*60*1000+ts.Seconds*1000+ts.Milliseconds; //记录消耗时间
+            elapsedTime = intElapsedTime; 
+            
+            if (_workbook != null)
+            {
+                if (sheetName != null)
+                {
+                    sheet = _workbook.GetSheet(sheetName);
+                    if (sheet == null) //没有指定名称的Sheet页
+                    {
+                        //sheet = _workbook.GetSheetAt(0);
+                        strStatus = "未找到指定名称的Sheet页";
+                        sheetExistFlag = false;
+                    }
+                }
+                if (sheet != null)
+                {
+                    foreach (var rowDef in dictRowsDefinition)
+                    {
+                        #region 定义表头信息
+                        IRow rowInfo = sheet.GetRow(rowDef.Key);
+                        int cellCount = rowInfo.LastCellNum; //一行最后一个cell的编号 即总的列数
+                        for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                        {
+                            ICell cell = rowInfo.GetCell(j);
+                            if (cell != null)
+                            {
+                                string cellValue = cell.StringCellValue;
+                                if (cellValue != null)
+                                {
+                                    if (!data.Columns.Contains(cellValue))
+                                    {
+                                        DataColumn column = new DataColumn(cellValue);
+                                        data.Columns.Add(column);
+                                    }
+
+
+                                }
+                            }
+                        }
+                        #endregion
+
+                        #region 获取数据值
+                        for (int i = rowDef.Key + 1; i <= rowDef.Value; i++)//遍历起始行至终止行
+                        {
+                            rowInfo = sheet.GetRow(i);
+                            if (rowInfo != null)
+                            {
+                                DataRow dataRow = data.NewRow();
+
+                                for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                                {
+                                    if (rowInfo.GetCell(j) != null)
+                                    {
+                                        dataRow[j] = rowInfo.GetCell(j).ToString();
+                                    }
+                                }
+                                data.Rows.Add(dataRow);
+                            }
+                            else //有空行时，剩余数据不必处理，直接返回
+                            {
+                                break;
+                            }
+                        }
+                        #endregion
+                    }
+                    sheetExistFlag = true;
+                }
+            }
+            data.TableName = sheetName;
+            return data;
+        }
     }
 }

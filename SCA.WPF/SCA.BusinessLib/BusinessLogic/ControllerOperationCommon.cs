@@ -137,5 +137,86 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+
+        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, Model.BusinessModel.ExcelTemplateCustomizedInfo customizedInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, Model.BusinessModel.ExcelTemplateCustomizedInfo customizedInfo, Model.ControllerType controllerType)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool GenerateExcelTemplateLoopSheet(List<string> sheetNames, IControllerConfig config, Model.BusinessModel.ExcelTemplateCustomizedInfo summaryInfo, ref IExcelService excelService)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool GenerateExcelTemplateStandardSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool GenerateExcelTemplateMixedSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool GenerateExcelTemplateGeneralSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool GenerateExcelTemplateManualControlBoardSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxAmount, ref IExcelService excelService)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool ExistSameDeviceCode(Model.LoopModel loop)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<Model.LoopModel> ConvertToLoopModelFromDataTable(DataTable dt, Model.ControllerModel controller, out string loopDetailErrorInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<Model.LinkageConfigStandard> ConvertToStandardLinkageModelFromDataTable(DataTable dtStandard)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<Model.LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dtMixed)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<Model.LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dtGeneral)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<Model.ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dtManualControlBoard)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //public event Action<int> UpdateProgressBarEvent;
+
+        //public event Action<Model.ControllerModel, string> ReadingExcelCompletedEvent;
+
+        //public event Action<Model.ControllerModel, string> ReadingExcelCancelationEvent;
+
+        //public event Action<string> ReadingExcelErrorEvent;
+
+        public void SetStaticProgressBarCancelFlag(bool flag)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

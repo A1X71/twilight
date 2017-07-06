@@ -403,7 +403,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <returns></returns>
         public List<Model.LinkageType> GetLinkageType()
         {
-            ControllerConfigBase config = new ControllerConfigBase();
+            ControllerConfigNone config = new ControllerConfigNone();
             return config.GetLinkageTypeWithCastration();
         }
 
@@ -420,7 +420,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public  List<LinkageActionType> GetLinkageActionType()
         {
-            ControllerConfigBase config = new ControllerConfigBase();
+            ControllerConfigNone config = new ControllerConfigNone();
             return config.GetLinkageActionType();
         }
 
@@ -472,8 +472,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             _linkageConfigMixedService.TheController = this.TheController;
             List<LinkageConfigMixed> lstLinkageConfigMixed = _linkageConfigMixedService.Create(rowsAmount);
             foreach (var v in lstLinkageConfigMixed)
-            {
-                
+            {               
                 EditableLinkageConfigMixed eLCM = new EditableLinkageConfigMixed();
                 eLCM.Controller =v.Controller;
                 eLCM.ControllerID = v.ControllerID;

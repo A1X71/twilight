@@ -25,6 +25,10 @@
         <ObjectDataProvider x:Key="ExcelVersionEnumDS"  ObjectType="{x:Type DContext:ImportControllerViewModel}" MethodName="GetExcelVersion">
 
         </ObjectDataProvider>
+        <!--<ObjectDataProvider x:Key="DeviceTypeDS"  ObjectType="{x:Type DContext:ImportControllerViewModel}" MethodName="GetValidDeviceType">
+
+        </ObjectDataProvider>-->
+        <CollectionViewSource x:Key="DeviceTypeDS" Source="{Binding ValidDeviceType}"/>
     </UserControl.Resources>
     <StackPanel>
         <StackPanel x:Name="ImportDataPage" Background="{StaticResource WindowBackgroundBrush}"  Visibility="{Binding Data.ConfigSection, Source={StaticResource proxy} }">
@@ -47,7 +51,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!--选择导入类型-->
-            <StackPanel  Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                <StackPanel x:Name="ImportTypePanel" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" IsEnabled="{Binding Path=ImportTypePanelFlag,Mode=TwoWay}">
                 
                 <RadioButton x:Name="ExcelFormat" GroupName="FileFormatType"  VerticalAlignment="Center" IsChecked="{Binding ExcelFormatState,Mode=TwoWay}"  DockPanel.Dock="Left">
                     EXCEL格式
@@ -74,7 +78,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel  Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                    <StackPanel x:Name="ExcelTemplateRadioPanel" Grid.ColumnSpan="3" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" IsEnabled="{Binding Path=ExcelTemplateRadioPanelFlag,Mode=TwoWay}">
                     <RadioButton x:Name="DefaultTemplate" GroupName="SelectedTemplate"  VerticalAlignment="Top" DockPanel.Dock="Left" IsChecked="{Binding DefaultTemplateState,Mode=TwoWay}">
                         默认模板
                     </RadioButton>
@@ -187,6 +191,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="回路数量"   Style="{StaticResource Label}"/>
                         <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" HorizontalAlignment="Left"
@@ -194,18 +199,40 @@
                         <Label Grid.Row="1" Grid.Column="0" Content="回路分组"   Style="{StaticResource Label}"/>
                         <TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopGroupInputTextBox" HorizontalAlignment="Left"
                      Width="160"  TabIndex="100" Foreground="{DynamicResource InputFontColor}"  Text="{Binding Path=LoopGroupAmount,Mode=TwoWay}"/>
-                    </Grid>
+                     <Label Grid.Row="2" Grid.Column="0" Content="默认器件类型"   Style="{StaticResource Label}"/>
+                                <ComboBox IsSynchronizedWithCurrentItem="True" 
+                                            DisplayMemberPath="Name"                                                                                     
+                                            SelectedValuePath="Code"    
+                                            ItemsSource="{Binding Source={StaticResource DeviceTypeDS}}"
+                                            SelectedValue="{Binding Path=SelectedDeviceTypeCode}"
+                                            x:Name="DefaultDeviceTypeComboBox"  Width="120"
+                                            Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"                                           
+                                            Margin="-4,0,0,0"  />
+
+                                <!--<ComboBox IsSynchronizedWithCurrentItem="False" 
+                                          ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}"
+                                          SelectedItem="{Binding Path=SerialPortNumber,Mode=TwoWay}"
+                                          x:Name="SerialPortNumberComboBox"  Width="120"
+                                          Grid.Row="1" HorizontalAlignment="Left" 
+                                          
+                                          Margin="-4,0,0,0"  />-->
+
+                            </Grid>
                 </GroupBox>
                     <!--Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"-->
-                <GroupBox Header="其它" 
+                        <!--SelectedItem="{Binding Path=SelectedDeviceTypeCode,Mode=TwoWay}"
+                                          selecteditem
+                                          SelectedValueBinding="{Binding SelectedDeviceTypeCode}"-->
+                        <GroupBox Header="其它" 
                           Margin="0,3,0,0" 
                           x:Name="OtherDefinitionGroup"
+                          Visibility="{Binding Data.OtherSettingsPanelVisibility, Source={StaticResource proxy} }"
                           >
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="标准组态"  IsChecked="{Binding Path=StandardLinkageFlag}"/>
-                        <CheckBox Content="混合组态" IsChecked="{Binding Path=MixedLinkageFlag}"/>
-                        <CheckBox Content="通用组态" IsChecked="{Binding Path=GeneralLinkageFlag}"/>
-                        <CheckBox Content="网络手动盘" IsChecked="{Binding Path=ManualControlBoardFlag}"/>
+                    <StackPanel x:Name="OtherSettingsPanel" Orientation="Horizontal">
+                                <CheckBox Content="标准组态"  IsChecked="{Binding Path=StandardLinkageFlag}" Visibility="{Binding Data.StandardLinkageCheckBoxVisibility, Source={StaticResource proxy} }" />
+                                <CheckBox Content="混合组态" IsChecked="{Binding Path=MixedLinkageFlag}"  Visibility="{Binding Data.MixedLinkageCheckBoxVisibility, Source={StaticResource proxy} }" />
+                                <CheckBox Content="通用组态" IsChecked="{Binding Path=GeneralLinkageFlag}"  Visibility="{Binding Data.GeneralLinkageCheckBoxVisibility, Source={StaticResource proxy} }" />
+                                <CheckBox Content="网络手动盘" IsChecked="{Binding Path=ManualControlBoardFlag}" Visibility="{Binding Data.ManualControlBoardCheckBoxVisibility, Source={StaticResource proxy} }" />
                         </StackPanel>
                 </GroupBox>
                 </StackPanel>
@@ -220,11 +247,12 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                    </Grid.RowDefinitions>
+                         <RowDefinition/>
+                        </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="文件位置"  Foreground="Black"/>
                     <TextBlock Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180px" Margin="5,0,0,0" Text="{Binding Path=ExcelFilePath,Mode=TwoWay}" />
                     <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="0" Grid.Column="3"  Width="20px" Command="{Binding Path=SelectExcelPathCommand}">...</Button>
-                    <Button x:Name="ImportExcelButton"  Grid.Row="0" Grid.Column="4" Command="{Binding Path=ImportDataFromExcelCommand}">读取</Button>
+                        <Button x:Name="ImportExcelButton"  Grid.Row="0" Grid.Column="4" IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>
                     <Label Grid.Row="1" Grid.Column="0" Content="EXCEL版本"  Foreground="Black"/>
                     <ComboBox IsSynchronizedWithCurrentItem="False" 
                                           ItemsSource="{Binding Source={StaticResource ExcelVersionEnumDS}}"
@@ -234,9 +262,12 @@
                                           Width="100px"
                                            Grid.ColumnSpan="2"
                                           Grid.Row="1" HorizontalAlignment="Left" />
-                        
-                        <Button x:Name="DownloadExcelTemplateButton"  Grid.Row="1" Grid.Column="4" Command="{Binding Path=DownloadExcelTemplateCommand}">下载模板</Button>
-                </Grid>
+
+                        <Button x:Name="DownloadExcelTemplateButton" Grid.Row="1" Grid.Column="4" IsEnabled="{Binding Path=DownloadExcelTemplateEnableFlag,Mode=TwoWay}" Command="{Binding Path=DownloadExcelTemplateCommand}">下载模板</Button>
+                        <TextBlock x:Name="lblExcelVersionPrompt"  Grid.Row="2" Grid.Column="0"  Grid.ColumnSpan="5" TextWrapping="WrapWithOverflow"  Text="友情提示：EXCEL2007的读取速度要慢于EXCEL2003!(相当于“龟兔赛跑”)。请慎重选择"  Foreground="Red"
+                                    Visibility="{Binding Data.ExcelVersionPromptVisibility, Source={StaticResource proxy} }"
+                                   />
+                    </Grid>
             </Grid>
 
             <!--Target="{Binding ElementName=ControllerNameInputTextBox, Mode=OneWay}"-->
@@ -252,7 +283,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>                        
                     </Grid.RowDefinitions>
-                    <Button x:Name="CloseButton" Content="关闭" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding Path=CloseViewCommand}"  Width="105" Height="21" FontSize="10" />
+                        <Button x:Name="CloseButton" Content="关闭" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" IsEnabled="{Binding Path=CloseButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=CloseViewCommand}"  Width="105" Height="21" FontSize="10" />
                     <!--<ComboBox IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource RelationshipValuesEnumDS}}" x:Name="FamilyMemberComboBox"  Width="120" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" SelectionChanged="FamilyMemberComboBox_SelectionChanged"  />
                     <Button x:Name="FamilyMemberAddButton" Content="_Add Father" Grid.Row="1" Click="FamilyMemberAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
                 </Grid>

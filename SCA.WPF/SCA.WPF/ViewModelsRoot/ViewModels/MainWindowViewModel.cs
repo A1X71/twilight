@@ -406,10 +406,12 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         {            
             ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;            
 
-            ImportControllerViewModel  importControllerVM=new ImportControllerViewModel();
-            importControllerVM.TheController = controller;
-            importControllerVM.ImportControllerVisibilityState = Visibility.Visible;
-            ImportControllerDataContext = importControllerVM;            
+            //ImportControllerViewModel  importControllerVM=new ImportControllerViewModel();
+            //importControllerVM.TheController = controller;
+            //importControllerVM.ImportControllerVisibilityState = Visibility.Visible;
+            //ImportControllerDataContext = importControllerVM;
+            ImportControllerDataContext.TheController = controller;
+            ImportControllerDataContext.ImportControllerVisibilityState = Visibility.Visible;
         }
         #endregion
 

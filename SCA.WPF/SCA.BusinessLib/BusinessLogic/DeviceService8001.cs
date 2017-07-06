@@ -20,6 +20,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class DeviceService8001:IDeviceService<DeviceInfo8001>
     {
+        private short _maxDeviceAmount = 0;
         public LoopModel TheLoop
         {
             get;
@@ -40,20 +41,44 @@ namespace SCA.BusinessLib.BusinessLogic
             //return lstDevInfo;
             throw new NotImplementedException();
         }
-
+        
+        public short MaxDeviceAmount
+        {
+            get
+            {
+                if (_maxDeviceAmount == 0)
+                {
+                    _maxDeviceAmount = new ControllerConfig8001().GetMaxDeviceAmountValue();
+                }
+                return _maxDeviceAmount;
+            }
+        }
         public List<DeviceInfo8001> Create(int amount)
         {
             List<DeviceInfo8001> lstDeviceInfo8001 = new List<DeviceInfo8001>();
             int currentMaxCode = GetMaxCode();
+            if (currentMaxCode >= MaxDeviceAmount)
+            {
+                amount = 0;
+            }
+            if ((currentMaxCode + amount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            {
+                amount = currentMaxCode + amount - MaxDeviceAmount;
+            }
+            int deviceID = ProjectManager.GetInstance.MaxDeviceIDInController8001;
             for (int i = 0; i < amount; i++)
             {
                 currentMaxCode++;
+                deviceID++;
                 DeviceInfo8001 dev = new DeviceInfo8001();
                 dev.Loop = TheLoop;
                 //需要根据器件编码指定编码位数
-                dev.Code = currentMaxCode.ToString();
+                dev.Code = TheLoop.Code + currentMaxCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+                dev.ID = deviceID;
                 lstDeviceInfo8001.Add(dev);
             }
+            //更新最大ID值
+            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 = deviceID;
             return lstDeviceInfo8001;
         }
 
@@ -136,9 +161,14 @@ namespace SCA.BusinessLib.BusinessLogic
 
                 IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, _databaseService);
 
-                deviceDBService.DeleteDeviceByID(id);
-
-
+                if (deviceDBService.DeleteDeviceByID(id))
+                {
+                    if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 == id) //如果最大ID等于被删除的ID，则重新赋值
+                    {
+                        ControllerOperation8001 controllerOperation = new ControllerOperation8001();
+                        BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 = controllerOperation.GetMaxDeviceID();     
+                    }
+                }
             }
             catch (Exception ex)
             {

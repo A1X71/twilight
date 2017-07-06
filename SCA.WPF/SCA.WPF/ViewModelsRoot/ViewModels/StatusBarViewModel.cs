@@ -5,6 +5,7 @@ using System.Text;
 using Caliburn.Micro;
 using System.Windows;
 using System.Reflection;
+using System.Windows.Input;
 using SCA.WPF.Utility;
 /* ==============================
 *
@@ -21,7 +22,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
     {
         private double _currentProgressValue=0;
         private string _statusOfflinePath = @"Resources/Icon/Style1/status-offline.png";
-
+        //public event Action<bool> CancelEvent;
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
         public string StatusOffinePath { get { return _appCurrentPath + _statusOfflinePath; } }
 
@@ -78,6 +79,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                 _descriptionText = value;
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             } 
+        }
+        
+        public ICommand CancelCommand
+        {
+            get { return new SCA.WPF.Utility.RelayCommand(CancelExecute, null); }
+        }
+        public void CancelExecute()
+        {
+            //得到需要导入的控制器的信息
+            SCA.WPF.Infrastructure.EventMediator.NotifyColleagues("CancelExcelImport", null);                
         }
     }
 }

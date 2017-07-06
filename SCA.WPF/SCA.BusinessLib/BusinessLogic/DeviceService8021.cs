@@ -28,7 +28,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
             throw new NotImplementedException();
         }
-
+        //commented by william at 2017-06-23 because of no using
         public List<DeviceInfo8021> Create(int amount)
         {
             List<DeviceInfo8021> lstDeviceInfo8021 = new List<DeviceInfo8021>();
@@ -122,5 +122,50 @@ namespace SCA.BusinessLib.BusinessLogic
             return result;
         }
 
+
+        public bool IsExistSameDeviceCode()
+        {
+            if (TheLoop != null)
+            {
+                bool existFlag = false;
+                foreach (var device in TheLoop.GetDevices<DeviceInfo8021>())
+                {
+                    existFlag = IsExistSameDeviceCode(device.Code);
+                    if (existFlag)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 在回路内是否存在相同的器件代码
+        /// </summary>
+        /// <param name="deviceCode"></param>
+        /// <returns></returns>
+        public bool IsExistSameDeviceCode(string deviceCode)
+        {
+            if (TheLoop != null)
+            {
+                int deviceCount = TheLoop.GetDevices<DeviceInfo8021>().Count((d) => d.Code == deviceCode);
+                if (deviceCount > 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else //TheLoop不应为空
+            {
+                return true;
+            }
+        }
     }
 }

@@ -55,8 +55,7 @@ namespace SCA.BusinessLib
                         { 
                             _projManager = new ProjectManager();
                         }
-                    }
-                    
+                    }                    
                 }
                 return _projManager;
             }
@@ -100,6 +99,9 @@ namespace SCA.BusinessLib
 
         private int _maxIDForManualControlBoard = 0;
         public int MaxIDForManualControlBoard { get { return _maxIDForManualControlBoard; } set { _maxIDForManualControlBoard = value; } }
+
+        private int _maxIDForLoop= 0;
+        public int MaxIDForLoop { get { return _maxIDForLoop; } set { _maxIDForLoop = value; } }
 
         #region 控制器操作
         //public List<ControllerModel> Controllers
@@ -307,16 +309,26 @@ namespace SCA.BusinessLib
                     c.GeneralConfig.Add(s);
                 }
                 project.Controllers.Add(c);
-            }
-
-        
+                
+            }       
         //private IManualControlBoardDBService _manualControlBoardDBService;
-
-
             project.SavePath = strPath;
-            this.Project = project;            
+            this.Project = project;
+            SetMaxIDWithMemoryData();
         }
-
+        private void SetMaxIDWithMemoryData()
+        {
+            MaxDeviceIDInController8001 = this.GetMaxIDForDevice8001();
+            MaxDeviceIDInController8007 = this.GetMaxIDForDevice8007();
+            MaxDeviceIDInController8000 = this.GetMaxIDForDevice8000();
+            MaxDeviceIDInController8003 = this.GetMaxIDForDevice8003();
+            MaxDeviceIDInController8036 = this.GetMaxIDForDevice8036();            
+            MaxDeviceIDInController8021 = this.GetMaxIDForDevice8021();
+            MaxIDForStandardLinkageConfig = this.GetMaxIDForStandardLinkage();
+            MaxIDForMixedLinkageConfig = this.GetMaxIDForMixedLinkage();
+            MaxIDForGeneralLinkageConfig = this.GetMaxIDForGeneralLinkage();
+            MaxIDForLoop = this.GetMaxIDForLoop();
+        }
         public bool CloseProject()
         {
             try
@@ -637,5 +649,217 @@ namespace SCA.BusinessLib
             }
             Project.IsDirty = false;
         }
+        private int GetMaxIDForDevice8001()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.NT8001 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8001> lstDeviceInfo8001 = l.GetDevices<DeviceInfo8001>();
+                    if (lstDeviceInfo8001.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo8001.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForDevice8000()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.FT8000 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8000> lstDeviceInfo = l.GetDevices<DeviceInfo8000>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForDevice8003()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.FT8003 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8003> lstDeviceInfo = l.GetDevices<DeviceInfo8003>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForDevice8007()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.NT8007 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8007> lstDeviceInfo = l.GetDevices<DeviceInfo8007>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForDevice8021()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.NT8021 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8021> lstDeviceInfo = l.GetDevices<DeviceInfo8021>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForDevice8036()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.NT8036 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8036> lstDeviceInfo = l.GetDevices<DeviceInfo8036>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+        private int GetMaxIDForStandardLinkage()
+        {
+            var controllers = from r in this.Project.Controllers select r;
+            int maxID = 0;
+            foreach (var c in controllers)
+            {
+                if (c.StandardConfig.Count > 0)
+                {
+                    int currentMaxID = c.StandardConfig.Max(info => info.ID);
+                    if (currentMaxID > maxID)
+                    {
+                        maxID = currentMaxID;
+                    }
+                }
+            }
+            return maxID;
+        }
+        private int GetMaxIDForMixedLinkage()
+        {
+            var controllers = from r in this.Project.Controllers select r;
+            int maxID = 0;
+            foreach (var c in controllers)
+            {
+                if (c.MixedConfig.Count > 0)
+                {
+                    int currentMaxID = c.MixedConfig.Max(info => info.ID);
+                    if (currentMaxID > maxID)
+                    {
+                        maxID = currentMaxID;
+                    }
+                }
+            }
+            return maxID;
+        }
+        private int GetMaxIDForGeneralLinkage()
+        {
+            var controllers = from r in this.Project.Controllers select r;
+            int maxID = 0;
+            foreach (var c in controllers)
+            {
+                if (c.GeneralConfig.Count > 0)
+                {
+                    int currentMaxID = c.GeneralConfig.Max(info => info.ID);
+                    if (currentMaxID > maxID)
+                    {
+                        maxID = currentMaxID;
+                    }
+                }
+            }
+            return maxID;
+        }
+        private int GetMaxIDForManualControlBoard()
+        {
+            var controllers = from r in this.Project.Controllers select r;
+            int maxID = 0;
+            foreach (var c in controllers)
+            {
+                if (c.ControlBoard.Count > 0)
+                {
+                    int currentMaxID = c.ControlBoard.Max(info => info.ID);
+                    if (currentMaxID > maxID)
+                    {
+                        maxID = currentMaxID;
+                    }
+                }
+            }
+            return maxID;
+        }
+        private int GetMaxIDForLoop()
+        {
+            var controllers = from r in this.Project.Controllers select r;
+            int maxID = 0;
+            foreach (var c in controllers)
+            {
+                if (c.Loops.Count > 0)
+                {
+                    int currentMaxID = c.Loops.Max(info => info.ID);
+                    if (currentMaxID > maxID)
+                    {
+                        maxID = currentMaxID;
+                    }
+                }
+            }
+            return maxID;
+        }
+
     }
 }

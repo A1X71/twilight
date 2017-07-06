@@ -227,11 +227,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 _lstLoops = value;
                 NotifyOfPropertyChange("ValidLoops");
                 GetDeviceTypeOfController(_controllerID);
-              //  LoopID = _lstLoops.FirstOrDefault().ID;
-                
+                //LoopID = _lstLoops.FirstOrDefault().ID;                
                 //NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
-                
-                
             }
         }
         /// <summary>

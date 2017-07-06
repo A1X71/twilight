@@ -99,7 +99,7 @@ namespace SCA.WPF.ViewModelsRoot.Converters
         {
             if (value != null)
             {                
-                SCA.BusinessLib.BusinessLogic.ControllerConfigBase config = new BusinessLib.BusinessLogic.ControllerConfigBase();
+                SCA.BusinessLib.BusinessLogic.ControllerConfigNone config = new BusinessLib.BusinessLogic.ControllerConfigNone();
                 SCA.Model.DeviceType dType=config.GetALLDeviceTypeInfo(null).Where((t) => t.Code == System.Convert.ToInt16(value)).FirstOrDefault<SCA.Model.DeviceType>();
                 return dType.Name;
             }

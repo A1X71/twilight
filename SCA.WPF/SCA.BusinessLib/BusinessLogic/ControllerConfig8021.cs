@@ -17,7 +17,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class ControllerConfig8021 : ControllerConfigBase, IControllerConfig
     {
-
+        private int _defaultDeviceTypeCode = 3;
         public Model.ControllerNodeModel[] GetNodes()
         {
             return new ControllerNodeModel[]
@@ -28,7 +28,30 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public Model.ColumnConfigInfo[] GetDeviceColumns()
         {
-            throw new NotImplementedException();
+            ////板卡号，手盘号，手键号暂定不在器件中处理
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[10];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编码";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "器件类型";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "屏蔽";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "电流报警值";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "温度报警值";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "楼号";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "区号";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "层号";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "房间号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "安装地点";            
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
@@ -45,7 +68,7 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        public List<DeviceType> GetDeviceTypeInfo()
+        public override List<DeviceType> GetDeviceTypeInfo()
         {
 
             string deviceType = GetDeviceTypeCodeInfo();
@@ -139,58 +162,85 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public short GetMaxAmountForMixedLinkageConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public short GetMaxAmountForGeneralLinkageConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public short GetMaxAmountForManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
 
         public short GetMaxAmountForBoardNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public short GetMaxAmountForSubBoardNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public short GetMaxAmountForKeyNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
 
         public List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public List<DeviceType> GetAllowedDeviceTypeInfoForLinkageGroup8000()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public int DefaultDeviceTypeCode
         {
             get
             {
-                throw new NotImplementedException();
+                return _defaultDeviceTypeCode;
             }
             set
             {
-                throw new NotImplementedException();
+                _defaultDeviceTypeCode = value;
             }
         }
+        public List<int> GetActionCoefficient()
+        {
+            return null;
+        }
 
+        public List<LinkageActionType> GetLinkageActionType()
+        {
+            return null;
+        }
 
+        public List<LinkageType> GetLinkageTypeWithCastration()
+        {
+            return null;
+        }
+
+        public List<LinkageType> GetLinkageType()
+        {
+            return null;
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoWithAnyAlarm()
+        {
+            return null;
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoWithoutFireDevice()
+        {
+            return null;
+        }
     }
 }

@@ -315,7 +315,7 @@ namespace SCA.BusinessLib.Controller
                 //sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Controller.MachineNumber.Length + singleDevInfo.Loop.Code.Length, 3));　//地编号
                 //回路的Code已经包含了机器号 2017-04-05
                 sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Code.Length, 3));　//地编号  
-                sendData[11] = Convert.ToByte(GetDevType(singleDevInfo.TypeCode) * 8 + singleDevInfo.Disable * 4);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
+                sendData[11] = Convert.ToByte(GetDevType(singleDevInfo.TypeCode) * 8 + (singleDevInfo.Disable==false?0:1) * 4);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
                 //GetDevType(CInt(leixing)) * 8 + geli * 4
                 sendData[12] = Convert.ToByte(singleDevInfo.TypeCode); //设备类型
                 //           dsent(12) = Left(Trim(.Text), 3)    '  设备类型
@@ -652,7 +652,7 @@ namespace SCA.BusinessLib.Controller
 
             //.Fields("lingmd") = CStr(m_arrInputData(nStartPos + 4) Mod 4 + 1)
             //屏蔽
-            deviceInfo.Disable = Convert.ToInt16((devicePackage[11] % 8) / 4);
+            deviceInfo.Disable = Convert.ToInt16((devicePackage[11] % 8) / 4)==1?true:false;
             //灵敏度
           //  deviceInfo.SensitiveLevel = Convert.ToInt16((devicePackage[11] % 4) + 1);
             //设备类型

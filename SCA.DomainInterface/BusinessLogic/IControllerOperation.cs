@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SCA.Model;
 using SCA.Interface.DatabaseAccess;
-using SCA.Model.BussinessModel;
+using SCA.Model.BusinessModel;
 /* ==============================
 *
 * Author     : William
@@ -124,11 +124,28 @@ namespace SCA.Interface
         ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldVersionSoftwareDBService);
         #endregion        
         #region EXCEL操作
+        
+        /// <summary>
+        /// 更新进度条
+        /// </summary>
+        event Action<int> UpdateProgressBarEvent;
+        /// <summary>
+        /// EXCEL读取完毕事件
+        /// </summary>
+        event Action<ControllerModel, string> ReadingExcelCompletedEvent;
+        event Action<ControllerModel, string> ReadingExcelCancelationEvent;
+        event Action<string> ReadingExcelErrorEvent;
 
         bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType);
-        
+        /// <summary>
+        /// 设置进度条取消标志
+        /// </summary>
+        /// <param name="flag"></param>
+        void SetStaticProgressBarCancelFlag(bool flag);
         #endregion
         ControllerType GetControllerType();
+        void ReadEXCELTemplate(string strFilePath, IFileService fileService, ControllerModel targetController);
+        
         //OrganizeControllerInfoFromOldVersionSoftwareDataFile
     }
 }

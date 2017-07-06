@@ -15,6 +15,11 @@ namespace SCA.Interface
        /// 默认器件类型编码
        /// </summary>
        int DefaultDeviceTypeCode { get; set; }
+
+       string SummarySheetNameForExcelTemplate{get;set;}
+       string CompatibleSoftwareVersionForExcelTemplate{get;set;}
+
+       string CompatibleControllerTypeForExcelTemplate { get; set; }
        /// <summary>
        /// 根据器件类型编码取得器件类型
        /// </summary>
@@ -27,6 +32,7 @@ namespace SCA.Interface
        ColumnConfigInfo[] GetGeneralLinkageConfigColumns();
        ColumnConfigInfo[] GetMixedLinkageConfigColumns();
        string  GetDeviceTypeCodeInfo();
+       
        /// <summary>
         /// 取得回路最大数量值 
        /// </summary>
@@ -112,6 +118,64 @@ namespace SCA.Interface
        /// </summary>
        /// <returns></returns>
        List<string> GetSerialPortNumber();
-       
+
+       List<int> GetActionCoefficient();
+       /// <summary>
+       /// 动作类型
+       /// </summary>
+       /// <returns></returns>
+       List<LinkageActionType> GetLinkageActionType();
+
+       /// <summary>
+       /// 去掉LinkageType的None值,本层,邻层
+       /// </summary>
+       /// <returns></returns>
+       List<Model.LinkageType> GetLinkageTypeWithCastration();
+ 
+       /// <summary>
+       /// 去掉LinkageType的None值
+       /// </summary>
+       /// <returns></returns>
+       List<Model.LinkageType> GetLinkageType();
+
+       List<string> GetFeatureList();
+
+       List<string> GetDisableList();
+
+       List<string> GetSensitiveLevelList();
+
+       List<DeviceType> GetDeviceTypeInfoWithAnyAlarm();
+       List<DeviceType> GetDeviceTypeInfoWithoutFireDevice();
+       Dictionary<int, string> GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();
+
+       /// <summary>
+       /// EXCEL模板摘要页_控制器信息验证
+       /// </summary>
+       /// <param name="deviceAddressLength"></param>
+       /// <returns></returns>
+        Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(int deviceAddressLength);
+
+       /// <summary>
+       /// EXCEL模板->摘要信息->回路设置->行数，名称
+       /// </summary>
+       /// <returns>行号及配置名称组成的字典</returns>
+        Dictionary<int, string> GetNameOfLoopSettingInSummaryInfoOfExcelTemplate();        
+
+       /// <summary>
+       ///  EXCEL模板->摘要信息->回路设置->行数，值验证规则
+       /// </summary>
+       /// <returns></returns>
+        Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate();    
+       /// <summary>
+       /// EXCEL模板->摘要信息->其它设置->行数，名称
+       /// </summary>
+       /// <returns>行号及配置名称组成的字典</returns>
+        Dictionary<int, string> GetNameOfOtherSettingInSummaryInfoOfExcelTemplate();
+       /// <summary>
+       ///  EXCEL模板->摘要信息->其它设置->行数，值验证规则
+       /// </summary>
+       /// <returns></returns>
+        Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate();
+    
     }
 }

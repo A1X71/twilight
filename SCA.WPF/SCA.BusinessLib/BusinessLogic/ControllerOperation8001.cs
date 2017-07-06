@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using SCA.Interface;
 using SCA.Model;
-using SCA.Model.BussinessModel;
+using SCA.Model.BusinessModel;
 using System.Data;
 using SCA.BusinessLib.Utility;
 using SCA.Interface.DatabaseAccess;
@@ -24,16 +24,16 @@ namespace SCA.BusinessLib.BusinessLogic
     public class ControllerOperation8001:ControllerOperationBase,IControllerOperation
     {
 
-        public static volatile bool _progressBarCancelFlag = false;//进度取消状态
-        /// <summary>
-        /// 更新进度条
-        /// </summary>
-        public event Action<int> UpdateProgressBarEvent;        
-        /// <summary>
-        /// EXCEL读取完毕事件
-        /// </summary>
-        public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
-        public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
+        
+        ///// <summary>
+        ///// 更新进度条
+        ///// </summary>
+        //public event Action<int> UpdateProgressBarEvent;        
+        ///// <summary>
+        ///// EXCEL读取完毕事件
+        ///// </summary>
+        //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
+        //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
         public ControllerOperation8001()
         { 
         
@@ -91,17 +91,17 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        public bool ProgressBarCancelFlag
-        {
-            get
-            {
-                return _progressBarCancelFlag;
-            }
-            set
-            {
-                _progressBarCancelFlag = value;
-            }
-        }
+        //public bool ProgressBarCancelFlag
+        //{
+        //    get
+        //    {
+        //        return _progressBarCancelFlag;
+        //    }
+        //    set
+        //    {
+        //        _progressBarCancelFlag = value;
+        //    }
+        //}
         public Model.ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldDBService)
         {
             ControllerModel controllerInfo = new ControllerModel();
@@ -493,7 +493,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 int defaultLoopCodeLength = 2;//默认回路编码长度
                 string loopSheetNamePrefix = "";//回路页签名称前缀
                 short maxDeviceAmount = config.GetMaxDeviceAmountValue();
-                int defaultDeviceTypeCode = config.DefaultDeviceTypeCode;//默认器件编码                
+                int maxLoopAmount = config.GetMaxLoopAmountValue(); //允许最大回路数量
+                int defaultDeviceTypeCode = summaryInfo.DefaultDeviceTypeCode;//默认器件编码                
                 DeviceType defaultDeviceType = config.GetDeviceTypeViaDeviceCode(defaultDeviceTypeCode);//默认器件类型
                 ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetDeviceColumns(); //取得器件的列定义信息
                 List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
@@ -509,9 +510,13 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
                 for (int i = currentLoopStartIndex; i <= summaryInfo.LoopSheetAmount + 1; i++)
                 {
-
+                    lstMergeCellRange.Clear();
                     for (int j = 0; j < summaryInfo.LoopAmountPerSheet; j++)
                     {
+                        if (maxLoopAmount < (j + 1 + (i - currentLoopStartIndex) * summaryInfo.LoopAmountPerSheet))//已经超出最大回路编号，退出循环
+                        {
+                            break;
+                        }
                         //  string deviceCode=defaultMachineNo+ defaultLoopCodeLength
                         string loopCode = summaryInfo.MachineNumberFormatted + (j + 1 + (i - currentLoopStartIndex) * summaryInfo.LoopAmountPerSheet).ToString().PadLeft(defaultLoopCodeLength, '0');
                         int extraLine = 0;
@@ -548,7 +553,7 @@ namespace SCA.BusinessLib.BusinessLogic
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + j * extraLine;
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + j * extraLine;
                         mergeCellRange.FirstColumnIndex = 0;
-                        mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length;
+                        mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length-1;
                         lstMergeCellRange.Add(mergeCellRange);
                         //回路默认器件信息
                         for (int k = 0; k < maxDeviceAmount; k++)
@@ -930,6 +935,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 return false;
             }            
         }
+
+        //需注销
         /// <summary>
         /// 通过EXCEL模板的设定值取得Controller对象
         /// </summary>
@@ -975,490 +982,22 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <returns></returns>
         public void ReadEXCELTemplate(string strFilePath, IFileService fileService,ControllerModel targetController)
         {
-            ReadExcelLoopArgumentForIn inArgs = new ReadExcelLoopArgumentForIn();            
-            inArgs.FileService=fileService;
-            inArgs.FilePath=strFilePath;
-            inArgs.Controller=targetController;
-            DoWorkEventArgs args = new DoWorkEventArgs(inArgs);                                    
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += ReadingEXCELDoWork;
-            worker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(UpdateProgress);
-            worker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(ReadingEXCELCompleteWork); 
-            worker.WorkerReportsProgress = true;
-            worker.WorkerSupportsCancellation = true;
-            worker.RunWorkerAsync(inArgs);    
+            //ReadExcelLoopArgumentForIn inArgs = new ReadExcelLoopArgumentForIn();            
+            //inArgs.FileService=fileService;
+            //inArgs.FilePath=strFilePath;
+            //inArgs.Controller=targetController;
+            //DoWorkEventArgs args = new DoWorkEventArgs(inArgs);                                    
+            //BackgroundWorker worker = new BackgroundWorker();
+            //worker.DoWork += ReadingEXCELDoWork;
+            //worker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(UpdateProgress);
+            //worker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(ReadingEXCELCompleteWork); 
+            //worker.WorkerReportsProgress = true;
+            //worker.WorkerSupportsCancellation = true;
+            //worker.RunWorkerAsync(inArgs);    
+            base.ReadEXCELTemplate(strFilePath, fileService, targetController);
         }
-        private void ReadingExcelSummarySheet(object sender, System.ComponentModel.DoWorkEventArgs e)
-        { 
         
-        }
-        #region 为异步执行而增加
-        private void ReadingEXCELDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-                BackgroundWorker bw = (BackgroundWorker)sender;
-                const int DELAY_VALUE = 5000;//线程休息时间5秒
-                float totalTime = 100;  //总EXCEL读取时间
-                float cumulativeTime = 0;  //当前累积时间
-                int percentageValue = Convert.ToInt32(cumulativeTime / totalTime)*100; //进度百分比
-                ReadExcelLoopArgumentForIn args = (ReadExcelLoopArgumentForIn)e.Argument;
-                DeviceService8001 deviceService = new DeviceService8001();
-                List<LoopModel> lstLoops = null;//从EXCEL文件中取得数据
-                bool blnSheetExistFlag;
-                string loopDetailErrorInfo; //回路错误信息
-                int elapsedSingleSheetTime; //执行时间
-                string strStatusInfo = ""; //状态信息
-                ControllerAndStatus result = new ControllerAndStatus();
-                cumulativeTime = 0; 
-                int loopCount = 0;
-                float averageTime = 0; //平均执行时间,避免进度忽大忽小
-                EXCELVersion version = GetExcelVersion(args.FilePath);
-                IExcelService excelService = ExcelServiceManager.GetExcelService(version, args.FilePath, args.FileService);
-                ControllerConfig8001 config = new ControllerConfig8001();
-                
-                ControllerNodeModel[] nodes = config.GetNodes();
-                ColumnConfigInfo[] deviceColumnDefinitions = config.GetDeviceColumns();
-                int maxDeviceAmount = config.GetMaxDeviceAmountValue(); //回路内器件信息最大数量
-                
-                Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”控制器设置的名称配置信息
-                Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(args.Controller.DeviceAddressLength); ////取得“摘要信息页”控制器设置的值的有效性
-                Dictionary<int, string> dictNameOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetNameOfLoopSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”回路设置的名称配置信息
-                Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”回路设置的值的有效性
-                Dictionary<int, string> dictNameOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetNameOfOtherSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”其它设置的名称配置信息
-                Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”其它设置的值的有效性
-                
-                bool blnIsError = false;     //错误标志    
-                int controllerSettingStartRow = 4;
-                int loopSettingStartRow = controllerSettingStartRow + dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + 3;//3为“控制器表头行+空行+回路标题"
-                int otherSettingStartRow = loopSettingStartRow + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + 3;
-                //定义“摘要信息”页的数据行定义信息
-                Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();
-                summarySheetRowDefinition.Add(controllerSettingStartRow, 9);//控制器信息起始行定义 4为表头信息,
-                summarySheetRowDefinition.Add(loopSettingStartRow, 15);//回路信息起始行定义
-                summarySheetRowDefinition.Add(otherSettingStartRow, 19);//其它信息起始行定义               
-
-                bw.ReportProgress(percentageValue); //进度条初始化
-
-                if (version == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
-                {
-                    new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
-                }       
-                if (ProgressBarCancelFlag)
-                {
-                    bw.CancelAsync();
-                }
-                if (bw.CancellationPending)
-                {
-                    e.Cancel = true;
-                    ReadingExcelCancelationEvent(null,null);//触发取消事件
-                    return;
-                }
-
-                DataTable dt = excelService.OpenExcel(args.FilePath, config.SummarySheetNameForExcelTemplate, summarySheetRowDefinition, out blnSheetExistFlag, out elapsedSingleSheetTime);
-                #region 计算时间 更新进度百分比
-                cumulativeTime += elapsedSingleSheetTime;
-                averageTime = cumulativeTime; 
-                //totalTime = elapsedSingleSheetTime * args.LoopSheetNames.Count;
-                totalTime = averageTime * 74;
-                percentageValue = Convert.ToInt32((cumulativeTime == 0 ? 1 : cumulativeTime) / (totalTime == 0 ? 1 : totalTime) * 100);
-                bw.ReportProgress(percentageValue);
-                #endregion
-                ControllerModel controller = new ControllerModel(); //存储"控制器配置"信息
-                int loopAmount = 1;//回路数量
-                int loopGroup = 1;//回路分组
-                string loopSheetNamePrefix = "";//回路页签名称前缀                
-                for (int i = 0; i < nodes.Length; i++)
-                {
-                    switch (nodes[i].Type)
-                    {
-                        case ControllerNodeType.Loop:
-                            loopSheetNamePrefix = nodes[i].Name;
-                            break;
-                    }
-                }
-                List<string> lstSheetNames = new List<string>();// 除“摘要信息”之外的页签名称
-                for (int i = 0; i < dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count; i++)
-                {
-                    if (!(dt.Rows[i][0].ToString() == dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[controllerSettingStartRow + 1 + i])) //+1为跨过标题行
-                    {
-                        strStatusInfo = "摘要信息-->控制器设置-->模板名称不正确";
-                        blnIsError = true;
-                    }
-                    else //名称一致，验证值的有效性
-                    {
-                        RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate[controllerSettingStartRow + 1 + i];                                       
-                        Regex exminator = new Regex(verifingMessage.Rule);
-                        if (!exminator.IsMatch(dt.Rows[i][1].ToString()))
-                        {
-                            strStatusInfo += ";" + verifingMessage.ErrorMessage;
-                            blnIsError = true;
-                            continue;
-                        }
-                        else
-                        {
-                            GetControllerViaExcelTemplate(dt.Rows[i][0].ToString(), dt.Rows[i][1].ToString(), controller);
-                        }
-                    }
-                }
-                if (!blnIsError)
-                {
-                    if (controller.DeviceAddressLength != args.Controller.DeviceAddressLength)
-                    {
-                        strStatusInfo += ";模板器件长度(" + controller.DeviceAddressLength + ")与当前控制器器件长度(" + args.Controller.DeviceAddressLength + ")不一致";
-                        blnIsError = true;
-                    }
-                    if (controller.MachineNumber != args.Controller.MachineNumber)
-                    {
-                        strStatusInfo += ";模板控制器机号(" + controller.MachineNumber + ")与当前控制器机号(" + args.Controller.MachineNumber + ")不一致";
-                        blnIsError = true;
-                    }
-                    if (controller.Type != args.Controller.Type)
-                    {
-                        strStatusInfo += ";模板控制器类型(" + controller.Type.ToString() + ")与当前控制器类型(" + args.Controller.Type.ToString() + ")不一致";
-                        blnIsError = true;
-                    }
-                }
-                if (!blnIsError)//控制器配置信息正确
-                {
-                    //controller
-                    //验证回路信息
-                    for (int i = 0; i < dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count; i++)
-                    {
-                        if (!(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == dictNameOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow + 1 + i]))//+1为跨过标题行
-                        {
-                            strStatusInfo = "摘要信息-->回路设置-->模板名称不正确";
-                            blnIsError = true;
-                        }
-                        else //名称一致，验证值的有效性
-                        {
-                            RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow + 1 + i];
-                            //verifingMessage.Rule
-                            //verifingMessa、ge.ErrorMessage                     
-                            Regex exminator = new Regex(verifingMessage.Rule);
-                            if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
-                            {
-                                strStatusInfo += ";" + verifingMessage.ErrorMessage;
-                                blnIsError = true;
-                                continue;
-                            }
-                            else //验证结果正确，存储读入的数据
-                            {
-                                if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路数量")
-                                {
-                                    loopAmount = Convert.ToInt32(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString());
-                                }
-                                else if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路分组")
-                                {
-                                    loopGroup = Convert.ToInt32(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString());
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    result.Status = strStatusInfo;
-                    result.Controller = controller;
-                    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
-                    return;
-                }
-                if (blnIsError) //存在错误，直接返回
-                {
-                    result.Status = strStatusInfo;
-                    result.Controller = controller;
-                    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
-                    return;
-                }
-                List<string> lstOtherSheetName = new List<string>();//除“回路”外的其它工作表名称
-                string otherSettingValue = "";//以“分号”分隔的页签名称
-                if (!blnIsError)//取得除回路外的工作表名称
-                {
-                    for (int i = 0; i < dictNameOfOtherSettingInSummaryInfoOfExcelTemplate.Count; i++)
-                    {
-                        if (!(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == dictNameOfOtherSettingInSummaryInfoOfExcelTemplate[otherSettingStartRow + 1 + i]))//+1为跨过标题行
-                        {
-                            strStatusInfo = "摘要信息-->其它设置-->名称不正确";
-                            blnIsError = true;
-                        }
-                        else //名称一致，验证值的有效性
-                        {
-                            RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate[otherSettingStartRow + 1 + i];                 
-                            Regex exminator = new Regex(verifingMessage.Rule);
-                            if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
-                            {
-                                strStatusInfo += ";摘要信息-->其它设置-->" + verifingMessage.ErrorMessage;
-                                blnIsError = true;
-                                continue;
-                            }
-                            else
-                            {
-                                otherSettingValue = dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString();
-                            }
-                        }
-                    }
-                }
-                if (blnIsError)
-                {
-                    result.Status = strStatusInfo;
-                    result.Controller = controller;
-                    ReadingExcelCancelationEvent(controller,strStatusInfo);//触发取消事件
-                    return;
-                }
-
-                //分组信息>回路数量时，重置回路分组信息
-                if (loopGroup > loopAmount)
-                {
-                    loopGroup = loopAmount;
-                }
-                List<string> lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopAmount, loopGroup);//根据“摘要信息”取得所有回路数据的工作表名称
-                string[] otherSheetNames = otherSettingValue.Split(';');
-                for (int i = 0; i < otherSheetNames.Length; i++)
-                {
-                    lstOtherSheetName.Add(otherSheetNames[i]);
-                }
-
-                int totoalSheets = lstLoopSheetName.Count + lstOtherSheetName.Count;//总共需要读取的Sheet页
-                foreach (var sheetName in lstLoopSheetName)
-                {
-                    if (version == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
-                    {
-                        new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
-                    }       
-                    if (ProgressBarCancelFlag)
-                    {
-                        bw.CancelAsync();
-                    }
-                    if (bw.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        ReadingExcelCancelationEvent(null,null);//触发取消事件
-                        return;
-                    }
-                    
-                    loopCount++;
-                    Console.WriteLine("开始读取" + sheetName);
-                    lstLoops = GetLoopData(excelService, args.FilePath, sheetName, maxDeviceAmount, controller, out blnSheetExistFlag, out loopDetailErrorInfo, out elapsedSingleSheetTime);
-                    cumulativeTime += elapsedSingleSheetTime;
-                    averageTime = cumulativeTime / loopCount;
-
-                     //totalTime = elapsedSingleSheetTime * args.LoopSheetNames.Count;
-                    totalTime = averageTime * totoalSheets;
-                    percentageValue=Convert.ToInt32((cumulativeTime==0?1:cumulativeTime) / (totalTime==0?1:totalTime) * 100);
-                    bw.ReportProgress(percentageValue);
-                     if (lstLoops != null)
-                     {
-                         if (blnSheetExistFlag)
-                         {
-                             foreach (var loop in lstLoops)
-                             {
-                                 deviceService.TheLoop = loop;
-                                 if (deviceService.IsExistSameDeviceCode())
-                                 {
-                                     loopDetailErrorInfo += ";" + loop.Code + "回路存在重码";
-                                 }
-                                 else
-                                 {
-                                     controller.Loops.Add(loop);
-                                 }
-                             }
-                         }
-                         else
-                         {
-                             loopDetailErrorInfo += ";《" + sheetName + "》工作表名称配置不正确";
-                         }
-                     }
-                     if (loopDetailErrorInfo != "") //有错误信息，则直接返回调用
-                     {
-                         strStatusInfo += ";" + loopDetailErrorInfo;
-                       //  strErrorMessage = strStatusInfo;
-                         result.Status = strStatusInfo;
-                         result.Controller = controller;
-                         e.Result = result;
-                         e.Cancel = true; //有错误信息，取消执行
-                         ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
-                         return;
-                     }
-                     Console.WriteLine("结束读取" + sheetName);
-                }
-
-                foreach (var sheetName in lstOtherSheetName)
-                {
-                    if (version == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
-                    {
-                        new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
-                    }
-                    if (ProgressBarCancelFlag)
-                    {
-                        bw.CancelAsync();
-                    }
-                    if (bw.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        ReadingExcelCancelationEvent(null,null);//触发取消事件
-                        return;
-                    }
-                    loopCount++;
-                    config.GetMaxAmountForStandardLinkageConfig();
-                    switch (sheetName)
-                    {
-                        case "标准组态":
-                            {
-                                DataTable dtStandard = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForStandardLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
-                                if (blnSheetExistFlag)
-                                {
-                                    List<LinkageConfigStandard> lstStandardConfig = ConvertToStandardLinkageModelFromDataTable(dtStandard);
-                                    LinkageConfigStandardService standardConfigService = new LinkageConfigStandardService(controller);
-                                    if (standardConfigService.IsExistSameCode(lstStandardConfig))
-                                    {
-                                        strStatusInfo += ";" + sheetName + "存在重码";
-                                    }
-                                    else
-                                    {
-                                        foreach (var r in lstStandardConfig)
-                                        {
-                                            controller.StandardConfig.Add(r);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
-                                }
-                            }
-                            break;
-                        case "混合组态":
-                            {
-                                DataTable dtMixed = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForMixedLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
-                                if (blnSheetExistFlag)
-                                {
-                                    List<LinkageConfigMixed> lstMixedConfig = ConvertToMixedLinkageModelFromDataTable(dtMixed);
-                                    LinkageConfigMixedService mixedConfigService = new LinkageConfigMixedService(controller);
-                                    if (mixedConfigService.IsExistSameCode(lstMixedConfig))
-                                    {
-                                        strStatusInfo += ";" + sheetName + "存在重码";
-                                    }
-                                    else
-                                    {
-                                        foreach (var r in lstMixedConfig)
-                                        {
-                                            controller.MixedConfig.Add(r);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
-                                }
-                            }
-                            break;
-                        case "通用组态":
-                            {
-                                DataTable dtGeneral = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
-                                if (blnSheetExistFlag)
-                                {
-
-                                    List<LinkageConfigGeneral> lstGeneralConfig = ConvertToGeneralLinkageModelFromDataTable(dtGeneral);
-                                    LinkageConfigGeneralService generalConfigService = new LinkageConfigGeneralService(controller);
-                                    if (generalConfigService.IsExistSameCode(lstGeneralConfig))
-                                    {
-                                        strStatusInfo += ";" + sheetName + "存在重码";
-                                    }
-                                    else
-                                    {
-                                        foreach (var r in lstGeneralConfig)
-                                        {
-                                            controller.GeneralConfig.Add(r);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
-                                }
-                            }
-                            break;
-                        case "网络手动盘":
-                            {
-                                DataTable dtMCB = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
-                                if (blnSheetExistFlag)
-                                {
-                                    List<ManualControlBoard> lstMCB = ConvertToManualControlBoardModelFromDataTable(dtMCB);
-                                    ManualControlBoardService mcbService = new ManualControlBoardService(controller);
-                                    if (mcbService.IsExistSameCode(lstMCB))
-                                    {
-                                        strStatusInfo += ";" + sheetName + "存在重码";
-                                    }
-                                    else
-                                    {
-                                        foreach (var r in lstMCB)
-                                        {
-                                            controller.ControlBoard.Add(r);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
-                                }
-                            }
-                            break;
-                    }
-                    cumulativeTime += elapsedSingleSheetTime;
-                    averageTime = cumulativeTime / loopCount;
-                    totalTime = averageTime * totoalSheets;
-                    percentageValue = Convert.ToInt32((cumulativeTime == 0 ? 1 : cumulativeTime) / (totalTime == 0 ? 1 : totalTime) * 100);
-                    bw.ReportProgress(percentageValue);
-                }
-                result.Controller = controller;
-                result.Status = strStatusInfo;
-                e.Result = result;
-                
-        }
-        void UpdateProgress(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-
-            int progress = e.ProgressPercentage;
-            UpdateProgressBarEvent(progress);
-
-        }
-        void ReadingEXCELCompleteWork(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-
-                Console.WriteLine("I have an error!");               
-
-            }
-            else if (e.Cancelled)
-            {
-
-               
-
-            }
-            else
-            {
-                ControllerAndStatus reuslt = (ControllerAndStatus)e.Result;
-                ReadingExcelCompletedEvent(reuslt.Controller,reuslt.Status);
-            }
-        }
-        public struct ReadExcelLoopArgumentForIn
-        {
-            //public IExcelService ExcelService;
-            public IFileService FileService;
-            public string FilePath;
-            //public string SheetName;
-            //public int MaxDeviceAmount;
-            public ControllerModel Controller;
-            //public List<string> LoopSheetNames;
-            //public List<string> OtherSettingSheetNames;
-            //public string statusInfo;
-        }
-        struct ControllerAndStatus
-        {
-           public  ControllerModel Controller;
-           public string Status;
-        }
-
-        #endregion 
+        #region 重构EXCEL读取 注销
         /// <summary>
         /// 读取EXEL,根据工作作名称，取得回路及器件信息
         /// </summary>
@@ -1468,47 +1007,562 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="maxDevcieAmount"></param>
         /// <param name="deviceCodeLength"></param>
         /// <returns></returns>
-        private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,ControllerModel controller,out bool sheetExistFlag,out string loopDetailErrorInfo,out int elapsedTime)
-        {
-            int[] loopRange = ParseLoopSheetName(sheetName);//取得回路编号范围
-            Dictionary<int, int> rowDefinition = new Dictionary<int, int>();
-            int extraLines=2; //除数据外的其它行数
-            //for (int i = loopRange[0]; i <= loopRange[loopRange.Length-1]; i++)
-            //{
-            //    if (i == 1)
-            //    {
-            //        rowDefinition.Add(1, i * maxDevcieAmount + i  * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
-            //    }
-            //    else
-            //    {
-            //        rowDefinition.Add(i * maxDevcieAmount + (i ) * extraLines - 1, (i ) * maxDevcieAmount + (i) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
-            //    }
-            //}
-            for (int i = 0; i < (loopRange[1] - loopRange[0] + 1); i++)
-            {
-                if (i == 0)
-                {
-                    rowDefinition.Add(1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
-                }
-                else
-                {
-                    rowDefinition.Add(i * maxDevcieAmount + (i + 1) * extraLines - 1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
-                }
-            }
-            DataTable dt = new DataTable();
-            int intElapsedTime;
-            dt = excelService.OpenExcel(filePath, sheetName, rowDefinition, out sheetExistFlag, out intElapsedTime);
-            elapsedTime = intElapsedTime;
-            return ConvertToLoopModelFromDataTable(dt, controller,out loopDetailErrorInfo);
-            //如果未找到指定sheetName的EXCEL数据，需要返回“页签错误”的信息            
-        }
+        //private List<LoopModel> GetLoopData(IExcelService excelService,string filePath, string sheetName,int maxDevcieAmount,ControllerModel controller,out bool sheetExistFlag,out string loopDetailErrorInfo,out int elapsedTime)
+        //{
+        //    int[] loopRange = ParseLoopSheetName(sheetName);//取得回路编号范围
+        //    Dictionary<int, int> rowDefinition = new Dictionary<int, int>();
+        //    int extraLines=2; //除数据外的其它行数
+        //    //for (int i = loopRange[0]; i <= loopRange[loopRange.Length-1]; i++)
+        //    //{
+        //    //    if (i == 1)
+        //    //    {
+        //    //        rowDefinition.Add(1, i * maxDevcieAmount + i  * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        rowDefinition.Add(i * maxDevcieAmount + (i ) * extraLines - 1, (i ) * maxDevcieAmount + (i) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+        //    //    }
+        //    //}
+        //    for (int i = 0; i < (loopRange[1] - loopRange[0] + 1); i++)
+        //    {
+        //        if (i == 0)
+        //        {
+        //            rowDefinition.Add(1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+        //        }
+        //        else
+        //        {
+        //            rowDefinition.Add(i * maxDevcieAmount + (i + 1) * extraLines - 1, (i + 1) * maxDevcieAmount + (i + 1) * extraLines - 1);//控制器信息起始行定义 4为表头信息,                    
+        //        }
+        //    }
+        //    DataTable dt = new DataTable();
+        //    int intElapsedTime;
+        //    dt = excelService.OpenExcel(filePath, sheetName, rowDefinition, out sheetExistFlag, out intElapsedTime);
+        //    elapsedTime = intElapsedTime;
+        //    return ConvertToLoopModelFromDataTable(dt, controller,out loopDetailErrorInfo);
+        //    //如果未找到指定sheetName的EXCEL数据，需要返回“页签错误”的信息            
+        //}
+        /// <summary>
+        /// 解析回路工作表的名称，取得回路号范围 
+        /// </summary>
+        /// <param name="sheetName"></param>
+        /// <returns></returns>
+        //private int[] ParseLoopSheetName(string sheetName)
+        //{
+        //    int lineCharIndex = sheetName.IndexOf('-');
+        //    int leftParenthesis = sheetName.IndexOf('(');
+        //    int rightParenthesis = sheetName.IndexOf(')');
+
+        //    string strLoopStartIndex = sheetName.Substring(leftParenthesis + 1, lineCharIndex - leftParenthesis - 1);
+        //    string strLoopEndIndex = sheetName.Substring(lineCharIndex + 1, rightParenthesis - lineCharIndex - 1);
+        //    int loopStartIndex = 1;
+        //    int loopEndIndex = 1;
+        //    if (strLoopStartIndex != "")
+        //    {
+        //        loopStartIndex = Convert.ToInt32(strLoopStartIndex);
+        //    }
+        //    if (strLoopEndIndex != "")
+        //    {
+        //        loopEndIndex = Convert.ToInt32(strLoopEndIndex);
+        //    }
+        //    //loopStartIndex = loopStartIndex == 0 ? 1 : loopStartIndex;
+        //    //loopEndIndex = loopEndIndex == 0 ? 1 : loopEndIndex;
+        //    int[] loopIndex = new int[2];
+        //    //for(int i=loopStartIndex-1;i<=loopEndIndex-1 ;i++)
+        //    //{
+        //    //    loopIndex[i] = i+1;
+        //    //}         
+        //    loopIndex[0] = loopStartIndex;
+        //    loopIndex[1] = loopEndIndex;
+        //    return loopIndex;
+        //}
+
+        //private DataTable GetOtherSettingData(IExcelService excelService,string filePath, string sheetName,int maxRowIndex,out bool sheetExistFlag,out int elapsedTime)
+        //{
+
+        //    Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();                      
+        //    summarySheetRowDefinition.Add(1,maxRowIndex + 2 - 1); //2为标题+表头,由于从0开始记数，需要减1        
+        //    DataTable dt = new DataTable();
+        //    dt = excelService.OpenExcel(filePath, sheetName, summarySheetRowDefinition,out sheetExistFlag,out  elapsedTime);
+        //    return dt;
+        //}
+
+
+        //private void ReadingEXCELDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        //{
+        //    BackgroundWorker bw = (BackgroundWorker)sender;
+        //    List<string> lstLoopSheetName;
+        //    List<string> lstOtherSheetName;
+        //    EXCELVersion excelVersion;
+        //    IExcelService excelService;
+        //    int loopCount = 0;
+        //    if (!ReadingExcelSummarySheet(ref bw, out lstLoopSheetName, out lstOtherSheetName, out excelVersion, out excelService))
+        //    {
+        //        //if (ProgressBarCancelFlag)
+        //        //{
+        //        bw.CancelAsync();
+        //        //}
+        //        if (bw.CancellationPending)
+        //        {
+        //            e.Cancel = true;
+        //            ReadingExcelCancelationEvent(null, null);//触发取消事件
+        //            return;
+        //        }
+        //    }
+        //    int totoalSheets = lstLoopSheetName.Count + lstOtherSheetName.Count;//总共需要读取的Sheet页
+        //    foreach (var sheetName in lstLoopSheetName)
+        //    {
+        //        if (excelVersion == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
+        //        {
+        //            new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
+        //        }
+        //        if (ProgressBarCancelFlag)
+        //        {
+        //            bw.CancelAsync();
+        //        }
+        //        if (bw.CancellationPending)
+        //        {
+        //            e.Cancel = true;
+        //            ReadingExcelCancelationEvent(null, null);//触发取消事件
+        //            return;
+        //        }
+
+        //        loopCount++;
+        //        Console.WriteLine("开始读取" + sheetName);
+        //        lstLoops = GetLoopData(excelService, args.FilePath, sheetName, maxDeviceAmount, controller, out blnSheetExistFlag, out loopDetailErrorInfo, out elapsedSingleSheetTime);
+        //        cumulativeTime += elapsedSingleSheetTime;
+        //        averageTime = cumulativeTime / loopCount;
+
+        //        //totalTime = elapsedSingleSheetTime * args.LoopSheetNames.Count;
+        //        totalTime = averageTime * totoalSheets;
+        //        percentageValue = Convert.ToInt32((cumulativeTime == 0 ? 1 : cumulativeTime) / (totalTime == 0 ? 1 : totalTime) * 100);
+        //        bw.ReportProgress(percentageValue);
+        //        if (lstLoops != null)
+        //        {
+        //            if (blnSheetExistFlag)
+        //            {
+        //                foreach (var loop in lstLoops)
+        //                {
+        //                    deviceService.TheLoop = loop;
+        //                    if (deviceService.IsExistSameDeviceCode())
+        //                    {
+        //                        loopDetailErrorInfo += ";" + loop.Code + "回路存在重码";
+        //                    }
+        //                    else
+        //                    {
+        //                        controller.Loops.Add(loop);
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                loopDetailErrorInfo += ";《" + sheetName + "》工作表名称配置不正确";
+        //            }
+        //        }
+        //        if (loopDetailErrorInfo != "") //有错误信息，则直接返回调用
+        //        {
+        //            strStatusInfo += ";" + loopDetailErrorInfo;
+        //            //  strErrorMessage = strStatusInfo;
+        //            result.Status = strStatusInfo;
+        //            result.Controller = controller;
+        //            e.Result = result;
+        //            e.Cancel = true; //有错误信息，取消执行
+        //            ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+        //            return;
+        //        }
+        //        Console.WriteLine("结束读取" + sheetName);
+        //    }
+
+        //    foreach (var sheetName in lstOtherSheetName)
+        //    {
+        //        if (version == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
+        //        {
+        //            new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
+        //        }
+        //        if (ProgressBarCancelFlag)
+        //        {
+        //            bw.CancelAsync();
+        //        }
+        //        if (bw.CancellationPending)
+        //        {
+        //            e.Cancel = true;
+        //            ReadingExcelCancelationEvent(null, null);//触发取消事件
+        //            return;
+        //        }
+        //        loopCount++;
+        //        config.GetMaxAmountForStandardLinkageConfig();
+        //        switch (sheetName)
+        //        {
+        //            case "标准组态":
+        //                {
+        //                    DataTable dtStandard = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForStandardLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
+        //                    if (blnSheetExistFlag)
+        //                    {
+        //                        List<LinkageConfigStandard> lstStandardConfig = ConvertToStandardLinkageModelFromDataTable(dtStandard);
+        //                        LinkageConfigStandardService standardConfigService = new LinkageConfigStandardService(controller);
+        //                        if (standardConfigService.IsExistSameCode(lstStandardConfig))
+        //                        {
+        //                            strStatusInfo += ";" + sheetName + "存在重码";
+        //                        }
+        //                        else
+        //                        {
+        //                            foreach (var r in lstStandardConfig)
+        //                            {
+        //                                controller.StandardConfig.Add(r);
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+        //                    }
+        //                }
+        //                break;
+        //            case "混合组态":
+        //                {
+        //                    DataTable dtMixed = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForMixedLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
+        //                    if (blnSheetExistFlag)
+        //                    {
+        //                        List<LinkageConfigMixed> lstMixedConfig = ConvertToMixedLinkageModelFromDataTable(dtMixed);
+        //                        LinkageConfigMixedService mixedConfigService = new LinkageConfigMixedService(controller);
+        //                        if (mixedConfigService.IsExistSameCode(lstMixedConfig))
+        //                        {
+        //                            strStatusInfo += ";" + sheetName + "存在重码";
+        //                        }
+        //                        else
+        //                        {
+        //                            foreach (var r in lstMixedConfig)
+        //                            {
+        //                                controller.MixedConfig.Add(r);
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+        //                    }
+        //                }
+        //                break;
+        //            case "通用组态":
+        //                {
+        //                    DataTable dtGeneral = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
+        //                    if (blnSheetExistFlag)
+        //                    {
+
+        //                        List<LinkageConfigGeneral> lstGeneralConfig = ConvertToGeneralLinkageModelFromDataTable(dtGeneral);
+        //                        LinkageConfigGeneralService generalConfigService = new LinkageConfigGeneralService(controller);
+        //                        if (generalConfigService.IsExistSameCode(lstGeneralConfig))
+        //                        {
+        //                            strStatusInfo += ";" + sheetName + "存在重码";
+        //                        }
+        //                        else
+        //                        {
+        //                            foreach (var r in lstGeneralConfig)
+        //                            {
+        //                                controller.GeneralConfig.Add(r);
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+        //                    }
+        //                }
+        //                break;
+        //            case "网络手动盘":
+        //                {
+        //                    DataTable dtMCB = GetOtherSettingData(excelService, args.FilePath, sheetName, config.GetMaxAmountForGeneralLinkageConfig(), out blnSheetExistFlag, out elapsedSingleSheetTime);
+        //                    if (blnSheetExistFlag)
+        //                    {
+        //                        List<ManualControlBoard> lstMCB = ConvertToManualControlBoardModelFromDataTable(dtMCB);
+        //                        ManualControlBoardService mcbService = new ManualControlBoardService(controller);
+        //                        if (mcbService.IsExistSameCode(lstMCB))
+        //                        {
+        //                            strStatusInfo += ";" + sheetName + "存在重码";
+        //                        }
+        //                        else
+        //                        {
+        //                            foreach (var r in lstMCB)
+        //                            {
+        //                                controller.ControlBoard.Add(r);
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        strStatusInfo += ";《" + sheetName + "》工作表名称配置不正确";
+        //                    }
+        //                }
+        //                break;
+        //        }
+        //        cumulativeTime += elapsedSingleSheetTime;
+        //        averageTime = cumulativeTime / loopCount;
+        //        totalTime = averageTime * totoalSheets;
+        //        percentageValue = Convert.ToInt32((cumulativeTime == 0 ? 1 : cumulativeTime) / (totalTime == 0 ? 1 : totalTime) * 100);
+        //        bw.ReportProgress(percentageValue);
+        //    }
+        //    result.Controller = controller;
+        //    result.Status = strStatusInfo;
+        //    e.Result = result;
+
+        //}
+        //void UpdateProgress(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        //{
+
+        //    int progress = e.ProgressPercentage;
+        //    UpdateProgressBarEvent(progress);
+
+        //}
+        //void ReadingEXCELCompleteWork(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    if (e.Error != null)
+        //    {
+
+        //        Console.WriteLine("I have an error!");
+
+        //    }
+        //    else if (e.Cancelled)
+        //    {
+
+
+
+        //    }
+        //    else
+        //    {
+        //        ControllerAndStatus reuslt = (ControllerAndStatus)e.Result;
+        //        ReadingExcelCompletedEvent(reuslt.Controller, reuslt.Status);
+        //    }
+        //}
+
+
+
+        //private bool ReadingExcelSummarySheet(ref BackgroundWorker bw, out List<string> loopSheetNames, out List<string> otherSettingSheetNames, out EXCELVersion version, out IExcelService excelService)
+        //{
+        //    const int DELAY_VALUE = 5000;//线程休息时间5秒
+        //    float totalTime = 100;  //总EXCEL读取时间
+        //    float cumulativeTime = 0;  //当前累积时间
+        //    int percentageValue = Convert.ToInt32(cumulativeTime / totalTime) * 100; //进度百分比
+        //    ReadExcelLoopArgumentForIn args = (ReadExcelLoopArgumentForIn)e.Argument;
+        //    DeviceService8001 deviceService = new DeviceService8001();
+        //    List<LoopModel> lstLoops = null;//从EXCEL文件中取得数据
+        //    bool blnSheetExistFlag;
+        //    string loopDetailErrorInfo; //回路错误信息
+        //    int elapsedSingleSheetTime; //执行时间
+        //    string strStatusInfo = ""; //状态信息
+        //    ControllerAndStatus result = new ControllerAndStatus();
+        //    cumulativeTime = 0;
+
+        //    float averageTime = 0; //平均执行时间,避免进度忽大忽小
+        //    version = GetExcelVersion(args.FilePath);
+        //    excelService = ExcelServiceManager.GetExcelService(version, args.FilePath, args.FileService);
+        //    ControllerConfig8001 config = new ControllerConfig8001();
+
+        //    ControllerNodeModel[] nodes = config.GetNodes();
+        //    ColumnConfigInfo[] deviceColumnDefinitions = config.GetDeviceColumns();
+        //    int maxDeviceAmount = config.GetMaxDeviceAmountValue(); //回路内器件信息最大数量
+
+        //    Dictionary<int, string> dictNameOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”控制器设置的名称配置信息
+        //    Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate(args.Controller.DeviceAddressLength); ////取得“摘要信息页”控制器设置的值的有效性
+        //    Dictionary<int, string> dictNameOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetNameOfLoopSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”回路设置的名称配置信息
+        //    Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”回路设置的值的有效性
+        //    Dictionary<int, string> dictNameOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetNameOfOtherSettingInSummaryInfoOfExcelTemplate();//取得“摘要信息页”其它设置的名称配置信息
+        //    Dictionary<int, RuleAndErrorMessage> dictValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate = config.GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate(); ////取得“摘要信息页”其它设置的值的有效性
+
+        //    bool blnIsError = false;     //错误标志    
+        //    int controllerSettingStartRow = 4;
+        //    int loopSettingStartRow = controllerSettingStartRow + dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + 3;//3为“控制器表头行+空行+回路标题"
+        //    int otherSettingStartRow = loopSettingStartRow + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + 3;
+        //    //定义“摘要信息”页的数据行定义信息
+        //    Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();
+        //    summarySheetRowDefinition.Add(controllerSettingStartRow, 9);//控制器信息起始行定义 4为表头信息,
+        //    summarySheetRowDefinition.Add(loopSettingStartRow, 15);//回路信息起始行定义
+        //    summarySheetRowDefinition.Add(otherSettingStartRow, 19);//其它信息起始行定义               
+
+        //    bw.ReportProgress(percentageValue); //进度条初始化
+
+        //    if (version == EXCELVersion.EXCEL2007) //由于2007文件读取很慢，增加空闲时间，以有机会操作UI界面（点击‘取消按钮')
+        //    {
+        //        new System.Threading.ManualResetEvent(false).WaitOne(DELAY_VALUE);
+        //    }
+        //    if (ProgressBarCancelFlag)
+        //    {
+        //        return false;
+        //    }
+
+        //    DataTable dt = excelService.OpenExcel(args.FilePath, config.SummarySheetNameForExcelTemplate, summarySheetRowDefinition, out blnSheetExistFlag, out elapsedSingleSheetTime);
+        //    #region 计算时间 更新进度百分比
+        //    cumulativeTime += elapsedSingleSheetTime;
+        //    averageTime = cumulativeTime;
+        //    //totalTime = elapsedSingleSheetTime * args.LoopSheetNames.Count;
+        //    totalTime = averageTime * 74;
+        //    percentageValue = Convert.ToInt32((cumulativeTime == 0 ? 1 : cumulativeTime) / (totalTime == 0 ? 1 : totalTime) * 100);
+        //    bw.ReportProgress(percentageValue);
+        //    #endregion
+        //    ControllerModel controller = new ControllerModel(); //存储"控制器配置"信息
+        //    int loopAmount = 1;//回路数量
+        //    int loopGroup = 1;//回路分组
+        //    string loopSheetNamePrefix = "";//回路页签名称前缀                
+        //    for (int i = 0; i < nodes.Length; i++)
+        //    {
+        //        switch (nodes[i].Type)
+        //        {
+        //            case ControllerNodeType.Loop:
+        //                loopSheetNamePrefix = nodes[i].Name;
+        //                break;
+        //        }
+        //    }
+        //    List<string> lstSheetNames = new List<string>();// 除“摘要信息”之外的页签名称
+        //    for (int i = 0; i < dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count; i++)
+        //    {
+        //        if (!(dt.Rows[i][0].ToString() == dictNameOfControllerSettingInSummaryInfoOfExcelTemplate[controllerSettingStartRow + 1 + i])) //+1为跨过标题行
+        //        {
+        //            strStatusInfo = "摘要信息-->控制器设置-->模板名称不正确";
+        //            blnIsError = true;
+        //        }
+        //        else //名称一致，验证值的有效性
+        //        {
+        //            RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfControllerSettingInSummaryInfoOfExcelTemplate[controllerSettingStartRow + 1 + i];
+        //            Regex exminator = new Regex(verifingMessage.Rule);
+        //            if (!exminator.IsMatch(dt.Rows[i][1].ToString()))
+        //            {
+        //                strStatusInfo += ";" + verifingMessage.ErrorMessage;
+        //                blnIsError = true;
+        //                continue;
+        //            }
+        //            else
+        //            {
+        //                controller = GetControllerViaExcelTemplate(dt.Rows[i][0].ToString(), dt.Rows[i][1].ToString(), controller);
+        //            }
+        //        }
+        //    }
+        //    if (!blnIsError)
+        //    {
+        //        if (controller.DeviceAddressLength != args.Controller.DeviceAddressLength)
+        //        {
+        //            strStatusInfo += ";模板器件长度(" + controller.DeviceAddressLength + ")与当前控制器器件长度(" + args.Controller.DeviceAddressLength + ")不一致";
+        //            blnIsError = true;
+        //        }
+        //        if (controller.MachineNumber != args.Controller.MachineNumber)
+        //        {
+        //            strStatusInfo += ";模板控制器机号(" + controller.MachineNumber + ")与当前控制器机号(" + args.Controller.MachineNumber + ")不一致";
+        //            blnIsError = true;
+        //        }
+        //        if (controller.Type != args.Controller.Type)
+        //        {
+        //            strStatusInfo += ";模板控制器类型(" + controller.Type.ToString() + ")与当前控制器类型(" + args.Controller.Type.ToString() + ")不一致";
+        //            blnIsError = true;
+        //        }
+        //    }
+        //    if (!blnIsError)//控制器配置信息正确
+        //    {
+        //        //controller
+        //        //验证回路信息
+        //        for (int i = 0; i < dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count; i++)
+        //        {
+        //            if (!(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == dictNameOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow + 1 + i]))//+1为跨过标题行
+        //            {
+        //                strStatusInfo = "摘要信息-->回路设置-->模板名称不正确";
+        //                blnIsError = true;
+        //            }
+        //            else //名称一致，验证值的有效性
+        //            {
+        //                RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfLoopSettingInSummaryInfoOfExcelTemplate[loopSettingStartRow + 1 + i];
+        //                //verifingMessage.Rule
+        //                //verifingMessa、ge.ErrorMessage                     
+        //                Regex exminator = new Regex(verifingMessage.Rule);
+        //                if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
+        //                {
+        //                    strStatusInfo += ";" + verifingMessage.ErrorMessage;
+        //                    blnIsError = true;
+        //                    continue;
+        //                }
+        //                else //验证结果正确，存储读入的数据
+        //                {
+        //                    if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路数量")
+        //                    {
+        //                        loopAmount = Convert.ToInt32(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString());
+        //                    }
+        //                    else if (dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == "回路分组")
+        //                    {
+        //                        loopGroup = Convert.ToInt32(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString());
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        result.Status = strStatusInfo;
+        //        result.Controller = controller;
+        //        ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+        //        return false;
+        //    }
+        //    if (blnIsError) //存在错误，直接返回
+        //    {
+        //        result.Status = strStatusInfo;
+        //        result.Controller = controller;
+        //        ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+        //        return false;
+        //    }
+        //    List<string> lstOtherSheetName = new List<string>();//除“回路”外的其它工作表名称
+        //    string otherSettingValue = "";//以“分号”分隔的页签名称
+        //    if (!blnIsError)//取得除回路外的工作表名称
+        //    {
+        //        for (int i = 0; i < dictNameOfOtherSettingInSummaryInfoOfExcelTemplate.Count; i++)
+        //        {
+        //            if (!(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][0].ToString() == dictNameOfOtherSettingInSummaryInfoOfExcelTemplate[otherSettingStartRow + 1 + i]))//+1为跨过标题行
+        //            {
+        //                strStatusInfo = "摘要信息-->其它设置-->名称不正确";
+        //                blnIsError = true;
+        //            }
+        //            else //名称一致，验证值的有效性
+        //            {
+        //                RuleAndErrorMessage verifingMessage = dictValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate[otherSettingStartRow + 1 + i];
+        //                Regex exminator = new Regex(verifingMessage.Rule);
+        //                if (!exminator.IsMatch(dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString()))
+        //                {
+        //                    strStatusInfo += ";摘要信息-->其它设置-->" + verifingMessage.ErrorMessage;
+        //                    blnIsError = true;
+        //                    continue;
+        //                }
+        //                else
+        //                {
+        //                    otherSettingValue = dt.Rows[dictNameOfControllerSettingInSummaryInfoOfExcelTemplate.Count + dictNameOfLoopSettingInSummaryInfoOfExcelTemplate.Count + i][1].ToString();
+        //                }
+        //            }
+        //        }
+        //    }
+        //    if (blnIsError)
+        //    {
+        //        result.Status = strStatusInfo;
+        //        result.Controller = controller;
+        //        ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+        //        return false;
+        //    }
+
+        //    //分组信息>回路数量时，重置回路分组信息
+        //    if (loopGroup > loopAmount)
+        //    {
+        //        loopGroup = loopAmount;
+        //    }
+        //    List<string> lstLoopSheetName = GetSheetNameForLoop(loopSheetNamePrefix, loopAmount, loopGroup);//根据“摘要信息”取得所有回路数据的工作表名称
+        //    string[] otherSheetNames = otherSettingValue.Split(';');
+        //    for (int i = 0; i < otherSheetNames.Length; i++)
+        //    {
+        //        lstOtherSheetName.Add(otherSheetNames[i]);
+        //    }
+        //    loopSheetNames = lstLoopSheetName;
+        //    otherSettingSheetNames = lstOtherSheetName;
+        //} 
+
+
+        #endregion
         /// <summary>
         /// 将读出的回路及器件信息转换为LoopModel类型存储
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="deviceCodeLength"></param>
         /// <returns></returns>
-        private List<LoopModel> ConvertToLoopModelFromDataTable(DataTable dt,ControllerModel controller,out string loopDetailErrorInfo)
+        protected override List<LoopModel> ConvertToLoopModelFromDataTable(DataTable dt,ControllerModel controller,out string loopDetailErrorInfo)
         {            
             loopDetailErrorInfo = "";//Initialize
             //取得当前控制器最大器件ID
@@ -1521,7 +1575,7 @@ namespace SCA.BusinessLib.BusinessLogic
             
             string loopCode = "";
             LoopModel loop=null;            
-            int[] loopIndexRange=ParseLoopSheetName(dt.TableName);//取得工作表内回路的起始编号
+            int[] loopIndexRange=base.ParseLoopSheetName(dt.TableName);//取得工作表内回路的起始编号
             int loopsAmount=loopIndexRange[1] - loopIndexRange[0] + 1;
             int[] loopIndex = new int[loopsAmount];
             for (int i = 0; i < loopsAmount; i++)
@@ -1643,57 +1697,27 @@ namespace SCA.BusinessLib.BusinessLogic
             return lstLoops;            
         }
 
-        
-        /// <summary>
-        /// 解析回路工作表的名称，取得回路号范围 
-        /// </summary>
-        /// <param name="sheetName"></param>
-        /// <returns></returns>
-        private int[] ParseLoopSheetName(string sheetName)
-        {
-            int lineCharIndex = sheetName.IndexOf('-');
-            int leftParenthesis = sheetName.IndexOf('(');
-            int rightParenthesis = sheetName.IndexOf(')');
-            
-            string strLoopStartIndex = sheetName.Substring(leftParenthesis + 1, lineCharIndex-leftParenthesis-1);
-            string strLoopEndIndex = sheetName.Substring(lineCharIndex + 1, rightParenthesis- lineCharIndex-1);
-            int loopStartIndex=1;
-            int loopEndIndex=1;
-            if (strLoopStartIndex != "")
-            { 
-                loopStartIndex = Convert.ToInt32(strLoopStartIndex);
-            }
-            if (strLoopEndIndex != "")
-            {
-                loopEndIndex = Convert.ToInt32(strLoopEndIndex);
-            }
-            //loopStartIndex = loopStartIndex == 0 ? 1 : loopStartIndex;
-            //loopEndIndex = loopEndIndex == 0 ? 1 : loopEndIndex;
-            int[] loopIndex = new int[2];
-            //for(int i=loopStartIndex-1;i<=loopEndIndex-1 ;i++)
-            //{
-            //    loopIndex[i] = i+1;
-            //}         
-            loopIndex[0] = loopStartIndex;
-            loopIndex[1] = loopEndIndex;
-            return loopIndex;
-        }
 
-        private DataTable GetOtherSettingData(IExcelService excelService,string filePath, string sheetName,int maxRowIndex,out bool sheetExistFlag,out int elapsedTime)
+        //检查回路内的器件编码是否有重复
+        protected override bool ExistSameDeviceCode(LoopModel loop)
         {
-            
-            Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();                      
-            summarySheetRowDefinition.Add(1,maxRowIndex + 2 - 1); //2为标题+表头,由于从0开始记数，需要减1        
-            DataTable dt = new DataTable();
-            dt = excelService.OpenExcel(filePath, sheetName, summarySheetRowDefinition,out sheetExistFlag,out  elapsedTime);
-            return dt;
-        }
+            DeviceService8001 deviceService = new DeviceService8001();
+            deviceService.TheLoop = loop;
+            if (deviceService.IsExistSameDeviceCode())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } 
         /// <summary>
         /// 将读出的标准组态信息转换为LinkageConfigStandard类型存储
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        private List<LinkageConfigStandard> ConvertToStandardLinkageModelFromDataTable(DataTable dt)
+        protected override List<LinkageConfigStandard> ConvertToStandardLinkageModelFromDataTable(DataTable dt)
         {
             List<LinkageConfigStandard> lstStandardLinkage = new List<LinkageConfigStandard>();
             int maxID = ProjectManager.GetInstance.MaxIDForStandardLinkageConfig;
@@ -1729,7 +1753,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        private List<LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dt)
+        protected override List<LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dt)
         {
             ControllerConfig8001 config = new ControllerConfig8001();
             List<LinkageConfigMixed> lstMixedLinkage = new List<LinkageConfigMixed>();
@@ -1860,7 +1884,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        private List<LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dt)
+        protected override List<LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dt)
         {
             ControllerConfig8001 config = new ControllerConfig8001();
             List<LinkageConfigGeneral> lstGeneralLinkage = new List<LinkageConfigGeneral>();
@@ -1952,7 +1976,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        private List<ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dt)
+        protected override List<ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dt)
         {
             //ControllerConfig8001 config = new ControllerConfig8001();
             List<ManualControlBoard> lstManualControlBoard = new List<ManualControlBoard>();
@@ -1981,6 +2005,19 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             return base.DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, controllerType);
         }
-        
+
+        public void SetStaticProgressBarCancelFlag(bool flag)
+        {
+            ControllerOperationBase.ProgressBarCancelFlag = flag;
+        }
+
+
+        //public event Action<int> UpdateProgressBarEvent;
+
+        //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
+
+        //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
+
+        //public event Action<string> ReadingExcelErrorEvent;
     }
 }

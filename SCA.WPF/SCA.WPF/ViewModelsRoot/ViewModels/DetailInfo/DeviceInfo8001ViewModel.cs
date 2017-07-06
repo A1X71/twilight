@@ -353,7 +353,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         //}
         private EditableDeviceInfo8001Collection _deviceInfoCollection;
         private List<DeviceInfo8001> _lstDeviceInfo8001;
-
+        private DeviceService8001 _deviceService8001;
         private int _maxCode = 0;//当前器件最大编号
         private int _addedAmount = 1;//向集合中新增信息的数量
         private short _maxDeviceAmount = 0;
@@ -372,7 +372,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string DownloadIconPath { get { return _appCurrentPath + _downloadIconPath; } }
         public string UploadIconPath { get { return _appCurrentPath + _uploadIconPath; } }
-
+        public DeviceInfo8001ViewModel()
+        {
+            _deviceService8001 = new DeviceService8001();
+        }
         public short MaxDeviceAmount
         {
             get
@@ -438,31 +441,39 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <param name="rowsAmount"></param>
         public void AddNewRecordExecute(int rowsAmount)
         {
-            int tempCode = _maxCode;
-            if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
-            {
-                rowsAmount = 0;
-            }
+            _deviceService8001.TheLoop = TheLoop;
+            List<DeviceInfo8001> lstDeviceInfo8001 = _deviceService8001.Create(rowsAmount);
+            //int tempCode = _maxCode;
+            //if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
+            //{
+            //    rowsAmount = 0;
+            //}
 
-            if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //{
+            //    rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+            //}
+            //int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001;
+            //for (int i = 0; i < rowsAmount; i++)
+            //{
+            //    tempCode++;
+            //    deviceID++;
+            //    EditableDeviceInfo8001 deviceInfo = new EditableDeviceInfo8001();
+            //    deviceInfo.Loop = TheLoop;                
+            //    deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+            //    deviceInfo.ID = deviceID;
+            //    DeviceInfoObservableCollection.Add(deviceInfo);
+            //}
+            //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 = deviceID;
+            //_maxCode = tempCode;
+            foreach (var device in lstDeviceInfo8001)
             {
-                rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+                EditableDeviceInfo8001 editDevice8001 = new EditableDeviceInfo8001();
+                editDevice8001.Loop = device.Loop;
+                editDevice8001.Code = device.Code;
+                editDevice8001.ID = device.ID;
+                DeviceInfoObservableCollection.Add(editDevice8001);
             }
-            int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001;
-            for (int i = 0; i < rowsAmount; i++)
-            {
-                tempCode++;
-                deviceID++;
-                EditableDeviceInfo8001 deviceInfo = new EditableDeviceInfo8001();
-                deviceInfo.Loop = TheLoop;                
-                deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
-                deviceInfo.ID = deviceID;
-                DeviceInfoObservableCollection.Add(deviceInfo);
-            }
-            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 = deviceID;
-            _maxCode = tempCode;
-
-
         }
         public ICommand DownloadCommand
         {

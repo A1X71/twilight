@@ -70,124 +70,9 @@ namespace SCA.BusinessLib.Utility
         /// </summary>
         public CellStyle CellDataStyle { get { return _dataStyle; } set { _dataStyle = value; _xssfDataCellStyle = PhaseCellStyle(_dataStyle); } }
 
-        public CellStyle CellTableHeadStyle { get { return _tableHeadStyle; } set { _tableHeadStyle = value; _xssfDataCellStyle = PhaseCellStyle(_tableHeadStyle); } }
-        /// <summary>
-        /// 返回工作薄内指定的Sheet页数据
-        /// </summary>
-        /// <param name="excelPath"></param>
-        /// <param name="lstSheetNames">工作表名称</param>
-        /// <returns></returns>
-        //public System.Data.DataSet OpenExcel(string excelPath, List<string> lstSheetNames)
-        //{
-        //    DataSet ds = new DataSet();
-        //    foreach (string sheetName in lstSheetNames)
-        //    {
-        //        DataTable dt = OpenExcel(excelPath, sheetName);
-        //        //如果未指定DataTable名称，则赋值表名称
-        //        if(dt.TableName==""){dt.TableName = sheetName;}
-        //        //如果已包含此表的名称，则不处理
-        //        if(!ds.Tables.Contains(dt.TableName)){ds.Tables.Add(dt);}
-        //    }
-        //    return ds;
-        //}
-        ///// <summary>
-        ///// 返回指定Excel文件中指定的Sheet页的内容
-        ///// </summary>
-        ///// <param name="excelPath"></param>
-        ///// <param name="sheetName"></param>
-        ///// <returns></returns>
-        //public System.Data.DataTable OpenExcel(string excelPath,string sheetName)
-        //{
-        //    _workbook = null;
-        //    FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read);
-        //    ISheet sheet = null;
-        //    DataTable data = new DataTable();
-        //    string strStatus="";
-        //    int sheetsAmount;//所有的Sheet数量
-
-        //    int startRow = 0;
-
-        //    if (excelPath.IndexOf(".xlsx") > 0) // 2007版本
-        //    {
-        //        _workbook = new XSSFWorkbook(fs);
-        //    }
-        //    else if (excelPath.IndexOf(".xls") > 0) // 2003版本
-        //    { 
-        //        _workbook = new HSSFWorkbook(fs);
-        //    }            
-        //    if(_workbook !=null )
-        //    { 
-        //          sheetsAmount = _workbook.NumberOfSheets;
-        //          if (sheetName != null)
-        //          {
-        //              sheet = _workbook.GetSheet(sheetName);
-        //              if (sheet == null) //没有指定名称的Sheet页
-        //              {
-        //                  //sheet = _workbook.GetSheetAt(0);
-        //                  strStatus = "未找到指定名称的Sheet页";
-        //              }
-        //          }
-        //          else
-        //          { 
-        //               sheet = _workbook.GetSheetAt(0);
-        //          }
-        //          if (sheet != null)
-        //          {
-        //              IRow firstRow = sheet.GetRow(0);
-        //              int cellCount = firstRow.LastCellNum; //一行最后一个cell的编号 即总的列数
-
-        //              //if (isFirstRowColumn)
-        //              //{
-        //              for (int i = firstRow.FirstCellNum; i < cellCount; ++i)
-        //              {
-        //                  ICell cell = firstRow.GetCell(i);
-        //                  if (cell != null)
-        //                  {
-        //                      string cellValue = cell.StringCellValue;
-        //                      if (cellValue != null)
-        //                      {
-        //                          DataColumn column = new DataColumn(cellValue);
-        //                          data.Columns.Add(column);
-        //                      }
-        //                  }
-        //              }
-        //              startRow = sheet.FirstRowNum + 1;
-        //              //}
-        //              //else
-        //              //{
-        //              //    startRow = sheet.FirstRowNum;
-        //              //}
-
-        //              //最后一列的标号
-        //              int rowCount = sheet.LastRowNum;
-        //              for (int i = startRow; i <= rowCount; ++i)
-        //              {
-        //                  IRow row = sheet.GetRow(i);
-        //                  if (row == null) continue; //没有数据的行默认是null　　　　　　　
-
-        //                  DataRow dataRow = data.NewRow();
-        //                  for (int j = row.FirstCellNum; j < cellCount; ++j)
-        //                  {
-        //                      if (row.GetCell(j) != null) //同理，没有数据的单元格都默认是null
-        //                          dataRow[j] = row.GetCell(j).ToString();
-        //                  }
-        //                  data.Rows.Add(dataRow);
-        //              }
-        //          }
-        //          else
-        //          {
-        //              DataColumn column = new DataColumn("错误");
-        //              data.Columns.Add(column);
-        //              DataRow row = data.NewRow();
-        //              row[0] = strStatus;
-        //              data.Rows.Add(row);
-        //              data.TableName = sheetName+"Error";
-        //          }
-        //      }
-        //      data.TableName = sheetName;
-        //      return data;
-        //}
-        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition,out bool sheetExistFlag)
+        public CellStyle CellTableHeadStyle { get { return _tableHeadStyle; } set { _tableHeadStyle = value; _xssfTableHeadStyle = PhaseCellStyle(_tableHeadStyle); } }
+      
+        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition, out bool sheetExistFlag)
         {
             _workbook = null;
             sheetExistFlag = false;
@@ -196,8 +81,100 @@ namespace SCA.BusinessLib.Utility
             DataTable data = new DataTable();
             string strStatus = "";
             int sheetsAmount;//所有的Sheet数量
-            int startRow = 0;    
-            _workbook = new XSSFWorkbook(fs);       
+            int startRow = 0;
+            _workbook = new XSSFWorkbook(fs);
+          // _workbook = WorkbookFactory.Create(excelPath);
+
+            if (_workbook != null)
+            {
+                if (sheetName != null)
+                {
+                    sheet = _workbook.GetSheet(sheetName);
+                    if (sheet == null) //没有指定名称的Sheet页
+                    {
+                        //sheet = _workbook.GetSheetAt(0);
+                        strStatus = "未找到指定名称的Sheet页";
+                        sheetExistFlag = false;
+                    }
+                }
+                if (sheet != null)
+                {
+                    foreach (var rowDef in dictRowsDefinition)
+                    {
+                        #region 定义表头信息
+                        IRow rowInfo = sheet.GetRow(rowDef.Key);
+                        int cellCount = rowInfo.LastCellNum; //一行最后一个cell的编号 即总的列数
+                        for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                        {
+                            ICell cell = rowInfo.GetCell(j);
+                            if (cell != null)
+                            {
+                                string cellValue = cell.StringCellValue;
+                                if (cellValue != null)
+                                {
+                                    if (!data.Columns.Contains(cellValue))
+                                    {
+                                        DataColumn column = new DataColumn(cellValue);
+                                        data.Columns.Add(column);
+                                    }
+
+
+                                }
+                            }
+                        }
+                        #endregion
+
+                        #region 获取数据值
+                        for (int i = rowDef.Key + 1; i <= rowDef.Value; i++)//遍历起始行至终止行
+                        {
+                            rowInfo = sheet.GetRow(i);
+                            if (rowInfo != null)
+                            {
+                                DataRow dataRow = data.NewRow();
+
+                                for (int j = rowInfo.FirstCellNum; j < cellCount; ++j)//记录当前行各列的信息
+                                {
+                                    if (rowInfo.GetCell(j) != null)
+                                    {
+                                        dataRow[j] = rowInfo.GetCell(j).ToString();
+                                    }
+                                }
+                                data.Rows.Add(dataRow);
+                            }
+                            else //有空行时，剩余数据不必处理，直接返回
+                            {
+                                break;
+                            }
+                        }
+                        #endregion
+                    }
+                    sheetExistFlag = true;
+                }
+            }
+            data.TableName = sheetName;
+            return data;
+        }
+        public System.Data.DataTable OpenExcel(string excelPath, string sheetName, Dictionary<int, int> dictRowsDefinition,out bool sheetExistFlag,out int elapsedTime)
+        {
+            _workbook = null;
+            sheetExistFlag = false;
+            FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read);
+            ISheet sheet = null;
+            DataTable data = new DataTable();
+            string strStatus = "";
+            int sheetsAmount;//所有的Sheet数量
+            int startRow = 0;
+            
+            //用于记录读取单EXCEL Sheet的时间
+            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();                       
+            _workbook = new XSSFWorkbook(fs);
+            //_workbook = WorkbookFactory.Create(excelPath);
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            int intElapsedTime = ts.Hours * 60*60 + ts.Minutes*60 + ts.Seconds; //记录消耗时间
+            elapsedTime = intElapsedTime;           
+            
             if (_workbook != null)
             {
                 if (sheetName != null)
@@ -383,88 +360,7 @@ namespace SCA.BusinessLib.Utility
                 string message = ex.ToString();
             }
         }
-
-        /// <summary>
-        /// 解析单元格样式
-        /// </summary>
-        /// <param name="paramCellStyle">单元格样式</param>
-        /// <returns>NPOI单元格样式</returns>
-        //private XSSFCellStyle PhaseCellStyle(CellStyle paramCellStyle)
-        //{
-        //    XSSFCellStyle style = (XSSFCellStyle)_workbook.CreateCellStyle();
-        //    XSSFFont font = (XSSFFont)_workbook.CreateFont();
-        //    font.FontName = paramCellStyle.FontName.ToString();
-        //    font.FontHeightInPoints = paramCellStyle.FontHeightInPoints;
-        //    if (paramCellStyle.FontBoldFlag)
-        //    {
-        //        font.Boldweight = 700;
-        //    }
-        //    style.SetFont(font);
-        //    //设置水平位置
-        //    switch (paramCellStyle.HorizontalAlignment.ToString())
-        //    {
-        //        case "Center":
-        //            style.Alignment = HorizontalAlignment.Center;
-        //            break;
-        //        case "Left":
-        //            style.Alignment = HorizontalAlignment.Left;
-        //            break;
-        //        case "Right":
-        //            style.Alignment = HorizontalAlignment.Right;
-        //            break;
-        //        default:
-        //            style.Alignment = HorizontalAlignment.Center;
-        //            break;
-        //    }
-        //    //设置垂直位置
-        //    switch (paramCellStyle.VerticalAlignment.ToString())
-        //    {
-        //        case "Center":
-        //            style.VerticalAlignment = VerticalAlignment.Center;
-        //            break;
-        //        case "Top":
-        //            style.VerticalAlignment = VerticalAlignment.Top;
-        //            break;
-        //        case "Botton":
-        //            style.VerticalAlignment = VerticalAlignment.Bottom;
-        //            break;
-        //        default:
-        //            style.VerticalAlignment = VerticalAlignment.Center;
-        //            break;
-        //    }
-        //    //设置表格线样式宽度
-        //    switch (paramCellStyle.BorderStyle.ToString())
-        //    {
-        //        case "Thin":
-        //            style.BorderBottom = BorderStyle.Thin;
-        //            style.BorderLeft = BorderStyle.Thin;
-        //            style.BorderRight = BorderStyle.Thin;
-        //            style.BorderTop = BorderStyle.Thin;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    //设置表格线颜色
-        //    switch (paramCellStyle.BorderStyle.ToString())
-        //    {
-        //        case "Black":
-        //            style.BottomBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
-        //            style.TopBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
-        //            style.LeftBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
-        //            style.RightBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    //设置单元格是否换行
-        //    #region 设置为文本
-        //    style.WrapText = paramCellStyle.WrapText;
-        //    XSSFDataFormat format = (XSSFDataFormat)_workbook.GetCreationHelper().CreateDataFormat();
-        //    short index = format.GetFormat("@");
-        //    style.DataFormat = index;
-        //    #endregion 
-        //    return style;
-        //}
+               
 
         public void Dispose()
         {
@@ -606,41 +502,5 @@ namespace SCA.BusinessLib.Utility
             //}
             return style;
         }
-    }
-    /// <summary>
-    /// 自定义样式类
-    /// </summary>
-    //public class CellStyle
-    //{
-    //    /// <summary>
-    //    /// 字体
-    //    /// </summary>
-    //    public enum FontNameValue
-    //    {
-    //        黑体,
-    //        宋体,
-    //        //[EnumMember(Value = "Times New Roman")]
-    //        //System.Runtime.Serialization.
-    //        TimesNewRoman
-    //    };
-
-    //    /// <summary>
-    //    /// 设置字体加粗值
-    //    /// </summary>
-    //    private bool fontBoldFlag = false;
-    //    public bool FontBoldFlag { get { return fontBoldFlag; } set { fontBoldFlag = value; } }
-    //    public enum HorizontalAlignmentValue { Center, Left, Right };
-    //    public enum VerticalAlignmentValue { Center, Top, Bottom };
-    //    public enum BorderStyleValue { Thin, None };
-    //    public enum BorderColorValue { Black, None };
-    //    public FontNameValue FontName { set; get; }
-    //    public short FontHeightInPoints { get; set; }
-
-    //    public BorderStyleValue BorderStyle { set; get; }
-    //    public HorizontalAlignmentValue HorizontalAlignment { set; get; }
-    //    public VerticalAlignmentValue VerticalAlignment { set; get; }
-    //    public BorderColorValue BorderColor { get; set; }
-    //    public bool WrapText { get; set; }
-    //}
-    
+    }    
 }
