@@ -384,11 +384,10 @@ E:\Program\4 Project\NT8001SeriesControllerAssistantV0.6\SCA.WPF\SCA.WPF\obj\x86
 E:\Program\4 Project\NT8001SeriesControllerAssistantV0.6\SCA.WPF\SCA.WPF\obj\x86\Debug\SCA.WPF.csproj.GenerateResource.Cache
 E:\Program\4 Project\NT8001SeriesControllerAssistantV0.6\SCA.WPF\SCA.WPF\obj\x86\Debug\SCA.WPF.exe
 E:\Program\4 Project\NT8001SeriesControllerAssistantV0.6\SCA.WPF\SCA.WPF\obj\x86\Debug\SCA.WPF.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\SCA.WPF.exe
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\X64\SQLite.Interop.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\X86\SQLite.Interop.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\SCA.WPF.exe.config
-E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\SCA.WPF.exe
-E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\SCA.WPF.pdb
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\Caliburn.Micro.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\Caliburn.Micro.Platform.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.WPF\bin\x86\Debug\log4net.dll
