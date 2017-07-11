@@ -48,7 +48,7 @@ namespace SCA.DatabaseAccess.DBContext
                     DeviceInfo8036 device = new DeviceInfo8036();
                     device.Code = dtDevices.Rows[j]["bianhao"].ToString();
                     device.TypeCode = Convert.ToInt16(dtDevices.Rows[j]["leixing"].ToString());
-                    device.Disable = dtDevices.Rows[j]["geli"].ToString().ToNullable<Int16>();
+                    device.Disable = (dtDevices.Rows[j]["geli"].ToString() == "" || dtDevices.Rows[j]["geli"].ToString() == "0")?false:true;
                     device.LinkageGroup1 = dtDevices.Rows[j]["shuchu1"].ToString();
                     device.LinkageGroup2 = dtDevices.Rows[j]["shuchu2"].ToString();
                     device.AlertValue = dtDevices.Rows[j]["nongdu"].ToString().ToNullable<float>();

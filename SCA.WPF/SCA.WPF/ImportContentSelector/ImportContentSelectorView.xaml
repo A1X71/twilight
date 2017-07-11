@@ -90,7 +90,7 @@
                 <Label x:Name="lblPromptInfo"  Content="{Binding Path=PromptInfo}" Visibility="{Binding Data.OtherInfoInSelectorVisibility, Source={StaticResource proxy} }"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="ImportButton" Content="导入" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding Path=ImportCommand}"  Width="105" Height="21" FontSize="10" />
-                <Button x:Name="CloseButton"  Content="关闭" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding Path=CloseCommand}"  Width="105" Height="21" FontSize="10" />
+                <Button x:Name="CloseButton"  Content="关闭" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" HorizontalAlignment="Center" Command="{Binding Path=CloseCommand}"   Width="105" Height="21" FontSize="10" />
                 </StackPanel>
             </StackPanel>
         </Grid>

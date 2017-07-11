@@ -2011,13 +2011,62 @@ namespace SCA.BusinessLib.BusinessLogic
             ControllerOperationBase.ProgressBarCancelFlag = flag;
         }
 
-
+        public Dictionary<string, int> GetAmountOfDifferentDeviceType(ControllerModel controller)
+        {
+                Dictionary<string, int> dictDeviceTypeStatistic = new Dictionary<string, int>();
+                ControllerConfig8001 config =new ControllerConfig8001();
+                if(controller!=null)
+                {
+                    if (controller.Loops != null)
+                    {
+                        foreach (var loop in controller.Loops)
+                        {
+                            IEnumerable<DeviceInfo8001> lstDistinceInfo = loop.GetDevices<DeviceInfo8001>().Distinct(new DeviceTypeComparer());
+                            foreach (var device in lstDistinceInfo)
+                            { 
+                                DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                                int typeCount =  loop.GetDevices<DeviceInfo8001>().Count((d)=>d.TypeCode==dType.Code);
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }                            
+                        }
+                    }
+                }
+                return dictDeviceTypeStatistic;                      
+        }
         //public event Action<int> UpdateProgressBarEvent;
-
         //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
-
         //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
-
         //public event Action<string> ReadingExcelErrorEvent;
     }
+    public class DeviceTypeComparer : IEqualityComparer<DeviceInfo8001>
+    {
+
+        public bool Equals(DeviceInfo8001 x, DeviceInfo8001 y)
+        {
+            if (x.TypeCode == y.TypeCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetHashCode(DeviceInfo8001 obj)
+        {
+            //Check whether the object is null
+            if (Object.ReferenceEquals(obj, null)) return 0;
+
+            //Get hash code for the Name field if it is not null.
+            int hashDeviceCode = obj.Code == null ? 0 : obj.Code.GetHashCode();
+
+            //Get hash code for the Code field.
+            int hashDeviceTypeCode = obj.TypeCode.GetHashCode();
+
+            //Calculate the hash code for the product.
+            return hashDeviceCode ^ hashDeviceTypeCode;
+        }
+    }
+
 }

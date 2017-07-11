@@ -93,6 +93,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             deviceInfo8001.MCBCode = this.MCBCode;
             return deviceInfo8001;
         }
+        public new string Code
+        {
+            get;
+            set;
+        }
         private EditableDeviceInfo8001 backupCopy;
         private bool inEdit;
         public void BeginEdit()
@@ -308,11 +313,24 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             _loop = loop;
             if (lstDeviceInfo8001 != null)
             {
-                foreach (var o in lstDeviceInfo8001)
-                {
-                    this.Add(new EditableDeviceInfo8001(o));
-                }
+                //if (lstDeviceInfo8001.Count != 0)
+                //{
+                    foreach (var o in lstDeviceInfo8001)
+                    {
+                        this.Add(new EditableDeviceInfo8001(o));
+                    }
+                //}
+                //else
+                //{
+                //    DeviceInfo8001 o = new DeviceInfo8001();
+                //    this.Add(new EditableDeviceInfo8001(o));
+                //}
             }
+            //else
+            //{
+            //    DeviceInfo8001 o = new DeviceInfo8001();
+            //    this.Add(new EditableDeviceInfo8001(o));
+            //}
         }
         protected override void InsertItem(int index, EditableDeviceInfo8001 item)
         {
@@ -375,6 +393,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public DeviceInfo8001ViewModel()
         {
             _deviceService8001 = new DeviceService8001();
+
         }
         public short MaxDeviceAmount
         {
@@ -422,8 +441,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             set
             {
                 _deviceInfoCollection = value;
-                _maxCode = GetMaxCode(value);
-                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001=GetMaxID();
+              //  _maxCode = GetMaxCode(value);
+               // BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001=GetMaxID();
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }

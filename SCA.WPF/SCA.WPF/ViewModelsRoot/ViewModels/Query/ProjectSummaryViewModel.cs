@@ -568,10 +568,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
 
         #endregion
 
-        #region 混合组态查询
-
-
-        #endregion
+    
         public void LinkageSimulatorExecute()
         {
             var result = ProjectManager.GetInstance.Project.Controllers.Where((c) => c.ID == ControllerID);

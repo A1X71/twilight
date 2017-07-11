@@ -40,8 +40,11 @@ namespace SCA.WPF
             this.DataContext = vm;
             EventMediator.Register("UploadedFinished", ControllerInfoUploadedFinished);
             EventMediator.Register("UpdateProgressBarStatusEvent", UpdateProgressBarStatus);
+            EventMediator.Register("UpdateProgressBarStatusForExcelReading", UpdateProgressBarStatusForExcelReading);//读取EXCEL时的进度条
             EventMediator.Register("DisplayTheOpenedProject", DisplayTheOpenedProject);
             EventMediator.Register("RefreshNavigator", RefreshNavigator);
+            EventMediator.Register("DisappearProgressBar", DisappearProgressBar);
+            
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             //this.Left = System.Windows.SystemParameters.WorkArea.Width;// -this.Width;
             //this.Top = System.Windows.SystemParameters.WorkArea.Height;// -this.Height;
@@ -372,6 +375,38 @@ namespace SCA.WPF
                 StatusBar.DataContext = _statusBarVM;
             }));
         }
+        private void UpdateProgressBarStatusForExcelReading(object args)
+        {
+            double result;
+            if (((object[])args)[0] == ((object[])args)[1])
+            {
+                result = 100;
+            }
+            else
+            {
+                result = (Convert.ToDouble(((object[])args)[0]) / Convert.ToDouble(((object[])args)[1])) * 100;
+            }
+            _statusBarVM.CurrentProgressValue = result;
+            _statusBarVM.IsProgressBarVisible = Visibility.Visible;
+            _statusBarVM.DescriptionText = "正在努力读取中,请稍等....";
+            //_statusBarVM.CancelEvent += CancelReadingExcel;
+            Dispatcher.Invoke((Action)(() =>
+            {
+                StatusBar.DataContext = _statusBarVM;
+            }));
+            
+        }
+        private void DisappearProgressBar(object args)
+        {
+            _statusBarVM.CurrentProgressValue = 0;
+            _statusBarVM.IsProgressBarVisible = Visibility.Collapsed;
+            _statusBarVM.DescriptionText = "";            
+            Dispatcher.Invoke((Action)(() =>
+            {
+                StatusBar.DataContext = _statusBarVM;
+            }));
+        }
+
 #endregion
 #region 导航菜单栏事件处理程序
         #region 控制器节点

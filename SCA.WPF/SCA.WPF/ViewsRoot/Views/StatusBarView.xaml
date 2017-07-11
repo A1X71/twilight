@@ -38,7 +38,7 @@
                     <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=CurrentProgressValue }" Name="pbStatus" Height="24px"/>
                     <TextBlock Text="{Binding ElementName=pbStatus, Path=Value,StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
-                    <Button Grid.Column="2" Height="24">取消操作</Button>
+                    <Button Grid.Column="2" Height="24" Command="{Binding Path=CancelCommand}">取消操作</Button>
                 <!--<TextBlock Grid.Row="0" Grid.Column="1"   Visibility="Visible" Foreground="Black"/>-->                
             </Grid>
                 <Label Grid.Column="2" VerticalAlignment="Center">通迅状态:</Label>

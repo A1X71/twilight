@@ -7,7 +7,7 @@
              xmlns:VM="clr-namespace:SCA.WPF.CreateController"
              xmlns:DContext="clr-namespace:SCA.WPF.ImportController"
              xmlns:View="clr-namespace:SCA.WPF.ViewsRoot.Views"        
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"             
              mc:Ignorable="d" 
              d:DesignWidth="300">
     <UserControl.Resources>
@@ -296,9 +296,17 @@
         <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
         
         
-    </StackPanel>        
+    </StackPanel>
         <View:ImportContentSelectorView x:Name="ImportContentSelectorUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   
-                                       DataContext="{Binding Path=ImportContentSelectorDataContext}"
-                                       Visibility="{Binding Data.SelfVisibility, Source={StaticResource proxy},Mode=TwoWay}"/>        
+                                       DataContext="{Binding Path=ImportContentSelectorDataContext}" 
+                                       Visibility="{Binding Data.SelfVisibility, Source={StaticResource proxy},Mode=TwoWay}">
+            <!--<Style>
+                <Style.Triggers>
+                    <Trigger Property="Data.SelfVisibility" Value="True">
+                        <Setter Property="Control.Background" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>-->
+        </View:ImportContentSelectorView>
     </StackPanel>
 </UserControl>

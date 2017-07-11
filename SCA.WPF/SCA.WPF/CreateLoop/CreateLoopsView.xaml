@@ -21,9 +21,9 @@
     <!--ItemsSource="{Binding Source={StaticResource LoopCodeEnumDS}}"--> 
     </UserControl.Resources>
     <StackPanel Background="{StaticResource WindowBackgroundBrush}">
-        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
-            <TextBlock Text="创建回路" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
-        </Border>
+        <!--<Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
+            <TextBlock Text="创建回路" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18"  FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        </Border>-->
         <!-- Content -->
         <Grid  x:Name="AddControllerGrid" Margin="0,0,0,0">
             <Grid.ColumnDefinitions>
@@ -38,27 +38,31 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="_机号" Target="{Binding ElementName=MachineNumberInputLabel, Mode=OneWay}" Style="{StaticResource Label}" />
+            <Label Grid.Row="0" Grid.Column="0" Content="机号"  Style="{StaticResource Label}" />
             <Label x:Name="MachineNumberInputLabel" Grid.Row="0" Grid.Column="1"  Content="{Binding Path=ControllerMachineNumber}"  Style="{StaticResource Label}"/>
             <!--<TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="MachineNumberInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
-            <Label Grid.Row="1" Grid.Column="0" Content="_回路号" Target="{Binding ElementName=LoopCodeInputTextBox, Mode=OneWay}" Style="{StaticResource Label}" />
+            <Label Grid.Row="1" Grid.Column="0" Content="回路号"  Style="{StaticResource Label}" />
             
             <ComboBox Grid.Row="1" Grid.Column="1" IsSynchronizedWithCurrentItem="False"                      
                       ItemsSource="{Binding LoopsCode}"
-                      x:Name="LoopCodeComboBox"  Width="120"  HorizontalAlignment="Left" 
+                      HorizontalContentAlignment="Center"
+                      VerticalContentAlignment="Center"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      x:Name="LoopCodeComboBox"  Width="120" 
                       Margin="5,0,0,0" />
             
-            <Label Grid.Row="2" Grid.Column="0" Content="_节点数" Target="{Binding ElementName=DeviceAmountInputTextBox, Mode=OneWay}" Style="{StaticResource Label}" />
-            <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label Grid.Row="3" Grid.Column="0" Content="_回路数" Target="{Binding ElementName=LoopAmountInputTextBox, Mode=OneWay}" Style="{StaticResource Label}" />            
-            <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label Grid.Row="4" Grid.Column="0" Content="_回路名" Target="{Binding ElementName=LoopNameInputTextBox, Mode=OneWay}" Style="{StaticResource Label}" />
-            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Click="AddButton_Click" TabIndex="140" Width="64"/>
-                <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CancelButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="_节点数" Style="{StaticResource Label}" />
+            <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox"  Width="180" Margin="5,0,0,0" TabIndex="100" />
+            <Label Grid.Row="3" Grid.Column="0" Content="_回路数"  Style="{StaticResource Label}"/>            
+            <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />
+            <Label Grid.Row="4" Grid.Column="0" Content="_回路名" Style="{StaticResource Label}" />
+            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />            
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="15,15,15,15" Orientation="Horizontal">
+                <Button Content="_确定" x:Name="AddButton"  IsDefault="True" Click="AddButton_Click" TabIndex="140" Width="64"/>
+                <Button Content="_取消" x:Name="CloseButton" IsCancel="True"  Click="CancelButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>
         </Grid>
-        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+        <!--<Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>-->
     </StackPanel>
 </UserControl>

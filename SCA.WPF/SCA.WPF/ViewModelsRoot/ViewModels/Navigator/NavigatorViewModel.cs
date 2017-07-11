@@ -35,7 +35,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Navigator
         private string _loopAddIconPath = @"Resources/Icon/Style1/loop-add.png";
         private string _loopDeleteIconPath = @"Resources/Icon/Style1/loop-delete.png";        
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
-        public string ProjectAddIconPath { get { return _appCurrentPath + _projectAddIconPath; } }
+        public string ProjectAddIconPath { get { return _appCurrentPath + _projectAddIconPath; } set { _projectAddIconPath = value; } }
         public string ProjectOpenIconPath { get { return _appCurrentPath + _projectOpenIconPath; } }
         public string ProjectDeleteIconPath { get { return _appCurrentPath + _projectDeleteIconPath; } }
         public string ExportExcelIconPath { get { return _appCurrentPath + _exportExcelIconPath; } }

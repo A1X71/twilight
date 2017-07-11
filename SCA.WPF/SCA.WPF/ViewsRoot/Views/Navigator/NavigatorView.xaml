@@ -5,9 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.Navigator"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:Infrastructure="clr-namespace:SCA.WPF.Infrastructure"             
+             xmlns:Infrastructure="clr-namespace:SCA.WPF.Infrastructure"            
+             xmlns:Utility="clr-namespace:SCA.WPF.Utility"             
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="Navigator"
+             >
 
 
     <StackPanel>
@@ -24,15 +27,29 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">NEAT</Label>            
             <Button x:Name="btnAddProject"  Grid.Column="1" Grid.Row="0" Width="32" Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnAddProject_Click">
-                <Image Source="{Binding Path=ProjectAddIconPath,Mode=OneWay}"/>
+                <!--<Image Source="{Binding Path=ProjectAddIconPath,Mode=OneWay}"/>-->
+                <Image >
+                    <Image.Source>
+                        <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectAddIconPath"/>
+                    </Image.Source>
+                </Image>
             </Button>
 
             <Button x:Name="btnOpenProject" Grid.Column="2" Grid.Row="0" Width="32" Height="32"  Background="Transparent" BorderBrush="Transparent" Click="btnOpenProject_Click">
-                <Image Source="{Binding Path=ProjectOpenIconPath,Mode=OneWay}"/>
+                <Image >
+                    <Image.Source>
+                        <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectOpenIconPath"/>
+                    </Image.Source>
+                </Image>                
             </Button>
-
+            <!--Source="{Binding Path=ProjectOpenIconPath,Mode=OneWay}"-->
             <Button x:Name="btnCloseProject" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnCloseProject_Click">
-                <Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>
+                <!--<Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>-->
+                <Image >
+                    <Image.Source>
+                        <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectDeleteIconPath"/>
+                    </Image.Source>
+                </Image>
             </Button>
         </Grid>
         <Grid x:Name="ProjectTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
@@ -49,11 +66,21 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">工程</Label>
             <Button x:Name="btnCloseProjectInProjectToolStrip" Grid.Column="1" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent"  Click="btnCloseProjectInProjectToolStrip_Click">
-                <Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>
+                <!--<Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>-->
+                <Image >
+                    <Image.Source>
+                        <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectDeleteIconPath"/>
+                    </Image.Source>
+                </Image>
             </Button>
 
             <Button x:Name="btnExportToExcel" Grid.Column="2" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnExportToExcel_Click">
-                <Image Source="{Binding Path=ExportExcelIconPath,Mode=OneWay}"/>
+                <!--<Image Source="{Binding Path=ExportExcelIconPath,Mode=OneWay}"/>-->
+                <Image >
+                    <Image.Source>
+                        <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ExportExcelIconPath"/>
+                    </Image.Source>
+                </Image>
             </Button>
 
             <Button x:Name="btnMerge" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnMerge_Click">

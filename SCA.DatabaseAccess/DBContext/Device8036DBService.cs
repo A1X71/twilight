@@ -214,7 +214,7 @@ namespace SCA.DatabaseAccess.DBContext
                 Model.DeviceInfo8036 model = new Model.DeviceInfo8036();
                 model.ID = Convert.ToInt16(dt.Rows[i]["id"]);    
                 model.Code = dt.Rows[i]["Code"].ToString();
-                model.Disable= Convert.ToInt16(dt.Rows[i]["Disable"]);
+                model.Disable = (dt.Rows[i]["Disable"].ToString() == "" || dt.Rows[i]["Disable"].ToString() == "0")?false:true;
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.AlertValue = Convert.ToSingle(dt.Rows[i]["AlertValue"]);

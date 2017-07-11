@@ -7,5 +7,6 @@ namespace SCA.Model
 {
     public interface IDevice
     {
+        Int16 TypeCode { get; set; }
     }
 }

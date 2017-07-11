@@ -1,0 +1,11 @@
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\SCA.Model.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\SCA.Model.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\Caliburn.Micro.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\Caliburn.Micro.Platform.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\System.Windows.Interactivity.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\Caliburn.Micro.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\Caliburn.Micro.Platform.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\bin\Release\System.Windows.Interactivity.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\obj\Release\SCA.Model.csprojResolveAssemblyReference.cache
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\obj\Release\SCA.Model.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.Model\obj\Release\SCA.Model.pdb

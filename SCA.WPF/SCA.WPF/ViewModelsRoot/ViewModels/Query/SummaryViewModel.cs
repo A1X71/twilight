@@ -9,7 +9,10 @@ using SCA.BusinessLib;
 using SCA.BusinessLib.Controller;
 using SCA.BusinessLib.BusinessLogic ;
 using SCA.WPF.Infrastructure;
-using Caliburn.Micro; 
+using SCA.BusinessLib.Utility;
+using SCA.Interface;
+using Caliburn.Micro;
+using System.Collections.ObjectModel;
 /* ==============================
 *
 * Author     : William
@@ -146,11 +149,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         /// 控制器
         /// </summary>
         public ControllerModel TheController { get; private set; }
-
-
-
-
-
         #region 命令
         public ICommand SaveCommand
         {
@@ -465,6 +463,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         public SummaryInfoViewModel()
         {
             InitializeComPorts();
+            
         }
         /// <summary>
         /// 设置当前页面所属的控制器
@@ -494,7 +493,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
             //    strResult = result.FirstOrDefault().ToString();
             //}
             //return strResult;
-
+            GenerateSummaryInfo();
         }
         /// <summary>
         /// 取得本机可用的串口号
@@ -511,6 +510,133 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 }
             }
             ComPorts = comPorts;
+        }
+        /// <summary>
+        /// 生成控制器摘要信息
+        /// </summary>
+        private void GenerateSummaryInfo()
+        {
+            if (TheController != null)
+            { 
+                SummaryInfo summary = new SummaryInfo();
+                summary.Icon = "";
+                summary.Name = "控制器:" + TheController.Name + "(" + TheController.Type.ToString() + "," + TheController.DeviceAddressLength.ToString() + ")";
+                summary.Number = 1;
+                //summary.ChildNodes.Add();
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(TheController.Type);
+                ControllerNodeModel[] nodes = config.GetNodes();
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    switch (nodes[i].Type)
+                    {
+                        case ControllerNodeType.Loop:
+                            { 
+                                SummaryInfo node = new SummaryInfo();
+                                node.Icon = "";
+                                node.Name = ControllerNodeType.Loop.GetDescription();
+                                node.Number = TheController.Loops.Count;
+                                summary.ChildNodes.Add(node);
+                            }
+                            break;
+                        case ControllerNodeType.Standard:
+                            {
+                                SummaryInfo node = new SummaryInfo();
+                                node.Icon = "";
+                                node.Name = ControllerNodeType.Standard.GetDescription();
+                                node.Number = TheController.StandardConfig.Count;
+                                summary.ChildNodes.Add(node);
+                            }
+                            break;
+
+                        case ControllerNodeType.Mixed:
+                            {
+                                SummaryInfo node = new SummaryInfo();
+                                node.Icon = "";
+                                node.Name = ControllerNodeType.Mixed.GetDescription();
+                                node.Number = TheController.MixedConfig.Count;
+                                summary.ChildNodes.Add(node);
+                            }
+                            break;
+                        case ControllerNodeType.General:
+                            {
+                                SummaryInfo node = new SummaryInfo();
+                                node.Icon = "";
+                                node.Name = ControllerNodeType.General.GetDescription();
+                                node.Number = TheController.GeneralConfig.Count;
+                                summary.ChildNodes.Add(node);
+                            }
+                            break;
+                        case ControllerNodeType.Board:
+                            {
+                                SummaryInfo node = new SummaryInfo();
+                                node.Icon = "";
+                                node.Name = ControllerNodeType.Board.GetDescription();
+                                node.Number = TheController.ControlBoard.Count;
+                                summary.ChildNodes.Add(node);
+                            }
+                            break;
+                    }
+                }
+                ControllerOperation8001 controller = new ControllerOperation8001();
+               Dictionary<string,int> dictDeviceTypeCount = controller.GetAmountOfDifferentDeviceType(TheController);
+               if (dictDeviceTypeCount.Count > 0)
+               {
+                   SummaryInfo node = new SummaryInfo();
+                   node.Icon = "";
+                   node.Name = "设备类型";                   
+                   foreach (var d in dictDeviceTypeCount)
+                   {
+                       SummaryInfo typeNode = new SummaryInfo();
+                       typeNode.Icon = "";
+                       typeNode.Name = d.Key;
+                       typeNode.Number = d.Value;
+                       node.ChildNodes.Add(typeNode);
+                       node.Number = node.Number+d.Value;                   
+                   }
+                   summary.ChildNodes.Add(node);
+               }                
+            }
+        }
+    }
+    public class SummaryInfo
+    {
+        public SummaryInfo() { }
+        public SummaryInfo(string p_name, int? p_number, string p_icon)
+        {
+
+            this._icon = p_icon;
+            this._number = p_number;
+            this._name = p_name;
+
+        }
+        private string _icon;
+        private int? _number;
+        private string _name;
+
+
+        public string Icon
+        {
+            get { return this._icon; }
+            set { this._icon = value; }
+        }
+        public int? Number
+        {
+            get { return this._number; }
+            set { this._number = value; }
+        }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+
+            }
+        }
+        private ObservableCollection<SummaryInfo> _childNode = new ObservableCollection<SummaryInfo>();
+        public ObservableCollection<SummaryInfo> ChildNodes
+        {
+            get { return _childNode; }
         }
     }
 }
