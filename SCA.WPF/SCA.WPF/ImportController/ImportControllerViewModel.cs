@@ -662,9 +662,12 @@ namespace SCA.WPF.ImportController
         {
             EventMediator.NotifyColleagues("DisappearProgressBar", null);
             ToggleButtonStateForReadingExcel(false);
-            if(errorMessage!=""  && errorMessage!=null ) //需要显示错误信息
-            {
-                DisplayContentSelectorPage(errorMessage);
+            if (errorMessage != null)
+            { 
+                if(errorMessage!="") //需要显示错误信息
+                {
+                    DisplayContentSelectorPage(errorMessage);
+                }
             }
         }
         public void ReadingExcelErrorHandler(string errorMessage)

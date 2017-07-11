@@ -1155,7 +1155,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return controllerInfo;
         }
 
-        private bool ReadingExcelSummarySheet(ref BackgroundWorker bw, ReadExcelLoopArgumentForIn args,IControllerConfig config,out List<string> loopSheetNames, out List<string> otherSettingSheetNames, out EXCELVersion version, out IExcelService excelService,out ControllerModel controller,ref float cumulativeTime)
+        private bool ReadingExcelSummarySheet(ref BackgroundWorker bw, ReadExcelLoopArgumentForIn args,IControllerConfig config,out List<string> loopSheetNames, out List<string> otherSettingSheetNames, out EXCELVersion version, out IExcelService excelService,out ControllerModel controller,out string strStatus ,ref float cumulativeTime)
         {
 
             List<string> lstLoopSheetName;
@@ -1218,6 +1218,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     otherSettingSheetNames=null;                    
                     //result.Controller = null;
                     //result.Status = "用户取消操作";
+                    strStatus = strStatusInfo;
                     return false;
                 }
                 
@@ -1327,10 +1328,11 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     result.Status = strStatusInfo;
                     result.Controller = controller;
-                    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件                    
+                   // ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件                    
                     //controller = null;
                     loopSheetNames = null;
-                    otherSettingSheetNames = null;  
+                    otherSettingSheetNames = null;
+                    strStatus = strStatusInfo;
                     return false;
                 }
                 if (blnIsError) //存在错误，直接返回
@@ -1338,9 +1340,10 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.Status = strStatusInfo;
                     result.Controller = controller;
                     
-                    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+                 //   ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
                     loopSheetNames = null;
-                    otherSettingSheetNames = null;  
+                    otherSettingSheetNames = null;
+                    strStatus = strStatusInfo;
                     return false;
                 }
                 lstOtherSheetName = new List<string>();//除“回路”外的其它工作表名称
@@ -1377,7 +1380,8 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.Controller = controller;
                     loopSheetNames = null;
                     otherSettingSheetNames = null;  
-                    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+                //    ReadingExcelCancelationEvent(controller, strStatusInfo);//触发取消事件
+                    strStatus = strStatusInfo;
                     return false;
                 }
 
@@ -1402,10 +1406,12 @@ namespace SCA.BusinessLib.BusinessLogic
                 version = EXCELVersion.EXCEL2003;
                 controller = null;
                 excelService = null;
+                strStatus = "EXCEPTION:";
                 return false;
             }
             loopSheetNames = lstLoopSheetName;
             otherSettingSheetNames = lstOtherSheetName;
+            strStatus = "";
             return true;
         }
         public void ReadEXCELTemplate(string strFilePath, IFileService fileService, ControllerModel targetController)
@@ -1446,7 +1452,7 @@ namespace SCA.BusinessLib.BusinessLogic
             float totalTime = 100;  //总EXCEL读取时间
             float averageTime = 0; //平均执行时间,避免进度忽大忽小
             int percentageValue ; //进度百分比
-            if (!ReadingExcelSummarySheet(ref bw, args, config, out lstLoopSheetName, out lstOtherSheetName, out excelVersion, out excelService, out controller, ref cumulativeTime))
+            if (!ReadingExcelSummarySheet(ref bw, args, config, out lstLoopSheetName, out lstOtherSheetName, out excelVersion, out excelService, out controller,out strStatusInfo, ref cumulativeTime))
             {
                 //if (ProgressBarCancelFlag)
                 //{
@@ -1454,7 +1460,10 @@ namespace SCA.BusinessLib.BusinessLogic
                 //}
                 if (bw.CancellationPending)
                 {
-                    strStatusInfo += ";EXCEL文件打开失败(文件可能已打开)";
+                    if (strStatusInfo == "EXCEPTION:")
+                    {
+                        strStatusInfo += ";EXCEL文件打开失败(文件可能已打开)";
+                    }
                     result.Status = strStatusInfo;
                     result.Controller = controller;
                     e.Result = result;
