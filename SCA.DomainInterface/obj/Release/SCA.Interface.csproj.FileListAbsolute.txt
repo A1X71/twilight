@@ -1,0 +1,7 @@
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\bin\Release\SCA.DomainInterface.dll
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\bin\Release\SCA.DomainInterface.pdb
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\bin\Release\SCA.Model.dll
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\bin\Release\SCA.Model.pdb
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\obj\Release\SCA.Interface.csprojResolveAssemblyReference.cache
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\obj\Release\SCA.DomainInterface.dll
+E:\Program\6 Git\TRIFLE\SCA.DomainInterface\obj\Release\SCA.DomainInterface.pdb
