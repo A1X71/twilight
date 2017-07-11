@@ -38,6 +38,7 @@ namespace SCA.WPF.ImportController
             ToggleButtonStateForReadingExcel(false);
             GetValidDeviceType(SelectedControllerType);
             SetSelectedDeviceTypeCode(SelectedControllerType);
+            EventMediator.Register("ImportControllerViewClose", CloseViewExecute);
             
             
         }
@@ -358,12 +359,16 @@ namespace SCA.WPF.ImportController
         public Visibility ImportControllerVisibilityState
         {
             get
-            {
+            {               
                 return _importControllerVisibilityState;
             }
             set
             {
                 _importControllerVisibilityState = value;
+                if(_importControllerVisibilityState==Visibility.Visible)
+                {
+                    ConfigSection = Visibility.Visible;
+                }
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -792,6 +797,10 @@ namespace SCA.WPF.ImportController
         public void CloseViewExecute()
         {
             ImportControllerVisibilityState = Visibility.Collapsed;
+        }
+        private void CloseViewExecute(object o)
+        {
+            CloseViewExecute();
         }
         /// <summary>
         /// 控制器类型选择后执行命令

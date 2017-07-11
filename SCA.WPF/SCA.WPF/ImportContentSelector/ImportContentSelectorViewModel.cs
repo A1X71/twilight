@@ -44,7 +44,7 @@ namespace SCA.WPF.ImportContentSelector
         private CheckItemCollection _errorInfoCollection; //错误信息集合
         private bool _selectedAllFlag = false; //全选标志
         public ControllerModel TheController { get; set; }//当前控制器
-        public System.Action CloseEvent;// 关闭事件
+        //public System.Action CloseEvent;// 关闭事件
         public string Title
         {
             get
@@ -364,7 +364,8 @@ namespace SCA.WPF.ImportContentSelector
         public void CloseExecute()
         {
             SelfVisibility = Visibility.Collapsed;
-            CloseEvent();
+            EventMediator.NotifyColleagues("ImportControllerViewClose", null);
+           // CloseEvent();
         }
         #endregion
         /// <summary>
