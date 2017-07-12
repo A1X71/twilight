@@ -1284,8 +1284,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     {
                         strStatusInfo += ";模板控制器机号(" + controller.MachineNumber + ")与当前控制器机号(" + args.Controller.MachineNumber + ")不一致";
                         blnIsError = true;
-                    }
-                    
+                    }                    
                 }
                 if (!blnIsError)//控制器配置信息正确
                 {
@@ -1705,8 +1704,6 @@ namespace SCA.BusinessLib.BusinessLogic
             result.Status = strStatusInfo;
             e.Result = result;
         }
-
-
         private DataTable GetOtherSettingData(IExcelService excelService, string filePath, string sheetName, int maxRowIndex, out bool sheetExistFlag, out int elapsedTime)
         {
             Dictionary<int, int> summarySheetRowDefinition = new Dictionary<int, int>();

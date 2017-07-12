@@ -577,7 +577,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                             break;
                     }
                 }
-                ControllerOperation8001 controller = new ControllerOperation8001();
+               ControllerOperation8001 controller = new ControllerOperation8001();
                Dictionary<string,int> dictDeviceTypeCount = controller.GetAmountOfDifferentDeviceType(TheController);
                if (dictDeviceTypeCount.Count > 0)
                {

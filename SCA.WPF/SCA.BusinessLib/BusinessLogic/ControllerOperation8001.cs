@@ -2022,11 +2022,18 @@ namespace SCA.BusinessLib.BusinessLogic
                         foreach (var loop in controller.Loops)
                         {
                             IEnumerable<DeviceInfo8001> lstDistinceInfo = loop.GetDevices<DeviceInfo8001>().Distinct(new DeviceTypeComparer());
+                            int deviceCountInLoop = loop.GetDevices<DeviceInfo8001>().Count;
+                            int deviceCountInStatistic = 0;
                             foreach (var device in lstDistinceInfo)
-                            { 
+                            {                                 
                                 DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
                                 int typeCount =  loop.GetDevices<DeviceInfo8001>().Count((d)=>d.TypeCode==dType.Code);
                                 dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                                deviceCountInStatistic += typeCount;
+                                if (deviceCountInStatistic == deviceCountInLoop)
+                                {
+                                    break;
+                                }
                             }                            
                         }
                     }
@@ -2043,14 +2050,19 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public bool Equals(DeviceInfo8001 x, DeviceInfo8001 y)
         {
-            if (x.TypeCode == y.TypeCode)
-            {
-                return true;
-            }
-            else
-            {
+            //if (x.TypeCode == y.TypeCode)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
+            if (Object.ReferenceEquals(x, y)) return true;
+
+            if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
                 return false;
-            }
+            return x.TypeCode == y.TypeCode;
         }
 
         public int GetHashCode(DeviceInfo8001 obj)
@@ -2059,7 +2071,7 @@ namespace SCA.BusinessLib.BusinessLogic
             if (Object.ReferenceEquals(obj, null)) return 0;
 
             //Get hash code for the Name field if it is not null.
-            int hashDeviceCode = obj.Code == null ? 0 : obj.Code.GetHashCode();
+            int hashDeviceCode = obj.TypeCode == null ? 0 : obj.TypeCode.GetHashCode();
 
             //Get hash code for the Code field.
             int hashDeviceTypeCode = obj.TypeCode.GetHashCode();
