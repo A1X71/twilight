@@ -10,6 +10,8 @@ using SCA.BusinessLib;
 using SCA.WPF.Utility;
 using SCA.Interface;
 using SCA.BusinessLib.BusinessLogic;
+using SCA.Model.BusinessModel;
+
 using Caliburn.Micro;
 using System;
 
@@ -41,7 +43,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string SimulatorIconPath { get { return _appCurrentPath + _simulatorIconPath; } }
-
+        //存储摘要信息
+        private System.Collections.ObjectModel.ObservableCollection<SummaryInfo> _summaryNodes = null;
         public ProjectSummaryViewModel()
         {
             _cManager = new ControllerManager();
@@ -151,6 +154,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 return new SCA.WPF.Utility.RelayCommand(RefreshExecute, null); 
             }
         }
+        public IList<SummaryInfo> SummaryNodes { get { return _summaryNodes ?? (_summaryNodes = new System.Collections.ObjectModel.ObservableCollection<SummaryInfo>()); } }
         public void ToggleSimulatorInfoExecute()
         {
 
@@ -1598,6 +1602,29 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
 
 
         #endregion
+        public void GenerateSummaryInfo()
+        {
+            SummaryNodes.Clear();
+            if (TheProject != null)
+            {
+                SummaryInfo summary = new SummaryInfo();
+                summary.Icon = @"Resources\Icon\Style1\proj.jpg"; ;
+                summary.Name = "工程";// +TheController.Name + "(" + TheController.Type.ToString() + "," + TheController.DeviceAddressLength.ToString() + ")";
+                summary.Number = 1;
+                summary.Level = 1;
+                ControllerManager controllerManager = new ControllerManager();
+                controllerManager.InitializeAllControllerOperation(null);                
+                foreach (var controller in TheProject.Controllers)
+                {
+                    IControllerOperation controllerOperation = controllerManager.GetController(controller.Type);                        
+                    SummaryInfo controllerSummary=controllerOperation.GetSummaryNodes(controller,2);
+                    summary.ChildNodes.Add(controllerSummary);
+                }
+                SummaryNodes.Add(summary);
+            }
+            
+        }
+       
     }
     /// <summary>
     /// 输入器件查询类型

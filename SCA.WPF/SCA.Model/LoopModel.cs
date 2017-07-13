@@ -12,7 +12,7 @@ namespace SCA.Model
     {
         private ControllerModel _controller; //Added at 2016-12-06 控制器信息
         private object  _lstDevices;
-        private string _iconInTree = @"E:\Program\4 Project\NT8001SeriesControllerAssistantV0.3\SCA.WPF\SCA.WPF\Resources\Icon\Loop.jpg";        
+        private string _iconInTree;
         public LoopModel()
         { 
         

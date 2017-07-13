@@ -306,6 +306,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         {
             object item = (SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((SCA.WPF.ViewsRoot.Views.Navigator.NavigatorView)((RoutedEventArgs)o).Source).HierarchyTreeView.SelectedItem;
             _projectSummaryViewModel.ProjectName = ((SCA.Model.ProjectModel)((NavigatorItemViewModel)item).DataItem).Name;
+            _projectSummaryViewModel.TheProject = (SCA.Model.ProjectModel)((NavigatorItemViewModel)item).DataItem;
+            _projectSummaryViewModel.GenerateSummaryInfo();
             CurrentView = _projectSummaryViewModel;  
         }
         //public void NavigateToLoopSummary(object o)

@@ -29,7 +29,14 @@ namespace SCA.Model.BusinessModel
 
         public string Icon
         {
-            get { return this._icon; }
+            get 
+            {
+                if (this._icon.IndexOf(':') == -1)
+                {
+                    return System.AppDomain.CurrentDomain.BaseDirectory + _icon;
+                }
+                return this._icon; 
+            }
             set { this._icon = value; }
         }
         public int? Number

@@ -523,102 +523,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         {
             SummaryNodes.Clear();
             if (TheController != null)
-            { 
-                SummaryInfo summary = new SummaryInfo();
-                summary.Icon = "";
-                summary.Name = "控制器:" + TheController.Name + "(" + TheController.Type.ToString() + "," + TheController.DeviceAddressLength.ToString() + ")";
-                summary.Number = 1;
-                summary.Level = 1;
-                //summary.ChildNodes.Add();
-                IControllerConfig config = ControllerConfigManager.GetConfigObject(TheController.Type);
-                ControllerNodeModel[] nodes = config.GetNodes();
-                for (int i = 0; i < nodes.Length; i++)
-                {
-                    switch (nodes[i].Type)
-                    {
-                        case ControllerNodeType.Loop:
-                            { 
-                                SummaryInfo node = new SummaryInfo();
-                                node.Icon = "";
-                                node.Name = ControllerNodeType.Loop.GetDescription();
-                                node.Number = TheController.Loops.Count;
-                                node.Level = 2;
-                                foreach (var l in TheController.Loops)
-                                {
-                                    SummaryInfo subNode = new SummaryInfo();
-                                    subNode.Icon = "";
-                                    subNode.Name = l.Name;
-                                    subNode.Number = l.DeviceAmount;
-                                    subNode.Level = 3;
-                                    node.ChildNodes.Add(subNode);
-                                }
-                                summary.ChildNodes.Add(node);
-                            }
-                            break;
-                        case ControllerNodeType.Standard:
-                            {
-                                SummaryInfo node = new SummaryInfo();
-                                node.Icon = "";
-                                node.Name = ControllerNodeType.Standard.GetDescription();
-                                node.Number = TheController.StandardConfig.Count;
-                                node.Level = 2;
-                                summary.ChildNodes.Add(node);
-                            }
-                            break;
-
-                        case ControllerNodeType.Mixed:
-                            {
-                                SummaryInfo node = new SummaryInfo();
-                                node.Icon = "";
-                                node.Name = ControllerNodeType.Mixed.GetDescription();
-                                node.Number = TheController.MixedConfig.Count;
-                                node.Level = 2;
-                                summary.ChildNodes.Add(node);
-                            }
-                            break;
-                        case ControllerNodeType.General:
-                            {
-                                SummaryInfo node = new SummaryInfo();
-                                node.Icon = "";
-                                node.Name = ControllerNodeType.General.GetDescription();
-                                node.Number = TheController.GeneralConfig.Count;
-                                node.Level = 2;
-                                summary.ChildNodes.Add(node);
-                            }
-                            break;
-                        case ControllerNodeType.Board:
-                            {
-                                SummaryInfo node = new SummaryInfo();
-                                node.Icon = "";
-                                node.Name = ControllerNodeType.Board.GetDescription();
-                                node.Number = TheController.ControlBoard.Count;
-                                node.Level = 2;
-                                summary.ChildNodes.Add(node);
-                            }
-                            break;
-                    }
-                }
-               ControllerOperation8001 controller = new ControllerOperation8001();
-               Dictionary<string,int> dictDeviceTypeCount = controller.GetAmountOfDifferentDeviceType(TheController);
-               if (dictDeviceTypeCount.Count > 0)
-               {
-                   SummaryInfo node = new SummaryInfo();
-                   node.Icon = "";
-                   node.Name = "设备类型";
-                   node.Level = 2;
-                   foreach (var d in dictDeviceTypeCount)
-                   {
-                       SummaryInfo typeNode = new SummaryInfo();
-                       typeNode.Icon = "";
-                       typeNode.Name = d.Key;
-                       typeNode.Number = d.Value;
-                       typeNode.Level = 3;
-                       node.ChildNodes.Add(typeNode);
-                       node.Number = node.Number+d.Value;                   
-                   }
-                   summary.ChildNodes.Add(node);
-               }
-               SummaryNodes.Add(summary);
+            {
+                ControllerManager controllerManager = new ControllerManager();
+                controllerManager.InitializeAllControllerOperation(null);
+                IControllerOperation controllerOperation = controllerManager.GetController(TheController.Type);    
+                //controllerOperation
+                SummaryInfo controllerSummary = controllerOperation.GetSummaryNodes(TheController, 1);
+                SummaryNodes.Add(controllerSummary);
             }
         }
         

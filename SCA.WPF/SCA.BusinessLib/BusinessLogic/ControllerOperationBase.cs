@@ -1745,6 +1745,116 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
         #endregion
+        /// <summary>
+        /// 获取控制器内不同器件类型的数量
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <returns></returns>
+        public abstract Dictionary<string, int> GetAmountOfDifferentDeviceType(ControllerModel controller);
+            
+        /// <summary>
+        /// 取得控制器摘要信息
+        /// </summary>
+        /// <param name="controller">控制器信息</param>
+        /// <param name="startLevel">控制器信息缩进级别</param>
+        /// <returns></returns>
+        public SummaryInfo GetSummaryNodes(ControllerModel controller, int startLevel)
+        {          
+            SummaryInfo summary = new SummaryInfo();            
+            summary.Icon = @"Resources\Icon\Style1\Controller.jpg"; 
+            summary.Name = "控制器:" + controller.Name + "(" + controller.Type.ToString() + "," + controller.DeviceAddressLength.ToString() + ")";
+            summary.Number = 1;
+            summary.Level = startLevel;
+            //summary.ChildNodes.Add();
+            IControllerConfig config = ControllerConfigManager.GetConfigObject(controller.Type);
+            ControllerNodeModel[] nodes = config.GetNodes();
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                switch (nodes[i].Type)
+                {
+                    case ControllerNodeType.Loop:
+                        {
+                            SummaryInfo node = new SummaryInfo();
+                            node.Icon =  @"Resources\Icon\Style1\Loop.jpg";
+                            node.Name = ControllerNodeType.Loop.GetDescription();
+                            node.Number = controller.Loops.Count;
+                            node.Level = startLevel + 1;
+                            foreach (var l in controller.Loops)
+                            {
+                                SummaryInfo subNode = new SummaryInfo();
+                                subNode.Icon = "";
+                                subNode.Name = l.Name;
+                                subNode.Number = l.DeviceAmount;
+                                subNode.Level = startLevel + 2;
+                                node.ChildNodes.Add(subNode);
+                            }
+                            summary.ChildNodes.Add(node);
+                        }
+                        break;
+                    case ControllerNodeType.Standard:
+                        {
+                            SummaryInfo node = new SummaryInfo();
+                            node.Icon = @"Resources\Icon\Style1\Linkage.jpg";
+                            node.Name = ControllerNodeType.Standard.GetDescription();
+                            node.Number = controller.StandardConfig.Count;
+                            node.Level = startLevel + 1;
+                            summary.ChildNodes.Add(node);
+                        }
+                        break;
+
+                    case ControllerNodeType.Mixed:
+                        {
+                            SummaryInfo node = new SummaryInfo();
+                            node.Icon = @"Resources\Icon\Style1\Linkage.jpg";
+                            node.Name = ControllerNodeType.Mixed.GetDescription();
+                            node.Number = controller.MixedConfig.Count;
+                            node.Level = startLevel + 1;
+                            summary.ChildNodes.Add(node);
+                        }
+                        break;
+                    case ControllerNodeType.General:
+                        {
+                            SummaryInfo node = new SummaryInfo();
+                            node.Icon = @"Resources\Icon\Style1\Linkage.jpg";
+                            node.Name = ControllerNodeType.General.GetDescription();
+                            node.Number = controller.GeneralConfig.Count;
+                            node.Level = startLevel + 1;
+                            summary.ChildNodes.Add(node);
+                        }
+                        break;
+                    case ControllerNodeType.Board:
+                        {
+                            SummaryInfo node = new SummaryInfo();
+                            node.Icon = @"Resources\Icon\Style1\Linkage.jpg";
+                            node.Name = ControllerNodeType.Board.GetDescription();
+                            node.Number = controller.ControlBoard.Count;
+                            node.Level = startLevel + 1;
+                            summary.ChildNodes.Add(node);
+                        }
+                        break;
+                }
+            }
+            Dictionary<string, int> dictDeviceTypeCount = GetAmountOfDifferentDeviceType(controller);
+            if (dictDeviceTypeCount.Count > 0)
+            {
+                SummaryInfo node = new SummaryInfo();
+                node.Icon = "";
+                node.Name = "设备类型";
+                node.Level = startLevel + 1;
+                foreach (var d in dictDeviceTypeCount)
+                {
+                    SummaryInfo typeNode = new SummaryInfo();
+                    typeNode.Icon = "";
+                    typeNode.Name = d.Key;
+                    typeNode.Number = d.Value;
+                    typeNode.Level = startLevel + 2;
+                    node.ChildNodes.Add(typeNode);
+                    node.Number = node.Number + d.Value;
+                }
+                summary.ChildNodes.Add(node);
+            }
+            return summary;
+        }
     }
     public struct ReadExcelLoopArgumentForIn
     {

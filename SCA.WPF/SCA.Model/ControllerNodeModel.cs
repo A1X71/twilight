@@ -11,7 +11,7 @@ namespace SCA.Model
     /// </summary>
     public  class ControllerNodeModel
     {
-        private string _iconInTree = @"E:\Program\4 Project\NT8001SeriesControllerAssistantV0.3\SCA.WPF\SCA.WPF\Resources\Icon\Loop.jpg";
+        private string _iconInTree;
         public string IconInTree
         {
             get

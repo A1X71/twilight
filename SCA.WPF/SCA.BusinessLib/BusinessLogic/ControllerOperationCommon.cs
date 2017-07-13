@@ -218,5 +218,10 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+        public override Dictionary<string, int> GetAmountOfDifferentDeviceType(Model.ControllerModel controller)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

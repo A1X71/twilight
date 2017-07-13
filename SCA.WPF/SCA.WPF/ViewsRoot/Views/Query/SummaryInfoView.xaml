@@ -15,7 +15,7 @@
         </Style>
         <converter:LevelToMarginConverter x:Key="LevelToMarginConverter"/>
         <Style x:Key="HeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
-            <Setter Property="Background" Value="#1685a9"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
         </Style>
         <!--<Style x:Key="RowStyle" TargetType="{x:Type GridViewRowPresenter }">
             <Setter Property="Visibility" Value="Collapsed"/>            
@@ -56,9 +56,10 @@
         <GridViewColumnCollection x:Key="gvcc">
             <!--CellTemplate="{StaticResource CellTemplate_Name}"-->
             <GridViewColumn Header="名称" CellTemplate="{StaticResource CellTemplate_Name}"  Width="180"/>
-            <GridViewColumn Header="数量" DisplayMemberBinding="{Binding Number}"  Width="60"/>
+            <GridViewColumn Header="数量" DisplayMemberBinding="{Binding Number}"  Width="1000"/>
         </GridViewColumnCollection>
         <Style TargetType="{x:Type TreeViewItem}">
+            <Setter Property="IsExpanded" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TreeViewItem}">
@@ -78,6 +79,19 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsExpanded" Value="false">
                                 <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self},
+                                                Path=IsMouseOver}" Value="True"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},
+                                                Path=IsSelected}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" Value="#ffe5f3fb"/>
+                                <Setter Property="BorderBrush" Value="#ffa5d7f0"/>
+                            </MultiDataTrigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FFE5F3FF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

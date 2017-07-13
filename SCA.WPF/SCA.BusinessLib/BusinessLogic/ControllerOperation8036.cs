@@ -879,7 +879,41 @@ namespace SCA.BusinessLib.BusinessLogic
             ControllerOperationBase.ProgressBarCancelFlag = flag;
         }
 
+        /// <summary>
+        /// 获取控制器内不同器件类型的数量
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <returns></returns>
+        public override Dictionary<string, int> GetAmountOfDifferentDeviceType(ControllerModel controller)
+        {
+            Dictionary<string, int> dictDeviceTypeStatistic = new Dictionary<string, int>();
+            ControllerConfig8036 config = new ControllerConfig8036();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8036> lstDistinceInfo = loop.GetDevices<DeviceInfo8036>().Distinct(new CollectionEqualityComparer<DeviceInfo8036>((x, y) => x.TypeCode == y.TypeCode)).ToList();
 
+                        int deviceCountInLoop = loop.GetDevices<DeviceInfo8036>().Count;
+                        int deviceCountInStatistic = 0;
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            int typeCount = loop.GetDevices<DeviceInfo8036>().Count((d) => d.TypeCode == dType.Code);
+                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            deviceCountInStatistic += typeCount;
+                            if (deviceCountInStatistic == deviceCountInLoop)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return dictDeviceTypeStatistic;
+        }
         //public event Action<int> UpdateProgressBarEvent;
 
         //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;

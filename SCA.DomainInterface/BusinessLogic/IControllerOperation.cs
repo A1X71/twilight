@@ -145,7 +145,13 @@ namespace SCA.Interface
         #endregion
         ControllerType GetControllerType();
         void ReadEXCELTemplate(string strFilePath, IFileService fileService, ControllerModel targetController);
-        
+        /// <summary>
+        /// 取得控制器摘要信息
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="startLevel"></param>
+        /// <returns></returns>
+        SummaryInfo GetSummaryNodes(ControllerModel controller, int startLevel);
         //OrganizeControllerInfoFromOldVersionSoftwareDataFile
     }
 }
