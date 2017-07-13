@@ -5,6 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Windows.Input;
 using SCA.Model;
+using SCA.Model.BusinessModel;
 using SCA.BusinessLib;
 using SCA.BusinessLib.Controller;
 using SCA.BusinessLib.BusinessLogic ;
@@ -49,6 +50,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string DownloadIconPath { get { return _appCurrentPath + _downloadIconPath; } }
         public string UploadIconPath { get { return _appCurrentPath + _uploadIconPath; } }
+        
+        //存储控制器摘要信息
+        private System.Collections.ObjectModel.ObservableCollection<SummaryInfo> _summaryNodes = null;
         public List<string> BaudsRate
         {
             get
@@ -90,6 +94,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 NotifyOfPropertyChange("SelectedBaudRate");
             }
         }
+        public IList<SummaryInfo> SummaryNodes { get { return _summaryNodes ?? (_summaryNodes = new System.Collections.ObjectModel.ObservableCollection<SummaryInfo>()); } }
         public string SelectedComPort
         {
 
@@ -516,12 +521,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         /// </summary>
         private void GenerateSummaryInfo()
         {
+            SummaryNodes.Clear();
             if (TheController != null)
             { 
                 SummaryInfo summary = new SummaryInfo();
                 summary.Icon = "";
                 summary.Name = "控制器:" + TheController.Name + "(" + TheController.Type.ToString() + "," + TheController.DeviceAddressLength.ToString() + ")";
                 summary.Number = 1;
+                summary.Level = 1;
                 //summary.ChildNodes.Add();
                 IControllerConfig config = ControllerConfigManager.GetConfigObject(TheController.Type);
                 ControllerNodeModel[] nodes = config.GetNodes();
@@ -535,6 +542,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                                 node.Icon = "";
                                 node.Name = ControllerNodeType.Loop.GetDescription();
                                 node.Number = TheController.Loops.Count;
+                                node.Level = 2;
+                                foreach (var l in TheController.Loops)
+                                {
+                                    SummaryInfo subNode = new SummaryInfo();
+                                    subNode.Icon = "";
+                                    subNode.Name = l.Name;
+                                    subNode.Number = l.DeviceAmount;
+                                    subNode.Level = 3;
+                                    node.ChildNodes.Add(subNode);
+                                }
                                 summary.ChildNodes.Add(node);
                             }
                             break;
@@ -544,6 +561,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                                 node.Icon = "";
                                 node.Name = ControllerNodeType.Standard.GetDescription();
                                 node.Number = TheController.StandardConfig.Count;
+                                node.Level = 2;
                                 summary.ChildNodes.Add(node);
                             }
                             break;
@@ -554,6 +572,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                                 node.Icon = "";
                                 node.Name = ControllerNodeType.Mixed.GetDescription();
                                 node.Number = TheController.MixedConfig.Count;
+                                node.Level = 2;
                                 summary.ChildNodes.Add(node);
                             }
                             break;
@@ -563,6 +582,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                                 node.Icon = "";
                                 node.Name = ControllerNodeType.General.GetDescription();
                                 node.Number = TheController.GeneralConfig.Count;
+                                node.Level = 2;
                                 summary.ChildNodes.Add(node);
                             }
                             break;
@@ -572,6 +592,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                                 node.Icon = "";
                                 node.Name = ControllerNodeType.Board.GetDescription();
                                 node.Number = TheController.ControlBoard.Count;
+                                node.Level = 2;
                                 summary.ChildNodes.Add(node);
                             }
                             break;
@@ -583,60 +604,24 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                {
                    SummaryInfo node = new SummaryInfo();
                    node.Icon = "";
-                   node.Name = "设备类型";                   
+                   node.Name = "设备类型";
+                   node.Level = 2;
                    foreach (var d in dictDeviceTypeCount)
                    {
                        SummaryInfo typeNode = new SummaryInfo();
                        typeNode.Icon = "";
                        typeNode.Name = d.Key;
                        typeNode.Number = d.Value;
+                       typeNode.Level = 3;
                        node.ChildNodes.Add(typeNode);
                        node.Number = node.Number+d.Value;                   
                    }
                    summary.ChildNodes.Add(node);
-               }                
+               }
+               SummaryNodes.Add(summary);
             }
         }
+        
     }
-    public class SummaryInfo
-    {
-        public SummaryInfo() { }
-        public SummaryInfo(string p_name, int? p_number, string p_icon)
-        {
-
-            this._icon = p_icon;
-            this._number = p_number;
-            this._name = p_name;
-
-        }
-        private string _icon;
-        private int? _number;
-        private string _name;
-
-
-        public string Icon
-        {
-            get { return this._icon; }
-            set { this._icon = value; }
-        }
-        public int? Number
-        {
-            get { return this._number; }
-            set { this._number = value; }
-        }
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-
-            }
-        }
-        private ObservableCollection<SummaryInfo> _childNode = new ObservableCollection<SummaryInfo>();
-        public ObservableCollection<SummaryInfo> ChildNodes
-        {
-            get { return _childNode; }
-        }
-    }
+    
 }
