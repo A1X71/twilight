@@ -20,8 +20,8 @@ using SCA.Interface.DatabaseAccess;
 using SCA.BusinessLib;
 using SCA.BusinessLib.Utility;
 using SCA.BusinessLib.BusinessLogic;
-using SCA.DatabaseAccess;
-using SCA.DatabaseAccess.DBContext;
+//using SCA.DatabaseAccess;
+//using SCA.DatabaseAccess.DBContext;
 
 #endregion
 /* ==============================
@@ -438,62 +438,64 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         /// <returns></returns>
         private List<ProjectModel> GetNavigatorInfo()
         {
-            IProjectManager projManager = ProjectManager.GetInstance;
-            IFileService _fileService = new FileService();
-            IDatabaseService _databaseService = new MSAccessDatabaseAccess(@"C:\Users\Administrator\Desktop\foo\8036.mdb", null, _fileService);
-            IOldVersionSoftwareDBService oldVersionService = new OldVersionSoftware8036DBService(_databaseService);
-            IControllerOperation controllerOperation = null;
+            //IProjectManager projManager = ProjectManager.GetInstance;
+            //IFileService _fileService = new FileService();
+            //IDatabaseService _databaseService = new MSAccessDatabaseAccess(@"C:\Users\Administrator\Desktop\foo\8036.mdb", null, _fileService);
+            //IOldVersionSoftwareDBService oldVersionService = new OldVersionSoftware8036DBService(_databaseService);
+            //IControllerOperation controllerOperation = null;
 
-            string[] strFileInfo = oldVersionService.GetFileVersionAndControllerType();
-            ControllerModel controllerInfo = null;
-            if (strFileInfo.Length > 0)
-            {
-                switch (strFileInfo[0])
-                {
-                    case "8036":
-                        controllerOperation = new ControllerOperation8036(_databaseService);
-                        break;
-                }
-                if (controllerOperation != null)
-                {
-                    controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
-                }
-                //strFileInfo[1];
-            }
-
-
-            ProjectModel proj = new ProjectModel() { ID = 1, Name = "尼特智能" };
-            proj.Controllers.Add(controllerInfo);
+            //string[] strFileInfo = oldVersionService.GetFileVersionAndControllerType();
+            //ControllerModel controllerInfo = null;
+            //if (strFileInfo.Length > 0)
+            //{
+            //    switch (strFileInfo[0])
+            //    {
+            //        case "8036":
+            //            controllerOperation = new ControllerOperation8036(_databaseService);
+            //            break;
+            //    }
+            //    if (controllerOperation != null)
+            //    {
+            //        controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
+            //    }
+            //    //strFileInfo[1];
+            //}
 
 
+            //ProjectModel proj = new ProjectModel() { ID = 1, Name = "尼特智能" };
+            //proj.Controllers.Add(controllerInfo);
 
-            _databaseService = new MSAccessDatabaseAccess(@"E:\2016\6 软件优化升级\4 实际工程数据\工程数据111\连城心怡都城_文件版本5.mdb", null, _fileService);
-            oldVersionService = new OldVersionSoftware8001DBService(_databaseService);
 
-            strFileInfo = oldVersionService.GetFileVersionAndControllerType();
-            controllerInfo = null;
-            if (strFileInfo.Length > 0)
-            {
-                switch (strFileInfo[0])
-                {
-                    case "8001":
-                        controllerOperation = new ControllerOperation8001(null);
-                        break;
-                }
-                if (controllerOperation != null)
-                {
-                    controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
-                }
-                //strFileInfo[1];
-            }
 
-            proj.Controllers.Add(controllerInfo);
+            //_databaseService = new MSAccessDatabaseAccess(@"E:\2016\6 软件优化升级\4 实际工程数据\工程数据111\连城心怡都城_文件版本5.mdb", null, _fileService);
+            //oldVersionService = new OldVersionSoftware8001DBService(_databaseService);
 
-            projManager.CreateProject(proj);
+            //strFileInfo = oldVersionService.GetFileVersionAndControllerType();
+            //controllerInfo = null;
+            //if (strFileInfo.Length > 0)
+            //{
+            //    switch (strFileInfo[0])
+            //    {
+            //        case "8001":
+            //            controllerOperation = new ControllerOperation8001(null);
+            //            break;
+            //    }
+            //    if (controllerOperation != null)
+            //    {
+            //        controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
+            //    }
+            //    //strFileInfo[1];
+            //}
 
-            List<ProjectModel> lstProjects = new List<ProjectModel>();
-            lstProjects.Add(proj);
-            return lstProjects;
+            //proj.Controllers.Add(controllerInfo);
+
+            //projManager.CreateProject(proj);
+
+            //List<ProjectModel> lstProjects = new List<ProjectModel>();
+            //lstProjects.Add(proj);
+            //return lstProjects;
+            //重构至业务层
+            return null;
         }
 
         public void NewProject()

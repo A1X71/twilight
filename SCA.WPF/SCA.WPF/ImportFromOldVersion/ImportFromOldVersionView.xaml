@@ -35,20 +35,20 @@
                     </Grid.RowDefinitions>
                     <!--MouseDown="AvatarGrid_MouseDown"-->
                     <Label Grid.Row="0" Grid.Column="0" Content="_项目名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
+                    <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100"  Text="{Binding Path=ProjectName}"/>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="导入文件路径" Target="{Binding ElementName=ImportFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120" />
-                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="1" Grid.Column="3" Click="SelectFolderForSourceFileButton_Click">...</Button>
+                    <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120"  Text="{Binding Path=ImportedFilePath}"/>                    
+                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="1" Grid.Column="3"  Command="{Binding Path=SelectedImportedFilePathCommand}">...</Button>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=SaveFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="SaveFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120" />                    
-                    <Button x:Name="SelectFolderForSavePathButton"  Grid.Row="2" Grid.Column="3" Click="SelectFolderForSavePathButton_Click">...</Button>
+                    <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="SaveFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120"  Text="{Binding Path=SavedFilePath}"/>                    
+                    <Button x:Name="SelectFolderForSavePathButton"  Grid.Row="2" Grid.Column="3" Command="{Binding Path=SelectedSavedFilePathCommand}">...</Button>
                 </Grid>
 
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                    <Button Content="_确定" x:Name="ConfirmButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" TabIndex="140" Width="64" Click="ConfirmButton_Click"/>
-                    <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CloseButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
+                    <Button Content="_确定" x:Name="ConfirmButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" TabIndex="140" Width="64" Command="{Binding Path=ComfirmExecuteCommand}"/>
+                    <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60" Command="{Binding Path=CancelExecuteCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
