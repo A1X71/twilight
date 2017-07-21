@@ -223,5 +223,17 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+
+        public Model.ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Model.ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, Model.ControllerModel controller)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

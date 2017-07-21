@@ -137,7 +137,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 controllerInfo.PrimaryFlag = false;
                 controllerInfo.LoopAddressLength = 2;
                 
-                List<LoopModel> lstLoopInfo = GetLoopInfoFromOldVersionSoftwareDataFile(oldDBService);
+                List<LoopModel> lstLoopInfo=null;// = GetLoopInfoFromOldVersionSoftwareDataFile(oldDBService);
                 StringBuilder sbQuerySQL = new StringBuilder();
                 foreach (var l in lstLoopInfo)//回路信息
                 {
@@ -897,17 +897,20 @@ namespace SCA.BusinessLib.BusinessLogic
                         IEnumerable<DeviceInfo8036> lstDistinceInfo = loop.GetDevices<DeviceInfo8036>().Distinct(new CollectionEqualityComparer<DeviceInfo8036>((x, y) => x.TypeCode == y.TypeCode)).ToList();
 
                         int deviceCountInLoop = loop.GetDevices<DeviceInfo8036>().Count;
-                        int deviceCountInStatistic = 0;
+                        //int deviceCountInStatistic = 0;
                         foreach (var device in lstDistinceInfo)
                         {
                             DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                            int typeCount = loop.GetDevices<DeviceInfo8036>().Count((d) => d.TypeCode == dType.Code);
-                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                            deviceCountInStatistic += typeCount;
-                            if (deviceCountInStatistic == deviceCountInLoop)
+                            int typeCount = loop.GetDevices<DeviceInfo8036>().Count((d) => d.TypeCode == dType.Code); //记录器件类型的数量
+                            if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                             {
-                                break;
-                            }
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }         
+                            //deviceCountInStatistic += typeCount;
+                            //if (deviceCountInStatistic == deviceCountInLoop)
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }
@@ -921,5 +924,37 @@ namespace SCA.BusinessLib.BusinessLogic
         //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
 
         //public event Action<string> ReadingExcelErrorEvent;
+
+
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, ControllerModel controller)
+        {
+            ControllerModel controllerInfo = controller;
+            List<LoopModel> lstLoopInfo = dbFileVersionService.GetLoopsByController(controller);
+            StringBuilder sbQuerySQL = new StringBuilder();
+            //(1)回路及器件
+            foreach (var l in lstLoopInfo)//回路信息
+            {
+                LoopModel loop = l;
+                dbFileVersionService.GetDevicesByLoopForControllerType8036(ref loop);//为loop赋予“器件信息”
+                loop.Controller = controllerInfo;
+                controllerInfo.Loops.Add(loop);
+            }
+            //(2)标准组态
+            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig(controller);
+            foreach (var l in lstStandard)
+            {
+                LinkageConfigStandard standardConfig = l;
+                standardConfig.Controller = controllerInfo;
+                controllerInfo.StandardConfig.Add(standardConfig);
+            }
+
+            return controllerInfo;
+        }
     }
 }

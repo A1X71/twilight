@@ -673,22 +673,49 @@ namespace SCA.BusinessLib.BusinessLogic
                         IEnumerable<DeviceInfo8021> lstDistinceInfo = loop.GetDevices<DeviceInfo8021>().Distinct(new CollectionEqualityComparer<DeviceInfo8021>((x, y) => x.TypeCode == y.TypeCode)).ToList();
 
                         int deviceCountInLoop = loop.GetDevices<DeviceInfo8021>().Count;
-                        int deviceCountInStatistic = 0;
+                        //int deviceCountInStatistic = 0;
                         foreach (var device in lstDistinceInfo)
                         {
                             DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                            int typeCount = loop.GetDevices<DeviceInfo8021>().Count((d) => d.TypeCode == dType.Code);
-                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                            deviceCountInStatistic += typeCount;
-                            if (deviceCountInStatistic == deviceCountInLoop)
+                            int typeCount = loop.GetDevices<DeviceInfo8021>().Count((d) => d.TypeCode == dType.Code); //记录器件类型的数量
+                            if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                             {
-                                break;
-                            }
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }         
+                            //deviceCountInStatistic += typeCount;
+                            //if (deviceCountInStatistic == deviceCountInLoop)
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }
             }
             return dictDeviceTypeStatistic;
+        }
+
+
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, ControllerModel controller)
+        {
+            ControllerModel controllerInfo = controller;
+            List<LoopModel> lstLoopInfo = dbFileVersionService.GetLoopsByController(controller);
+            StringBuilder sbQuerySQL = new StringBuilder();  
+            //(1)回路及器件
+            foreach (var l in lstLoopInfo)//回路信息
+            {
+                LoopModel loop = l;
+                dbFileVersionService.GetDevicesByLoopForControllerType8021(ref loop);//为loop赋予“器件信息”
+                loop.Controller = controllerInfo;
+                controllerInfo.Loops.Add(loop);
+            }
+      
+            return controllerInfo;
         }
     }
 }
