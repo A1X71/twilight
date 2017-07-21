@@ -117,7 +117,6 @@ namespace SCA.WPF
         }
         private void ImportFromOldVersionUserControl_ConfirmButtonClick(object sender,RoutedEventArgs e)
         {
-
             RefreshNavigator();
             ImportFromOldVersionUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
@@ -126,6 +125,9 @@ namespace SCA.WPF
         private void DisplayTheOpenedProject(object args)
         {
             RefreshNavigator();
+            //* 增加于2017-07*18  ---start---
+            ImportFromOldVersionUserControl.Visibility = Visibility.Collapsed;
+            //*--end---
             this.WelcomeUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
             this.Navigator.Visibility = Visibility.Visible;

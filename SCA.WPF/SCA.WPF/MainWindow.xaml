@@ -215,7 +215,9 @@
             <!--<View:ProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  />-->
             <View:CreateProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center" AddButtonClick="ProjectUserControl_AddButtonClick" CloseButtonClick="ProjectUserControl_CloseButtonClick"   Visibility="Hidden"/>
 
-            <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden" ConfirmButtonClick="ImportFromOldVersionUserControl_ConfirmButtonClick"  CloseButtonClick="ImportFromOldVersionUserControl_CloseButtonClick"/>
+            <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"
+                                           ConfirmButtonClick="ImportFromOldVersionUserControl_ConfirmButtonClick" 
+                                           CloseButtonClick="ImportFromOldVersionUserControl_CloseButtonClick"/>
 
             <View:CreateControllerView x:Name="CreateControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"  AddButtonClick="CreateControllerUserControl_AddButtonClick"  CancelButtonClick="CreateControllerUserControl_CancelButtonClick"/>
 
