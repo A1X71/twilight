@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Collections.Generic;
 using SCA.Interface.DatabaseAccess;
-
+using SCA.Model;
 /* ==============================
 *
 * Author     : William
@@ -16,14 +16,19 @@ namespace SCA.DatabaseAccess.DBContext
     public class ManualControlBoardDBService:IManualControlBoardDBService
     {
         private IDatabaseService _databaseService;
+        private IDBFileVersionService _dbFileVersionService;
         public ManualControlBoardDBService(IDatabaseService databaseService)
         {
             _databaseService = databaseService;
         }
-
-        public Model.ManualControlBoard GetManualControlBoardInfo(int id)
+        public ManualControlBoardDBService(IDBFileVersionService dbFileVersionService)
         {
-            throw new System.NotImplementedException();
+            _dbFileVersionService = dbFileVersionService;
+        }
+
+        public List<ManualControlBoard> GetManualControlBoardInfo(ControllerModel controller)
+        {
+            return _dbFileVersionService.GetManualControlBoard(controller);   
         }
 
         public Model.ManualControlBoard GetManualControlBoardInfo(Model.ManualControlBoard manualControlBoard)
@@ -36,17 +41,18 @@ namespace SCA.DatabaseAccess.DBContext
             int intEffectiveRows = 0;
             try
             {
-                StringBuilder sbSQL = new StringBuilder("REPLACE INTO ManualControlBoard(ID,Code, BoardNo ,SubBoardNo ,KeyNo , DeviceCode , SDPKey ,controllerID) ");
-                sbSQL.Append("VALUES(");
-                sbSQL.Append(manualControlBoard.ID + ",");
-                sbSQL.Append(manualControlBoard.Code + ",'");
-                sbSQL.Append(manualControlBoard.BoardNo + "','");
-                sbSQL.Append(manualControlBoard.SubBoardNo + "','");
-                sbSQL.Append(manualControlBoard.KeyNo + "','");
-                sbSQL.Append(manualControlBoard.DeviceCode + "','");
-                sbSQL.Append(manualControlBoard.SDPKey + "','");
-                sbSQL.Append(manualControlBoard.ControllerID + "');");
-                intEffectiveRows = _databaseService.ExecuteBySql(sbSQL);
+                //StringBuilder sbSQL = new StringBuilder("REPLACE INTO ManualControlBoard(ID,Code, BoardNo ,SubBoardNo ,KeyNo , DeviceCode , SDPKey ,controllerID) ");
+                //sbSQL.Append("VALUES(");
+                //sbSQL.Append(manualControlBoard.ID + ",");
+                //sbSQL.Append(manualControlBoard.Code + ",'");
+                //sbSQL.Append(manualControlBoard.BoardNo + "','");
+                //sbSQL.Append(manualControlBoard.SubBoardNo + "','");
+                //sbSQL.Append(manualControlBoard.KeyNo + "','");
+                //sbSQL.Append(manualControlBoard.DeviceCode + "','");
+                //sbSQL.Append(manualControlBoard.SDPKey + "','");
+                //sbSQL.Append(manualControlBoard.ControllerID + "');");
+                //intEffectiveRows = _databaseService.ExecuteBySql(sbSQL);
+                intEffectiveRows = _dbFileVersionService.AddManualControlBoardInfo(manualControlBoard);
             }
             catch
             {
