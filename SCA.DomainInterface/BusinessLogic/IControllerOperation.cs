@@ -114,14 +114,13 @@ namespace SCA.Interface
         List<DeviceInfoForSimulator> GetSimulatorDevices(ControllerModel controller);
         List<DeviceInfoForSimulator> GetSimulatorDevicesByDeviceCode(List<string> lstDeviceCode,ControllerModel controller,List<DeviceInfoForSimulator> lstAllDevicesOfOtherMachine);
         #endregion
-        #region 低版本数据升级
-        /// <summary>        
-        /// 将老版本(2.0版本系列)数据转换为当前版本软件数据        
+        #region 低版本数据升级        
+        /// <summary>
+        /// 通过指定的数据文件操作服务取得控制器信息        
         /// </summary>
-        /// <param name="sourceVersion">源版本号</param>
-        /// <param name="destVersion">目的版本号</param>
+        /// <param name="dbFileVersionService"></param>
         /// <returns></returns>
-        ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldVersionSoftwareDBService);
+        ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService,ControllerModel controller);        
         #endregion        
         #region EXCEL操作
         
