@@ -7,6 +7,7 @@ using SCA.Interface;
 using SCA.Interface.DatabaseAccess;
 using SCA.Model;
 using SCA.BusinessLib.BusinessLogic;
+using SCA.BusinessLib;
 namespace SCA.BusinessLib
 {
     public class ProjectManager:SCA.Interface.IProjectManager
@@ -36,7 +37,8 @@ namespace SCA.BusinessLib
         private ILinkageConfigGeneralDBService _linkageConfigGeneralDBService;
         private ILinkageConfigMixedDBService _linkageConfigMixedDBService;
         private IManualControlBoardDBService _manualControlBoardDBService;
-        private IDatabaseService _databaseService;
+        //private IDatabaseService _databaseService;
+        private IDBFileVersionService _dbFileVersionService;
         private IFileService _fileService;
         /// <summary>
         /// 存储从外部导入的控制器信息
@@ -100,9 +102,13 @@ namespace SCA.BusinessLib
         private int _maxIDForManualControlBoard = 0;
         public int MaxIDForManualControlBoard { get { return _maxIDForManualControlBoard; } set { _maxIDForManualControlBoard = value; } }
 
+        //回路信息当前最大ID
         private int _maxIDForLoop= 0;
         public int MaxIDForLoop { get { return _maxIDForLoop; } set { _maxIDForLoop = value; } }
 
+        //控制器信息当前最大ID
+        private int _maxIDForController = 0;
+        public int MaxIDForController { get { return _maxIDForController; } set { _maxIDForController = value; } }
         #region 控制器操作
         //public List<ControllerModel> Controllers
         //{
@@ -200,20 +206,22 @@ namespace SCA.BusinessLib
         /// </summary>
         private ProjectManager()
         {
-            //_projectService = projectService;     
+            //_projectService = projectService; 
+            if (_fileService == null)
+            {
+                _fileService = new SCA.BusinessLib.Utility.FileService();
+            }
         }
         private void InitializeDefaultSetting()
         {
-            _fileService = new SCA.BusinessLib.Utility.FileService();
-            ILogRecorder logger = null;            
-            _projectDBService = new SCA.DatabaseAccess.DBContext.ProjectDBService(_databaseService);
-            _controllerDBService = new SCA.DatabaseAccess.DBContext.ControllerDBService(_databaseService);
-            _loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(_databaseService);
-            _linkageConfigStandardDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigStandardDBService(_databaseService);
-            _linkageConfigGeneralDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigGeneralDBService(_databaseService);
-            _linkageConfigMixedDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigMixedDBService(_databaseService);
-            _manualControlBoardDBService = new SCA.DatabaseAccess.DBContext.ManualControlBoardDBService(_databaseService);
-            _deviceTypeDBService = new SCA.DatabaseAccess.DBContext.DeviceTypeDBService(_databaseService);
+            _projectDBService = new SCA.DatabaseAccess.DBContext.ProjectDBService(_dbFileVersionService);
+            _controllerDBService = new SCA.DatabaseAccess.DBContext.ControllerDBService(_dbFileVersionService);
+            _loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(_dbFileVersionService);
+            _linkageConfigStandardDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigStandardDBService(_dbFileVersionService);
+            _linkageConfigGeneralDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigGeneralDBService(_dbFileVersionService);
+            _linkageConfigMixedDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigMixedDBService(_dbFileVersionService);
+            _manualControlBoardDBService = new SCA.DatabaseAccess.DBContext.ManualControlBoardDBService(_dbFileVersionService);
+            _deviceTypeDBService = new SCA.DatabaseAccess.DBContext.DeviceTypeDBService(_dbFileVersionService);
         }
         public IProjectDBService ProjectDBService
         {
@@ -267,8 +275,15 @@ namespace SCA.BusinessLib
             if (projectService.CreateProject(project, fileService))
             { 
                 Project = project; //将对象信息赋给当前属性
-                _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(Project.SaveFilePath, null, fileService); ;
+                ILogRecorder logger = null;
+                SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(Project.SaveFilePath,logger, fileService);
+                _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                //_databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(Project.SaveFilePath, null, fileService);
+                
+                
+
                 InitializeDefaultSetting();
+
             }
           //  IsDirty = true;
             return Project;
@@ -277,8 +292,15 @@ namespace SCA.BusinessLib
         public void OpenProject(string strPath)
         {
             ILogRecorder logger = null;
-            _fileService = new SCA.BusinessLib.Utility.FileService();
-            _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(strPath, logger, _fileService);
+            
+
+            //_databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(strPath, logger, _fileService);
+
+            SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(strPath,logger,_fileService);
+            _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+            
+
+
             InitializeDefaultSetting();
             
             IDeviceDBServiceTest deviceDBService;
@@ -289,7 +311,7 @@ namespace SCA.BusinessLib
                 List<LoopModel> lstLoops=_loopDBService.GetLoopsByController(c);
                 foreach (LoopModel l in lstLoops)
                 {
-                    deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _databaseService);
+                    deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _dbFileVersionService);
                     c.Loops.Add(deviceDBService.GetDevicesByLoop(l));
                 
                 }
@@ -307,6 +329,11 @@ namespace SCA.BusinessLib
                 foreach (var s in lstGeneral)
                 {
                     c.GeneralConfig.Add(s);
+                }
+                List<ManualControlBoard> lstMCB = _manualControlBoardDBService.GetManualControlBoardInfo(c);
+                foreach (var s in lstMCB)
+                {
+                    c.ControlBoard.Add(s);
                 }
                 project.Controllers.Add(c);
                 
@@ -328,6 +355,7 @@ namespace SCA.BusinessLib
             MaxIDForMixedLinkageConfig = this.GetMaxIDForMixedLinkage();
             MaxIDForGeneralLinkageConfig = this.GetMaxIDForGeneralLinkage();
             MaxIDForLoop = this.GetMaxIDForLoop();
+            MaxIDForController = this.GetMaxIDForController();
         }
         public bool CloseProject()
         {
@@ -536,7 +564,7 @@ namespace SCA.BusinessLib
         public ProjectModel CreateProject(ProjectModel project)
         {
              IProjectService _projectService=new SCA.BusinessLib.BusinessLogic.ProjectService();
-             IFileService _fileService=new SCA.BusinessLib.Utility.FileService();
+             
             return    CreateProject(project, _projectService, _fileService);
 
         }
@@ -605,7 +633,7 @@ namespace SCA.BusinessLib
                 //保存此工程下的回路，器件，组态，手动盘
                 foreach (var c in this.Project.Controllers)
                 {
-                    _deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _databaseService);
+                    _deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _dbFileVersionService);
                     c.Project.ID = projectID;
                     c.ProjectID = projectID;
                     _controllerDBService.AddController(c);
@@ -858,6 +886,12 @@ namespace SCA.BusinessLib
                     }
                 }
             }
+            return maxID;
+        }
+        private int GetMaxIDForController()
+        {           
+            int maxID = 0;
+            maxID = Project.Controllers.Max(info => info.ID);            
             return maxID;
         }
 
