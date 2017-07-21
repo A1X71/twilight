@@ -223,6 +223,7 @@ namespace SCA.Model
                 return _lstManualControlBoard;
             }
         }
+        #region 非业务数据
         //保存状态
         private bool _isDirty = true;
         public bool IsDirty 
@@ -235,9 +236,20 @@ namespace SCA.Model
                     this.Project.IsDirty = true;
                 }
             } 
-
         }
-     
+        /// <summary>
+        /// 文件版本，为兼容4，5，6文件版本保留 
+        /// </summary>
+        public int FileVersion { get; set; }
+        #endregion 
+        /// <summary>
+        /// 协议版本
+        /// </summary>
+        public string ProtocolVersion { get; set; }
+        /// <summary>
+        /// 位置
+        /// </summary>
+        public string Position { get; set; }
     }
     public enum ControllerType 
     { 

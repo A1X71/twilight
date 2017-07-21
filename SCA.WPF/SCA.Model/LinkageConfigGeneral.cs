@@ -39,6 +39,9 @@ namespace SCA.Model
         public int? LayerNoA1 { get; set; }
         public int? LayerNoA2 { get; set; }
         public Int16 DeviceTypeCodeA { get; set; }
+        //器件类型名称(兼容老版数据文件保留)
+        //老版软件的器件类型以“字符名称”存储
+        public string DeviceTypeNameA{ get; set; }
 
         public LinkageType TypeC { get; set; }
         public string MachineNoC { get; set; }
@@ -48,6 +51,9 @@ namespace SCA.Model
         public  int? ZoneNoC { get; set; }
         public int? LayerNoC { get; set; }
         public Int16 DeviceTypeCodeC { get; set; }
+        //器件类型名称(兼容老版数据文件保留)
+        //老版软件的器件类型以“字符名称”存储
+        public string DeviceTypeNameC { get; set; }
         #region 非业务数据
         //保存状态
         private bool _isDirty = true;

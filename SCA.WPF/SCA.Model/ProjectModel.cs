@@ -50,7 +50,10 @@ namespace SCA.Model
         /// </summary>
         public string SavePath { get; set; }
 
-
+        /// <summary>
+        /// 文件版本
+        /// </summary>
+        public int FileVersion { get; set; }
         /// <summary>
         /// 保存文件路径
         /// </summary>
