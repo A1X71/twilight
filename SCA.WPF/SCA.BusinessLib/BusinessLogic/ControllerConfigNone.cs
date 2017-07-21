@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SCA.Interface;
+using SCA.Model;
 /* ==============================
 *
 * Author     : William
@@ -148,20 +149,11 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public List<Model.LinkageActionType> GetLinkageActionType()
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<Model.LinkageType> GetLinkageTypeWithCastration()
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<Model.LinkageType> GetLinkageType()
-        {
-            throw new NotImplementedException();
-        }
+
+
+
 
         public List<Model.DeviceType> GetDeviceTypeInfoWithAnyAlarm()
         {
