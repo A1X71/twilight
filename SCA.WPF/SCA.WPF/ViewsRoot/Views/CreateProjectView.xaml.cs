@@ -57,7 +57,8 @@ namespace SCA.WPF.ViewsRoot.Views
             SCA.Model.ProjectModel project = new Model.ProjectModel();
             project.Name = this.ProjectNameInputTextBox.Text;
             project.SavePath = this.FilePathInputTextBox.Text;
-            project.SaveFilePath = this.FilePathInputTextBox.Text + "\\" + project.Name + ".nt";            
+            project.SaveFilePath = this.FilePathInputTextBox.Text + "\\" + project.Name + ".nt";
+            project.FileVersion = BusinessLogic.DBFileVersionManager.CurrentDBFileVersion;
             SCA.BusinessLib.ProjectManager.GetInstance.CreateProject(project);
 
             RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
