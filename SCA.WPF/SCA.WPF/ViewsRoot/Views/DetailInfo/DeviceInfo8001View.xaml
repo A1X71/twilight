@@ -117,10 +117,10 @@
                 </dg:DataGridTextColumn>
                     <!--Binding="{Binding Path=Code,TargetNullValue='oops,missing', FallbackValue='default'}"-->
                     <!--,Converter={debug:DebugBinding}-->
-                <dg:DataGridTextColumn Width="Auto" 
+                <!--<dg:DataGridTextColumn Width="Auto" 
                                        Header="器件类型" 
                                        Binding="{Binding Path=Type}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
                     <dg:DataGridComboBoxColumn Header="器件类型"  
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
@@ -129,11 +129,11 @@
                                                >
                     </dg:DataGridComboBoxColumn>
                     
-                    <dg:DataGridTextColumn Width="Auto" 
+                    <!--<dg:DataGridTextColumn Width="Auto" 
                                        Header="特性" 
                                        Binding="{Binding Path=Feature,ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
 
                     <dg:DataGridComboBoxColumn Header="特性" SelectedItemBinding="{Binding Path=Feature}" >
                         <dg:DataGridComboBoxColumn.ItemsSource>
@@ -150,14 +150,14 @@
                                        Binding="{Binding Path=Disable ,ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
-                    <dg:DataGridCheckBoxColumn Header="屏蔽" 
+                    <!--<dg:DataGridCheckBoxColumn Header="屏蔽" 
                                                Binding="{Binding Path=Disable,ValidatesOnDataErrors=True}" 
-                                               />
-                    <dg:DataGridTextColumn Width="Auto" 
+                                               />-->
+                    <!--<dg:DataGridTextColumn Width="Auto" 
                                        Header="灵敏度" 
                                        Binding="{Binding Path=SensitiveLevel,ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
                     <dg:DataGridComboBoxColumn Header="灵敏度"  SelectedItemBinding="{Binding Path=SensitiveLevel}">
                     <dg:DataGridComboBoxColumn.ItemsSource>
                         <col:ArrayList>
