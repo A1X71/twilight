@@ -4,7 +4,7 @@ namespace SCA.Interface.DatabaseAccess
 {
     public interface IManualControlBoardDBService
     {
-        ManualControlBoard GetManualControlBoardInfo(int id);
+        List<ManualControlBoard> GetManualControlBoardInfo(ControllerModel controller);
         ManualControlBoard GetManualControlBoardInfo(ManualControlBoard manualControlBoard);
         bool AddManualControlBoardInfo(ManualControlBoard manualControlBoard);
         bool AddManualControlBoardInfo(List<ManualControlBoard> lstManualControlBoard);

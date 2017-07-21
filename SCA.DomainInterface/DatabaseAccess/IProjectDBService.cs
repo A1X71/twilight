@@ -21,7 +21,7 @@ namespace SCA.Interface.DatabaseAccess
         bool InitializeControllerTypeInfo();//ProjectModel project
         //bool InitializeDeviceTypeInfo(List<Model.DeviceType> lstDeviceType);
         ProjectModel GetProject(int id);
-        ProjectModel GetProject(ProjectModel project);
+        //ProjectModel GetProject(ProjectModel project);
 
         int AddProject(ProjectModel project);
 
