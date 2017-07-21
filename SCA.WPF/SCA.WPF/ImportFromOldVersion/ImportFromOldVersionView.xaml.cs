@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 namespace SCA.WPF.ViewsRoot.Views
 {
     /// <summary>
@@ -21,6 +22,8 @@ namespace SCA.WPF.ViewsRoot.Views
         public ImportFromOldVersionView()
         {
             InitializeComponent();
+            SCA.WPF.ImportFromOldVersion.ImportFromOldVersionViewModel vm = new ImportFromOldVersion.ImportFromOldVersionViewModel();
+            this.DataContext = vm;
         }
         public static readonly RoutedEvent ConfirmButtonClickEvent = EventManager.RegisterRoutedEvent(
                 "ConfirmButtonClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ImportFromOldVersionView));
