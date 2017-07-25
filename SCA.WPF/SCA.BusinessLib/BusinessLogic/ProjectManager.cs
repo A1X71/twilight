@@ -86,6 +86,10 @@ namespace SCA.BusinessLib
         private int _maxDeviceIDInController8000 = 0;
         public int MaxDeviceIDInController8000 { get { return _maxDeviceIDInController8000; } set { _maxDeviceIDInController8000 = value; } }
 
+        //本项目中8053控制器的器件信息的最大ID编号
+        private int _maxDeviceIDInController8053 = 0;
+        public int MaxDeviceIDInController8053 { get { return _maxDeviceIDInController8053; } set { _maxDeviceIDInController8053 = value; } }
+
 
         //本项目中标准组态信息的最大ID编号
         private int _maxIDForStandardLinkageConfig = 0;
@@ -351,6 +355,7 @@ namespace SCA.BusinessLib
             MaxDeviceIDInController8003 = this.GetMaxIDForDevice8003();
             MaxDeviceIDInController8036 = this.GetMaxIDForDevice8036();            
             MaxDeviceIDInController8021 = this.GetMaxIDForDevice8021();
+            MaxDeviceIDInController8053 = this.GetMaxIDForDevice8053();
             MaxIDForStandardLinkageConfig = this.GetMaxIDForStandardLinkage();
             MaxIDForMixedLinkageConfig = this.GetMaxIDForMixedLinkage();
             MaxIDForGeneralLinkageConfig = this.GetMaxIDForGeneralLinkage();
@@ -791,6 +796,28 @@ namespace SCA.BusinessLib
                 foreach (var l in c.Loops)
                 {
                     List<DeviceInfo8036> lstDeviceInfo = l.GetDevices<DeviceInfo8036>();
+                    if (lstDeviceInfo.Count > 0)
+                    {
+                        int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);
+                        if (currentLoopMaxDeviceID > maxDeviceID)
+                        {
+                            maxDeviceID = currentLoopMaxDeviceID;
+                        }
+                    }
+                }
+            }
+            return maxDeviceID;
+        }
+
+        private int GetMaxIDForDevice8053()
+        {
+            var controllers = from r in this.Project.Controllers where r.Type == ControllerType.NT8053 select r;
+            int maxDeviceID = 0;
+            foreach (var c in controllers)
+            {
+                foreach (var l in c.Loops)
+                {
+                    List<DeviceInfo8053> lstDeviceInfo = l.GetDevices<DeviceInfo8053>();
                     if (lstDeviceInfo.Count > 0)
                     {
                         int currentLoopMaxDeviceID = lstDeviceInfo.Max(device => device.ID);

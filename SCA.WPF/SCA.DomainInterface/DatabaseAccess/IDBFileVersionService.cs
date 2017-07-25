@@ -205,6 +205,30 @@ namespace SCA.Interface.DatabaseAccess
         int DeleteDeviceByIDForControllerType8036(int id);
         int GetMaxDeviceIDForControllerType8036();
         #endregion
+        #region 8053控制器器件信息
+
+        bool CreateTableForDeviceInfoOfControllerType8053();
+        bool AddDeviceForControllerType8053(LoopModel loop);
+        int AddDeviceForControllerType8053(DeviceInfo8053 deviceInfo);
+        /// <summary>
+        /// 读取器件信息时，为器件信息关联手动盘信息
+        /// </summary>
+        /// <param name="loop">器件所在的回路</param>
+        /// <param name="dictDeviceMappingManualControlBoard">手动盘信息</param>
+        /// <returns></returns>
+        bool GetDevicesByLoopForControllerType8053(ref LoopModel loop, Dictionary<string, string> dictDeviceMappingManualControlBoard);
+        /// <summary>
+        /// 读取器件信息
+        /// </summary>
+        /// <param name="loop">器件所在的回路</param>
+        /// <returns>已添加器件信息的回路</returns>
+        LoopModel GetDevicesByLoopForControllerType8053(LoopModel loop);
+        int DeleteAllDevicesByControllerIDForControllerType8053(int id);
+        int DeleteDeviceByIDForControllerType8053(int id);
+        int GetMaxDeviceIDForControllerType8053();
+        #endregion
+
+
         #region 控制器信息读取等操作
         int AddController(ControllerModel controller);
         int DeleteController(int controllerID);

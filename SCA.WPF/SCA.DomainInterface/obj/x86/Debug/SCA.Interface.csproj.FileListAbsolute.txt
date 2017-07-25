@@ -58,3 +58,4 @@ E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DomainInterface\bin\x86\Debug\SCA.Model.pdb
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DomainInterface\obj\x86\Debug\SCA.Interface.csprojResolveAssemblyReference.cache
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DomainInterface\obj\x86\Debug\SCA.DomainInterface.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DomainInterface\obj\x86\Debug\SCA.DomainInterface.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DomainInterface\bin\x86\Debug\log4net.dll

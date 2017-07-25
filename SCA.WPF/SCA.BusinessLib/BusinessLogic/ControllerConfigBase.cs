@@ -17,7 +17,7 @@ namespace SCA.BusinessLib.BusinessLogic
     public abstract class ControllerConfigBase
     {   
         private string _compatibleSoftwareVersionForExcelTemplate = "4.0"; //EXCEL导入模板的兼容软件版本
-        private string _compatibleControllerTypeForExcelTemplate = "NT8001,NT8036,NT8021,NT8007,FT8000,FT8003";//EXCEL导入模板兼容的控制器类型
+        private string _compatibleControllerTypeForExcelTemplate = "NT8001,NT8036,NT8021,NT8007,FT8000,FT8003,NT8053";//EXCEL导入模板兼容的控制器类型
         private string _summarySheetNameForExcelTemplate = "摘要信息";  //EXCEL导入模板的摘要页签名称
         private  Dictionary<Model.ControllerType, string>  _controllerTablesName ;//{ get; set; }
         
@@ -34,6 +34,7 @@ namespace SCA.BusinessLib.BusinessLogic
             _controllerTablesName.Add(Model.ControllerType.FT8000, "系统设置;文件配置;位置信息;设备种类;器件组态;");
             _controllerTablesName.Add(Model.ControllerType.NT8001, "系统设置;文件配置;位置信息;设备种类;器件组态;网络手控盘;通用组态;混合组态;");
             _controllerTablesName.Add(Model.ControllerType.NT8036, "系统设置;文件配置;位置信息;设备种类;器件组态;");
+            _controllerTablesName.Add(Model.ControllerType.NT8053, "系统设置;文件配置;位置信息;设备种类;器件组态;网络手控盘;通用组态;混合组态;");
             return _controllerTablesName;    
         }
         

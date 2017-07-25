@@ -7,6 +7,8 @@ using SCA.Interface;
 using System.Data.SQLite;
 using System.Data;
 using System.Collections;
+using Neat.Dennis.Common.LoggerManager;
+using System.Reflection;
 namespace SCA.DatabaseAccess
 {
     /* ==============================
@@ -20,6 +22,7 @@ namespace SCA.DatabaseAccess
     */
     public class SQLiteDatabaseAccess:IDatabaseService
     {
+        private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Object _locker = new Object(); //并行锁        
         private SQLiteConnection _db = null;
         private ILogRecorder _logRecorder; //日志处理
@@ -102,7 +105,7 @@ namespace SCA.DatabaseAccess
             }
             catch (Exception ex)
             {
-                _logRecorder.WriteException(ex);
+                logger.Error(ex.Message, ex);
                 return null;
             }       
         }
@@ -175,30 +178,24 @@ namespace SCA.DatabaseAccess
                 }
                 try
                 {
-                    Console.WriteLine("tryExecute");
                     cmd.Transaction = DbTrans;
                     num = cmd.ExecuteNonQuery();
                     DbTrans.Commit();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("first:"+e.Message);
+                    logger.Error(e.Message, e);
                     DbTrans.Rollback();
                     num = -1;
-                    this._logRecorder.WriteException(e);
-                    Console.Write(_logRecorder.GetType().ToString());
-                    
                 }
-                //finally
-                //{
-                //    conn.Close();
-                //    conn.Dispose();
-                //}
+                finally
+                {
+                    conn.Close();
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Second"+e.Message);
-                _logRecorder.WriteException(e);
+                logger.Error(ex.Message, ex);
             }
             finally
             {

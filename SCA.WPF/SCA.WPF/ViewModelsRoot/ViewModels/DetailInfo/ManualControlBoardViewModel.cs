@@ -150,11 +150,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "DeviceCode":
-                        rule = dictMessage["DeviceCode"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.DeviceCode.ToString()))
+                        if (!string.IsNullOrEmpty(this.DeviceCode))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceCode.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                 }

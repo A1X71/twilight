@@ -35,6 +35,8 @@ namespace SCA.BusinessLib.BusinessLogic
                     return new ControllerConfig8021();  
                 case ControllerType.NONE:
                     return new ControllerConfigNone();
+                case ControllerType.NT8053:
+                    return new ControllerConfig8053();
             }
             return null;            
         }

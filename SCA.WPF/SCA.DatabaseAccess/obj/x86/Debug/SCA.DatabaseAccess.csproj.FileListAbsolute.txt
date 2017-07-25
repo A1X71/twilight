@@ -146,3 +146,4 @@ E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\x86\Debug\System.Windows.
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\x86\Debug\SCA.DatabaseAccess.csprojResolveAssemblyReference.cache
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\x86\Debug\SCA.DatabaseAccess.dll
 E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\x86\Debug\SCA.DatabaseAccess.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\x86\Debug\log4net.dll

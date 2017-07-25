@@ -38,6 +38,7 @@ namespace SCA.BusinessLib.BusinessLogic
             AddController(ControllerType.FT8000, new ControllerOperation8000(dbService));
             AddController(ControllerType.FT8003, new ControllerOperation8003(dbService));
             AddController(ControllerType.NT8021, new ControllerOperation8021(dbService));
+            AddController(ControllerType.NT8053, new ControllerOperation8053(dbService));
         }
         public bool AddController(ControllerType key, IControllerOperation val)
         {

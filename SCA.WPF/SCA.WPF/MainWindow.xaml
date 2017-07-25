@@ -45,7 +45,13 @@
 
             </view:DeviceInfo8021View>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type viewModel:DeviceInfo8053ViewModel}">
+            <view:DeviceInfo8053View DataContext="{Binding}">
+
+            </view:DeviceInfo8053View>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type viewModel:LinkageConfigStandardViewModel}">
             <view:LinkageConfigStandardView  DataContext="{Binding}">
 

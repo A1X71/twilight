@@ -1044,5 +1044,47 @@ namespace SCA.DatabaseAccess.DBContext
         {
             throw new NotImplementedException();
         }
+
+
+        public bool CreateTableForDeviceInfoOfControllerType8053()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddDeviceForControllerType8053(LoopModel loop)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool GetDevicesByLoopForControllerType8053(ref LoopModel loop, Dictionary<string, string> dictDeviceMappingManualControlBoard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LoopModel GetDevicesByLoopForControllerType8053(LoopModel loop)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteAllDevicesByControllerIDForControllerType8053(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteDeviceByIDForControllerType8053(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetMaxDeviceIDForControllerType8053()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public int AddDeviceForControllerType8053(DeviceInfo8053 deviceInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

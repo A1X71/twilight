@@ -32,6 +32,8 @@ namespace SCA.DatabaseAccess.DBContext
                     return new Device8003DBService(dbFileVersionService);
                 case ControllerType.NT8021:
                     return new Device8021DBService(dbFileVersionService);
+                case ControllerType.NT8053:
+                    return new Device8053DBService(dbFileVersionService);
             }
             return null;
         }
