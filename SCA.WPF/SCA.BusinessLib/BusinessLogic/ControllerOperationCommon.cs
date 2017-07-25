@@ -235,5 +235,11 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+
+        public List<Model.DeviceType> GetAllDeviceTypeOfController(Model.ControllerModel controller)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

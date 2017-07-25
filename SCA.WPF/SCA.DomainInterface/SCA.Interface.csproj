@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{565EB552-E694-4CB9-9CCD-0714A759134F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SCA.Interface</RootNamespace>
+    <AssemblyName>SCA.DomainInterface</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessLogic\IDBFileVersionConverter.cs" />
+    <Compile Include="BusinessLogic\ILinkageConfigGeneralService.cs" />
+    <Compile Include="BusinessLogic\ILinkageConfigMixedService.cs" />
+    <Compile Include="BusinessLogic\ILinkageConfigStandardService.cs" />
+    <Compile Include="BusinessLogic\IManualControlBoardService.cs" />
+    <Compile Include="ControllerCommunication\ICom.cs" />
+    <Compile Include="ControllerCommunication\IControllerRunner.cs" />
+    <Compile Include="ControllerCommunication\IProtocolCommand.cs" />
+    <Compile Include="ControllerCommunication\IProtocolDriver.cs" />
+    <Compile Include="ControllerCommunication\IRunDevice.cs" />
+    <Compile Include="DatabaseAccess\IControllerDBService.cs" />
+    <Compile Include="DatabaseAccess\IDBFileVersionService.cs" />
+    <Compile Include="DatabaseAccess\IDeviceDBService.cs" />
+    <Compile Include="DatabaseAccess\IDeviceTypeDBService.cs" />
+    <Compile Include="DatabaseAccess\ILinkageConfigGeneralDBService.cs" />
+    <Compile Include="DatabaseAccess\ILinkageConfigMixedDBService.cs" />
+    <Compile Include="DatabaseAccess\ILinkageConfigStandardDBService.cs" />
+    <Compile Include="DatabaseAccess\ILoopDBService.cs" />
+    <Compile Include="DatabaseAccess\IManualControlBoardDBService.cs" />
+    <Compile Include="DatabaseAccess\IOldVersionSoftwareDBService.cs" />
+    <Compile Include="DatabaseAccess\IProjectDBService.cs" />
+    <Compile Include="Handler.cs" />
+    <Compile Include="ICom.cs" />
+    <Compile Include="IControllerCommunication.cs" />
+    <Compile Include="IControllerConfig.cs" />
+    <Compile Include="IControllerManager.cs" />
+    <Compile Include="BusinessLogic\IControllerOperation.cs" />
+    <Compile Include="DatabaseAccess\IDatabaseService.cs" />
+    <Compile Include="BusinessLogic\IDeviceService.cs" />
+    <Compile Include="IExcelService.cs" />
+    <Compile Include="IFileService.cs" />
+    <Compile Include="ILinkageConfig.cs" />
+    <Compile Include="ILogRecorder.cs" />
+    <Compile Include="BusinessLogic\ILoopService.cs" />
+    <Compile Include="BusinessLogic\IProjectService.cs" />
+    <Compile Include="BusinessLogic\IProjectManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIWPF\IDeviceInfoViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SCA.Model\SCA.Model.csproj">
+      <Project>{0e23cc32-8681-4607-8a02-73e3319f797f}</Project>
+      <Name>SCA.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

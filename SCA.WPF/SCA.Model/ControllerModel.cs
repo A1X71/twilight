@@ -260,6 +260,7 @@ namespace SCA.Model
         FT8000=5,
         FT8003=6,
         UNCOMPATIBLE=7, //非兼容控制器类型
+        NT8053 = 8,
         NONE=0
     }
 

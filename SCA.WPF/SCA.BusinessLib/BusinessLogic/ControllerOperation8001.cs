@@ -374,6 +374,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 simulatorDevice.ZoneNo = d.ZoneNo;
                 simulatorDevice.FloorNo = d.FloorNo;
                 simulatorDevice.Loop = d.Loop;
+                simulatorDevice.Disable = d.Disable;
+                simulatorDevice.Location = d.Location;
                 i++;
                 lstDeviceSimulator.Add(simulatorDevice);
             }
@@ -2052,6 +2054,29 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
                 return dictDeviceTypeStatistic;                      
         }
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8001 config = new ControllerConfig8001();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8001> lstDistinceInfo = loop.GetDevices<DeviceInfo8001>().Distinct(new CollectionEqualityComparer<DeviceInfo8001>((x, y) => x.TypeCode == y.TypeCode)).ToList();                        
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
+
+
         //public event Action<int> UpdateProgressBarEvent;
         //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
         //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;

@@ -1,0 +1,50 @@
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.Model.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.Model.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.csprojResolveAssemblyReference.cache
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.Model.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.Model.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.csprojResolveAssemblyReference.cache
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll.config
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.pdb
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\EntityFramework.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\EntityFramework.xml
+C:\Users\william\Desktop\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\EntityFramework.SqlServer.xml
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll.config
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.dll
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\4 Project\NT8001SeriesControllerAssistant\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\X64\SQLite.Interop.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\X86\SQLite.Interop.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll.config
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.DatabaseAccess.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\Caliburn.Micro.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\Caliburn.Micro.Platform.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.Model.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\System.Windows.Interactivity.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.DomainInterface.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\SCA.Model.pdb
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\Caliburn.Micro.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\Caliburn.Micro.Platform.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\System.Data.SQLite.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\bin\Debug\System.Windows.Interactivity.xml
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.csprojResolveAssemblyReference.cache
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.dll
+E:\Program\6 Git\TRIFLE\SCA.WPF\SCA.DatabaseAccess\obj\Debug\SCA.DatabaseAccess.pdb

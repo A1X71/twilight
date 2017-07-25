@@ -693,7 +693,27 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return dictDeviceTypeStatistic;
         }
-
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8021 config = new ControllerConfig8021();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8021> lstDistinceInfo = loop.GetDevices<DeviceInfo8021>().Distinct(new CollectionEqualityComparer<DeviceInfo8021>((x, y) => x.TypeCode == y.TypeCode)).ToList();
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
 
         public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
         {

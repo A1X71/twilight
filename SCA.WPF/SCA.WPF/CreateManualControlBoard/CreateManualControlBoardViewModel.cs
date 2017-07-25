@@ -100,27 +100,22 @@ namespace SCA.WPF.CreateManualControlBoard
                 return _subBoardList;
             }
         }
- //       public static readonly RoutedEvent AddMoreLineClickEvent = EventManager.RegisterRoutedEvent(
- //     "AddMoreLineClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ManualControlBoardView)
- //);
- //       public event RoutedEventHandler AddMoreLineClick
- //       {
- //           add { AddHandler(AddMoreLineClickEvent, value); }
- //           remove { RemoveHandler(AddMoreLineClickEvent, value); }
- //       }
-        public ICommand AddMoreLineCommand
+
+        public ICommand ConfirmCommand
         {
-            get { return new SCA.WPF.Utility.RelayCommand(AddMoreLineExecute, null); }
+            get { return new SCA.WPF.Utility.RelayCommand(ConfirmExecute, null); }
         }
-        public void AddMoreLineExecute()
+        public ICommand CloseCommand
+        {
+            get { return new SCA.WPF.Utility.RelayCommand(CloseExecute, null); }
+        }
+        public void ConfirmExecute()
         {
             
             object [] numbers = new object[5];
             numbers[0] = BoardNo;
             numbers[1] = SubBoardStartNo;
-            numbers[2] = SubBoardEndNo;
-            
-            //EventMediator.Register("AddMoreLines", AddMoreLines);
+            numbers[2] = SubBoardEndNo;     
             if (Key64)
             {
                 numbers[3] = 64;
@@ -129,12 +124,11 @@ namespace SCA.WPF.CreateManualControlBoard
             {
                 numbers[3] = KeyNoAmount;
             }
-            EventMediator.NotifyColleagues("ManualControlBoardAddMoreLines", numbers);
-            //SCA.WPF.Infrastructure.EventMediator.Register("", RefreshData);
-            //List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
-            //lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
-          // NavigatingViewModel.UpdateControllerInfo((ControllerModel)((RoutedEventArgs)o).OriginalSource);
-           // SetNavigatingViewModel(lstProject);
+            EventMediator.NotifyColleagues("ManualControlBoardAddMoreLines", numbers);       
+        }
+        public void CloseExecute()
+        {
+            EventMediator.NotifyColleagues("ManualControlBoardAddMoreLines", null);
         }
         
     }

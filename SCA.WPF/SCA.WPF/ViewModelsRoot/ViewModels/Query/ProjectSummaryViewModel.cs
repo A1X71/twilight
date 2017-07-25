@@ -1626,20 +1626,22 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         }
        
     }
-    /// <summary>
-    /// 输入器件查询类型
-    /// </summary>
-    enum QueryType
-    { 
-        QueryByLoop=0,
-        QueryByBuildingNo = 1,
-        QueryByType = 2,
-        QueryByLoopAndBuildingNo=3,
-        QueryByLoopAndType = 4,
-        QueryByBuildingNoAndType = 5,        
-        QueryByLoopAndBuildingNoAndType = 6,
-        QueryByNothing=7,        
-    }
+
+    //public enum QueryType
+    //{
+    //    QueryByLoop = 0,
+    //    QueryByBuildingNo = 1,
+    //    QueryByType = 2,
+    //    QueryByLoopAndBuildingNo = 3,
+    //    QueryByLoopAndType = 4,
+    //    QueryByBuildingNoAndType = 5,
+    //    QueryByLoopAndBuildingNoAndType = 6,
+    //    QueryByNothing = 7,
+    //    QueryByDeviceCode = 8,
+    //    QueryByLoopAndDeviceCode = 9,
+    //    QueryByTypeAndDeviceCode = 10,
+    //    QueryByLoopAndTypeAndDeviceCode = 11,
+    //}
     /// <summary>
     /// 任意楼，区，层查询枚举
     /// </summary>

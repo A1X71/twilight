@@ -917,13 +917,27 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return dictDeviceTypeStatistic;
         }
-        //public event Action<int> UpdateProgressBarEvent;
-
-        //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
-
-        //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
-
-        //public event Action<string> ReadingExcelErrorEvent;
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8036 config = new ControllerConfig8036();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8036> lstDistinceInfo = loop.GetDevices<DeviceInfo8036>().Distinct(new CollectionEqualityComparer<DeviceInfo8036>((x, y) => x.TypeCode == y.TypeCode)).ToList();
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
 
 
         public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)

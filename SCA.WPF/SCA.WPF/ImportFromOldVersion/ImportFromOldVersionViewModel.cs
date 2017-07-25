@@ -10,8 +10,6 @@ using SCA.Model;
 using SCA.Interface;
 using SCA.Interface.DatabaseAccess;
 using SCA.WPF.Utility;
-using SCA.DatabaseAccess;
-using SCA.DatabaseAccess.DBContext;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLogic;
 using SCA.BusinessLib.Utility;
