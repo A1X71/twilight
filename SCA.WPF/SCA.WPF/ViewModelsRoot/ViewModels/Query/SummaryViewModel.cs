@@ -310,6 +310,45 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                             iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
                         }
                         #endregion
+                        #region 8053
+
+                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
+                        {
+                            //下传所有回路信息
+                            foreach (var l in TheController.Loops)
+                            {
+                                iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                                ((ControllerType8053)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8053>();
+                                iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+                                iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                            }
+
+                            //下传所有标准组态信息
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            ((ControllerType8053)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
+                            iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+
+                            //下传所有混合组态信息
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            ((ControllerType8053)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
+                            iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+
+                            //下传所有通用组态信息
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            ((ControllerType8053)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
+                            iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+
+                            //下传所有网络手动盘信息
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            ((ControllerType8053)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
+                            iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                        }
+
+                        #endregion 
 
                     }
                 }
@@ -382,6 +421,17 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                         {
                             List<DeviceInfo8021> lstDevicesInfo = new List<DeviceInfo8021>();                            
                             ((ControllerType8021)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;                            
+                            iCC.TheController = TheController;
+                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+                            iCC.AllDataUploadedEvent += UploadedFinished;
+                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+                        }
+                        #endregion
+                        #region 8053
+                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
+                        {
+                            List<DeviceInfo8053> lstDevicesInfo = new List<DeviceInfo8053>();
+                            ((ControllerType8053)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
                             iCC.TheController = TheController;
                             iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
                             iCC.AllDataUploadedEvent += UploadedFinished;

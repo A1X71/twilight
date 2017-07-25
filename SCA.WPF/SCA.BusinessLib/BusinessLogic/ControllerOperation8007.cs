@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Collections.Generic;
 using SCA.Interface;
 using SCA.BusinessLib.Utility;
@@ -594,29 +595,78 @@ namespace SCA.BusinessLib.BusinessLogic
                         IEnumerable<DeviceInfo8007> lstDistinceInfo = loop.GetDevices<DeviceInfo8007>().Distinct(new CollectionEqualityComparer<DeviceInfo8007>((x, y) => x.TypeCode == y.TypeCode)).ToList();
 
                         int deviceCountInLoop = loop.GetDevices<DeviceInfo8007>().Count;
-                        int deviceCountInStatistic = 0;
+                        //int deviceCountInStatistic = 0;
                         foreach (var device in lstDistinceInfo)
                         {
                             DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                            int typeCount = loop.GetDevices<DeviceInfo8007>().Count((d) => d.TypeCode == dType.Code);
-                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                            deviceCountInStatistic += typeCount;
-                            if (deviceCountInStatistic == deviceCountInLoop)
+                            int typeCount = loop.GetDevices<DeviceInfo8007>().Count((d) => d.TypeCode == dType.Code); //记录器件类型的数量
+                            if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                             {
-                                break;
-                            }
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }         
+
+                            //deviceCountInStatistic += typeCount;
+                            //if (deviceCountInStatistic == deviceCountInLoop)
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }
             }
             return dictDeviceTypeStatistic;
         }
-        //public event System.Action<int> UpdateProgressBarEvent;
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8007 config = new ControllerConfig8007();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8007> lstDistinceInfo = loop.GetDevices<DeviceInfo8007>().Distinct(new CollectionEqualityComparer<DeviceInfo8007>((x, y) => x.TypeCode == y.TypeCode)).ToList();
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
 
-        //public event System.Action<ControllerModel, string> ReadingExcelCompletedEvent;
 
-        //public event System.Action<ControllerModel, string> ReadingExcelCancelationEvent;
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        {
+            throw new NotImplementedException();
+        }
 
-        //public event System.Action<string> ReadingExcelErrorEvent;
+
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, ControllerModel controller)
+        {
+            ControllerModel controllerInfo = controller;
+            List<LoopModel> lstLoopInfo = dbFileVersionService.GetLoopsByController(controller);
+            StringBuilder sbQuerySQL = new StringBuilder();  
+            //(1)回路及器件
+            foreach (var l in lstLoopInfo)//回路信息
+            {
+                LoopModel loop = l;
+                dbFileVersionService.GetDevicesByLoopForControllerType8007(ref loop);//为loop赋予“器件信息”
+                loop.Controller = controllerInfo;
+                controllerInfo.Loops.Add(loop);
+            }
+            //(2)标准组态
+            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig(controller);
+            foreach (var l in lstStandard)
+            {
+                LinkageConfigStandard standardConfig = l;
+                standardConfig.Controller = controllerInfo;
+                controllerInfo.StandardConfig.Add(standardConfig);
+            }
+            return controllerInfo;
+        }
     }
 }

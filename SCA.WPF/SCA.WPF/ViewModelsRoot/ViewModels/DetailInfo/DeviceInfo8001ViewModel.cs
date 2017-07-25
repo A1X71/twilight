@@ -25,6 +25,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     public class EditableDeviceInfo8001 : DeviceInfo8001, IEditableObject, System.ComponentModel.IDataErrorInfo
     {
         public event ItemEndEditEventHandler ItemEndEdit;
+
         public EditableDeviceInfo8001()
         {
 
@@ -102,6 +103,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private bool inEdit;
         public void BeginEdit()
         {
+            
             if (inEdit) return;
             inEdit = true;
             backupCopy = this.MemberwiseClone() as EditableDeviceInfo8001;

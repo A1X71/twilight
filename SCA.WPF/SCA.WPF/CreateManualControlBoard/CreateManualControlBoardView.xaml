@@ -105,8 +105,8 @@
                           />
             </DockPanel>
             <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Margin="15,15,15,15"  Orientation="Horizontal" HorizontalAlignment="Center"  VerticalAlignment="Stretch">
-                <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Right" Command="{Binding Path=AddMoreLineCommand}" TabIndex="140" Width="64"/>
-                <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
+                <Button Content="_确定" x:Name="ConfirmButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Right" Command="{Binding Path=ConfirmCommand}" TabIndex="140" Width="64"/>
+                <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60"  Command="{Binding Path=CloseCommand}"/>
             </StackPanel>
         </Grid>
         <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" VerticalAlignment="Bottom" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>

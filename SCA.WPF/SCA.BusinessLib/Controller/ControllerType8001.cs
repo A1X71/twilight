@@ -580,8 +580,8 @@ namespace SCA.BusinessLib.Controller
                 sendData[7] = Convert.ToByte(0x13);　//器件总数
                 sendData[8] = Convert.ToByte(singleDevInfo.Loop.Controller.MachineNumber);　//控制器号
                 sendData[9] = Convert.ToByte(singleDevInfo.Loop.Code);　//回路号
-                sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Controller.MachineNumber.Length + singleDevInfo.Loop.Code.Length, 3));　//地编号
-
+                sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Code.Length, 3));　//地编号
+                //singleDevInfo.Loop.Controller.MachineNumber.Length + 
                 sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable==true?1:0) * 4 + singleDevInfo.SensitiveLevel-1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
 
                 //GetDevType(CInt(leixing)) * 8 + geli * 4
@@ -1889,7 +1889,7 @@ namespace SCA.BusinessLib.Controller
 
         protected override void SetDownloadedDeviceInfoTotalAmountInCurrentLoop(LoopModel loopModel)
         {
-            throw new NotImplementedException();
+            DownloadedDeviceInfoTotalAmountInCurrentLoop = loopModel.GetDevices<DeviceInfo8001>().Count; //设置当前回路的器件总数2017-04-06
         }
 
         public override ControllerModel GetControllerUploadedInfo()

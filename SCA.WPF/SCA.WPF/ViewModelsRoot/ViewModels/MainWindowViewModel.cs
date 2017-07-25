@@ -49,6 +49,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         private DeviceInfo8000ViewModel _deviceInfoViewModel8000;
         private DeviceInfo8003ViewModel _deviceInfoViewModel8003;
         private DeviceInfo8021ViewModel _deviceInfoViewModel8021;
+        private DeviceInfo8053ViewModel _deviceInfoViewModel8053;
 
         private LinkageConfigStandardViewModel _linkageConfigStandardViewModel;                
         private LinkageConfigGeneralViewModel _linkageConfigGeneralViewModel;
@@ -127,6 +128,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             _deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
             _deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
             _deviceInfoViewModel8021 =new DeviceInfo8021ViewModel();
+            _deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
             _defaultViewModel = new DefaultViewModel();
 
             _linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
@@ -292,6 +294,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     _deviceInfoViewModel8021.DeviceInfoObservableCollection = new EditableDeviceInfo8021Collection(loop, loop.GetDevices<DeviceInfo8021>());
                     CurrentView = _deviceInfoViewModel8021;
                     break;
+                case ControllerType.NT8053:
+                    _deviceInfoViewModel8053.TheLoop = loop;
+                    _deviceInfoViewModel8053.DeviceInfoObservableCollection = new EditableDeviceInfo8053Collection(loop, loop.GetDevices<DeviceInfo8053>());
+                    CurrentView = _deviceInfoViewModel8053;
+                    break;
             }
         }
 
@@ -333,12 +340,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
 
         public ICommand NavigatorUserControl_StartCommunicationCommand
         {
-            get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StartCommunicationExecute, Navigation_StartCommunicationCommand_CanExecute); }
+            //get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StartCommunicationExecute, Navigation_StartCommunicationCommand_CanExecute); }
+            get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StartCommunicationExecute, null); }
         }
 
         public ICommand NavigatorUserControl_StopCommunicationCommand
         {
-            get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StopCommunicationExecute, Navigation_StopCommunicationCommand_CanExecute); }
+            //get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StopCommunicationExecute, Navigation_StopCommunicationCommand_CanExecute); }
+            get { return new SCA.WPF.Utility.RelayCommand<object>(NavigatorUserControl_StopCommunicationExecute, null); }
         }
         public ICommand NavigatorUserControl_MergeForControllerCommand
         {

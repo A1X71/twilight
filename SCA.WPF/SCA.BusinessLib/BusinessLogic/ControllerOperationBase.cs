@@ -9,7 +9,9 @@ using SCA.Interface;
 using SCA.Model;
 using SCA.Model.BusinessModel;
 using SCA.BusinessLib.Utility;
+using SCA.BusinessLogic;
 using SCA.Interface.DatabaseAccess;
+
 //using Ookii.Dialogs.Wpf;
 /* ==============================
 *
@@ -41,11 +43,11 @@ namespace SCA.BusinessLib.BusinessLogic
         
         }
 
-        protected List<Model.LoopModel> GetLoopInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldDBService)
-        {
-            return oldDBService.GetLoopsInfo();
+        //protected List<Model.LoopModel> GetLoopInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldDBService)
+        //{
+        //    return oldDBService.GetLoopsInfo();
             
-        }
+        //}
         /// <summary>
         /// 将字符型联动类型转换为枚举值 
         /// </summary>
@@ -162,10 +164,14 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
                 ILogRecorder logger = null;
-                IDatabaseService _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(controller.Project.SavePath, logger, _fileService);
-                IControllerDBService controllerDBService = new SCA.DatabaseAccess.DBContext.ControllerDBService(_databaseService);
-                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(_databaseService);
-                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(controller.Type, _databaseService);
+                //IDatabaseService _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(controller.Project.SavePath, logger, _fileService);
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(controller.Project.SavePath, logger, _fileService);
+                IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                
+
+                IControllerDBService controllerDBService = new SCA.DatabaseAccess.DBContext.ControllerDBService(dbFileVersionService);
+                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(dbFileVersionService);
+                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(controller.Type, dbFileVersionService);
                 deviceDBService.DeleteAllDevicesByControllerID(controller.ID);
                 loopDBService.DeleteLoopsByControllerID(controller.ID);
                 controllerDBService.DeleteController(controller.ID);

@@ -98,6 +98,16 @@ namespace SCA.Model
                             lstDeviceNo.Add(DeviceNo7);
                             lstDeviceNo.Add(DeviceNo8);
                             break;
+                    case ControllerType.NT8053:
+                            lstDeviceNo.Add(DeviceNo1);
+                            lstDeviceNo.Add(DeviceNo2);
+                            lstDeviceNo.Add(DeviceNo3);
+                            lstDeviceNo.Add(DeviceNo4);
+                            lstDeviceNo.Add(DeviceNo5);
+                            lstDeviceNo.Add(DeviceNo6);
+                            lstDeviceNo.Add(DeviceNo7);
+                            lstDeviceNo.Add(DeviceNo8);
+                            break;
                 }
                 
                 return lstDeviceNo;
@@ -145,6 +155,16 @@ namespace SCA.Model
                         DeviceNo4 = lstDeviceNo[3];
                         break;
                     case ControllerType.FT8000:
+                        DeviceNo1 = lstDeviceNo[0];
+                        DeviceNo2 = lstDeviceNo[1];
+                        DeviceNo3 = lstDeviceNo[2];
+                        DeviceNo4 = lstDeviceNo[3];
+                        DeviceNo5 = lstDeviceNo[4];
+                        DeviceNo6 = lstDeviceNo[5];
+                        DeviceNo7 = lstDeviceNo[6];
+                        DeviceNo8 = lstDeviceNo[7];
+                        break;
+                    case ControllerType.NT8053:
                         DeviceNo1 = lstDeviceNo[0];
                         DeviceNo2 = lstDeviceNo[1];
                         DeviceNo3 = lstDeviceNo[2];

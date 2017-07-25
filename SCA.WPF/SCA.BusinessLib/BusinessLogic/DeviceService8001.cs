@@ -6,6 +6,7 @@ using SCA.Interface;
 using SCA.Interface.DatabaseAccess;
 using SCA.DatabaseAccess.DBContext;
 using SCA.Model;
+using SCA.BusinessLogic;
 
 /* ==============================
 *
@@ -157,10 +158,9 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
                 ILogRecorder logger = null;
-                IDatabaseService _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(TheLoop.Controller.Project.SavePath, logger, _fileService);
-
-                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, _databaseService);
-
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheLoop.Controller.Project.SavePath, logger, _fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, _dbFileVersionService);
                 if (deviceDBService.DeleteDeviceByID(id))
                 {
                     if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8001 == id) //如果最大ID等于被删除的ID，则重新赋值

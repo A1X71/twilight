@@ -262,6 +262,11 @@ namespace SCA.BusinessLib.BusinessLogic
                             iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
                             iCC.TheControllerType.Status = ControllerStatus.DataSending;
                             break;
+                        case ControllerType.NT8053:
+                            ((ControllerType8000)iCC.TheControllerType).StandardLinkageConfigList = lstLinkageConfigStandard;
+                            iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                            break;
                         default:
                             iCC.TheControllerType.Status = ControllerStatus.DataSended;// 没有控制器可以处理此信息，将控制器置于数据发送完成状态
                             break;

@@ -48,6 +48,12 @@ namespace SCA.Model
         /// 控制器范围
         /// </summary>
         public ControllerScope Scope { get; set; }
+        public bool? Disable
+        {
+            get;
+            set;
+        }
+        public string Location { get; set; }
         
     }
    /// <summary>

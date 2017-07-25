@@ -133,11 +133,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 switch (columnName)
                 {
                     case "Code":
-                        rule = dictMessage["Code"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.Code.ToString()))
+                        if(!string.IsNullOrEmpty(this.Code))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Code"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.Code.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     //case "ActionCoefficient":
@@ -149,7 +152,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     //    }
                     //    break;
                     case "LinkageNo1":
-                        if (this.LinkageNo1.ToString() != "")
+                        if (!string.IsNullOrEmpty(this.LinkageNo1))
                         { 
                             rule = dictMessage["Code"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
@@ -160,7 +163,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "LinkageNo2":
-                        if (this.LinkageNo2.ToString() != "")
+                        if (!string.IsNullOrEmpty(this.LinkageNo2))
                         {
                             rule = dictMessage["Code"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
@@ -171,7 +174,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "LinkageNo3":
-                        if (this.LinkageNo3.ToString() != "")
+                        if (!string.IsNullOrEmpty(this.LinkageNo3))
                         {
                             rule = dictMessage["Code"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);

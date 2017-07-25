@@ -123,9 +123,31 @@ namespace SCA.BusinessLib.BusinessLogic
             //set sdpkey=xianggh,xianggh= (Round((xianggh/756)+.4999999)-1),panhao=IIF(Round(((xianggh/63))+.4999999)>12,Round(((xianggh/63))+.4999999)-12,Round(((xianggh/63))+.4999999)),jianhao=IIF((xianggh Mod 63)=0,63,xianggh Mod 63)
             throw new NotImplementedException();
         }
-        public Model.ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService databaseService)
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService,ControllerModel controller)
         {
-            throw new NotImplementedException();
+            ControllerModel controllerInfo = controller;     
+            List<LoopModel> lstLoopInfo = dbFileVersionService.GetLoopsByController(controller);
+            StringBuilder sbQuerySQL = new StringBuilder();
+            //set sdpkey=xianggh,xianggh= (Round((xianggh/756)+.4999999)-1),panhao=IIF(Round(((xianggh/63))+.4999999)>12,Round(((xianggh/63))+.4999999)-12,Round(((xianggh/63))+.4999999)),jianhao=IIF((xianggh Mod 63)=0,63,xianggh Mod 63)
+    
+            //(1)回路及器件
+            foreach (var l in lstLoopInfo)//回路信息
+            {
+                LoopModel loop = l;
+                dbFileVersionService.GetDevicesByLoopForControllerType8000(ref loop);//为loop赋予“器件信息”
+                loop.Controller = controllerInfo;
+                controllerInfo.Loops.Add(loop);
+            }
+            //(2)标准组态
+            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig(controller);
+            foreach (var l in lstStandard)
+            {
+                LinkageConfigStandard standardConfig = l;
+                standardConfig.Controller = controllerInfo;
+                controllerInfo.StandardConfig.Add(standardConfig);
+            }       
+            
+            return controllerInfo;
         }
 
         public Model.ControllerType GetControllerType()
@@ -601,22 +623,51 @@ namespace SCA.BusinessLib.BusinessLogic
                         IEnumerable<DeviceInfo8000> lstDistinceInfo = loop.GetDevices<DeviceInfo8000>().Distinct(new CollectionEqualityComparer<DeviceInfo8000>((x, y) => x.TypeCode == y.TypeCode)).ToList();
 
                         int deviceCountInLoop = loop.GetDevices<DeviceInfo8000>().Count;
-                        int deviceCountInStatistic = 0;
+                       // int deviceCountInStatistic = 0;
                         foreach (var device in lstDistinceInfo)
                         {
                             DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                            int typeCount = loop.GetDevices<DeviceInfo8000>().Count((d) => d.TypeCode == dType.Code);
-                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                            deviceCountInStatistic += typeCount;
-                            if (deviceCountInStatistic == deviceCountInLoop)
+                            int typeCount = loop.GetDevices<DeviceInfo8000>().Count((d) => d.TypeCode == dType.Code); //记录器件类型的数量
+                            if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                             {
-                                break;
-                            }
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }         
+                            //deviceCountInStatistic += typeCount;
+                            //if (deviceCountInStatistic == deviceCountInLoop)
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }
             }
             return dictDeviceTypeStatistic;
+        }
+
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8000 config = new ControllerConfig8000();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8000> lstDistinceInfo = loop.GetDevices<DeviceInfo8000>().Distinct(new CollectionEqualityComparer<DeviceInfo8000>((x, y) => x.TypeCode == y.TypeCode)).ToList();
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        {
+            throw new NotImplementedException();
         }
     }
 }

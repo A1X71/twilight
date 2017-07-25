@@ -64,4 +64,6 @@ SCA.DatabaseAccess/SCA.DatabaseAccess.csproj
 SCA.DatabaseAccess/SCA.DatabaseAccess.csproj.user
 SCA.DomainInterface/SCA.Interface.csproj
 SCA.DomainInterface/SCA.Interface.csproj.user
+SCA.DatabaseAccess/obj/x86/Debug/
+SCA.WPF/NT8001SeriesControllerAssistantSetup/
 

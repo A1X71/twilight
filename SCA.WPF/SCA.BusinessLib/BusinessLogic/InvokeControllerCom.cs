@@ -59,6 +59,7 @@ namespace SCA.BusinessLib.BusinessLogic
             dictControllerCom.TryAdd(ControllerType.FT8003, new ControllerType8003(m_SerialComManager, m_protocolDriver));
             dictControllerCom.TryAdd(ControllerType.FT8000, new ControllerType8000(m_SerialComManager, m_protocolDriver));
             dictControllerCom.TryAdd(ControllerType.NT8021, new ControllerType8021(m_SerialComManager, m_protocolDriver));
+            dictControllerCom.TryAdd(ControllerType.NT8053, new ControllerType8053(m_SerialComManager, m_protocolDriver));
         }
         /// <summary>
         /// 获取当前实例
@@ -160,6 +161,12 @@ namespace SCA.BusinessLib.BusinessLogic
                 case ControllerType.NT8021:
                     //  _controllerType = TheControllerType;
                     dictControllerCom.TryGetValue(ControllerType.NT8021, out _controllerType);
+                    _controllerType.ControllerModel = TheControllerType.ControllerModel;
+                    TheControllerType = _controllerType;
+                    break;
+                case ControllerType.NT8053:
+                    //  _controllerType = TheControllerType;
+                    dictControllerCom.TryGetValue(ControllerType.NT8053, out _controllerType);
                     _controllerType.ControllerModel = TheControllerType.ControllerModel;
                     TheControllerType = _controllerType;
                     break;
@@ -328,6 +335,15 @@ namespace SCA.BusinessLib.BusinessLogic
                             case ControllerType.NT8021: //未测试
                                 {
                                     ((ControllerType8021)TheControllerType).GetControllerUploadedInfo();
+                                    if (AllDataUploadedEvent != null)
+                                    {
+                                        AllDataUploadedEvent(TheControllerType.ControllerModel);
+                                    }
+                                }
+                                break;
+                            case ControllerType.NT8053:
+                                {
+                                    ((ControllerType8053)TheControllerType).GetControllerUploadedInfo();
                                     if (AllDataUploadedEvent != null)
                                     {
                                         AllDataUploadedEvent(TheControllerType.ControllerModel);

@@ -89,7 +89,7 @@ namespace SCA.Model
         /// 8000控制器中需要在此录入
         /// 应用BoardNo,SubBoardNo,KeyNo计算出来的值
         /// </summary>
-        public int sdpKey { get; set; }
+        public string sdpKey { get; set; }
         /// <summary>
         /// 区号
         /// </summary>

@@ -140,10 +140,11 @@
                         
                         
 
-                    <dg:DataGridTextColumn Width="Auto" 
+                    <!--目前不需要此字段，暂时屏蔽 2017-07-21
+                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="特性" 
                                        Binding="{Binding Path=Feature}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>                    
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->                    
                     <!--<dg:DataGridTextColumn Width="Auto" 
                                        Header="屏蔽" 
                                        Binding="{Binding Path=Disable , ValidatesOnDataErrors=True}" 

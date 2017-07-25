@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SCA.Interface;
+using SCA.Interface.DatabaseAccess;
+using SCA.BusinessLogic;
 using SCA.Model;
 using System.Collections.ObjectModel;
 /* ==============================
@@ -110,6 +112,32 @@ namespace SCA.BusinessLib.BusinessLogic
                 return false;
             }
             return true;
+        }
+        private bool DeleteDeviceFromDB(int id)
+        {
+            try
+            {
+                IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
+                ILogRecorder logger = null;
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheLoop.Controller.Project.SavePath, logger, _fileService);
+                IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, dbFileVersionService);
+
+                if (deviceDBService.DeleteDeviceByID(id))
+                {
+                    if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8036 == id) //如果最大ID等于被删除的ID，则重新赋值
+                    {
+                        ControllerOperation8036 controllerOperation = new ControllerOperation8036();
+                        BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8036 = controllerOperation.GetMaxDeviceID();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+
         }
         private int GetMaxCode()
         {

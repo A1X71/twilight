@@ -116,11 +116,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 {
      
                     case "Code":
-                        rule = dictMessage["Code"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.Code.ToString()))
+                        if(!string.IsNullOrEmpty(this.Code))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Code"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.Code.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     //case "ActionCoefficient":
@@ -132,83 +135,113 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     //    }
                     //    break;
                     case "BuildingNoA":
-                        rule = dictMessage["Building"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.BuildingNoA.ToString()))
+                        if (this.BuildingNoA != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Building"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.BuildingNoA.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "ZoneNoA":
-                        rule = dictMessage["Zone"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.ZoneNoA.ToString()))
+                        if (this.ZoneNoA != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Zone"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.ZoneNoA.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "LayerNoA1":
-                        rule = dictMessage["FloorNo"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.LayerNoA1.ToString()))
+                        if (this.LayerNoA1 != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["FloorNo"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.LayerNoA1.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "LayerNoA2":
-                        rule = dictMessage["FloorNo"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.LayerNoA2.ToString()))
+                        if (this.LayerNoA2 != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["FloorNo"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.LayerNoA2.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "MachineNoC":
-                        rule = dictMessage["MachineNo"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.MachineNoC.ToString()))
+                        if (!string.IsNullOrEmpty(this.MachineNoC))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["MachineNo"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.MachineNoC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "LoopNoC":
-                        rule = dictMessage["Loop"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.LoopNoC.ToString()))
+                        if (!string.IsNullOrEmpty(this.LoopNoC))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Loop"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.LoopNoC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "DeviceCodeC":
-                        rule = dictMessage["Device"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.DeviceCodeC.ToString()))
+                        if (!string.IsNullOrEmpty(this.DeviceCodeC))
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Device"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceCodeC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "BuildingNoC":
-                        rule = dictMessage["Building"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.BuildingNoC.ToString()))
+                        if (this.BuildingNoC != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Building"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.BuildingNoC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "ZoneNoC":
-                        rule = dictMessage["Zone"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.ZoneNoC.ToString()))
+                        if (this.ZoneNoC != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["Zone"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.ZoneNoC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "LayerNoC":
-                        rule = dictMessage["FloorNo"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.LayerNoC.ToString()))
+                        if (this.LayerNoC != null)
                         {
-                            errorMessage = rule.ErrorMessage;
+                            rule = dictMessage["FloorNo"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.LayerNoC.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                 }

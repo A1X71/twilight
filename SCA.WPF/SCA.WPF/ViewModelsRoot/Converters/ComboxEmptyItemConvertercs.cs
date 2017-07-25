@@ -18,10 +18,11 @@ using System.Globalization;
 */
 namespace SCA.WPF.ViewModelsRoot.Converters
 {
-    ///注意：Combox需要指定DisplayMemberPath.如果此属性未设置，Empty item将默认显示为ToString()值
+    
+    /// 注意（仅供参考）：Combox需要指定DisplayMemberPath.如果此属性未设置，Empty item将默认显示为ToString()值
     ///     如在EmptyItem中重写ToString()方法，将无法应用在int,double,bool中。可用DisplayMemberpath作为另一种选项
-    ///     为以为combobox建立一个itemtemplate
-    ///     SelectedValuePath同样需要设定，由于EmptyItem总是返回null,此属性必须可为空.如果为primitive或struct时，此值
+    ///     为combobox建立一个itemtemplate
+    ///     同样需要设置SelectedValuePath属性，由于EmptyItem总是返回"未选择“,此属性必须可为空.如果为primitive或struct时，此值
     ///     的设置不会更新至source.
     ///     以上两种弊端可能过在SelectedValue属性中增加一个“ValueConvert”解决，此Convert有能力将null值转换为默认值。
     /// <summary>
@@ -30,32 +31,28 @@ namespace SCA.WPF.ViewModelsRoot.Converters
     public class ComboxEmptyItemConverters:IValueConverter
     {
         /// <summary>
-        /// this object is the empty item in the combobox. A dynamic object that
-        /// returns null for all property request.
+        /// 空条目
         /// </summary>
         private class EmptyItem : DynamicObject
         {
             public override bool TryGetMember(GetMemberBinder binder, out object result)
             {
-                // just set the result to null and return true
-                result = "--未选择--";
-                //result =null;
+                //设置为“未选择”
+                result = "--未选择--";                
                 return true;
             }
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // assume that the value at least inherits from IEnumerable
-            // otherwise we cannot use it.
+            //value必须为IEnumerable类型
             IEnumerable container = value as IEnumerable;
             if (container != null)
-            {
-                // everything inherits from object, so we can safely create a generic IEnumerable
+            {                   
                 IEnumerable<object> genericContainer = container.OfType<object>();
-                // create an array with a single EmptyItem object that serves to show en empty line
+                //创建“--未选择--”条目
                 IEnumerable<object> emptyItem = new object[] { new EmptyItem() };
-                // use Linq to concatenate the two enumerable
+                // 应用LINQ连接两个IEnumerable
                 return emptyItem.Concat(genericContainer);
             }
             return value;
@@ -70,27 +67,19 @@ namespace SCA.WPF.ViewModelsRoot.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IEnumerable container = value as IEnumerable;
-            if (container != null)
-            {
-                // everything inherits from object, so we can safely create a generic IEnumerable
-                IEnumerable<object> genericContainer = container.OfType<object>();
-                // create an array with a single EmptyItem object that serves to show en empty line
-                
-                // use Linq to concatenate the two enumerable
-                string s = "welcome";
-            }
             return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString() != "--未选择--")
-            {
-                return value;
+            if (value != null)
+            { 
+                if (value.ToString() != "--未选择--")
+                {
+                    return value;
+                }
             }
-            return 9999;
-            //throw new NotImplementedException();
+            return 9999;            
         }
     }
     public class DeviceTypeConverter : IValueConverter

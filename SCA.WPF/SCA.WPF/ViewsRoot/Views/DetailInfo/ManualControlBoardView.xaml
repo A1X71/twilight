@@ -17,8 +17,9 @@
             <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
         </Grid.Resources>
         <StackPanel>
-            <Grid  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300">
+            <Grid  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" x:Name="ToolBar">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -72,6 +73,9 @@
                 <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
                 </Button>
+                <Button Grid.Column="7" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent" Command="{Binding Path=SelectDeviceCommand}">
+                                        
+                </Button>
 
             </Grid>
             <local:DetailInfoGridControl x:Name="DataGrid_ManualBoard" 
@@ -79,14 +83,13 @@
                      IsSynchronizedWithCurrentItem="True" 
                      Background="Transparent"
                      RowHeaderWidth="25"
-                     RowHeight="40"                     
+                     RowHeight="40"      
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
-                     AlternationCount="2"
+                     AlternationCount="2"                                         
                      SelectionUnit="CellOrRowHeader"                 
                      ItemsSource="{Binding Path=ManualControlBoardInfoObservableCollection}">
-                <local:DetailInfoGridControl.Resources>
-                    
+                <local:DetailInfoGridControl.Resources>                    
                     <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
                         <Style.Triggers>
                             <Trigger Property="Validation.HasError" Value="True">
@@ -125,18 +128,25 @@
                                        Binding="{Binding Path=KeyNo,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                            EditingElementStyle="{StaticResource errorStyle}"
-                                           />
-                    <dg:DataGridTextColumn Width="*" 
-                                       Header="地编号" 
-                                       Binding="{Binding Path=DeviceCode,ValidatesOnDataErrors=True}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"
-                                           EditingElementStyle="{StaticResource errorStyle}"
-                                           />
-
+                                           />                 
+                    <dg:DataGridTemplateColumn Width="*"   
+                                       Header="器件编号"                         
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=DeviceCode}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectDeviceCommand,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>                                    
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>                        
+                    </dg:DataGridTemplateColumn>
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
         </StackPanel>
         <View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.CreateManualControlBoardVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
+        <View:DeviceItemSelectorView DataContext="{Binding Path=DeviceItemSelectorVM}" x:Name="DeviceItemSelector" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.DeviceItemSelectorVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
         
     </Grid>
 </UserControl>

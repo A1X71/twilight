@@ -101,125 +101,129 @@ namespace SCA.BusinessLib.BusinessLogic
         //    {
         //        _progressBarCancelFlag = value;
         //    }
-        //}
-        public Model.ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldDBService)
+        //}    
+               
+        public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, ControllerModel controller)
         {
-            ControllerModel controllerInfo = new ControllerModel();
-            try
+            ControllerModel controllerInfo = controller;
+
+            List<LoopModel> lstLoopInfo = dbFileVersionService.GetLoopsByController(controller);
+            StringBuilder sbQuerySQL = new StringBuilder();
+            
+            //(1)网络手动盘       
+            Dictionary<string, string> dictDeviceMappingManualControlBoard = new Dictionary<string, string>();//存储器件编码与手控盘编号的对应关系，将此关系存储在回路信息中
+            List<ManualControlBoard> lstBoard = dbFileVersionService.GetManualControlBoard(controller);
+            foreach (var r in lstBoard)
             {
-                //ControllerConfigBase configBase = new ControllerConfigBase();
-                
-                //8021,8036默认为8
-                //8000,8001,8003默认为7
-                //根据当前读到的版本需要进行判断                                
-                //在版本6时，在每个回路表中增加了“特性”字段，需要更新特性字段的值
-       
-                //#通用组态更新“器件类型A”，“器件类型C”
-                //带“点动”字样的为大数，需要-64
-                //带“自动”字样的不需要改变
-
-                //#混合组态更新“器件类型A",“器件类型B",“器件类型C"
-                //更新逻辑同上
-
-                //controllerInfo.ID = 
-                controllerInfo.Name = "OldVersion";
-                controllerInfo.Project = null;                
-                controllerInfo.Type = ControllerType.NT8001;
-                controllerInfo.PrimaryFlag = false;
-                controllerInfo.LoopAddressLength = 2;
-                //select deviceCode from deviceInfo8001 a left join controllerboard b 
-                //where  a.devicecode =b.devicecode and a.controllerID=b.controllerID
-                //a.deviceInfo.cmb=
-                bool blnPostponingSetDeviceAddressLength = false;//器件长度延后设置标置 
-
-                if (oldDBService.Version < 5)
-                {                     
-                    //在版本5之前（not includ），8001器件长度固定为7     
-                    controllerInfo.DeviceAddressLength = 7;                    
-                }
-                else if (oldDBService.Version == 5)
-                {
-                    //在版本5时，在数据表中增加了“器件长度”字段，可以根据"器件长度”取得当前的器件长度，默认值为7
-                    //由于 “器件长度”可通过后续的器件编码来判断，不需重读数据文件，延后设置
-                    blnPostponingSetDeviceAddressLength = true;
-
-                }
-                else if (oldDBService.Version == 6)
-                {
-                    blnPostponingSetDeviceAddressLength = true;                    
-                }
- 
-                List<LoopModel> lstLoopInfo = GetLoopInfoFromOldVersionSoftwareDataFile(oldDBService);                
-                StringBuilder sbQuerySQL = new StringBuilder();
-                //set sdpkey=xianggh,xianggh= (Round((xianggh/756)+.4999999)-1),panhao=IIF(Round(((xianggh/63))+.4999999)>12,Round(((xianggh/63))+.4999999)-12,Round(((xianggh/63))+.4999999)),jianhao=IIF((xianggh Mod 63)=0,63,xianggh Mod 63)
-                //(1)网络手动盘            
-
-                
-                Dictionary<string, string> dictDeviceMappingManualControlBoard = new Dictionary<string, string>();//存储器件编码与手控盘编号的对应关系，将此关系存储在回路信息中
-                List<ManualControlBoard> lstBoard=oldDBService.GetManualControlBoard();
-                foreach (var r in lstBoard)
-                {
-                    dictDeviceMappingManualControlBoard.Add(r.DeviceCode.ToString(), r.Code.ToString());
-                    ManualControlBoard board = r;
-                    board.Controller = controllerInfo;
-                    controllerInfo.ControlBoard.Add(board);
-                }
-                
-                //(2)回路及器件
-                foreach  (var l in lstLoopInfo)//回路信息
-                {
-                    LoopModel loop = l;
-                    
-                    oldDBService.GetDevicesInLoop(ref loop, dictDeviceMappingManualControlBoard); //为loop赋予“器件信息”
-                    loop.Controller = controllerInfo;
-                    
-                    if (blnPostponingSetDeviceAddressLength)//设置控制器的“地址长度”
-                    {
-                        controllerInfo.DeviceAddressLength = oldDBService.DeviceAddressLength;
-                        blnPostponingSetDeviceAddressLength = false;
-                    }
-                    controllerInfo.Loops.Add(loop);
-                }
-
-                //(3)标准组态
-                
-                List<LinkageConfigStandard> lstStandard=oldDBService.GetStandardLinkageConfig();
-                foreach (var l in lstStandard)
-                {
-                    LinkageConfigStandard standardConfig = l;
-                    standardConfig.Controller = controllerInfo;
-                    controllerInfo.StandardConfig.Add(standardConfig);
-                }
-
-
-                //(4)混合组态
-                
-                List<LinkageConfigMixed> lstMixedConfig = oldDBService.GetMixedLinkageConfig();
-                foreach (var l in lstMixedConfig)
-                {
-                    LinkageConfigMixed mixedConfig = l;
-                    mixedConfig.Controller = controllerInfo;
-                    controllerInfo.MixedConfig.Add(mixedConfig);
-                }
-
-                //(5)通用组态
-                
-                List<LinkageConfigGeneral> lstGeneral = oldDBService.GetGeneralLinkageConfig();
-                foreach (var l in lstGeneral)
-                {
-                    LinkageConfigGeneral generalConfig = l;
-                    generalConfig.Controller = controllerInfo;
-                    controllerInfo.GeneralConfig.Add(generalConfig);
-                }
-
+                dictDeviceMappingManualControlBoard.Add(r.DeviceCode.ToString(), r.Code.ToString());
+                ManualControlBoard board = r;
+                board.Controller = controllerInfo;
+                controllerInfo.ControlBoard.Add(board);
             }
-            catch
+            //(2)回路及器件
+            foreach (var l in lstLoopInfo)//回路信息
             {
-
-
+                LoopModel loop = l;
+                dbFileVersionService.GetDevicesByLoopForControllerType8001(ref loop, dictDeviceMappingManualControlBoard);//为loop赋予“器件信息”
+                loop.Controller = controllerInfo;
+                controllerInfo.Loops.Add(loop);
             }
+            //(3)标准组态
+            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig(controller);
+            foreach (var l in lstStandard)
+            {
+                LinkageConfigStandard standardConfig = l;
+                standardConfig.Controller = controllerInfo;
+                controllerInfo.StandardConfig.Add(standardConfig);
+            }
+            //(4)混合组态
+            List<LinkageConfigMixed> lstMixedConfig = dbFileVersionService.GetMixedLinkageConfig(controller);
+            foreach (var l in lstMixedConfig)
+            {
+                LinkageConfigMixed mixedConfig = l;
+                mixedConfig.Controller = controllerInfo;
+                controllerInfo.MixedConfig.Add(mixedConfig);
+            }
+            //(5)通用组态
+            List<LinkageConfigGeneral> lstGeneral = dbFileVersionService.GetGeneralLinkageConfig(controller);
+            foreach (var l in lstGeneral)
+            {
+                LinkageConfigGeneral generalConfig = l;
+                generalConfig.Controller = controllerInfo;
+                controllerInfo.GeneralConfig.Add(generalConfig);
+            }
+            //   }
             return controllerInfo;
         }
+        //public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
+        //{ 
+        //        ControllerModel controllerInfo = new ControllerModel();
+        //        controllerInfo.Type = ControllerType.NT8001;
+        //        //ControllerConfigBase configBase = new ControllerConfigBase();                
+        //        //8021,8036默认为8
+        //        //8000,8001,8003默认为7
+        //        //根据当前读到的版本需要进行判断                                
+        //        //在版本6时，在每个回路表中增加了“特性”字段，需要更新特性字段的值       
+        //        //#通用组态更新“器件类型A”，“器件类型C”
+        //        //带“点动”字样的为大数，需要-64
+        //        //带“自动”字样的不需要改变
+        //        //#混合组态更新“器件类型A",“器件类型B",“器件类型C"
+        //        //更新逻辑同上           
+        //        //controllerInfo.DeviceAddressLength
+        //        //dbFileVersionService.GetFileVersionAndControllerType
+        //        //存在只有特定版本才存在的数据结构（如版本5有“器件长度”，版本4没有）
+                
+        //        //if (dbFileVersionService.GetControllerInfo(ref controllerInfo))
+        //        //{ 
+        //            List<LoopModel> lstLoopInfo=null;// = dbFileVersionService.GetLoopsInfo();
+        //            StringBuilder sbQuerySQL = new StringBuilder();
+        //            //set sdpkey=xianggh,xianggh= (Round((xianggh/756)+.4999999)-1),panhao=IIF(Round(((xianggh/63))+.4999999)>12,Round(((xianggh/63))+.4999999)-12,Round(((xianggh/63))+.4999999)),jianhao=IIF((xianggh Mod 63)=0,63,xianggh Mod 63)
+        //            //(1)网络手动盘       
+        //            Dictionary<string, string> dictDeviceMappingManualControlBoard = new Dictionary<string, string>();//存储器件编码与手控盘编号的对应关系，将此关系存储在回路信息中
+        //            List<ManualControlBoard> lstBoard=dbFileVersionService.GetManualControlBoard();
+        //            foreach (var r in lstBoard)
+        //            {
+        //                dictDeviceMappingManualControlBoard.Add(r.DeviceCode.ToString(), r.Code.ToString());
+        //                ManualControlBoard board = r;
+        //                board.Controller = controllerInfo;
+        //                controllerInfo.ControlBoard.Add(board);
+        //            }                
+        //            //(2)回路及器件
+        //            foreach  (var l in lstLoopInfo)//回路信息
+        //            {
+        //                LoopModel loop = l;
+        //                dbFileVersionService.GetDevicesByLoopForControllerType8001(ref loop,dictDeviceMappingManualControlBoard);//为loop赋予“器件信息”
+        //                loop.Controller = controllerInfo;                  
+        //                controllerInfo.Loops.Add(loop);
+        //            }
+        //            //(3)标准组态
+        //            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig();
+        //            foreach (var l in lstStandard)
+        //            {
+        //                LinkageConfigStandard standardConfig = l;
+        //                standardConfig.Controller = controllerInfo;
+        //                controllerInfo.StandardConfig.Add(standardConfig);
+        //            }
+        //            //(4)混合组态
+        //            List<LinkageConfigMixed> lstMixedConfig = dbFileVersionService.GetMixedLinkageConfig();
+        //            foreach (var l in lstMixedConfig)
+        //            {
+        //                LinkageConfigMixed mixedConfig = l;
+        //                mixedConfig.Controller = controllerInfo;
+        //                controllerInfo.MixedConfig.Add(mixedConfig);
+        //            }
+        //            //(5)通用组态
+        //            List<LinkageConfigGeneral> lstGeneral = dbFileVersionService.GetGeneralLinkageConfig();
+        //            foreach (var l in lstGeneral)
+        //            {
+        //                LinkageConfigGeneral generalConfig = l;
+        //                generalConfig.Controller = controllerInfo;
+        //                controllerInfo.GeneralConfig.Add(generalConfig);
+        //            }
+        //     //   }
+        //        return controllerInfo;
+        //}
+        
 
         public Model.ControllerType GetControllerType()
         {
@@ -370,6 +374,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 simulatorDevice.ZoneNo = d.ZoneNo;
                 simulatorDevice.FloorNo = d.FloorNo;
                 simulatorDevice.Loop = d.Loop;
+                simulatorDevice.Disable = d.Disable;
+                simulatorDevice.Location = d.Location;
                 i++;
                 lstDeviceSimulator.Add(simulatorDevice);
             }
@@ -2028,23 +2034,49 @@ namespace SCA.BusinessLib.BusinessLogic
                             IEnumerable<DeviceInfo8001> lstDistinceInfo = loop.GetDevices<DeviceInfo8001>().Distinct(new CollectionEqualityComparer<DeviceInfo8001>((x,y)  => x.TypeCode==y.TypeCode)).ToList();
                                                                                                                                        
                             int deviceCountInLoop = loop.GetDevices<DeviceInfo8001>().Count;
-                            int deviceCountInStatistic = 0;
+                         //   int deviceCountInStatistic = 0;
                             foreach (var device in lstDistinceInfo)
                             {                                 
                                 DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                                int typeCount =  loop.GetDevices<DeviceInfo8001>().Count((d)=>d.TypeCode==dType.Code);
-                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                                deviceCountInStatistic += typeCount;
-                                if (deviceCountInStatistic == deviceCountInLoop)
+                                int typeCount =  loop.GetDevices<DeviceInfo8001>().Count((d)=>d.TypeCode==dType.Code); //记录器件类型的数量
+                                if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                                 {
-                                    break;
+                                    dictDeviceTypeStatistic.Add(dType.Name, typeCount);
                                 }
+                                //deviceCountInStatistic += typeCount;
+                                //if (deviceCountInStatistic == deviceCountInLoop)
+                                //{
+                                //    break;
+                                //}
                             }                            
                         }
                     }
                 }
                 return dictDeviceTypeStatistic;                      
         }
+        public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
+        {
+            List<DeviceType> lstDeviceType = new List<DeviceType>();
+            ControllerConfig8001 config = new ControllerConfig8001();
+            if (controller != null)
+            {
+                if (controller.Loops != null)
+                {
+                    foreach (var loop in controller.Loops)
+                    {
+                        IEnumerable<DeviceInfo8001> lstDistinceInfo = loop.GetDevices<DeviceInfo8001>().Distinct(new CollectionEqualityComparer<DeviceInfo8001>((x, y) => x.TypeCode == y.TypeCode)).ToList();                        
+                        foreach (var device in lstDistinceInfo)
+                        {
+                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
+                            lstDeviceType.Add(dType);
+                        }
+                    }
+                }
+            }
+            return lstDeviceType;
+        }
+
+
         //public event Action<int> UpdateProgressBarEvent;
         //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
         //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
