@@ -84,7 +84,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             {
                 return _navigatingViewModel;
             }
-            
         }
         
         public object CurrentView

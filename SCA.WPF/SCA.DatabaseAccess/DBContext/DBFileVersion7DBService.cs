@@ -1871,5 +1871,6 @@ namespace SCA.DatabaseAccess.DBContext
             }
             return strResult == "" ? 0 : Convert.ToInt32(strResult);
         }
+       
     }
 }

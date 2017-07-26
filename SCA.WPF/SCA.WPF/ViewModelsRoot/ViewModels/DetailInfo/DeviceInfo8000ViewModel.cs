@@ -405,9 +405,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 {
                     if (iCC.TheControllerType.ControllerType == ControllerType.FT8000) //如果控制器类型不相符，则不执行操作
                     {
+
                         List<LoopModel> lstLoopsModel = new List<LoopModel>();
                         lstLoopsModel.Add(TheLoop);
                         ((ControllerType8000)iCC.TheControllerType).Loops = lstLoopsModel;
+
                         iCC.TheControllerType.OperableDataType = OperantDataType.Device;
                         iCC.TheControllerType.Status = ControllerStatus.DataSending;
                         iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
