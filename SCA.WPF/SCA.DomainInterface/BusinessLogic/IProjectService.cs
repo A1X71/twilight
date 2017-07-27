@@ -20,6 +20,7 @@ namespace SCA.Interface
         bool CreateProject(ProjectModel project,IFileService fileService);
         ProjectModel CreateProject(string name, string savePath);
         bool UpdateProject(ProjectModel project);
+        bool SaveProjectName(string name);
         bool DeleteProject(int ProjectId);
         /// <summary>
         /// 打开项目文件
@@ -33,7 +34,7 @@ namespace SCA.Interface
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        bool ExportProject(ProjectModel project);
+        bool ExportProjectToExcel(ProjectModel project);
 
         /// <summary>
         /// 将项目信息保存至文件中
@@ -41,6 +42,6 @@ namespace SCA.Interface
         /// <param name="project"></param>
         /// <returns></returns>
         bool SaveProject(ProjectModel project);
-
+        bool ValidateProjectName(string projName);
     }
 }

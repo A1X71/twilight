@@ -37,10 +37,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         private bool _mixedLinkageSimulatorFlag = false;
         private bool _generalLinkageSimulatorFlag = false;
         private string _saveIconPath = @"Resources/Icon/Style1/save.png";
-        private string _simulatorIconPath = @"Resources/Icon/Style1/simulator.png";
-        
-
+        private string _simulatorIconPath = @"Resources/Icon/Style1/simulator.png";        
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private string _promptInfo = "";        
+
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string SimulatorIconPath { get { return _appCurrentPath + _simulatorIconPath; } }
         //存储摘要信息
@@ -87,6 +87,18 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
+        public string PromptInfo
+        {
+            get
+            {
+                return _promptInfo;
+            }
+            set
+            {
+                _promptInfo = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
                
         public string ProjectName
         {
@@ -102,6 +114,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         }
         private Visibility _simulatorVisibility = Visibility.Collapsed;
         private Visibility _summaryVisibility = Visibility.Visible;
+        private Visibility _promptInfoVisibility = Visibility.Collapsed; //信息提示框可见性
         public Visibility SimulatorVisibility 
         {
             get
@@ -128,6 +141,18 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 NotifyOfPropertyChange("SummaryVisibility");
             }        
         }
+        public Visibility PromptInfoVisibility
+        {
+            get
+            {
+                return _promptInfoVisibility;
+            }
+            set
+            {
+                _promptInfoVisibility = value;
+                NotifyOfPropertyChange("PromptInfoVisibility");
+            }
+        }
         public ICommand SaveProjectInfoCommand
         { 
             get { return new SCA.WPF.Utility.RelayCommand(SaveProjectInfoExecute,null);}
@@ -153,6 +178,31 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
             {
                 return new SCA.WPF.Utility.RelayCommand(RefreshExecute, null); 
             }
+        }
+        public ICommand SaveProjectNameCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveProjectNameExecute, null); 
+            }
+        }
+        public void SaveProjectNameExecute()
+        {
+            ProjectService projectService = new ProjectService();
+            if (projectService.ValidateProjectName(this.ProjectName))
+            {
+                TheProject.Name = this.ProjectName;
+                projectService.SaveProjectName(TheProject.Name);
+                TheProject.IsDirty = true;
+                EventMediator.NotifyColleagues("RefreshNavigator", null);
+
+            }
+            else
+            {
+                this.PromptInfo = "名称长度不符合要求";
+                this.PromptInfoVisibility = Visibility.Visible;
+            }
+            
         }
         public IList<SummaryInfo> SummaryNodes { get { return _summaryNodes ?? (_summaryNodes = new System.Collections.ObjectModel.ObservableCollection<SummaryInfo>()); } }
         public void ToggleSimulatorInfoExecute()

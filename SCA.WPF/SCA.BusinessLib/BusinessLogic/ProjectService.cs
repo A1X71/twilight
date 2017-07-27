@@ -28,83 +28,83 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
         }
                 
-        /// <summary>
-        /// 组织控制器信息
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        private List<ControllerModel> OrganizeControllersInfo(DataTable dt)
-        {
-            List<ControllerModel> lstControllerModel = new List<ControllerModel>();
+        ///// <summary>
+        ///// 组织控制器信息
+        ///// </summary>
+        ///// <param name="dt"></param>
+        ///// <returns></returns>
+        //private List<ControllerModel> OrganizeControllersInfo(DataTable dt)
+        //{
+        //    List<ControllerModel> lstControllerModel = new List<ControllerModel>();
             
-            var rows = from row in dt.AsEnumerable()                      
-                       group row["controllerid"]
-                       by new { id = row["controllerid"], name = row["controllername"],projectID=row["projectID"] } into g
-                       select new
-                       {
-                           Id = g.Key.id,
-                           Name = g.Key.name,
-                           ProjectID=g.Key.projectID
-                       };
+        //    var rows = from row in dt.AsEnumerable()                      
+        //               group row["controllerid"]
+        //               by new { id = row["controllerid"], name = row["controllername"],projectID=row["projectID"] } into g
+        //               select new
+        //               {
+        //                   Id = g.Key.id,
+        //                   Name = g.Key.name,
+        //                   ProjectID=g.Key.projectID
+        //               };
 
-            foreach (var row in rows)
-            {
-                ControllerModel controllerModel = new ControllerModel();
-                controllerModel.ID = Convert.ToInt16(row.Id);
-                controllerModel.Name = row.Name.ToString();
-                controllerModel.ProjectID = Convert.ToInt16(row.ProjectID);
+        //    foreach (var row in rows)
+        //    {
+        //        ControllerModel controllerModel = new ControllerModel();
+        //        controllerModel.ID = Convert.ToInt16(row.Id);
+        //        controllerModel.Name = row.Name.ToString();
+        //        controllerModel.ProjectID = Convert.ToInt16(row.ProjectID);
 
-                OrganizeLoopModel(dt, ref controllerModel);
+        //        OrganizeLoopModel(dt, ref controllerModel);
 
-                OrganizeStandardLinkageConfigModel(dt, ref controllerModel);
+        //        OrganizeStandardLinkageConfigModel(dt, ref controllerModel);
 
-                lstControllerModel.Add(controllerModel);
-            }            
-            return lstControllerModel;
-        }
+        //        lstControllerModel.Add(controllerModel);
+        //    }            
+        //    return lstControllerModel;
+        //}
 //        private List<LoopModel> OrganizeLoopModel(DataTable dt, ref ControllerModel controller)
-        private void  OrganizeLoopModel(DataTable dt,ref ControllerModel controller)
-        {
-            int intControllerID=controller.ID;
-            var rows = from row in dt.AsEnumerable()
-                       where Convert.ToInt16(row["controllerId"]) == intControllerID
-                       group row["loopid"]
-                       by new { id = row["loopid"], name = row["loopname"] } into g
-                       select new
-                       {
-                           Id=g.Key.id,
-                           Name=g.Key.name            
-                       };            
-            foreach (var row in rows)
-            {
-                if (!(row.Id is System.DBNull))
-                { 
-                    LoopModel loop = new LoopModel { ID=Convert.ToInt16(row.Id),Name=(string)row.Name,ControllerID=controller.ID };
-                    controller.Loops.Add(loop);
-                }
-            }            
-        }
-        private void OrganizeStandardLinkageConfigModel(DataTable dt, ref ControllerModel controller)
-        {
-            int intControllerID = controller.ID;
-            var rows = from row in dt.AsEnumerable()
-                       where Convert.ToInt16(row["controllerId"]) == intControllerID
-                       group row["standardID"]
-                       by new { id = row["standardID"], code = row["standardCode"] } into g
-                       select new
-                       {
-                           linkageId = g.Key.id,
-                           linkageCode = g.Key.code
-                       };
-            foreach (var row in rows)
-            {
-                if (!(row.linkageId is System.DBNull))
-                {
-                    LinkageConfigStandard loop = new LinkageConfigStandard { ID = Convert.ToInt16(row.linkageId), Code = row.linkageCode.ToString(), ControllerID = controller.ID };
-                    controller.StandardConfig.Add(loop);
-                }
-            }
-        }
+        //private void  OrganizeLoopModel(DataTable dt,ref ControllerModel controller)
+        //{
+        //    int intControllerID=controller.ID;
+        //    var rows = from row in dt.AsEnumerable()
+        //               where Convert.ToInt16(row["controllerId"]) == intControllerID
+        //               group row["loopid"]
+        //               by new { id = row["loopid"], name = row["loopname"] } into g
+        //               select new
+        //               {
+        //                   Id=g.Key.id,
+        //                   Name=g.Key.name            
+        //               };            
+        //    foreach (var row in rows)
+        //    {
+        //        if (!(row.Id is System.DBNull))
+        //        { 
+        //            LoopModel loop = new LoopModel { ID=Convert.ToInt16(row.Id),Name=(string)row.Name,ControllerID=controller.ID };
+        //            controller.Loops.Add(loop);
+        //        }
+        //    }            
+        //}
+        //private void OrganizeStandardLinkageConfigModel(DataTable dt, ref ControllerModel controller)
+        //{
+        //    int intControllerID = controller.ID;
+        //    var rows = from row in dt.AsEnumerable()
+        //               where Convert.ToInt16(row["controllerId"]) == intControllerID
+        //               group row["standardID"]
+        //               by new { id = row["standardID"], code = row["standardCode"] } into g
+        //               select new
+        //               {
+        //                   linkageId = g.Key.id,
+        //                   linkageCode = g.Key.code
+        //               };
+        //    foreach (var row in rows)
+        //    {
+        //        if (!(row.linkageId is System.DBNull))
+        //        {
+        //            LinkageConfigStandard loop = new LinkageConfigStandard { ID = Convert.ToInt16(row.linkageId), Code = row.linkageCode.ToString(), ControllerID = controller.ID };
+        //            controller.StandardConfig.Add(loop);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 将项目信息保存至文件中
@@ -116,13 +116,24 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
 
         }
-
+        public bool SaveProjectName(string name)
+        {
+            try
+            {
+                ProjectManager.GetInstance.Project.Name = name;
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         /// <summary>
         /// 将项目文件发布为EXCEL文档
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public bool ExportProject(ProjectModel project)
+        public bool ExportProjectToExcel(ProjectModel project)
         {
             /*
              * Excel导出规则 
@@ -207,7 +218,7 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        private bool ValidateProjectName(string projName)
+        public bool ValidateProjectName(string projName)
         {
             if (projName != null)
             {
@@ -265,5 +276,6 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
     }
 }

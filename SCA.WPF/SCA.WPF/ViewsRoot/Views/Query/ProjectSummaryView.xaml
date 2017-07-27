@@ -152,12 +152,16 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0"  Style="{StaticResource Label}" >工程名称：</Label>
-            <TextBox x:Name="ProjectNameInputTextBox" Grid.Column="1" Grid.Row="0"  Text="{Binding Path=ProjectName,Mode=OneWay}"/>
+            <TextBox x:Name="ProjectNameInputTextBox" Grid.Column="1" Grid.Row="0"  Text="{Binding Path=ProjectName,Mode=TwoWay}"/>
+            <Button Grid.Column="2" Grid.Row="0" Command="{Binding SaveProjectNameCommand}">保存</Button>
+            <Label Content="{Binding PromptInfo}" Foreground="Red" Visibility="{Binding PromptInfoVisibility}"/>
         </Grid>
         <Grid x:Name="SummaryInfo" Visibility="{Binding Path=SummaryVisibility}">            
             <TreeView x:Name="list" ItemsSource="{Binding SummaryNodes }"  BorderThickness="2" >
