@@ -82,8 +82,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void BeginEdit()
         {
-            string str = "new string";
-            
             //throw new System.NotImplementedException();
         }
 

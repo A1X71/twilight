@@ -40,7 +40,7 @@
                 <Image Source="../../../Resources/Icon/Style1/c_upload.png" ToolTip="上传"/>
             </Button>
         </Grid>
-        <Grid >
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="100"/>

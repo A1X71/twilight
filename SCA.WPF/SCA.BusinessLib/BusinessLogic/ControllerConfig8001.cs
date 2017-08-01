@@ -72,17 +72,145 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[13];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "输出组号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "联动模块1";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "联动模块2";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "联动模块3";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "联动模块4";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "联动模块5";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "联动模块6";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "联动模块7";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "联动模块8";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "动作常数";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "联动组1";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "联动组2";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "联动组3";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetGeneralLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[15];
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName =  "编号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName =  "动作常数";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName =  "A楼号";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName =  "A区号";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName =  "A层号1";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName =  "A层号2";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName =  "类型A";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName =  "C分类";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName =  "C楼号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName =  "C区号";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName =  "C层号";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName =  "C机号";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName =  "C回路号";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName =  "C编号";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName =  "C类型";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetMixedLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[25];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "动作常数";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "动作类型";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "A分类";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "A楼号";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "A区号";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "A层号";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "A路号";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "A编号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "A类型";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "B分类";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "B楼号";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "B区号";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "B层号";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "B路号";
+            columnDefinitionArray[15] = new ColumnConfigInfo();
+            columnDefinitionArray[15].ColumnName = "B编号";
+            columnDefinitionArray[16] = new ColumnConfigInfo();
+            columnDefinitionArray[16].ColumnName = "B类型";
+            columnDefinitionArray[17] = new ColumnConfigInfo();
+            columnDefinitionArray[17].ColumnName = "C分类";
+            columnDefinitionArray[18] = new ColumnConfigInfo();
+            columnDefinitionArray[18].ColumnName = "C楼号";
+            columnDefinitionArray[19] = new ColumnConfigInfo();
+            columnDefinitionArray[19].ColumnName = "C区号";
+            columnDefinitionArray[20] = new ColumnConfigInfo();
+            columnDefinitionArray[20].ColumnName = "C层号";
+            columnDefinitionArray[21] = new ColumnConfigInfo();
+            columnDefinitionArray[21].ColumnName = "C机号";
+            columnDefinitionArray[22] = new ColumnConfigInfo();
+            columnDefinitionArray[22].ColumnName = "C回路号";
+            columnDefinitionArray[23] = new ColumnConfigInfo();
+            columnDefinitionArray[23].ColumnName = "C编号";
+            columnDefinitionArray[24] = new ColumnConfigInfo();
+            columnDefinitionArray[24].ColumnName = "C类型";
+            return columnDefinitionArray;
+        }
+
+        public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[5];
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "板卡号";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "手盘号";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "手键号";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "地编号";
+
+            return columnDefinitionArray;
         }
         /// <summary>
         /// 取得器件类型信息
@@ -400,7 +528,25 @@ namespace SCA.BusinessLib.BusinessLogic
             return dictExpressionAndInfo;
         
         }
+        public Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictControllerInfoRE = new Dictionary<string, RuleAndErrorMessage>();
+            //名称
+            dictControllerInfoRE.Add("Name", new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF()（）]{0,16}$", "允许填写”中文字符、英文字符、阿拉伯数字、圆括号”,最大长度16个字符"));
+            if (deviceAddressLength == 7)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{2}$", "请填写2位数字"));
+            }
+            else if (deviceAddressLength == 8)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{3}$", "请填写3位数字"));
+            }
 
+            return dictControllerInfoRE;
+
+        }
 
         public short GetMaxAmountForMixedLinkageConfig()
         {

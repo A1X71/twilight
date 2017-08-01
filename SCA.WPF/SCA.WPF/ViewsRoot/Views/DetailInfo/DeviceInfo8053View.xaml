@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
+             xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -106,6 +108,16 @@
                                                ItemsSource="{Binding Source={StaticResource TypesCollection}}"
                                                >
                     </dg:DataGridComboBoxColumn>
+                    <dg:DataGridComboBoxColumn Header="特性" SelectedItemBinding="{Binding Path=Feature}" >
+                        <dg:DataGridComboBoxColumn.ItemsSource>
+                            <col:ArrayList>
+                                <sys:Int16>0</sys:Int16>
+                                <sys:Int16>1</sys:Int16>
+                                <sys:Int16>2</sys:Int16>
+                                <sys:Int16>3</sys:Int16>
+                            </col:ArrayList>
+                        </dg:DataGridComboBoxColumn.ItemsSource>
+                    </dg:DataGridComboBoxColumn>
                     <dg:DataGridCheckBoxColumn Header="屏蔽" 
                                                Binding="{Binding Path=Disable,ValidatesOnDataErrors=True}" 
                                                />
@@ -120,13 +132,8 @@
                                            EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
-                                       Header="报警浓度" 
-                                       Binding="{Binding Path=AlertValue,ValidatesOnDataErrors=True}" 
-                                       EditingElementStyle="{StaticResource errorStyle}"
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
-                    <dg:DataGridTextColumn 
-                                       Header="预警浓度" 
-                                       Binding="{Binding Path=ForcastValue,ValidatesOnDataErrors=True}" 
+                                       Header="输出组3" 
+                                       Binding="{Binding Path=LinkageGroup3,ValidatesOnDataErrors=True}" 
                                            EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 

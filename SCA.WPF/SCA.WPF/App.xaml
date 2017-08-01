@@ -16,6 +16,6 @@
                  <!--Use the Black skin by default-->                
                 <ResourceDictionary Source="pack://application:,,,/SCA.WPF;component/Resources/Skins/Black/BlackResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        </ResourceDictionary>         
     </Application.Resources>
 </Application>

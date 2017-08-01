@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SCA.Interface;
-using SCA.Model;
 using System.Data;
+using System.Collections.Generic;
+using SCA.Model;
+using SCA.Interface;
+using SCA.Model.BusinessModel;
+using SCA.BusinessLib.Utility;
 using SCA.Interface.DatabaseAccess;
 namespace SCA.BusinessLib.BusinessLogic
 {
@@ -26,85 +28,8 @@ namespace SCA.BusinessLib.BusinessLogic
         public IEnumerable<Model.ProjectModel> GetProjects()
         {
             throw new NotImplementedException();
-        }
-                
-        /// <summary>
-        /// 组织控制器信息
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        private List<ControllerModel> OrganizeControllersInfo(DataTable dt)
-        {
-            List<ControllerModel> lstControllerModel = new List<ControllerModel>();
-            
-            var rows = from row in dt.AsEnumerable()                      
-                       group row["controllerid"]
-                       by new { id = row["controllerid"], name = row["controllername"],projectID=row["projectID"] } into g
-                       select new
-                       {
-                           Id = g.Key.id,
-                           Name = g.Key.name,
-                           ProjectID=g.Key.projectID
-                       };
+        }                
 
-            foreach (var row in rows)
-            {
-                ControllerModel controllerModel = new ControllerModel();
-                controllerModel.ID = Convert.ToInt16(row.Id);
-                controllerModel.Name = row.Name.ToString();
-                controllerModel.ProjectID = Convert.ToInt16(row.ProjectID);
-
-                OrganizeLoopModel(dt, ref controllerModel);
-
-                OrganizeStandardLinkageConfigModel(dt, ref controllerModel);
-
-                lstControllerModel.Add(controllerModel);
-            }            
-            return lstControllerModel;
-        }
-//        private List<LoopModel> OrganizeLoopModel(DataTable dt, ref ControllerModel controller)
-        private void  OrganizeLoopModel(DataTable dt,ref ControllerModel controller)
-        {
-            int intControllerID=controller.ID;
-            var rows = from row in dt.AsEnumerable()
-                       where Convert.ToInt16(row["controllerId"]) == intControllerID
-                       group row["loopid"]
-                       by new { id = row["loopid"], name = row["loopname"] } into g
-                       select new
-                       {
-                           Id=g.Key.id,
-                           Name=g.Key.name            
-                       };            
-            foreach (var row in rows)
-            {
-                if (!(row.Id is System.DBNull))
-                { 
-                    LoopModel loop = new LoopModel { ID=Convert.ToInt16(row.Id),Name=(string)row.Name,ControllerID=controller.ID };
-                    controller.Loops.Add(loop);
-                }
-            }            
-        }
-        private void OrganizeStandardLinkageConfigModel(DataTable dt, ref ControllerModel controller)
-        {
-            int intControllerID = controller.ID;
-            var rows = from row in dt.AsEnumerable()
-                       where Convert.ToInt16(row["controllerId"]) == intControllerID
-                       group row["standardID"]
-                       by new { id = row["standardID"], code = row["standardCode"] } into g
-                       select new
-                       {
-                           linkageId = g.Key.id,
-                           linkageCode = g.Key.code
-                       };
-            foreach (var row in rows)
-            {
-                if (!(row.linkageId is System.DBNull))
-                {
-                    LinkageConfigStandard loop = new LinkageConfigStandard { ID = Convert.ToInt16(row.linkageId), Code = row.linkageCode.ToString(), ControllerID = controller.ID };
-                    controller.StandardConfig.Add(loop);
-                }
-            }
-        }
 
         /// <summary>
         /// 将项目信息保存至文件中
@@ -116,68 +41,223 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
 
         }
+        public bool SaveProjectName(string name)
+        {
+            try
+            {
+                ProjectManager.GetInstance.Project.Name = name;
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// 生成EXCEL文件摘要信息页
+        /// </summary>
+        /// <param name="excelService"></param>
+        /// <param name="sheetNames"></param>
+        /// <returns></returns>
+        protected  bool GenerateExcelSummarySheet(ProjectModel project,ref IExcelService excelService, out List<string> sheetNames)
+        {
+            List<string> lstSheetNames = new List<string>();
+            try
+            {
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = 2;
+                lstMergeCellRange.Add(mergeCellRange);
 
+                const int Loop_Amount_Per_Sheet = 8;
+                ControllerManager controllerManager = new ControllerManager();
+                controllerManager.InitializeAllControllerOperation(null);
+                List<SummaryInfo> lstSummaryInfo = new List<SummaryInfo>();
+                lstSheetNames.Add("项目摘要");
+                foreach (var controller in project.Controllers)
+                {
+                    IControllerOperation controllerOperation = controllerManager.GetController(controller.Type);
+                    //取控制器摘要信息逻辑
+                    SummaryInfo controllerSummary = controllerOperation.GetSummaryNodes(controller, 2);
+                    controllerSummary.Name += "-机号:" + controller.MachineNumber;
+                    lstSummaryInfo.Add(controllerSummary);
+                    int loopSheetAmount = Convert.ToInt32(Math.Ceiling((float)controller.Loops.Count / Loop_Amount_Per_Sheet));
+                    for (int i = 0; i < loopSheetAmount; i++)
+                    {
+                        lstSheetNames.Add(controller.Name + "-回路分组" + (i+1).ToString());
+                    }
+                    if (controller.StandardConfig.Count > 0)
+                    {
+                        lstSheetNames.Add(controller.Name + "-标准组态");
+                    }
+                    if (controller.MixedConfig.Count > 0)
+                    {
+                        lstSheetNames.Add(controller.Name + "-混合组态");
+                    }
+                    if (controller.GeneralConfig.Count > 0)
+                    {
+                        lstSheetNames.Add(controller.Name + "-通用组态");
+                    }
+                    if (controller.ControlBoard.Count > 0)
+                    {
+                        lstSheetNames.Add(controller.Name + "-网络手动盘");
+                    }
+                }
+                excelService.CreateExcelSheets(lstSheetNames);                
+
+                ControllerOperationCommon controllerOperator = new ControllerOperationCommon();
+                controllerOperator.SetDefaultExcelStyle(ref excelService);//取得默认EXCEL样式                
+
+                excelService.RowHeight = (short)20;//到下一个高度设置前，使用该高度
+                excelService.SetCellValue(lstSheetNames[0], 0, 0, project.Name, CellStyleType.Caption);
+                excelService.RowHeight = (short)15;
+                int startRowIndex = 1;//开始行
+                int endRowIndex = 0;//结束行
+                foreach (var info in lstSummaryInfo)
+                {
+                    endRowIndex++;
+                    //info.name格式：summary.Name = "控制器:控制器名(控制器类型,器件长度)-机号:001";                    
+                    startRowIndex = endRowIndex;
+                    string strControllerName = "";
+                    string strControllerType = "";
+                    string strControllerDeviceAddressLength = "";
+                    string strControllerMachineNumber = "";
+                    int startIndex = info.Name.IndexOf(':')+1;
+                    int endIndex = info.Name.IndexOf('[');
+                    if (startIndex < endIndex)
+                    {
+                        strControllerName = info.Name.Substring(startIndex, endIndex - startIndex);
+                    }
+                    startIndex = info.Name.IndexOf('[')+1;
+                    endIndex = info.Name.IndexOf(',');
+                    if (startIndex < endIndex)
+                    {
+                        strControllerType = info.Name.Substring(startIndex, endIndex - startIndex);
+                    }
+
+                    startIndex = info.Name.IndexOf(',') + 1;
+                    endIndex = info.Name.IndexOf(']');
+                    if (startIndex < endIndex)
+                    {
+                        strControllerDeviceAddressLength = info.Name.Substring(startIndex, endIndex - startIndex);
+                    }
+                    startIndex = info.Name.LastIndexOf(':')+1;
+                    if (startIndex != -1)
+                    {
+                        strControllerMachineNumber = info.Name.Substring(startIndex);
+                    }
+                    
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 0, strControllerName, CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 1, "类型", CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 2, strControllerType, CellStyleType.Data);
+                    endRowIndex++;
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 0, null, CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 1, "机号", CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 2, strControllerMachineNumber, CellStyleType.Data);
+                    endRowIndex++;
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 0, null, CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 1, "器件长度", CellStyleType.Data);
+                    excelService.SetCellValue(lstSheetNames[0], endRowIndex, 2, strControllerDeviceAddressLength + "位", CellStyleType.Data);
+                    for (int i = 0; i < info.ChildNodes.Count;i++)
+                    {
+                        if (info.ChildNodes[i].Name != "设备类型")
+                        {
+                            endRowIndex++;
+                            excelService.SetCellValue(lstSheetNames[0], endRowIndex, 0, null, CellStyleType.Data);
+                            excelService.SetCellValue(lstSheetNames[0], endRowIndex, 1, info.ChildNodes[i].Name+"数量", CellStyleType.Data);
+                            excelService.SetCellValue(lstSheetNames[0], endRowIndex, 2, info.ChildNodes[i].Number.ToString(), CellStyleType.Data);
+                        }
+                    }
+                    mergeCellRange = new MergeCellRange();
+                    mergeCellRange.FirstRowIndex = startRowIndex;
+                    mergeCellRange.LastRowIndex = endRowIndex;
+                    mergeCellRange.FirstColumnIndex = 0;
+                    mergeCellRange.LastColumnIndex = 0;
+                    lstMergeCellRange.Add(mergeCellRange);
+                }
+                excelService.SetColumnWidth(lstSheetNames[0], 1, 15f);
+                excelService.SetMergeCells(lstSheetNames[0], lstMergeCellRange);//设置"摘要信息"合并单元格
+                sheetNames = lstSheetNames;
+            }
+            catch (Exception ex)
+            {
+                sheetNames = lstSheetNames;
+                return false;
+            }
+            return true;
+        }
         /// <summary>
         /// 将项目文件发布为EXCEL文档
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public bool ExportProject(ProjectModel project)
+        public bool ExportProjectToExcel(ProjectModel project,string strFilePath,IFileService fileService)
         {
-            /*
-             * Excel导出规则 
-             * 1.  第一页为“设备类型”
-             * 2.  控制器输出方式
-             * 2.1 由于存在多个回路，每个回路输出一页，输出回路中的器件
-             * 2.2 输出“标准组态”
-             * 2.3 输出“混合组态”
-             * 2.4 输出“通用组态”
-             * 2.5 输出“网络手动盘”
-             * 3.  需要输出所有控制器的信息
-             */
+   
             if (project == null)  return false;
             try
             {
-                string saveFileName = project.Name;
-                //输出设备类型信息
-                //_excelService.CreateExcelSheets();
-                //控制器信息输出
+                EXCELVersion version = EXCELVersion.EXCEL2003;
+                strFilePath +="\\"+ project.Name + ".xls";
+                IExcelService excelService = ExcelServiceManager.GetExcelService(version, strFilePath, fileService);
                 List<string> sheetNames = new List<string>();
-                sheetNames.Add("设备类型");
-                foreach (ControllerModel c in project.Controllers)
-                {         
-                    if(c.Loops.Count>0)
-                    { 
-                        foreach (LoopModel l in c.Loops)//增加回路名称
-                        {
-                            sheetNames.Add(c.Name+l.Name);        
-                        }
-                    }
-                    if (c.StandardConfig.Count > 0)
-                    {
-                        sheetNames.Add(c.Name + NodeCategory.标准组态.ToString());
-                    }
-                    if (c.MixedConfig.Count > 0)
-                    {
-                        sheetNames.Add(c.Name + NodeCategory.混合组态.ToString());
-                    }
-                    if (c.GeneralConfig.Count > 0)
-                    {
-                        sheetNames.Add(c.Name + NodeCategory.通用组态.ToString());
-                    }
-                    if (c.ControlBoard.Count > 0)
-                    {
-                        sheetNames.Add(c.Name + NodeCategory.网络手动盘.ToString());
-                    }       
-                }
-                _excelService.CreateExcelSheets(sheetNames);
-                _excelService.SetCellValue(sheetNames[0].ToString(), 0, 0, sheetNames[0],CellStyleType.Data);
-                //第1行
-                _excelService.SetCellValue(sheetNames[0].ToString(), 1, 0, "编号", CellStyleType.Data);
-                _excelService.SetCellValue(sheetNames[0].ToString(), 1, 1, "名称", CellStyleType.Data);
-                //第2行
+                const int Loop_Amount_Per_Sheet = 8;
+                GenerateExcelSummarySheet(project, ref  excelService, out sheetNames);
+                ControllerManager controllerManager = new ControllerManager();
+                controllerManager.InitializeAllControllerOperation(null);
                 
-                //读取所有回路信息
+                //生成“项目摘要”信息
+                
+                
+                foreach (var controller in project.Controllers)
+                {
+                   IControllerOperation controllerOperation = controllerManager.GetController(controller.Type);
+                    
+                    int loopSheetAmount = Convert.ToInt32(Math.Ceiling((float)controller.Loops.Count / Loop_Amount_Per_Sheet));
+                    int loopStartIndex = 0;//记录每个Sheet页内初始索引号                    
+                    for (int i = 0; i < loopSheetAmount; i++)
+                    {                        
+                        string loopName =controller.Name + "-回路分组" + (i+1).ToString();
+                        int loopEndIndex = (i+1) * Loop_Amount_Per_Sheet;
+                        List<LoopModel> lstLoops=new List<LoopModel>();
+                        for (int j = loopStartIndex; j < loopEndIndex; j++)
+                        {
+                            //loopStartIndex++;
+                            if (j >= controller.Loops.Count) //超过最大回路数
+                            {
+                                break;
+                            }
+                            lstLoops.Add(controller.Loops[j]);                            
+                        }
+                        controllerOperation.ExportLoopDataToExcel(ref excelService, lstLoops, loopName);
+                        lstLoops.Clear();
+                    }
+                    if (controller.StandardConfig.Count > 0)
+                    {
+                        string strSheetName = controller.Name + "-标准组态";
+                        controllerOperation.ExportStandardLinkageDataToExcel(ref excelService, controller.StandardConfig,strSheetName);
+                    }
+                    if (controller.MixedConfig.Count > 0)
+                    {   
+                        string strSheetName = controller.Name + "-混合组态";
+                        controllerOperation.ExportMixedLinkageDataToExcel(ref excelService, controller.MixedConfig, strSheetName);
+                    }
+                    if (controller.GeneralConfig.Count > 0)
+                    {
+                        string strSheetName=controller.Name + "-通用组态";
+                        controllerOperation.ExportGeneralLinkageDataToExcel(ref excelService, controller.GeneralConfig, strSheetName);
+                    }
+                    if (controller.ControlBoard.Count > 0)
+                    {
+                        string strSheetName = controller.Name + "-网络手动盘";
+                        controllerOperation.ExportManualControlBoardDataToExcel(ref excelService, controller.ControlBoard, strSheetName);                        
+                    }
+                    
+                }
+                excelService.SaveToFile();    
 
                 return true;
             }
@@ -187,7 +267,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 return false;
             }
 
-            //_excelService.c
+            
         }
 
         public void Dispose()
@@ -207,7 +287,7 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        private bool ValidateProjectName(string projName)
+        public bool ValidateProjectName(string projName)
         {
             if (projName != null)
             {
@@ -265,5 +345,6 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
     }
 }

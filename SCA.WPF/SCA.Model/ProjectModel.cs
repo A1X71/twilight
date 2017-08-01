@@ -57,7 +57,7 @@ namespace SCA.Model
         /// <summary>
         /// 保存文件路径
         /// </summary>
-        public string SaveFilePath { get; set; }
+        //public string SaveFilePath { get; set; }
         
 
         public override string ToString()

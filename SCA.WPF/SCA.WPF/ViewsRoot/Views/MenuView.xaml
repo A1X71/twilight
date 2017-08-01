@@ -3,8 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
+             xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+	       <UserControl.Resources>
+        <local:MenuViewModel x:Key="vm"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource vm}"/>
+    </UserControl.DataContext>
+<<<<<<< HEAD
     <Grid>
         <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top" >
             <Menu DockPanel.Dock="Top"   Style="{DynamicResource MenuStyle}">
@@ -21,8 +29,8 @@
                         <MenuItem Header="合并" IsEnabled="False"/>
                     </MenuItem>
                     <MenuItem Header="导出"    Style="{DynamicResource SubMenuItemStyle}">
-                        <MenuItem Header="导出为EXCEL文件" />
-                        <MenuItem Header="发布"/>
+                        <MenuItem Header="导出为EXCEL文件" x:Name="menu_ExportToExcelFile" Command="{Binding Path=ExportProjectExcelCommand}"/>
+                        <MenuItem Header="发布" x:Name="menu_PublishAsDatabaseFile" Command="{Binding Path=PublishAsDatabaseFileCommand}"/>
                     </MenuItem>
                     <MenuItem Header="退出" Command="ApplicationCommands.Close" />
                 </MenuItem>
@@ -49,6 +57,40 @@
                     <MenuItem Header="网络手动盘"/>
                     <MenuItem Header="工程设置" Click="ProjectSettingMenuItem_Click"/>
                     <MenuItem Header="器件类型" IsEnabled="False"/>
+=======
+    <UserControl.Resources>
+        <local:MenuViewModel x:Key="vm"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource vm}"/>
+    </UserControl.DataContext>
+    <Grid x:Name="MenuContainer" >   
+        <Menu DockPanel.Dock="Top" Grid.Row="1">
+            <MenuItem Header="_文件">
+                <MenuItem Header="_新建工程" x:Name="menu_CreateProject"  Click="CreateProjectMenuItem_Click" />                
+                <Separator />                
+                <MenuItem Header="打开工程" x:Name="menu_OpenProject" Click="menu_OpenProject_Click"/>
+                <MenuItem Header="保存工程" x:Name="menu_SaveProject" Click="menu_SaveProject_Click"/>
+                <MenuItem Header="关闭工程" x:Name="menu_CloseProject" Click="menu_CloseProject_Click"/>
+                <MenuItem Header="导入">
+                    <MenuItem Header="低版本数据导入" x:Name="menu_ImportFromOldVersionFile" Click="menu_ImportFromOldVersionFile_Click"/>
+                    <MenuItem Header="由EXCEL文件导入" x:Name="menu_ImportFromExcelFile" Click="menu_ImportFromExcelFile_Click" IsEnabled="False"/>
+                    <MenuItem Header="合并" IsEnabled="False"/>                    
+                </MenuItem>
+                <MenuItem Header="导出">
+                    <MenuItem Header="导出为EXCEL文件" x:Name="menu_ExportToExcelFile" Command="{Binding Path=ExportProjectToExcelCommand}"/>
+                    <MenuItem Header="发布" x:Name="menu_PublishAsDatabaseFile" Command="{Binding Path=PublishAsDatabaseFileCommand}"/>
+                </MenuItem>                
+                <MenuItem Header="退出" Command="ApplicationCommands.Close" />
+            </MenuItem>
+            <MenuItem Header="设置">
+                <MenuItem Header="控制器设置" >
+                    <!--<MenuItem Header="新建控制器" Command="{Binding Path=CreateControllerCommand}"/>-->
+                    <MenuItem Header="新建控制器" Click="CreateControllerMenuItem_Click"/>
+                    
+                    <MenuItem Header="端口设置" IsEnabled="False"/>
+                    <MenuItem Header="器件长度" IsEnabled="False"/>
+>>>>>>> 1d5dd5ef18d55852ea0bfcf4ae07585a1f672f29
                 </MenuItem>
                 <MenuItem Header="下传"  Style="{DynamicResource MenuItemStyle}">
                     <MenuItem Header="全部下传"/>

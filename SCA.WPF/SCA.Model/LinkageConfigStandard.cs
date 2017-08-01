@@ -46,6 +46,10 @@ namespace SCA.Model
         public string DeviceNo8 { get; set; }
         public string DeviceNo9 { get; set; }
         public string DeviceNo10 { get; set; }
+        public string DeviceNo11 { get; set; }
+        public string DeviceNo12 { get; set; }
+        public string OutputDevice1 { get; set; }
+        public string OutputDevice2 { get; set; }
         public string LinkageNo1 { get; set; }
         public string LinkageNo2 { get; set; }
         public string LinkageNo3 { get; set; }
@@ -107,6 +111,10 @@ namespace SCA.Model
                             lstDeviceNo.Add(DeviceNo6);
                             lstDeviceNo.Add(DeviceNo7);
                             lstDeviceNo.Add(DeviceNo8);
+                            lstDeviceNo.Add(DeviceNo9);
+                            lstDeviceNo.Add(DeviceNo10);
+                            lstDeviceNo.Add(DeviceNo11);
+                            lstDeviceNo.Add(DeviceNo12);
                             break;
                 }
                 
@@ -122,7 +130,6 @@ namespace SCA.Model
         {
             set
             {
-
                 List<string> lstDeviceNo = value;                
                 switch (_controller.Type)
                 {
@@ -165,18 +172,66 @@ namespace SCA.Model
                         DeviceNo8 = lstDeviceNo[7];
                         break;
                     case ControllerType.NT8053:
-                        DeviceNo1 = lstDeviceNo[0];
-                        DeviceNo2 = lstDeviceNo[1];
-                        DeviceNo3 = lstDeviceNo[2];
-                        DeviceNo4 = lstDeviceNo[3];
-                        DeviceNo5 = lstDeviceNo[4];
-                        DeviceNo6 = lstDeviceNo[5];
-                        DeviceNo7 = lstDeviceNo[6];
-                        DeviceNo8 = lstDeviceNo[7];
+                        if (lstDeviceNo != null && lstDeviceNo.Count >= 12)
+                        {
+                            DeviceNo1 = lstDeviceNo[0];
+                            DeviceNo2 = lstDeviceNo[1];
+                            DeviceNo3 = lstDeviceNo[2];
+                            DeviceNo4 = lstDeviceNo[3];
+                            DeviceNo5 = lstDeviceNo[4];
+                            DeviceNo6 = lstDeviceNo[5];
+                            DeviceNo7 = lstDeviceNo[6];
+                            DeviceNo8 = lstDeviceNo[7];
+                            DeviceNo9 = lstDeviceNo[8];
+                            DeviceNo10 = lstDeviceNo[9];
+                            DeviceNo11 = lstDeviceNo[10];
+                            DeviceNo12 = lstDeviceNo[11];
+                        }
                         break;
                 }
             }
         }
+
+        /// <summary>
+        /// 获取输出设备
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetOutputDeviceList()
+        {
+            List<string> lstDeviceNo = new List<string>();
+            switch (_controller.Type)
+            {
+                case ControllerType.NT8053:
+                    lstDeviceNo.Add(OutputDevice1);
+                    lstDeviceNo.Add(OutputDevice2);
+                    break;
+            }
+
+            return lstDeviceNo;
+        }
+
+        /// <summary>
+        /// 设置输出设备列表
+        /// </summary>
+        public List<string> SetOutputDevcieList
+        {
+            set
+            {
+                List<string> lstDeviceNo = value;
+                switch (_controller.Type)
+                {
+                    case ControllerType.NT8053:
+                        if (lstDeviceNo != null && lstDeviceNo.Count >= 2)
+                        {
+                            OutputDevice1 = lstDeviceNo[0];
+                            OutputDevice2 = lstDeviceNo[1];
+                        }
+                        break;
+                }
+            }
+        }
+
+
         #region 非业务数据
         //保存状态
         private bool _isDirty = true;

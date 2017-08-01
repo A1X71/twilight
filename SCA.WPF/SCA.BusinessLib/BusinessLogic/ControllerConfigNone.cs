@@ -164,5 +164,17 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+
+        public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -36,7 +36,9 @@ namespace SCA.Model
         public int ActionCoefficient { get; set; }
 
         public LinkageActionType ActionType { get; set; }
-        //分类A
+        /// <summary>
+        /// 分类A
+        /// </summary>
         public LinkageType TypeA { get; set; }
         //回路A
         //器件编号A [当分类为“地址”时，存储的"回路编号"]

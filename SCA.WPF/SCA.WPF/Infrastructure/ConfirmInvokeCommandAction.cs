@@ -12,6 +12,7 @@ using System.Windows.Interactivity;
 * FileName   : ConfirmInvokeCommandAction
 * Description:
 * Version：V1
+ * $Author: william_wang $
 * ===============================
 */
 namespace SCA.WPF.Infrastructure

@@ -114,5 +114,11 @@ namespace SCA.BusinessLib.Utility
         {
           //  GC.SuppressFinalize(this);
         }
+
+
+        public void Copy(string sourceFileName, string destFileName, bool overwrite)
+        {
+            File.Copy(sourceFileName, destFileName, overwrite);
+        }
     }
 }

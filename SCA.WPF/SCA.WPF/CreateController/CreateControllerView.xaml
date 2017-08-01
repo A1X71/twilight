@@ -33,97 +33,65 @@
 
     <StackPanel Background="{StaticResource WindowBackgroundBrush}" >
         <!-- Header -->
-        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
-            <TextBlock Text="创建控制器" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" >
+            <TextBlock Text="创建控制器" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock" />
         </Border>
         <!--<Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
             <TextBlock Text="Add" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
         </Border>-->
         <!-- Content -->
-        <CheckBox Content="从外部文件创建"  IsChecked="{Binding Path=CreateFromExternalFileFlag}"/>
+        <!--时间紧，“从外部文件创建”功能暂停开发-->
+        <CheckBox Content="从外部文件创建"  IsChecked="{Binding Path=CreateFromExternalFileFlag}" Visibility="Collapsed"/>
         <Grid  x:Name="AddControllerGrid" Margin="-1,0,1,0"   Visibility="{Binding Data.StandardStyleVisibility, Source={StaticResource proxy} }">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <!--Target="{Binding ElementName=ControllerNameInputTextBox, Mode=OneWay}"-->
-            <Label Grid.Row="0" Grid.Column="0" Content="_控制器名称"   Style="{StaticResource Label}" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>            
+            <Label Grid.Row="0" Grid.Column="0" Content="控制器名称"   Style="{StaticResource Label}" />
             <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerNameInputTextBox" HorizontalAlignment="Left"
-                     Width="180"  TabIndex="100" Foreground="{DynamicResource InputFontColor}" />
-            <!--Target="{Binding ElementName=ControllerTypeInputTextBox, Mode=OneWay}"-->
-            <Label Grid.Row="1" Grid.Column="0" Content="_控制器类型"  Style="{StaticResource Label}" />
-            <Border  BorderThickness="0,1,0,0" Grid.Row="1" Grid.Column="1" >
-                <Grid Margin="10,5,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <ComboBox IsSynchronizedWithCurrentItem="False" 
+                     Width="145"  TabIndex="100" Foreground="{DynamicResource InputFontColor}"   Margin="5,0,0,0"  ToolTip="{Binding Path=Content, ElementName=ErrorMessageControllerName}"/>
+            <TextBlock x:Name="ErrorMessageControllerName"  Grid.Row="0" Grid.Column="2"   Height="30"  TextWrapping="Wrap"/>
+            
+            
+            <Label Grid.Row="1" Grid.Column="0" Content="控制器类型"  Style="{StaticResource Label}" />
+             <ComboBox IsSynchronizedWithCurrentItem="False"  Grid.Row="1" Grid.Column="1"
                               ItemsSource="{Binding Source={StaticResource ControllerTypeEnumDS}}" 
                               x:Name="ControllerTypeComboBox"  Width="120"                              
-                              Grid.Row="1" HorizontalAlignment="Left"  
-                              SelectionChanged="ControllerTypeComboBox_SelectionChanged" Grid.ColumnSpan="2" Margin="0,0,0,-0.163"/>
-                    <!--<Button x:Name="ControllerTypeAddButton" Content="_控制器类型" Grid.Row="1" Click="ControllerTypeAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
-                </Grid>
-            </Border>
-            <!--<TextBox Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerTypeInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
-            <Label Grid.Row="2" Grid.Column="0" Content="_控制器机号" Target="{Binding ElementName=ControllerMachineNumInputTextBox, Mode=OneWay}"  Style="{StaticResource Label}" />
+                               HorizontalAlignment="Left"  
+                              SelectionChanged="ControllerTypeComboBox_SelectionChanged" Grid.ColumnSpan="2"  Margin="5,0,0,0" />          
+            <TextBlock x:Name="ErrorMessageControllerType"  Grid.Row="1" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>           
+            
+            <Label Grid.Row="2" Grid.Column="0" Content="控制器机号" Target="{Binding ElementName=ControllerMachineNumInputTextBox, Mode=OneWay}"  Style="{StaticResource Label}" />
             <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerMachineNumInputTextBox"
-                     HorizontalAlignment="Left" Width="180" 
+                     HorizontalAlignment="Left" Width="120" 
                       Foreground="{DynamicResource InputFontColor}" 
-                     TabIndex="100" />
-            <Label Grid.Row="3" Grid.Column="0" Content="_器件长度"   Style="{StaticResource Label}" />
-            <!--<TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceCodeLengthInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
-
+                     TabIndex="100"  Margin="5,0,0,0"  />
+            <TextBlock x:Name="ErrorMessageControllerMachineNumber"  Grid.Row="2" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="器件长度"   Style="{StaticResource Label}" />
             <ComboBox x:Name="DeviceCodeLengthComboBox" ItemsSource="{Binding Path=DeviceCodeLength}"  Width="120" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" IsSynchronizedWithCurrentItem="False" />
+            <TextBlock x:Name="ErrorMessageControllerDeviceAddressLength"  Grid.Row="3" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
 
-            <Label Grid.Row="4" Grid.Column="0" Content="_串口号" Style="{StaticResource Label}" />
-            <Border  BorderThickness="0,1,0,0" Grid.Row="4" Grid.Column="1" >
-                <Grid Margin="10,5,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <ComboBox IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}" x:Name="SerialPortNumberComboBox"  Width="120" Grid.Row="1" HorizontalAlignment="Left" SelectionChanged="SerialPortNumberComboBox_SelectionChanged" Margin="-4,0,0,0"  />
-                    <!--<Button x:Name="SerialPortNumberAddButton" Content="_串口号" Grid.Row="1" Click="SerialPortNumberAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
-                </Grid>
-            </Border>
-            <!--<TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="SerialPortNumberInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
-
-            <Border  BorderThickness="0,1,0,0">
-                <Grid Margin="10,5,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <!--<ComboBox IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource RelationshipValuesEnumDS}}" x:Name="FamilyMemberComboBox"  Width="120" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" SelectionChanged="FamilyMemberComboBox_SelectionChanged"  />
-                    <Button x:Name="FamilyMemberAddButton" Content="_Add Father" Grid.Row="1" Click="FamilyMemberAddButton_Click" Margin="5,0,0,0" HorizontalAlignment="Left" Width="105" Height="21" FontSize="10" VerticalAlignment="Stretch" />-->
-                </Grid>
-            </Border>
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <Label Grid.Row="4" Grid.Column="0" Content="串口号" Style="{StaticResource Label}" />
+            <ComboBox  Grid.Row="4" Grid.Column="1" IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}" x:Name="SerialPortNumberComboBox"  Width="120" HorizontalAlignment="Left" SelectionChanged="SerialPortNumberComboBox_SelectionChanged"  Margin="5,0,0,0"   />
+            <TextBlock x:Name="ErrorMessageControllerPortName"  Grid.Row="4" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>              
+            
+            <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Click="AddButton_Click" TabIndex="140" Width="64"/>
                 <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CancelButton_Click" TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>
         </Grid>
-        <Grid  x:Name="AddByExternalFileGrid" Margin="-1,0,1,0"   Visibility="{Binding Data.ExternalFileStyleVisibility, Source={StaticResource proxy} }">
+        
+        <!--<Grid  x:Name="AddByExternalFileGrid" Margin="-1,0,1,0"   Visibility="{Binding Data.ExternalFileStyleVisibility, Source={StaticResource proxy} }" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -141,11 +109,11 @@
                 <Button Content="确定" x:Name="ImportButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left"  TabIndex="140" Width="64"  Command="{Binding Path=ImportCommand}"/>
                 <Button Content="取消" x:Name="CancelButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60" Command="{Binding Path=CancelCommand}"/>
             </StackPanel>
-            <!--<Button x:Name="ImportButton"  Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>            
-            <Button x:Name="CancelButton"  Grid.Row="1" Grid.Column="2"  IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>-->
+            --><!--<Button x:Name="ImportButton"  Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>            
+            <Button x:Name="CancelButton"  Grid.Row="1" Grid.Column="2"  IsEnabled="{Binding Path=ReadingButtonEnableFlag,Mode=TwoWay}" Command="{Binding Path=ImportDataFromExcelCommand}" >读取</Button>--><!--
             
 
-        </Grid>
+        </Grid>-->
 
                 <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
     </StackPanel>

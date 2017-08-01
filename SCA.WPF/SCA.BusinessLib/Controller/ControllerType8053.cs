@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 154 $
+*  $Revision: 185 $
 *  $Author: dennis_zhang $        
-*  $Date: 2017-07-21 16:08:46 +0800 (周五, 21 七月 2017) $
+*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
 ***************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -599,7 +599,7 @@ namespace SCA.BusinessLib.Controller
             sendData[9] = Convert.ToByte(singleDevInfo.Loop.Code);　//回路号
             sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Controller.MachineNumber.Length + singleDevInfo.Loop.Code.Length, 3));　//地编号
 
-            sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable == true ? 1 : 0) * 4 + singleDevInfo.SensitiveLevel - 1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
+            //sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable == true ? 1 : 0) * 4 + singleDevInfo.SensitiveLevel - 1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
 
             //GetDevType(CInt(leixing)) * 8 + geli * 4
             sendData[12] = Convert.ToByte(singleDevInfo.TypeCode); //设备类型
@@ -740,7 +740,7 @@ namespace SCA.BusinessLib.Controller
                 sendData[9] = Convert.ToByte(singleDevInfo.Loop.Code);　//回路号
                 sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Controller.MachineNumber.Length + singleDevInfo.Loop.Code.Length, 3));　//地编号
 
-                sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable == true ? 1 : 0) * 4 + singleDevInfo.SensitiveLevel - 1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
+                //sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable == true ? 1 : 0) * 4 + singleDevInfo.SensitiveLevel - 1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
 
                 //GetDevType(CInt(leixing)) * 8 + geli * 4
                 sendData[12] = Convert.ToByte(singleDevInfo.TypeCode); //设备类型
@@ -1244,12 +1244,6 @@ namespace SCA.BusinessLib.Controller
                     tempMachineNo = tempMachineNo.PadLeft(2, '0');
                     break;
             }
-            //#---------start
-            //将“器件总数”及"回路号"存入系统设置表中-->机号+路号作为回路号
-            //回路号作为"存储器件的表名"： 表名的规则为“路号+编号"
-            //
-            //#----------end
-
 
             //回路信息
             Model.LoopModel loop = new LoopModel();
@@ -1267,7 +1261,7 @@ namespace SCA.BusinessLib.Controller
             //屏蔽
             deviceInfo.Disable = ((devicePackage[11] % 8) / 4) == 1 ? true : false;
             //灵敏度
-            deviceInfo.SensitiveLevel = Convert.ToInt16((devicePackage[11] % 4) + 1);
+            //deviceInfo.SensitiveLevel = Convert.ToInt16((devicePackage[11] % 4) + 1);
             //设备类型
             short tempType = Convert.ToInt16(devicePackage[12]);
             //根据设备类型的取值，决定是否需要特性字段信息
@@ -1312,32 +1306,6 @@ namespace SCA.BusinessLib.Controller
 
             //手操号
             tempValue = devicePackage[20] * 256 + devicePackage[21];
-            //板卡号
-            deviceInfo.BoardNo = (Int16)Math.Ceiling((tempValue / 1024) - 0.9);
-            //手盘号
-            //.Fields("xianggh") = nShouCao \ 1024
-            //    .Fields("panhao") = (nShouCao - (nShouCao \ 1024) * 1024) \ 63 + 1
-            //    .Fields("jianhao") = nShouCao - (nShouCao \ 1024) * 1024 - ((nShouCao - (nShouCao \ 1024) * 1024) \ 63) * 63
-            deviceInfo.SubBoardNo = Convert.ToInt16(Math.Ceiling(tempValue - (Convert.ToInt32(deviceInfo.BoardNo)) * 1024 / 63 - 0.9) + 1);
-
-            //手键号
-            deviceInfo.KeyNo = Convert.ToInt16(tempValue - (Convert.ToInt32(deviceInfo.BoardNo) * 1024 - (Math.Ceiling((tempValue - Convert.ToInt32(deviceInfo.BoardNo) * 1024) / 63 - 0.9)) * 63));
-
-            if (deviceInfo.KeyNo == 0)
-            {
-                deviceInfo.KeyNo = 63;
-                deviceInfo.SubBoardNo = Convert.ToInt16(deviceInfo.SubBoardNo - 1);
-            }
-            //广播分区
-            tempValue = devicePackage[22];
-            if (tempValue == 0)
-            {
-                deviceInfo.BroadcastZone = "";
-            }
-            else
-            {
-                deviceInfo.BroadcastZone = deviceInfo.BroadcastZone.PadLeft(3, '0');
-            }
 
             byte[] bLocation = new byte[24];
             for (int i = 25; i < 49; i++)

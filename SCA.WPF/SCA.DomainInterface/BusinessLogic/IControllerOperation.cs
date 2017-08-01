@@ -128,7 +128,7 @@ namespace SCA.Interface
         /// <returns></returns>
         ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService,ControllerModel controller);        
         #endregion        
-        #region EXCEL操作
+        #region EXCEL导入操作
         
         /// <summary>
         /// 更新进度条
@@ -148,7 +148,20 @@ namespace SCA.Interface
         /// <param name="flag"></param>
         void SetStaticProgressBarCancelFlag(bool flag);
         #endregion
+        #region EXCEL导出操作
+        /// <summary>
+        /// 设置EXCEL默认样式
+        /// </summary>
+        /// <param name="excelService"></param>
+        void SetDefaultExcelStyle(ref IExcelService excelService);
+        bool ExportLoopDataToExcel(ref IExcelService excelService,List<LoopModel> models, string sheetName);
+        bool ExportStandardLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigStandard> models, string sheetName);
+        bool ExportMixedLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigMixed> models, string sheetName);
+        bool ExportGeneralLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigGeneral> models, string sheetName);
+        bool ExportManualControlBoardDataToExcel(ref IExcelService excelService, List<ManualControlBoard> models, string sheetName);
+        #endregion
         ControllerType GetControllerType();
+        //读取EXCEL模板信息
         void ReadEXCELTemplate(string strFilePath, IFileService fileService, ControllerModel targetController);
         /// <summary>
         /// 取得控制器摘要信息

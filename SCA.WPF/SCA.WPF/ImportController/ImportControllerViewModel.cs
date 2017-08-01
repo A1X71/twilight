@@ -39,6 +39,8 @@ namespace SCA.WPF.ImportController
             GetValidDeviceType(SelectedControllerType);
             SetSelectedDeviceTypeCode(SelectedControllerType);
             EventMediator.Register("ImportControllerViewClose", CloseViewExecute);
+            
+            
         }
 
         #region 属性

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Ports;
+using System.Windows;
 using System.Windows.Input;
 using SCA.Model;
 using SCA.Model.BusinessModel;
@@ -28,6 +29,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
     public class SummaryInfoViewModel:PropertyChangedBase
     {
 
+        #region 属性
         private List<string> _baudsRate;        
         /// <summary>
         /// 当前选中的串口
@@ -37,14 +39,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         /// 当前选中的波特率
         /// </summary>
         private string _selectedBaudRate;
-
         private string _controllerName;
-
-
         private string _controllerMachineNumber;
         private string _saveIconPath = @"Resources/Icon/Style1/save.png";
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
+        private Visibility  _errorMessageVisibility = Visibility.Collapsed; //错误信息提示框可见性
+        private string _errorMessage;
 
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
@@ -154,6 +155,32 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         /// 控制器
         /// </summary>
         public ControllerModel TheController { get; private set; }
+        public Visibility ErrorMessageVisibility
+        {
+            get
+            {
+                return _errorMessageVisibility;
+            }
+            set
+            {
+                _errorMessageVisibility = value;
+                NotifyOfPropertyChange("ErrorMessageVisibility");
+            }
+        }
+        public string ErrorMessage
+        {
+            get
+            {
+                return _errorMessage;
+            }
+            set 
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange("ErrorMessage");
+            }
+        }
+
+        #endregion 
         #region 命令
         public ICommand SaveCommand
         {

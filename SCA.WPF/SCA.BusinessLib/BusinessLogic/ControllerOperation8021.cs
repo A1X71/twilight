@@ -457,6 +457,7 @@ namespace SCA.BusinessLib.BusinessLogic
                         excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.Disable.ToString(), mergeCellRange);                        
                     }
                     excelService.SetColumnWidth(sheetNames[i], 1, 15f);
+                    excelService.SetColumnWidth(sheetNames[i], 9, 50f);
                     excelService.SetMergeCells(sheetNames[i], lstMergeCellRange);//设置"回路页签"合并单元格
                 }
                 #endregion
@@ -736,6 +737,92 @@ namespace SCA.BusinessLib.BusinessLogic
             }
       
             return controllerInfo;
+        }
+        /// <summary>
+        /// 将回路数据写入指定的EXCEL工作表
+        /// </summary>
+        /// <param name="excelService"></param>
+        /// <param name="models"></param>
+        /// <param name="sheetName"></param>
+        /// <returns></returns>
+        public bool ExportLoopDataToExcel(ref IExcelService excelService, List<LoopModel> models, string sheetName)
+        {
+            try
+            {
+                if (models.Count > 0)
+                {
+                    IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.NT8021);
+                    ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetDeviceColumns(); //取得器件的列定义信息
+                    List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                    int startRowIndex = 0;
+                    int currentRowIndex = 0;
+                    foreach (var loop in models)
+                    {
+                        startRowIndex = currentRowIndex;
+                        currentRowIndex++;                        
+                        //回路标题                        
+                        excelService.SetCellValue(sheetName, startRowIndex, 0, "回路:" + loop.Name, CellStyleType.SubCaption);
+                        for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
+                        {
+                            excelService.SetCellValue(sheetName, currentRowIndex, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                        }
+                        //回路标题行合并
+                        MergeCellRange mergeCellRange = new MergeCellRange();
+                        mergeCellRange.FirstRowIndex = startRowIndex;
+                        mergeCellRange.LastRowIndex = startRowIndex;
+                        mergeCellRange.FirstColumnIndex = 0;
+                        mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
+                        lstMergeCellRange.Add(mergeCellRange);
+                        //写入器件信息         
+                        foreach (var device in loop.GetDevices<DeviceInfo8021>())
+                        {
+                            currentRowIndex++;
+                            excelService.SetCellValue(sheetName, currentRowIndex, 0, device.Code, CellStyleType.Data); //器件编码
+                            excelService.SetCellValue(sheetName, currentRowIndex, 1, config.GetDeviceTypeViaDeviceCode(device.TypeCode).Name, CellStyleType.Data); //器件类型                            
+                            excelService.SetCellValue(sheetName, currentRowIndex, 2, device.Disable, CellStyleType.Data); //屏蔽
+                            excelService.SetCellValue(sheetName, currentRowIndex, 3, device.CurrentThreshold, CellStyleType.Data); //电流报警值
+                            excelService.SetCellValue(sheetName, currentRowIndex, 4, device.TemperatureThreshold, CellStyleType.Data); //温度报警值                                                     
+                            excelService.SetCellValue(sheetName, currentRowIndex, 5, device.BuildingNo, CellStyleType.Data); //楼号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 6, device.ZoneNo, CellStyleType.Data); //区号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 7, device.FloorNo, CellStyleType.Data);//层号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 8, device.RoomNo, CellStyleType.Data);//房间号                           
+                            excelService.SetCellValue(sheetName, currentRowIndex, 9, device.Location, CellStyleType.Data);//安装地点
+                        } 
+                    }
+                    excelService.SetMergeCells(sheetName, lstMergeCellRange);//设置"回路页签"合并单元格
+                    excelService.SetColumnWidth(sheetName, 1, 15f);
+                    excelService.SetColumnWidth(sheetName, 9, 50f);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public bool ExportStandardLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigStandard> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportMixedLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigMixed> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportGeneralLinkageDataToExcel(ref IExcelService excelService, List<LinkageConfigGeneral> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+        public bool ExportManualControlBoardDataToExcel(ref IExcelService excelService, List<ManualControlBoard> models, string sheetName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

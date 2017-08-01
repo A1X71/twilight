@@ -38,6 +38,17 @@ namespace SCA.Interface
         /// <param name="filePath">文件路径</param>
         void DeleteFile(string filePath);
         #endregion
+
+        #region 复制文件
+        /// <summary>
+        /// 复制文件
+        /// </summary>
+        /// <param name="filePath">源文件路径</param>
+        /// <param name="filePath">目标文件路径</param>
+        /// <param name="filePath">是否可覆盖</param>
+        void Copy(string sourceFileName, string destFileName, bool overwrite);
+        #endregion
+
         #region 创建目录
         /// <summary>
         /// 创建目录

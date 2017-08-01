@@ -826,24 +826,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public List<DeviceType> GetAllDeviceTypeOfController(ControllerModel controller)
         {
-            List<DeviceType> lstDeviceType = new List<DeviceType>();
-            ControllerConfig8053 config = new ControllerConfig8053();
-            if (controller != null)
-            {
-                if (controller.Loops != null)
-                {
-                    foreach (var loop in controller.Loops)
-                    {
-                        IEnumerable<DeviceInfo8053> lstDistinceInfo = loop.GetDevices<DeviceInfo8053>().Distinct(new CollectionEqualityComparer<DeviceInfo8053>((x, y) => x.TypeCode == y.TypeCode)).ToList();
-                        foreach (var device in lstDistinceInfo)
-                        {
-                            DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
-                            lstDeviceType.Add(dType);
-                        }
-                    }
-                }
-            }
-            return lstDeviceType;
+            throw new NotImplementedException();
         }
 
 

@@ -280,7 +280,7 @@ namespace SCA.BusinessLib
             { 
                 Project = project; //将对象信息赋给当前属性
                 ILogRecorder logger = null;
-                SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(Project.SaveFilePath,logger, fileService);
+                SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(Project.SavePath,logger, fileService);
                 _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
                 //_databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(Project.SaveFilePath, null, fileService);
                 
@@ -611,76 +611,79 @@ namespace SCA.BusinessLib
         }
         public void SaveProject()
         {
-            if (this.Project.IsDirty)
-            {
-                if (!_fileService.IsExistFile(this.Project.SaveFilePath)) //数据文件不存在
+            if (this.Project != null)
+            { 
+                if (this.Project.IsDirty)
                 {
-                    _projectDBService.CreateLocalDBFile();
-                }
-                if (!IsCreatedFundamentalTableStructure) //未建立项目基础表结构
-                {
-                    if (_projectDBService != null)
+                    if (!_fileService.IsExistFile(this.Project.SavePath)) //数据文件不存在
                     {
-                        _projectDBService.CreatFundamentalTableStructure();  //创建基础存储结构
+                        _projectDBService.CreateLocalDBFile();
                     }
-                }
-                //保存工程信息
-                _projectDBService.AddProject(this.Project);
-                //初始化“控制器类型信息”
-                _projectDBService.InitializeControllerTypeInfo();
+                    if (!IsCreatedFundamentalTableStructure) //未建立项目基础表结构
+                    {
+                        if (_projectDBService != null)
+                        {
+                            _projectDBService.CreatFundamentalTableStructure();  //创建基础存储结构
+                        }
+                    }
+                    //保存工程信息
+                    _projectDBService.AddProject(this.Project);
+                    //初始化“控制器类型信息”
+                    _projectDBService.InitializeControllerTypeInfo();
 
-                //初始化此工程下的“器件类型”
-                int projectID=_projectDBService.GetMaxID();
-                IControllerConfig controllerConfig =  ControllerConfigManager.GetConfigObject(ControllerType.NONE);               
+                    //初始化此工程下的“器件类型”
+                    int projectID=_projectDBService.GetMaxID();
+                    IControllerConfig controllerConfig =  ControllerConfigManager.GetConfigObject(ControllerType.NONE);               
                 
-                _deviceTypeDBService.InitializeDeviceTypeInfo(controllerConfig.GetALLDeviceTypeInfo(projectID));
+                    _deviceTypeDBService.InitializeDeviceTypeInfo(controllerConfig.GetALLDeviceTypeInfo(projectID));
                 
-                //保存此工程下的回路，器件，组态，手动盘
-                foreach (var c in this.Project.Controllers)
-                {
-                    _deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _dbFileVersionService);
-                    c.Project.ID = projectID;
-                    c.ProjectID = projectID;
-                    _controllerDBService.AddController(c);
+                    //保存此工程下的回路，器件，组态，手动盘
+                    foreach (var c in this.Project.Controllers)
+                    {
+                        _deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _dbFileVersionService);
+                        c.Project.ID = projectID;
+                        c.ProjectID = projectID;
+                        _controllerDBService.AddController(c);
 
-                    //更新器件类型表的“匹配控制器信息”
-                    controllerConfig = ControllerConfigManager.GetConfigObject(c.Type);                    
-                    _deviceTypeDBService.UpdateMatchingController(c.Type,controllerConfig.GetDeviceTypeCodeInfo());
+                        //更新器件类型表的“匹配控制器信息”
+                        controllerConfig = ControllerConfigManager.GetConfigObject(c.Type);                    
+                        _deviceTypeDBService.UpdateMatchingController(c.Type,controllerConfig.GetDeviceTypeCodeInfo());
 
-                    //取得当前ControllerID
-                   // int controllerID = _controllerDBService.GetMaxID();
-                    _deviceDBService.CreateTableStructure();
-                    foreach (var loop in c.Loops)
-                    {
-                        loop.Controller.ID = c.ID;
-                        loop.ControllerID = c.ID;
-                        _loopDBService.AddLoopInfo(loop);
-                        //取得当前LoopID
-                      //  int loopID = _loopDBService.GetMaxID();
-                        loop.ID = loop.ID;                        
-                        _deviceDBService.AddDevice(loop);                        
-                        //取得当前器件最大ID号
-                        //int deviceID=_deviceDBService.GetMaxID();
-                    }
-                    if (c.StandardConfig.Count != 0)
-                    {
-                        _linkageConfigStandardDBService.AddStandardLinkageConfigInfo(c.StandardConfig);
-                    }
-                    if (c.GeneralConfig.Count != 0)
-                    {
-                        _linkageConfigGeneralDBService.AddGeneralLinkageConfigInfo(c.GeneralConfig);
-                    }
-                    if (c.MixedConfig.Count!=0)
-                    {
-                        _linkageConfigMixedDBService.AddMixedLinkageConfigInfo(c.MixedConfig);
-                    }
-                    if (c.ControlBoard.Count!=0)
-                    {
-                        _manualControlBoardDBService.AddManualControlBoardInfo(c.ControlBoard);
+                        //取得当前ControllerID
+                       // int controllerID = _controllerDBService.GetMaxID();
+                        _deviceDBService.CreateTableStructure();
+                        foreach (var loop in c.Loops)
+                        {
+                            loop.Controller.ID = c.ID;
+                            loop.ControllerID = c.ID;
+                            _loopDBService.AddLoopInfo(loop);
+                            //取得当前LoopID
+                          //  int loopID = _loopDBService.GetMaxID();
+                            loop.ID = loop.ID;                        
+                            _deviceDBService.AddDevice(loop);                        
+                            //取得当前器件最大ID号
+                            //int deviceID=_deviceDBService.GetMaxID();
+                        }
+                        if (c.StandardConfig.Count != 0)
+                        {
+                            _linkageConfigStandardDBService.AddStandardLinkageConfigInfo(c.StandardConfig);
+                        }
+                        if (c.GeneralConfig.Count != 0)
+                        {
+                            _linkageConfigGeneralDBService.AddGeneralLinkageConfigInfo(c.GeneralConfig);
+                        }
+                        if (c.MixedConfig.Count!=0)
+                        {
+                            _linkageConfigMixedDBService.AddMixedLinkageConfigInfo(c.MixedConfig);
+                        }
+                        if (c.ControlBoard.Count!=0)
+                        {
+                            _manualControlBoardDBService.AddManualControlBoardInfo(c.ControlBoard);
+                        }
                     }
                 }
+                Project.IsDirty = false;
             }
-            Project.IsDirty = false;
         }
         private int GetMaxIDForDevice8001()
         {

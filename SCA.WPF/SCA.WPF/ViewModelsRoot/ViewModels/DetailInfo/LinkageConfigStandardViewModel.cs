@@ -51,6 +51,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.DeviceNo8 = linkageConfigStandard.DeviceNo8;
             this.DeviceNo9 = linkageConfigStandard.DeviceNo9;
             this.DeviceNo10 = linkageConfigStandard.DeviceNo10;
+            this.DeviceNo11 = linkageConfigStandard.DeviceNo11;
+            this.DeviceNo12 = linkageConfigStandard.DeviceNo12;
+            this.OutputDevice1 = linkageConfigStandard.OutputDevice1;
+            this.OutputDevice2 = linkageConfigStandard.OutputDevice2;
             this.LinkageNo1 = linkageConfigStandard.LinkageNo1;
             this.LinkageNo2 = linkageConfigStandard.LinkageNo2;
             this.LinkageNo3 = linkageConfigStandard.LinkageNo3;
@@ -75,6 +79,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigStandard.DeviceNo8 = this.DeviceNo8;
             linkageConfigStandard.DeviceNo9 = this.DeviceNo9;
             linkageConfigStandard.DeviceNo10 = this.DeviceNo10;
+            linkageConfigStandard.DeviceNo11 = this.DeviceNo11;
+            linkageConfigStandard.DeviceNo12 = this.DeviceNo12;
+            linkageConfigStandard.OutputDevice1 = this.OutputDevice1;
+            linkageConfigStandard.OutputDevice2 = this.OutputDevice2;
             linkageConfigStandard.LinkageNo1 = this.LinkageNo1;
             linkageConfigStandard.LinkageNo2 = this.LinkageNo2;
             linkageConfigStandard.LinkageNo3 = this.LinkageNo3;
@@ -235,7 +243,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         
         private EditableLinkageConfigStandards _lcsCollection;
         private List<LinkageConfigStandard> _lstLinkageConfigStandard=null;
-        private Visibility _isVisualColumn=Visibility.Visible;
+        private Visibility _isVisualColumnGroup1=Visibility.Visible;
+        private Visibility _isVisualColumnGroup2 = Visibility.Visible;
+        private Visibility _isVisualColumnGroup3 = Visibility.Collapsed;
         private string _addIconPath = @"Resources/Icon/Style1/loop-add.png";
         private string _delIconPath = @"Resources/Icon/Style1/loop-delete.png";
         private string _copyIconPath = @"Resources/Icon/Style1/copy.png";
@@ -257,18 +267,41 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             _linkageConfigStandardService = new SCA.BusinessLib.BusinessLogic.LinkageConfigStandardService(TheController);
         }
-
-        public Visibility IsVisualColumn
+        public Visibility IsVisualColumnGroup1
         {
-
             get
             {
-                return _isVisualColumn;
-                
+                return _isVisualColumnGroup1;
             }
             set
             {
-                _isVisualColumn = value;
+                _isVisualColumnGroup1 = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+
+        public Visibility IsVisualColumnGroup2
+        {
+            get
+            {
+                return _isVisualColumnGroup2;
+            }
+            set
+            {
+                _isVisualColumnGroup2 = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+
+        public Visibility IsVisualColumnGroup3
+        {
+            get
+            {
+                return _isVisualColumnGroup3;
+            }
+            set
+            {
+                _isVisualColumnGroup3 = value;
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
