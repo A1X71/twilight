@@ -119,13 +119,13 @@
         </Border>-->
 
         <!--Menu Area-->
-        <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0,5,0,5">
+        <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top"  Background="{DynamicResource InputBackgroundBrush}" Height="25">
             <View:MenuView  CreateControllerClick="MenuUserController_CreateControllerClick"
                             CreateLoopClick="MenuUserController_CreateLoopClick"
                             ProjectSettingClick="MenuUserController_ProjectSettingClick" 
                             CreateProjectClick="MenuUserController_CreateProjectClick" 
                             EditLoopsClick="MenuUserController_EditLoopsClick"                            
-                            CloseProjectClick="ProjectUserControl_CloseButtonClick"                            
+                            CloseProjectClick="ProjectUserControl_CloseButtonClick"                                                        
                             >
                 <i:Interaction.Behaviors>
                     <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
