@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using System.Windows.Input;
 using SCA.Model;
+using SCA.BusinessLib;
 using SCA.Interface;
+using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.BusinessLogic;
+using Ookii.Dialogs.Wpf;
 /* ==============================
 *
 * Author     : William
@@ -19,6 +23,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Navigator
 {
     public class NavigatorViewModel
     {
+        #region 属性
         public CollectionView Projects { get; private set; }
         private NavigatorItemViewModel _selectedItem;
         private string _projectAddIconPath = @"Resources/Icon/Style1/project-add.png";
@@ -49,7 +54,28 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Navigator
         public string LoopAddIconPath { get { return _appCurrentPath + _loopAddIconPath; } }
         public string LoopDeleteIconPath { get { return _appCurrentPath + _loopDeleteIconPath; } }
 
-        
+        #endregion
+        #region 命令
+        public ICommand ExportProjectToExcelCommand
+        {
+            get { return new SCA.WPF.Utility.RelayCommand(ExportProjectToExcelExecute, null); }
+        }
+        public void ExportProjectToExcelExecute()
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            dialog.Description = "选择存储的文件夹";
+            dialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+            dialog.ShowDialog();
+
+            string strSelectedFolderPath = dialog.SelectedPath;
+            using (new WaitCursor())
+            {
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                ProjectService projectService = new ProjectService();                
+                projectService.ExportProjectToExcel(ProjectManager.GetInstance.Project,strSelectedFolderPath,fileService);
+            }
+        }
+        #endregion
 
         public NavigatorViewModel(List<ProjectModel> projects, object selectedEntity)
         {

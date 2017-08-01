@@ -19,6 +19,10 @@ namespace SCA.BusinessLib.BusinessLogic
     public class ControllerOperationCommon:ControllerOperationBase,IControllerOperation
     {
 
+        public ControllerOperationCommon()
+        {
+     
+        }
              
         public Model.ControllerNodeModel[] GetNodes()
         {
@@ -238,6 +242,32 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         public List<Model.DeviceType> GetAllDeviceTypeOfController(Model.ControllerModel controller)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool ExportLoopDataToExcel(ref IExcelService excelService, List<Model.LoopModel> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportStandardLinkageDataToExcel(ref IExcelService excelService, List<Model.LinkageConfigStandard> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportMixedLinkageDataToExcel(ref IExcelService excelService, List<Model.LinkageConfigMixed> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportGeneralLinkageDataToExcel(ref IExcelService excelService, List<Model.LinkageConfigGeneral> models, string sheetName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExportManualControlBoardDataToExcel(ref IExcelService excelService, List<Model.ManualControlBoard> models, string sheetName)
         {
             throw new NotImplementedException();
         }

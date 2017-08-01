@@ -3,10 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
+             xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Menu DockPanel.Dock="Top">
+    <UserControl.Resources>
+        <local:MenuViewModel x:Key="vm"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Source="{StaticResource vm}"/>
+    </UserControl.DataContext>
+    <Grid x:Name="MenuContainer" >   
+        <Menu DockPanel.Dock="Top" Grid.Row="1">
             <MenuItem Header="_文件">
                 <MenuItem Header="_新建工程" x:Name="menu_CreateProject"  Click="CreateProjectMenuItem_Click" />                
                 <Separator />                
@@ -19,8 +26,8 @@
                     <MenuItem Header="合并" IsEnabled="False"/>                    
                 </MenuItem>
                 <MenuItem Header="导出">
-                    <MenuItem Header="导出为EXCEL文件" IsEnabled="False"/>
-                    <MenuItem Header="发布"/>
+                    <MenuItem Header="导出为EXCEL文件" x:Name="menu_ExportToExcelFile" Command="{Binding Path=ExportProjectToExcelCommand}"/>
+                    <MenuItem Header="发布" x:Name="menu_PublishAsDatabaseFile" Command="{Binding Path=PublishAsDatabaseFileCommand}"/>
                 </MenuItem>                
                 <MenuItem Header="退出" Command="ApplicationCommands.Close" />
             </MenuItem>

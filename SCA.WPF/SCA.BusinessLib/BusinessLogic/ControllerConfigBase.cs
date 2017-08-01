@@ -413,7 +413,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return dictValueRule;
         }
         #endregion
-
+        
     }
     public enum RefereceRegionName
     {         

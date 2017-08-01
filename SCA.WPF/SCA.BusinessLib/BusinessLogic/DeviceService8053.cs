@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 155 $
+*  $Revision: 185 $
 *  $Author: dennis_zhang $        
-*  $Date: 2017-07-21 16:11:28 +0800 (周五, 21 七月 2017) $
+*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
 ***************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -78,15 +78,15 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     result.Loop = deviceInfo.Loop;
                     result.LoopID = deviceInfo.LoopID;
+                    result.MachineNo = deviceInfo.MachineNo;
                     result.ID = deviceInfo.ID;
-                    //result.Code = deviceInfo.Code;
-                   // result.SimpleCode = deviceInfo.SimpleCode;
+                    result.Code = deviceInfo.Code;
                     result.TypeCode = deviceInfo.TypeCode;
                     result.Disable = deviceInfo.Disable;
+                    result.Feature = deviceInfo.Feature;
                     result.LinkageGroup1 = deviceInfo.LinkageGroup1;
                     result.LinkageGroup2 = deviceInfo.LinkageGroup2;
-                    result.AlertValue = deviceInfo.AlertValue;
-                    result.ForcastValue = deviceInfo.ForcastValue;
+                    result.LinkageGroup3 = deviceInfo.LinkageGroup3;
                     result.DelayValue = deviceInfo.DelayValue;
                     result.BuildingNo = deviceInfo.BuildingNo;
                     result.ZoneNo = deviceInfo.ZoneNo;

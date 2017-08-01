@@ -70,10 +70,7 @@ namespace SCA.WPF.ViewsRoot.Views.Navigator
         }
 
 
-        private void btnExportToExcel_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
 
         private void btnMerge_Click(object sender, RoutedEventArgs e)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -29,10 +30,7 @@ namespace SCA.WPF.ViewsRoot.Views
                 "AddButtonClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CreateControllerView));
         public static readonly RoutedEvent CancelButtonClickEvent = EventManager.RegisterRoutedEvent(
                 "CancelButtonClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CreateControllerView)
-                );    
-        //public static readonly RoutedEvent ControllerTypeSelectedEvent=EventManager.RegisterRoutedEvent(
-        //        "ControllerTypeSelected",RoutingStrategy.Bubble,typeof(RoutedEventHandler),typeof(CreateControllerView)
-        //    );
+                );     
 
         public event RoutedEventHandler AddButtonClick
         {
@@ -52,33 +50,108 @@ namespace SCA.WPF.ViewsRoot.Views
 
         private void SerialPortNumberComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SerialPortNumberComboBox.SelectedIndex != -1)
-            {
-                string str = "Selected";
-            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            ClearAllErrorMessage();
             ControllerModel controller = new ControllerModel();
-            controller.Name = ControllerNameInputTextBox.Text;            
-            controller.Type = (ControllerType)ControllerTypeComboBox.SelectedItem;
-            controller.DeviceAddressLength = Convert.ToInt32(DeviceCodeLengthComboBox.SelectedItem);
             
-            controller.MachineNumber = ControllerMachineNumInputTextBox.Text;
-            
-            controller.PortName = SerialPortNumberComboBox.SelectedItem.ToString();
-            controller.LoopAddressLength = 2;//回路地址长度默认为2
-            
+            bool verifyFlag = true;
+            if (ControllerTypeComboBox.SelectedItem != null)
+            {
+                   controller.Type = (ControllerType)ControllerTypeComboBox.SelectedItem;
+            }
+            else
+            {
+                
+                this.ErrorMessageControllerType.Text = "请选择控制器类型";
+                verifyFlag = false;
+            }
+            if (DeviceCodeLengthComboBox.SelectedItem != null)
+            {
+                controller.DeviceAddressLength = Convert.ToInt32(DeviceCodeLengthComboBox.SelectedItem);
+            }
+            else
+            {
+                
+                this.ErrorMessageControllerDeviceAddressLength.Text = "请选择器件长度";
+                verifyFlag = false;
+            }
+            if (SerialPortNumberComboBox.SelectedItem != null)
+            {
+                controller.PortName = SerialPortNumberComboBox.SelectedItem.ToString();
+            }
+            else
+            {
+                
+                this.ErrorMessageControllerPortName.Text = "请选择端口";
+                verifyFlag = false;
+            }
+            if (this.ControllerMachineNumInputTextBox.Text == "")
+            {
+                this.ErrorMessageControllerDeviceAddressLength.Text = "请填写器件长度";
+                verifyFlag = false;
+            }
+            if (verifyFlag)
+            {
+                controller.Name = ControllerNameInputTextBox.Text;
+                controller.MachineNumber = ControllerMachineNumInputTextBox.Text;
+                controller.LoopAddressLength = 2;//回路地址长度默认为2
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(controller.Type);
+                int maxMachineNumber = config.GetMaxMachineAmountValue(controller.DeviceAddressLength);
+                Dictionary<string, RuleAndErrorMessage> dictRule = config.GetControllerInfoRegularExpression(controller.DeviceAddressLength);
 
-            ControllerManager controllerManager = new ControllerManager();            
-            controllerManager.InitializeAllControllerOperation(null);
+                RuleAndErrorMessage rule = dictRule["Name"];
 
-            IControllerOperation controllerOperation= controllerManager.GetController(controller.Type);
-            controllerOperation.AddControllerToProject(controller);
-            RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
+                Regex exminator = new Regex(rule.Rule);
+
+                if (!exminator.IsMatch(controller.Name))
+                {
+                    this.ErrorMessageControllerName.Text = rule.ErrorMessage;
+                    
+                    verifyFlag = false;
+                }
+                rule = dictRule["MachineNumber"];
+                exminator = new Regex(rule.Rule);
+                if (!exminator.IsMatch(ControllerMachineNumInputTextBox.Text))
+                {
+                    
+                    this.ErrorMessageControllerMachineNumber.Text = rule.ErrorMessage;
+                    verifyFlag = false;
+                }
+                else
+                {
+                    controller.MachineNumber = this.ControllerMachineNumInputTextBox.Text;
+                }
+                if (verifyFlag)
+                {
+                    if (Convert.ToInt16(controller.MachineNumber) > maxMachineNumber)
+                    {
+                        this.ErrorMessageControllerMachineNumber.Text = "机号超出范围，最大机号为" + maxMachineNumber.ToString();
+                        
+                        verifyFlag = false;
+                    }
+                }
+            }
+            if (verifyFlag)
+            {
+                ControllerManager controllerManager = new ControllerManager();
+                controllerManager.InitializeAllControllerOperation(null);
+                IControllerOperation controllerOperation = controllerManager.GetController(controller.Type);
+                controllerOperation.AddControllerToProject(controller);
+                RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
+            }
         }
+        private void ClearAllErrorMessage()
+        {
+            this.ErrorMessageControllerType.Text="";
+            this.ErrorMessageControllerPortName.Text="";
+            this.ErrorMessageControllerName.Text="";
+            this.ErrorMessageControllerMachineNumber.Text="";
+            this.ErrorMessageControllerDeviceAddressLength.Text="";
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(CancelButtonClickEvent));
@@ -91,38 +164,12 @@ namespace SCA.WPF.ViewsRoot.Views
             {
                 if(e.AddedItems.Count>0)
                 {
-                    //RaiseEvent(new RoutedEventArgs(ControllerTypeSelectedEvent,(ControllerType)e.AddedItems[0]));
-                    ((SCA.WPF.CreateController.CreateControllerViewModel)this.DataContext).GetDeviceCodeLength((ControllerType)e.AddedItems[0]);
-                    //SCA.Interface.IControllerConfig controllerConfig = ControllerConfigManager.GetConfigObject((ControllerType)e.AddedItems[0]);
-                    //    short maxLoopAmount = controllerConfig.GetMaxLoopAmountValue();
-
-                    //    for (int i = 1; i <= maxLoopAmount; i++)
-                    //    {
-                    //        lstLoopsCode.Add(i.ToString().PadLeft(controller.LoopAddressLength, '0'));
-                    //    }
-                    //}
-                    //LoopsCode = lstLoopsCode;
-                    //return lstLoopsCode;
+                    //此处需要重构,不应直接访问DataContext 2017-07-31 william
+                    ((SCA.WPF.CreateController.CreateControllerViewModel)this.DataContext).GetDeviceCodeLength((ControllerType)e.AddedItems[0]);      
 
                 }               
                 
             }
-            
-           // Object o = ((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)e.type).DataItem;
-            //List<string> lstLoopsCode = new List<string>();
-            //if (ProjectManager.GetInstance.Project != null)
-            //{
-            //    SCA.Model.ControllerModel controller = ProjectManager.GetInstance.GetPrimaryController();
-            //    SCA.Interface.IControllerConfig controllerConfig = ControllerConfigManager.GetConfigObject(controller.TypeCode);
-            //    short maxLoopAmount = controllerConfig.GetMaxLoopAmountValue();
-
-            //    for (int i = 1; i <= maxLoopAmount; i++)
-            //    {
-            //        lstLoopsCode.Add(i.ToString().PadLeft(controller.LoopAddressLength, '0'));
-            //    }
-            //}
-            //LoopsCode = lstLoopsCode;
-            //return lstLoopsCode;
         }
 
 

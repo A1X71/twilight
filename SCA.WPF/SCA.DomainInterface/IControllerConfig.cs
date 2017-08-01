@@ -31,6 +31,7 @@ namespace SCA.Interface
        ColumnConfigInfo[] GetStandardLinkageConfigColumns();
        ColumnConfigInfo[] GetGeneralLinkageConfigColumns();
        ColumnConfigInfo[] GetMixedLinkageConfigColumns();
+       ColumnConfigInfo[] GetManualControlBoardColumns();
        string  GetDeviceTypeCodeInfo();
        
        /// <summary>
@@ -176,6 +177,10 @@ namespace SCA.Interface
        /// </summary>
        /// <returns></returns>
         Dictionary<int, RuleAndErrorMessage> GetValueVerifyingRuleOfOtherSettingInSummaryInfoOfExcelTemplate();
-    
+       /// <summary>
+       /// 控制器基本信息验证
+       /// </summary>
+       /// <returns></returns>
+        Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SCA.Model;
+using SCA.Interface;
+using SCA.BusinessLib.BusinessLogic;
 using SCA.WPF.Infrastructure;
 namespace SCA.WPF.ViewsRoot.Views.Query
 {
@@ -23,6 +26,8 @@ namespace SCA.WPF.ViewsRoot.Views.Query
         public SummaryInfoView()
         {
             InitializeComponent();
+            this.ErrorMessage.Text = "";
+            this.ErrorMessage.Visibility = Visibility.Collapsed;
         }
         
         public static readonly RoutedEvent AddButtonClickEvent = EventManager.RegisterRoutedEvent(
@@ -56,7 +61,7 @@ namespace SCA.WPF.ViewsRoot.Views.Query
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            this.ErrorMessage.Text = "";            
            // if (TheController != null)
            // { 
                // ControllerModel controller=new ControllerModel();
@@ -71,15 +76,58 @@ namespace SCA.WPF.ViewsRoot.Views.Query
                // TheController.PortName = ComPortComboBox.SelectedItem.ToString();
             SCA.WPF.ViewModelsRoot.ViewModels.Query.SummaryInfoViewModel vm = (SCA.WPF.ViewModelsRoot.ViewModels.Query.SummaryInfoViewModel)this.DataContext;
             ControllerModel controller = vm.TheController;
-            controller.Name = ControllerNameInputTextBox.Text;
-            controller.MachineNumber = MachineNumberInputTextBox.Text;
-            controller.PortName = ComPortComboBox.SelectedItem.ToString();
-            controller.BaudRate = Convert.ToInt32(BaudsRateComboBox.SelectedItem);            
-            vm.SaveExecute(controller);
-            controller.IsDirty = true;
-            
-            EventMediator.NotifyColleagues("RefreshNavigator", controller);
-            RaiseEvent(new RoutedEventArgs(AddButtonClickEvent,controller));
+
+            IControllerConfig config = ControllerConfigManager.GetConfigObject(controller.Type);
+            int maxMachineNumber = config.GetMaxMachineAmountValue(controller.DeviceAddressLength);
+            Dictionary<string, RuleAndErrorMessage> dictRule = config.GetControllerInfoRegularExpression(controller.DeviceAddressLength);
+
+            RuleAndErrorMessage rule = dictRule["Name"];
+
+            Regex exminator = new Regex(rule.Rule);
+            string errorMessage = "";
+            bool verifyFlag = true;
+            if (!exminator.IsMatch(ControllerNameInputTextBox.Text))
+            {
+                errorMessage += "控制器名称:"+rule.ErrorMessage+"; ";
+                //errorMessage += rule.ErrorMessage+";";
+                verifyFlag = false;
+            }
+            rule = dictRule["MachineNumber"];
+            exminator = new Regex(rule.Rule);
+            if (!exminator.IsMatch(MachineNumberInputTextBox.Text))
+            {
+                //errorMessage += rule.ErrorMessage+";";
+                errorMessage += "控制器机号:" + rule.ErrorMessage + "; ";
+                verifyFlag = false;
+            }
+
+            if (verifyFlag)
+            {
+                if (Convert.ToInt16(MachineNumberInputTextBox.Text) > maxMachineNumber)
+                {
+                    errorMessage += "控制器机号:机号超出范围，最大机号为" + maxMachineNumber.ToString()+"; ";
+                    //errorMessage += "机号超出范围，最大机号为" + maxMachineNumber.ToString();
+                    verifyFlag = false;
+                }
+            }
+            if (verifyFlag)
+            {
+                controller.Name = ControllerNameInputTextBox.Text;
+                controller.MachineNumber = MachineNumberInputTextBox.Text;
+
+                controller.PortName = ComPortComboBox.SelectedItem.ToString();
+                controller.BaudRate = Convert.ToInt32(BaudsRateComboBox.SelectedItem);
+                vm.SaveExecute(controller);
+                controller.IsDirty = true;
+
+                EventMediator.NotifyColleagues("RefreshNavigator", controller);
+                RaiseEvent(new RoutedEventArgs(AddButtonClickEvent, controller));
+            }
+            else
+            {
+                this.ErrorMessage.Text = errorMessage;
+                this.ErrorMessage.Visibility = Visibility.Visible;
+            }
            // }
         }
     }

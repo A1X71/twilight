@@ -55,7 +55,27 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[9];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "输出组号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "联动模块1";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "联动模块2";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "联动模块3";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "联动模块4";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "动作常数";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "联动组1";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "联动组2";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "联动组3";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetGeneralLinkageConfigColumns()
@@ -164,7 +184,25 @@ namespace SCA.BusinessLib.BusinessLogic
             //备注
             return dictExpressionAndInfo;
         }
+        public Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictControllerInfoRE = new Dictionary<string, RuleAndErrorMessage>();
+            //名称
+            dictControllerInfoRE.Add("Name", new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF()（）]{0,16}$", "允许填写”中文字符、英文字符、阿拉伯数字、圆括号”,最大长度16个字符"));
+            if (deviceAddressLength == 7)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{2}$", "请填写2位数字"));
+            }
+            else if (deviceAddressLength == 8)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{3}$", "请填写3位数字"));
+            }
 
+            return dictControllerInfoRE;
+
+        }
 
         public short GetMaxAmountForMixedLinkageConfig()
         {
@@ -247,6 +285,12 @@ namespace SCA.BusinessLib.BusinessLogic
         public List<DeviceType> GetDeviceTypeInfoWithoutFireDevice()
         {
             return null;
+        }
+
+
+        public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
         }
     }
 }

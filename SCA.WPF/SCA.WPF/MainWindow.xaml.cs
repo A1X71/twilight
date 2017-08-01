@@ -54,8 +54,7 @@ namespace SCA.WPF
 
         private void ShowWelcomeScreen()
         {
-           //  HideDetailsPane();
-          // HideNewUserControl();
+
              DetailsPane.Visibility = Visibility.Hidden;
              ProjectUserControl.Visibility = Visibility.Collapsed;
              WelcomeUserControl.Visibility = Visibility.Visible;
@@ -63,25 +62,25 @@ namespace SCA.WPF
         #region 首页面处理事件
         private void WelcomeUserControl_NewButtonClick(object sender, RoutedEventArgs e)
         {
-            //NewFamily(sender, e);, RoutedEventArgs e
+            
             this.WelcomeUserControl.Visibility = Visibility.Collapsed;
             this.ProjectUserControl.Visibility = Visibility.Visible;
         }
         private void WelcomeUserControl_OpenButtonClick(object sender, RoutedEventArgs e)
         {
    
-            //this.FilePathInputTextBox.Text = dialog.SelectedPath;
+            
         }
         private void WelcomeUserControl_ImportButtonClick(object sender, RoutedEventArgs e)
         {
-            //NewFamily(sender, e);, RoutedEventArgs e
+            
             this.WelcomeUserControl.Visibility = Visibility.Collapsed;
             this.ImportFromOldVersionUserControl.Visibility = Visibility.Visible;
         }
         #endregion
         private void ProjectUserControl_AddButtonClick(object sender, RoutedEventArgs e)
         {
-            //NewFamily(sender, e);, RoutedEventArgs e
+            
             List<SCA.Model.ProjectModel> lstProject=new List<SCA.Model.ProjectModel>();
             lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);            
             vm.SetNavigatingViewModel(lstProject);
@@ -93,7 +92,6 @@ namespace SCA.WPF
         }
         private void ProjectUserControl_CloseButtonClick(object sender, RoutedEventArgs e)
         {
-            //NewFamily(sender, e);, RoutedEventArgs e           
             SCA.BusinessLib.ProjectManager.GetInstance.CloseProject();
             vm.CloseNavigatingViewModel();
             this.DataContext = vm;
@@ -103,7 +101,6 @@ namespace SCA.WPF
             this.DetailsPane.Visibility = Visibility.Visible;
             
         }
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void CreateControllerUserControl_AddButtonClick(object sender, RoutedEventArgs e)
         {
             List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
@@ -145,7 +142,6 @@ namespace SCA.WPF
         {
 
             CreateControllerUserControl.Visibility = Visibility.Collapsed;
-//            CreateControllerUserControl.InitializeComponent();
             this.DetailsPane.Visibility = Visibility.Visible;
         }
         #region 菜单事件处理程序 
@@ -238,18 +234,13 @@ namespace SCA.WPF
             someUI.HorizontalAlignment = HorizontalAlignment.Center;
             someUI.VerticalAlignment = VerticalAlignment.Center;
             
-            //someUI.AddButtonClick += CreateLoopUserControl_AddButtonClick;
             
             someUI.CloseButtonClick += EditLoopsUserControl_CloseButtonClick;
             Border loopUCBorder = new Border();
-            //myBorder1.Height =;
-            //myBorder1.
             loopUCBorder.BorderBrush = Brushes.SteelBlue;
             loopUCBorder.BorderThickness = new Thickness(0, 0, 1, 0);
-            //DockPanel.SetDock(projectSettingUCBorder, Dock.Top);
             StackPanel.SetFlowDirection(loopUCBorder, System.Windows.FlowDirection.LeftToRight);
             loopUCBorder.Child = someUI;
-            //((DockPanel)LeftContainer).SetDock(myBorder1, Dock.Top);            
             CreateViewArea.Children.Add(loopUCBorder);
             CreateViewArea.Visibility = Visibility.Visible;
         }

@@ -34,8 +34,7 @@ namespace SCA.Interface
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        bool ExportProjectToExcel(ProjectModel project);
-
+        bool ExportProjectToExcel(ProjectModel project,string strFilePath,IFileService fileService);
         /// <summary>
         /// 将项目信息保存至文件中
         /// </summary>

@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 158 $
+*  $Revision: 185 $
 *  $Author: dennis_zhang $        
-*  $Date: 2017-07-25 10:12:59 +0800 (周二, 25 七月 2017) $
+*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
 ***************************************************************************/
 using Caliburn.Micro;
 using System;
@@ -51,15 +51,15 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             this.Loop = deviceInfo8053.Loop;
             this.LoopID = deviceInfo8053.LoopID;
+            this.MachineNo = deviceInfo8053.MachineNo;
             this.ID = deviceInfo8053.ID;
             this.Code = deviceInfo8053.Code;
-            //   this.SimpleCode = deviceInfo8053.SimpleCode;
             this.TypeCode = deviceInfo8053.TypeCode;
             this.Disable = deviceInfo8053.Disable;
+            this.Feature = deviceInfo8053.Feature;
             this.LinkageGroup1 = deviceInfo8053.LinkageGroup1;
             this.LinkageGroup2 = deviceInfo8053.LinkageGroup2;
-            this.AlertValue = deviceInfo8053.AlertValue;
-            this.ForcastValue = deviceInfo8053.ForcastValue;
+            this.LinkageGroup3 = deviceInfo8053.LinkageGroup3;
             this.DelayValue = deviceInfo8053.DelayValue;
             this.BuildingNo = deviceInfo8053.BuildingNo;
             this.ZoneNo = deviceInfo8053.ZoneNo;
@@ -74,13 +74,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             deviceInfo8053.LoopID = this.LoopID;
             deviceInfo8053.ID = this.ID;
             deviceInfo8053.Code = this.Code;
-            //deviceInfo8053.SimpleCode = this.SimpleCode;
+            deviceInfo8053.MachineNo = this.MachineNo;
+            deviceInfo8053.Feature = this.Feature;
             deviceInfo8053.TypeCode = this.TypeCode;
             deviceInfo8053.Disable = this.Disable;
             deviceInfo8053.LinkageGroup1 = this.LinkageGroup1;
             deviceInfo8053.LinkageGroup2 = this.LinkageGroup2;
-            deviceInfo8053.AlertValue = this.AlertValue;
-            deviceInfo8053.ForcastValue = this.ForcastValue;
+            deviceInfo8053.LinkageGroup3 = this.LinkageGroup3;
             deviceInfo8053.DelayValue = this.DelayValue;
             deviceInfo8053.BuildingNo = this.BuildingNo;
             deviceInfo8053.ZoneNo = this.ZoneNo;
@@ -112,7 +112,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public string this[string columnName]
         {
-
             get
             {
                 ControllerConfig8053 config = new ControllerConfig8053();
@@ -122,16 +121,23 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 string errorMessage = String.Empty;
                 switch (columnName)
                 {
-
-                    case "Disable":
-                        if(this.Disable != null)
+                    case "Feature":
+                        if(this.Feature != null)
                         {
-                            rule = dictMessage["Disable"];
+                            rule = dictMessage["Feature"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.Disable.ToString()))
+                            if (!exminator.IsMatch(this.Feature.ToString()))
                             {
                                 errorMessage = rule.ErrorMessage;
                             }
+                        }
+                        break;
+                    case "Disable":
+                        rule = dictMessage["Disable"];
+                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                        if (!exminator.IsMatch(this.Disable.ToString()))
+                        {
+                            errorMessage = rule.ErrorMessage;
                         }
                         break;                    
                     case "LinkageGroup1":
@@ -156,23 +162,12 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                             }
                         }
                         break;
-                    case "AlertValue":
-                        if (this.AlertValue != null)
+                    case "LinkageGroup3":
+                        if (!string.IsNullOrEmpty(this.LinkageGroup3))
                         {
-                            rule = dictMessage["AlertValue"];
+                            rule = dictMessage["StandardLinkageGroup"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.AlertValue.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "ForcastValue":
-                        if (this.ForcastValue != null)
-                        {
-                            rule = dictMessage["ForcastValue"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.ForcastValue.ToString()))
+                            if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
                             {
                                 errorMessage = rule.ErrorMessage;
                             }
@@ -389,25 +384,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return config.GetDeviceTypeInfo();
             }
         }
-        #region  作废-->改为IEditable接口集合
-        //private ObservableCollection<DeviceInfo8053> _deviceInfoObservableCollection;
-        //public ObservableCollection<DeviceInfo8053> DeviceInfoObservableCollection
-        //{
-        //    get
-        //    {
-        //        if (_deviceInfoObservableCollection == null)
-        //        {
-        //            _deviceInfoObservableCollection = new ObservableCollection<DeviceInfo8053>();
-        //        }
-        //        return _deviceInfoObservableCollection;
-        //    }
-        //    set
-        //    {
-        //        _deviceInfoObservableCollection = value;                
-        //        NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
-        //    }
-        //}
-        #endregion
         public EditableDeviceInfo8053Collection DeviceInfoObservableCollection
         {
             get
@@ -415,7 +391,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 if (_deviceInfoCollection == null)
                 {
                     _deviceInfoCollection = new EditableDeviceInfo8053Collection(TheLoop, null);
-                    //  _deviceInfoCollection.CollectionChanged+=new NotifyCollectionChangedEventHandler
                 }
                 return _deviceInfoCollection;
             }

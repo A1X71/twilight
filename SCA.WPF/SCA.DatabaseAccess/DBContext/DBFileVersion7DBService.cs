@@ -93,7 +93,7 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool CreateTableForLinkageConfigStandard()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigStandard(ID integer not null primary key autoincrement,Code varchar(4) not null, DeviceNo1 varchar(10),DeviceNo2 varchar(10), DeviceNo3 varchar(10), DeviceNo4 varchar(10), DeviceNo5 varchar(10),DeviceNo6 varchar(10),DeviceNo7 varchar(10),DeviceNo8 varchar(10),DeviceNo9 varchar(10),DeviceNo10 varchar(10), ActionCoefficient integer, LinkageNo1 varchar(4),LinkageNo2 varchar(4),LinkageNo3 varchar(4),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigStandard(ID integer not null primary key autoincrement,Code varchar(4) not null, DeviceNo1 varchar(20),DeviceNo2 varchar(20), DeviceNo3 varchar(20), DeviceNo4 varchar(20), DeviceNo5 varchar(20), DeviceNo6 varchar(20),DeviceNo7 varchar(20),DeviceNo8 varchar(20),DeviceNo9 varchar(20),DeviceNo10 varchar(20), DeviceNo11 varchar(20), DeviceNo12 varchar(20), OutputDevice1 varchar(20), OutputDevice2 varchar(20), ActionCoefficient integer, LinkageNo1 varchar(4),LinkageNo2 varchar(4),LinkageNo3 varchar(4),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
             _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
             return true;
         }
@@ -1121,11 +1121,6 @@ namespace SCA.DatabaseAccess.DBContext
                 sbDeviceInfoSQL.Append("Disable Boolean,");
                 sbDeviceInfoSQL.Append("Feature integer,");
                 sbDeviceInfoSQL.Append("DelayValue integer,");
-                sbDeviceInfoSQL.Append("SensitiveLevel integer,");
-                sbDeviceInfoSQL.Append("BoardNo integer,");
-                sbDeviceInfoSQL.Append("SubBoardNo integer,");
-                sbDeviceInfoSQL.Append("KeyNo integer,");
-                sbDeviceInfoSQL.Append("BroadcastZone varchar(8),");
                 sbDeviceInfoSQL.Append("LinkageGroup1 varchar(4),");
                 sbDeviceInfoSQL.Append("LinkageGroup2 varchar(4),");
                 sbDeviceInfoSQL.Append("LinkageGroup3 varchar(4),");
@@ -1134,8 +1129,6 @@ namespace SCA.DatabaseAccess.DBContext
                 sbDeviceInfoSQL.Append("FloorNo integer,");
                 sbDeviceInfoSQL.Append("RoomNo integer,");
                 sbDeviceInfoSQL.Append("Location varchar(40),");
-                sbDeviceInfoSQL.Append("SDPKey varchar(6),");
-                sbDeviceInfoSQL.Append("MCBID integer references ManualControlBoard(ID) on delete restrict deferrable initially deferred,");
                 sbDeviceInfoSQL.Append("LoopID integer references Loop(ID) on delete restrict deferrable initially deferred not null,");
                 sbDeviceInfoSQL.Append("TypeCode integer references DeviceType(Code) on delete restrict deferrable initially deferred not null,unique(Code,LoopID));");
                 _databaseService.ExecuteBySql(sbDeviceInfoSQL);
@@ -1159,11 +1152,6 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append("Disable,");
             sbDeviceInfoSQL.Append("Feature,");
             sbDeviceInfoSQL.Append("DelayValue,");
-            sbDeviceInfoSQL.Append("SensitiveLevel,");
-            sbDeviceInfoSQL.Append("BoardNo,");
-            sbDeviceInfoSQL.Append("SubBoardNo,");
-            sbDeviceInfoSQL.Append("KeyNo,");
-            sbDeviceInfoSQL.Append("BroadcastZone,");
             sbDeviceInfoSQL.Append("LinkageGroup1,");
             sbDeviceInfoSQL.Append("LinkageGroup2,");
             sbDeviceInfoSQL.Append("LinkageGroup3,");
@@ -1172,8 +1160,6 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append("FloorNo,");
             sbDeviceInfoSQL.Append("RoomNo,");
             sbDeviceInfoSQL.Append("Location,");
-            //sbDeviceInfoSQL.Append("SDPKey,");
-            //sbDeviceInfoSQL.Append("MCBID,");
             sbDeviceInfoSQL.Append("LoopID,");
             sbDeviceInfoSQL.Append("TypeCode) ");
             sbDeviceInfoSQL.Append(" VALUES(");
@@ -1182,11 +1168,6 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append(device.Disable + "','");
             sbDeviceInfoSQL.Append(device.Feature + "','");
             sbDeviceInfoSQL.Append(device.DelayValue + "','");
-            sbDeviceInfoSQL.Append(device.SensitiveLevel + "','");
-            sbDeviceInfoSQL.Append(device.BoardNo + "','");
-            sbDeviceInfoSQL.Append(device.SubBoardNo + "','");
-            sbDeviceInfoSQL.Append(device.KeyNo + "','");
-            sbDeviceInfoSQL.Append(device.BroadcastZone + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup1 + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup2 + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup3 + "','");
@@ -1211,14 +1192,9 @@ namespace SCA.DatabaseAccess.DBContext
                 Model.DeviceInfo8053 model = new Model.DeviceInfo8053();
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
-                model.Disable = (bool?)dt.Rows[i]["Disable"];
+                model.Disable = (bool)dt.Rows[i]["Disable"];
                 model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
                 model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
-                model.SubBoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
-                model.KeyNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
-                model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
@@ -1227,8 +1203,6 @@ namespace SCA.DatabaseAccess.DBContext
                 model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
                 model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
-                //model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
-                //model.MCBID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
@@ -1246,14 +1220,9 @@ namespace SCA.DatabaseAccess.DBContext
                 Model.DeviceInfo8053 model = new Model.DeviceInfo8053();
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
-                model.Disable = (bool?)dt.Rows[i]["Disable"];
+                model.Disable = (bool)dt.Rows[i]["Disable"];
                 model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
                 model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
-                model.SubBoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
-                model.KeyNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
-                model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
@@ -1262,8 +1231,6 @@ namespace SCA.DatabaseAccess.DBContext
                 model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
                 model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
-                //model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
-                //model.MCBID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
@@ -1657,7 +1624,7 @@ namespace SCA.DatabaseAccess.DBContext
 
         public int AddStandardLinkageConfigInfo(LinkageConfigStandard linkageConfigStandard)
         {
-            StringBuilder sbSQL = new StringBuilder("REPLACE INTO LinkageConfigStandard(ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID) ");
+            StringBuilder sbSQL = new StringBuilder("REPLACE INTO LinkageConfigStandard(ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10, DeviceNo11, DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID) ");
             sbSQL.Append("VALUES(");
             sbSQL.Append(linkageConfigStandard.ID + ",'");
             sbSQL.Append(linkageConfigStandard.Code + "','");
@@ -1671,6 +1638,10 @@ namespace SCA.DatabaseAccess.DBContext
             sbSQL.Append(linkageConfigStandard.DeviceNo8 + "','");
             sbSQL.Append(linkageConfigStandard.DeviceNo9 + "','");
             sbSQL.Append(linkageConfigStandard.DeviceNo10 + "','");
+            sbSQL.Append(linkageConfigStandard.DeviceNo11 + "','");
+            sbSQL.Append(linkageConfigStandard.DeviceNo12 + "','");
+            sbSQL.Append(linkageConfigStandard.OutputDevice1 + "','");
+            sbSQL.Append(linkageConfigStandard.OutputDevice2 + "','");
             sbSQL.Append(linkageConfigStandard.ActionCoefficient + "','");
             sbSQL.Append(linkageConfigStandard.LinkageNo1 + "','");
             sbSQL.Append(linkageConfigStandard.LinkageNo2 + "','");
@@ -1756,7 +1727,7 @@ namespace SCA.DatabaseAccess.DBContext
         public List<LinkageConfigStandard> GetStandardLinkageConfig(ControllerModel controller)
         {
             List<LinkageConfigStandard> lstData = new List<LinkageConfigStandard>();
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID from LinkageConfigStandard where controllerID=" + controller.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10,DeviceNo11,DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID from LinkageConfigStandard where controllerID=" + controller.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1773,6 +1744,10 @@ namespace SCA.DatabaseAccess.DBContext
                 model.DeviceNo8 = dt.Rows[i]["DeviceNo8"].ToString();
                 model.DeviceNo9 = dt.Rows[i]["DeviceNo9"].ToString();
                 model.DeviceNo10 = dt.Rows[i]["DeviceNo10"].ToString();
+                model.DeviceNo11 = dt.Rows[i]["DeviceNo11"].ToString();
+                model.DeviceNo12 = dt.Rows[i]["DeviceNo12"].ToString();
+                model.OutputDevice1 = dt.Rows[i]["OutputDevice1"].ToString();
+                model.OutputDevice2 = dt.Rows[i]["OutputDevice2"].ToString();
                 model.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["ActionCoefficient"]);
                 model.LinkageNo1 = dt.Rows[i]["LinkageNo1"].ToString();
                 model.LinkageNo2 = dt.Rows[i]["LinkageNo2"].ToString();

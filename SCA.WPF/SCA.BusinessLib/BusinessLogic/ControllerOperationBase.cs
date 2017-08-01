@@ -557,6 +557,20 @@ namespace SCA.BusinessLib.BusinessLogic
             
             return true;
         }
+        public void SetDefaultExcelStyle(ref IExcelService excelService)
+        {
+            if (excelService != null)
+            { 
+                CellStyle cellCaptionStyle = GetCaptionCellStyle();
+                CellStyle cellSubCaptionStyle = GetSubCaptionCellStyle();
+                CellStyle cellDataStyle = GetDataCellStyle("Left", false);
+                CellStyle cellTableHeadStyle = GetTableHeadCellStyle();
+                excelService.CellCaptionStyle = cellCaptionStyle;
+                excelService.CellSubCaptionStyle = cellSubCaptionStyle;
+                excelService.CellDataStyle = cellDataStyle;
+                excelService.CellTableHeadStyle = cellTableHeadStyle;
+            }
+        }
         protected virtual bool GenerateExcelTemplateDeviceTypeSheet(List<string> sheetNames, IControllerConfig config,ref IExcelService excelService)
         {
             try
@@ -1751,6 +1765,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
         #endregion
+
         /// <summary>
         /// 获取控制器内不同器件类型的数量
         /// </summary>
@@ -1768,7 +1783,7 @@ namespace SCA.BusinessLib.BusinessLogic
         {          
             SummaryInfo summary = new SummaryInfo();            
             summary.Icon = @"Resources\Icon\Style1\Controller.jpg"; 
-            summary.Name = "控制器:" + controller.Name + "(" + controller.Type.ToString() + "," + controller.DeviceAddressLength.ToString() + ")";
+            summary.Name = "控制器:" + controller.Name + "[" + controller.Type.ToString() + "," + controller.DeviceAddressLength.ToString() + "]";
             summary.Number = 1;
             summary.Level = startLevel;
             //summary.ChildNodes.Add();

@@ -36,23 +36,7 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            //SCA.Model.LoopModel loop = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).TheLoop;
-            //var selectedItems = DataGrid_Device.SelectedItems;
-            //if (selectedItems != null)
-            //{
-            //    SCA.BusinessLib.BusinessLogic.DeviceService8036 deviceService = new SCA.BusinessLib.BusinessLogic.DeviceService8036();
-            //    deviceService.TheLoop = loop;
 
-            //    foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036 r in selectedItems)
-            //    {
-            //        if (r != null)
-            //        {
-            //            deviceService.DeleteBySpecifiedID(r.ID);
-            //        }
-            //    }
-            //    //刷新界面
-            //    ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).DeviceInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036Collection(loop, loop.GetDevices<Model.DeviceInfo8036>());
-            //}
         }
     }
 }

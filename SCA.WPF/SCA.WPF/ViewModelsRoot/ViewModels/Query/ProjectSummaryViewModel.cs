@@ -11,7 +11,6 @@ using SCA.WPF.Utility;
 using SCA.Interface;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.Model.BusinessModel;
-
 using Caliburn.Micro;
 using System;
 

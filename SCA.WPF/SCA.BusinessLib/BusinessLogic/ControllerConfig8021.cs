@@ -149,7 +149,25 @@ namespace SCA.BusinessLib.BusinessLogic
             return dictDeviceInfoRE;
         }
 
+        public Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictControllerInfoRE = new Dictionary<string, RuleAndErrorMessage>();
+            //名称
+            dictControllerInfoRE.Add("Name", new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF()（）]{0,16}$", "允许填写”中文字符、英文字符、阿拉伯数字、圆括号”,最大长度16个字符"));
+            if (deviceAddressLength == 7)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{2}$", "请填写2位数字"));
+            }
+            else if (deviceAddressLength == 8)
+            {
+                //机号
+                dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{3}$", "请填写3位数字"));
+            }
 
+            return dictControllerInfoRE;
+
+        }
 
 
 
@@ -241,6 +259,12 @@ namespace SCA.BusinessLib.BusinessLogic
         public List<DeviceType> GetDeviceTypeInfoWithoutFireDevice()
         {
             return null;
+        }
+
+
+        public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
         }
     }
 }

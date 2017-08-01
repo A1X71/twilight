@@ -123,6 +123,10 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.DeviceNo8 = linkageConfigStandard.DeviceNo8;
                     result.DeviceNo9 = linkageConfigStandard.DeviceNo9;
                     result.DeviceNo10 = linkageConfigStandard.DeviceNo10;
+                    result.DeviceNo11 = linkageConfigStandard.DeviceNo11;
+                    result.DeviceNo12 = linkageConfigStandard.DeviceNo12;
+                    result.OutputDevice1 = linkageConfigStandard.OutputDevice1;
+                    result.OutputDevice2 = linkageConfigStandard.OutputDevice2;
                     result.LinkageNo1 = linkageConfigStandard.LinkageNo1;
                     result.LinkageNo2 = linkageConfigStandard.LinkageNo2;
                     result.LinkageNo3 = linkageConfigStandard.LinkageNo3;
