@@ -25,20 +25,23 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel)this.DataContext).TheController;
-            var selectedItems = DataGrid_Mixed.SelectedItems;
-            if (selectedItems != null)
+            if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                SCA.Interface.BusinessLogic.ILinkageConfigMixedService lcsService = new SCA.BusinessLib.BusinessLogic.LinkageConfigMixedService(controller);
-                foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigMixed r in selectedItems)
+                SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel)this.DataContext).TheController;
+                var selectedItems = DataGrid_Mixed.SelectedItems;
+                if (selectedItems != null)
                 {
-                    if (r != null)
+                    SCA.Interface.BusinessLogic.ILinkageConfigMixedService lcsService = new SCA.BusinessLib.BusinessLogic.LinkageConfigMixedService(controller);
+                    foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigMixed r in selectedItems)
                     {
-                        lcsService.DeleteBySpecifiedID(r.ID);
+                        if (r != null)
+                        {
+                            lcsService.DeleteBySpecifiedID(r.ID);
+                        }
                     }
+                    //刷新界面
+                    ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel)this.DataContext).MixedLinkageConfigInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigMixeds(controller, controller.MixedConfig);
                 }
-                //刷新界面
-                ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel)this.DataContext).MixedLinkageConfigInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigMixeds(controller, controller.MixedConfig);
             }
        }
     }

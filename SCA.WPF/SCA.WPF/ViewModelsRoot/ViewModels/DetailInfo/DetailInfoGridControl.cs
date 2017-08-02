@@ -8,6 +8,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Windows.Data;
 using SCA.WPF.Utility;
+using SCA.Model;
 /* ==============================
 *
 * Author     : William
@@ -30,22 +31,36 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                      new CanExecuteRoutedEventHandler(OnCanExecutePaste)
                      )
                 );
-        }
-        /// <summary>
-        ///     DependencyProperty for CanUserAddRows.
-        /// </summary>
+        }       
+        
         public static readonly DependencyProperty CanUserPasteToNewRowsProperty =
             DependencyProperty.Register("CanUserPasteToNewRows",
                                         typeof(bool), typeof(DetailInfoGridControl),
                                         new FrameworkPropertyMetadata(true, null, null));
         /// <summary>
-        ///     Whether the end-user can add new rows to the ItemsSource.
+        /// 列表类型
+        /// </summary>
+        public static readonly DependencyProperty DetailTypeProperty =
+            DependencyProperty.Register("DetailType",
+                                        typeof(Object), typeof(DetailInfoGridControl),
+                                        new FrameworkPropertyMetadata(true, null, null));
+        /// <summary>
+        /// 允许用户向集合中添加新行
         /// </summary>
         public bool CanUserPasteToNewRows
         {
             get { return (bool)GetValue(CanUserPasteToNewRowsProperty); }
             set { SetValue(CanUserPasteToNewRowsProperty, value); }
         }
+        /// <summary>
+        /// 列表装载内容类型
+        /// </summary>
+        public Object DetailType
+        {
+            get { return (Object)GetValue(DetailTypeProperty); }
+            set { SetValue(DetailTypeProperty, value); }
+        }
+
         private static void OnCanExecutePaste(object target, CanExecuteRoutedEventArgs args)
         {
             ((DetailInfoGridControl)target).OnCanExecutePaste(args);
@@ -67,6 +82,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             //Debug.WriteLine("OnExecutedPaste begin");
             // parse the clipboard data            
+            object obj = this.DetailType;
             List<string[]> rowData = ClipboardHelper.ParseClipboardData();  
             bool hasAddedNewRow = false;
             if (rowData != null)
@@ -98,30 +114,33 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 
                 
                 int maxColumnDisplayIndex = Columns.Count - 1;
-                int rowDataIndex = 0;
+                int rowDataIndex = 1;
                 for (int i = minRowIndex; i <= maxRowIndex && rowDataIndex < rowData.Count; i++, rowDataIndex++)
                 {
-                    #region 将数据粘贴至新增的行中
-                    if (CanUserPasteToNewRows && CanUserAddRows && i == maxRowIndex)
-                    {
-                        // add a new row to be pasted to
-                        ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
-                        IEditableCollectionView iecv = cv as IEditableCollectionView;
-                        if (iecv != null)
+                    if (CanUserAddRows)
+                    { 
+                        #region 将数据粘贴至新增的行中
+                        if (CanUserPasteToNewRows && CanUserAddRows && i == maxRowIndex)
                         {
-                            hasAddedNewRow = true;
-                            iecv.AddNew();
-
-                            if (rowDataIndex + 1 < rowData.Count)
+                            // add a new row to be pasted to
+                            ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
+                            IEditableCollectionView iecv = cv as IEditableCollectionView;
+                            if (iecv != null)
                             {
-                                // still has more items to paste, update the maxRowIndex
-                                maxRowIndex = Items.Count - 1;
+                                hasAddedNewRow = true;
+                                iecv.AddNew();
+
+                                if (rowDataIndex + 1 < rowData.Count)
+                                {
+                                    // still has more items to paste, update the maxRowIndex
+                                    maxRowIndex = Items.Count - 1;
+                                }
                             }
                         }
-                    }
-                    else if (i == maxRowIndex)
-                    {
-                        continue;
+                        else if (i == maxRowIndex)
+                        {
+                            continue;
+                        }
                     }
                     #endregion
 

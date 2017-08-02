@@ -47,7 +47,7 @@ namespace SCA.WPF.Utility
                 }
                 Debug.Assert(rawDataStr != null, string.Format("clipboardRawData: {0}, could not be converted to a string or memorystream.", clipboardRawData));
 
-                string[] rows = rawDataStr.Split(new string[] { "input\n" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] rows = rawDataStr.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 if (rows != null && rows.Length > 0)
                 {
                     clipboardData = new List<string[]>();

@@ -8,6 +8,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"  
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
+             xmlns:utility="clr-namespace:SCA.WPF.Utility"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -86,7 +87,12 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"  
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"          
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding Path=MixedLinkageConfigInfoObservableCollection}">
                 <local:DetailInfoGridControl.Resources>                    
                     <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
@@ -99,13 +105,35 @@
                     </Style>
                 </local:DetailInfoGridControl.Resources>
             
+            
                 <local:DetailInfoGridControl.Columns>
-                <dg:DataGridTextColumn Width="Auto" 
-                                       Header="ID" 
-                                       Binding="{Binding Path=ID}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"                                       
-                                       />
-                <dg:DataGridTextColumn Width="120"                                        
+                    <!--<dg:DataGridTemplateColumn Width="Auto"   
+                                        Header="ID"                                           
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="HeaderID">
+                                    <TextBlock.Text>
+                                        <utility:LazyBinding ElementName="HeaderID" Path="ID"/>
+                                    </TextBlock.Text>
+                                    --><!--<TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectDeviceCommand,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>--><!--
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>-->
+
+                    <dg:DataGridTextColumn Width="120"                                        
+                                       Header="ID"       
+                                       Visibility="Hidden"
+                                       Binding="{Binding Path=ID,ValidatesOnDataErrors=True}"  
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                       EditingElementStyle="{StaticResource errorStyle}"
+                                       >
+                    </dg:DataGridTextColumn>    
+                    
+                    <dg:DataGridTextColumn Width="120"                                        
                                        Header="编号"                                       
                                        Binding="{Binding Path=Code,ValidatesOnDataErrors=True}"  
                                        ElementStyle="{StaticResource tb_ElementStyle}"
@@ -126,10 +154,7 @@
                 </dg:DataGridComboBoxColumn>
                 <dg:DataGridComboBoxColumn Header="动作类型" ItemsSource="{Binding Source={StaticResource LinkageActionTypeEnumDS}}" SelectedValueBinding="{Binding Path=ActionType,Mode=TwoWay}" />
                 <dg:DataGridComboBoxColumn Header="A分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeA,Mode=TwoWay}" />
-                    <!--<dg:DataGridTextColumn Width="Auto" 
-                                    Header="A分类" 
-                                    Binding="{Binding Path=TypeA}" 
-                                    ElementStyle="{StaticResource tb_ElementStyle}"/>-->
+                    
                 <dg:DataGridComboBoxColumn Width="*" Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
                                             Visibility="{Binding  Data.IsVisualColumnGroup, Source={StaticResource proxy} }">
                     <dg:DataGridComboBoxColumn.ItemsSource>
@@ -168,13 +193,7 @@
                                        Binding="{Binding Path=DeviceCodeA,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
-                                       />
-                <!--<dg:DataGridTextColumn Width="Auto" 
-                                       Header="A类型" 
-                                       Binding="{Binding Path=DeviceTypeCodeA}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"                                  
-                                       />-->
-
+                                       />        
                     <dg:DataGridComboBoxColumn Header="A类型"  
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
@@ -182,12 +201,7 @@
                                                ItemsSource="{Binding Source={StaticResource TypesCollection}}"
                                                >
                     </dg:DataGridComboBoxColumn>
-
-
                 <dg:DataGridComboBoxColumn Header="B分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeB,Mode=TwoWay}" />
-
-
-
                 <dg:DataGridComboBoxColumn Width="*" Header="B类别" SelectedItemBinding="{Binding Path=CategoryBString}"
                                         Visibility="{Binding  Data.IsVisualColumnGroup, Source={StaticResource proxy} }">
                     <dg:DataGridComboBoxColumn.ItemsSource>
@@ -227,10 +241,10 @@
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />
-                <!--<dg:DataGridTextColumn Width="Auto" 
+                <dg:DataGridTextColumn Width="Auto" 
                                        Header="B类型" 
                                        Binding="{Binding Path=DeviceTypeCodeB}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
                     
                     <dg:DataGridComboBoxColumn Header="B类型"  
                                                DisplayMemberPath="Name"
@@ -241,11 +255,7 @@
                     </dg:DataGridComboBoxColumn>
 
 
-                    <dg:DataGridComboBoxColumn Header="C分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeC,Mode=TwoWay}" />
-                    <!--<dg:DataGridTextColumn Width="Auto" 
-                                       Header="C分类" 
-                                       Binding="{Binding Path=TypeC}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
+                    <dg:DataGridComboBoxColumn Header="C分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeC,Mode=TwoWay}" />                    
 
                 <dg:DataGridTextColumn Width="Auto" 
                                        Header="C楼号" 
@@ -281,11 +291,7 @@
                                        Binding="{Binding Path=DeviceCodeC,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
-                                       />
-                <!--<dg:DataGridTextColumn Width="*" 
-                                       Header="C类型" 
-                                       Binding="{Binding Path=DeviceTypeCodeC}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
+                                       />                
                     <dg:DataGridComboBoxColumn Header="C类型"  
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"

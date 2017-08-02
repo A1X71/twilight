@@ -485,6 +485,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = ControllerNodeType.Mixed;
+
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -509,6 +511,18 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 _isVisualColumnGroup = value;
                 NotifyOfPropertyChange("IsVisualColumnGroup");
+            }
+        }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
             }
         }
         public int AddedAmount
@@ -630,6 +644,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 eLCM.ControllerID = v.ControllerID;
                 eLCM.ID = v.ID;
                 eLCM.Code =v.Code;
+                eLCM.ActionType = v.ActionType;
+                eLCM.TypeA = v.TypeA;
+                eLCM.TypeB = v.TypeB;
+                eLCM.TypeC = v.TypeC;                
                 MixedLinkageConfigInfoObservableCollection.Add(eLCM);
             }            
         }
