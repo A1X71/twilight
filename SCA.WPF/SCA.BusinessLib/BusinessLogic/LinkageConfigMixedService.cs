@@ -76,7 +76,11 @@ namespace SCA.BusinessLib.BusinessLogic
                 _maxID++;
                 LinkageConfigMixed lcm = new LinkageConfigMixed();
                 lcm.Controller = _controller;
-                lcm.ControllerID = _controller.ID;
+                lcm.ControllerID = _controller.ID;                
+                lcm.ActionType = LinkageActionType.AND;
+                lcm.TypeA = LinkageType.ZoneLayer;
+                lcm.TypeB = LinkageType.ZoneLayer;
+                lcm.TypeC = LinkageType.ZoneLayer;
                 lcm.ID = _maxID;
                 lcm.Code = tempCode.ToString().PadLeft(MaxMixedLinkageConfigAmount.ToString().Length, '0');
                 lcm.IsDirty = true;
@@ -84,6 +88,10 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             _maxCode = tempCode;
             DataRecordAlreadySet = false;
+            foreach (var singleItem in lstLinkageConfigMixed)
+            {
+                Update(singleItem);
+            }
             return lstLinkageConfigMixed;
         }
 
@@ -141,7 +149,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     _controller.MixedConfig.Add(linkageConfigMixed);
                     DataRecordAlreadySet = true;
-                    ProjectManager.GetInstance.MaxIDForMixedLinkageConfig++;
+                    if (linkageConfigMixed.ID > ProjectManager.GetInstance.MaxIDForMixedLinkageConfig)
+                    {
+                        ProjectManager.GetInstance.MaxIDForMixedLinkageConfig = linkageConfigMixed.ID;
+                    }
+                    else
+                    { 
+                        ProjectManager.GetInstance.MaxIDForMixedLinkageConfig++;
+                    }
                 }
             }
             catch

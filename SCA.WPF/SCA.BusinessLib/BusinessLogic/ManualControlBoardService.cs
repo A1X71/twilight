@@ -124,7 +124,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     _controller.ControlBoard.Add(mcb);
                     DataRecordAlreadySet = true;
-                    ProjectManager.GetInstance.MaxIDForManualControlBoard++;
+                    if (mcb.ID > ProjectManager.GetInstance.MaxIDForManualControlBoard)
+                    {
+                        ProjectManager.GetInstance.MaxIDForManualControlBoard = mcb.ID;
+                    }
+                    else
+                    {
+                        ProjectManager.GetInstance.MaxIDForManualControlBoard++;
+                    }                    
                 }
             }
             catch

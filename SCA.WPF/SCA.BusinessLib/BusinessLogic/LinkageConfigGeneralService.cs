@@ -123,7 +123,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     _controller.GeneralConfig.Add(linkageConfigGeneral);
                     DataRecordAlreadySet = true;
-                    ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig++;
+                    if (linkageConfigGeneral.ID > ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig)
+                    {
+                        ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig = linkageConfigGeneral.ID;
+                    }
+                    else
+                    {
+                        ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig++;
+                    }                    
                 }
             }
             catch
