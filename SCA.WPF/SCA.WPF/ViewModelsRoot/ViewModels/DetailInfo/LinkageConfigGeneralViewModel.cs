@@ -12,6 +12,7 @@ using SCA.BusinessLib.BusinessLogic;
 using SCA.WPF.Utility;
 using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.Controller;
+using System.Windows;
 /* ==============================
 *
 * Author     : William
@@ -23,7 +24,7 @@ using SCA.BusinessLib.Controller;
 */
 namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 {
-    public class EditableLinkageConfigGeneral : LinkageConfigGeneral, IEditableObject,IDataErrorInfo
+    public class EditableLinkageConfigGeneral : LinkageConfigGeneral, IEditableObject, IDataErrorInfo, INotifyPropertyChanged
     {
         public event ItemEndEditEventHandler ItemEndEdit;
         private EditableLinkageConfigGeneral copy;
@@ -38,6 +39,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ID = linkageConfigGeneral.ID;
             this.Code=linkageConfigGeneral.Code;
             this.ActionCoefficient= linkageConfigGeneral.ActionCoefficient;
+            this.CategoryA = linkageConfigGeneral.CategoryA;
             this.BuildingNoA=linkageConfigGeneral.BuildingNoA;
             this.ZoneNoA=linkageConfigGeneral.ZoneNoA;
             this.LayerNoA1=linkageConfigGeneral.LayerNoA1;
@@ -51,6 +53,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ZoneNoC=linkageConfigGeneral.ZoneNoC;
             this.LayerNoC=linkageConfigGeneral.LayerNoC;
             this.DeviceTypeCodeC = linkageConfigGeneral.DeviceTypeCodeC;
+            ToCategoryAString();
 
         }
         public LinkageConfigGeneral ToLinkageConfigGeneral()
@@ -62,6 +65,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigGeneral.ID = this.ID;
             linkageConfigGeneral.Code =this.Code;
             linkageConfigGeneral.ActionCoefficient = this.ActionCoefficient;
+            linkageConfigGeneral.CategoryA = this.CategoryA;
             linkageConfigGeneral.BuildingNoA = this.BuildingNoA;
             linkageConfigGeneral.ZoneNoA = this.ZoneNoA;
             linkageConfigGeneral.LayerNoA1 = this.LayerNoA1;
@@ -77,6 +81,58 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigGeneral.DeviceTypeCodeC = this.DeviceTypeCodeC;
             return linkageConfigGeneral;
         }
+
+        private string _categoryAString;
+        public string CategoryAString
+        {
+            get { return _categoryAString; }
+            set
+            {
+                _categoryAString = value;
+                RaisePropertyChanged("CategoryAString");
+                switch (_categoryAString)
+                {
+                    case "本系统":
+                        this.CategoryA = 0;
+                        break;
+                    case "它系统":
+                        this.CategoryA = 1;
+                        break;
+                }
+            }
+        }
+
+        public void ToCategoryAString()
+        {
+            switch (this.CategoryA)
+            {
+                case 0:
+                    CategoryAString = "本系统";
+                    break;
+                case 1:
+                    CategoryAString = "它系统";
+                    break;
+            }
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Methods
+
+        private void RaisePropertyChanged(string propertyName)
+        {
+            // take a copy to prevent thread issues
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
 
         public void BeginEdit()
         {
@@ -316,6 +372,21 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             ControllerConfigNone config = new ControllerConfigNone();
             return config.GetLinkageType();
         }
+
+        private Visibility _isVisualColumnGroup = Visibility.Collapsed;
+        public Visibility IsVisualColumnGroup
+        {
+            get
+            {
+                return _isVisualColumnGroup;
+            }
+            set
+            {
+                _isVisualColumnGroup = value;
+                NotifyOfPropertyChange("IsVisualColumnGroup");
+            }
+        }
+
 
         public int AddedAmount
         {

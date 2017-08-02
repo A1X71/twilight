@@ -46,6 +46,7 @@ namespace SCA.Model
         
         //器件编号A [当分类为“地址”时，存储的"器件编号"]
         public string  DeviceCodeA { get; set; }
+        public int CategoryA { get; set; }          //类别A
         //楼号A
         public int? BuildingNoA { get; set; }
         //区号A
@@ -60,6 +61,7 @@ namespace SCA.Model
         public LinkageType TypeB { get; set; }
         public string LoopNoB { get; set; }
         public string DeviceCodeB { get; set; }
+        public int CategoryB { get; set; }          //类别B
 
         public int? BuildingNoB { get; set; }
 

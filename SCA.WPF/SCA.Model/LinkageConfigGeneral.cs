@@ -34,6 +34,7 @@ namespace SCA.Model
         public int ID { get; set; }
         public string Code { get; set; }
         public int ActionCoefficient { get; set; }
+        public int CategoryA { get; set; }          //类别A
         public int? BuildingNoA { get; set; }
         public int? ZoneNoA { get; set; }
         public int? LayerNoA1 { get; set; }

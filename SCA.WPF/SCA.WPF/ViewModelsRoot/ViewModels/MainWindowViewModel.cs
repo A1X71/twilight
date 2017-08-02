@@ -249,16 +249,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                 case ControllerNodeType.General:
                     _linkageConfigGeneralViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;
                     _linkageConfigGeneralViewModel.GeneralLinkageConfigInfoObservableCollection = new EditableLinkageConfigGenerals(_linkageConfigGeneralViewModel.TheController, _linkageConfigGeneralViewModel.TheController.GeneralConfig);
+                    if (_linkageConfigGeneralViewModel.TheController.Type == ControllerType.NT8053)
+                    {
+                        _linkageConfigGeneralViewModel.IsVisualColumnGroup = Visibility.Visible;
+                    }
+                    else
+                    {
+                        _linkageConfigGeneralViewModel.IsVisualColumnGroup = Visibility.Collapsed;
+                    }
                     CurrentView = _linkageConfigGeneralViewModel;
                     break;
                 case ControllerNodeType.Mixed:
                     _linkageConfigMixedViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _linkageConfigMixedViewModel.MixedLinkageConfigInfoObservableCollection = new EditableLinkageConfigMixeds(_linkageConfigMixedViewModel.TheController, _linkageConfigMixedViewModel.TheController.MixedConfig);
+                    if (_linkageConfigMixedViewModel.TheController.Type == ControllerType.NT8053)
+                    {
+                        _linkageConfigMixedViewModel.IsVisualColumnGroup = Visibility.Visible;
+                    }
+                    else
+                    {
+                        _linkageConfigMixedViewModel.IsVisualColumnGroup = Visibility.Collapsed;
+                    }
                     CurrentView = _linkageConfigMixedViewModel;
                     break;
                 case ControllerNodeType.Board:
                     _manualControlBoardViewModel.TheController=(SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _manualControlBoardViewModel.ManualControlBoardInfoObservableCollection = new EditableManualControlBoards(_manualControlBoardViewModel.TheController,_manualControlBoardViewModel.TheController.ControlBoard);
+                    if(_manualControlBoardViewModel.TheController.Type == ControllerType.NT8053)
+                    {
+                        _manualControlBoardViewModel.IsVisualColumnGroup1 = Visibility.Collapsed;
+                        _manualControlBoardViewModel.IsVisualColumnGroup2 = Visibility.Visible;
+                    }
+                    else
+                    {
+                        _manualControlBoardViewModel.IsVisualColumnGroup1 = Visibility.Visible;
+                        _manualControlBoardViewModel.IsVisualColumnGroup2 = Visibility.Collapsed;
+                    }
                     CurrentView = _manualControlBoardViewModel;
                     break;
                 case ControllerNodeType.Loop:

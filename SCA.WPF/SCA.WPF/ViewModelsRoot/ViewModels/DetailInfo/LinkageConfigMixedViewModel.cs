@@ -13,6 +13,7 @@ using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
 using SCA.Interface.BusinessLogic;
+using System.Windows;
 /* ==============================
 *
 * Author     : William
@@ -47,6 +48,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.LoopNoA=linkageConfigMixed.LoopNoA;
             //器件编号A [当分类为“地址”时，存储的"器件编号"]
             this.DeviceCodeA=linkageConfigMixed.DeviceCodeA;
+            this.CategoryA = linkageConfigMixed.CategoryA;
             //楼号A
             this.BuildingNoA=linkageConfigMixed.BuildingNoA;
             //区号A
@@ -58,6 +60,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.TypeB=linkageConfigMixed.TypeB;
             this.LoopNoB=linkageConfigMixed.LoopNoB;
             this.DeviceCodeB=linkageConfigMixed.DeviceCodeB;
+            this.CategoryB = linkageConfigMixed.CategoryB;
             this.BuildingNoB=linkageConfigMixed.BuildingNoB;
             this.ZoneNoB=linkageConfigMixed.ZoneNoB;        
             this.LayerNoB=linkageConfigMixed.LayerNoB;
@@ -70,6 +73,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ZoneNoC=linkageConfigMixed.ZoneNoC;
             this.LayerNoC=linkageConfigMixed.LayerNoC;
             this.DeviceTypeCodeC = linkageConfigMixed.DeviceTypeCodeC;
+            ToCategoryString();
         }
         public LinkageConfigMixed ToLinkageConfigMixed()
         {
@@ -88,6 +92,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigMixed.LoopNoA = this.LoopNoA;
             //器件编号A [当分类为“地址”时，存储的"器件编号"]
             linkageConfigMixed.DeviceCodeA = this.DeviceCodeA;
+            linkageConfigMixed.CategoryA = this.CategoryA;
             //楼号A
             linkageConfigMixed.BuildingNoA = this.BuildingNoA;
             //区号A
@@ -99,6 +104,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigMixed.TypeB = this.TypeB;
             linkageConfigMixed.LoopNoB = this.LoopNoB;
             linkageConfigMixed.DeviceCodeB = this.DeviceCodeB;
+            linkageConfigMixed.CategoryB = this.CategoryB;
             linkageConfigMixed.BuildingNoB = this.BuildingNoB;
             linkageConfigMixed.ZoneNoB = this.ZoneNoB;
             linkageConfigMixed.LayerNoB = this.LayerNoB;
@@ -113,6 +119,87 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigMixed.DeviceTypeCodeC = this.DeviceTypeCodeC;
             return linkageConfigMixed;
         }
+
+        private string _categoryAString;
+        public string CategoryAString
+        {
+            get { return _categoryAString; }
+            set
+            {
+                _categoryAString = value;
+                RaisePropertyChanged("CategoryAString");
+                switch (_categoryAString)
+                {
+                    case "本系统":
+                        this.CategoryA = 0;
+                        break;
+                    case "它系统":
+                        this.CategoryA = 1;
+                        break;
+                }
+            }
+        }
+
+        private string _categoryBString;
+        public string CategoryBString
+        {
+            get { return _categoryBString; }
+            set
+            {
+                _categoryBString = value;
+                RaisePropertyChanged("CategoryBString");
+                switch (_categoryBString)
+                {
+                    case "本系统":
+                        this.CategoryB = 0;
+                        break;
+                    case "它系统":
+                        this.CategoryB = 1;
+                        break;
+                }
+            }
+        }
+
+        public void ToCategoryString()
+        {
+            switch (this.CategoryA)
+            {
+                case 0:
+                    CategoryAString = "本系统";
+                    break;
+                case 1:
+                    CategoryAString = "它系统";
+                    break;
+            }
+            switch (this.CategoryB)
+            {
+                case 0:
+                    CategoryBString = "本系统";
+                    break;
+                case 1:
+                    CategoryBString = "它系统";
+                    break;
+            }
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Methods
+
+        private void RaisePropertyChanged(string propertyName)
+        {
+            // take a copy to prevent thread issues
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
 
         public void BeginEdit()
         {
@@ -409,6 +496,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public LinkageConfigMixedViewModel()
         {
             _linkageConfigMixedService=new SCA.BusinessLib.BusinessLogic.LinkageConfigMixedService(TheController);
+        }
+
+        private Visibility _isVisualColumnGroup = Visibility.Collapsed;
+        public Visibility IsVisualColumnGroup
+        {
+            get
+            {
+                return _isVisualColumnGroup;
+            }
+            set
+            {
+                _isVisualColumnGroup = value;
+                NotifyOfPropertyChange("IsVisualColumnGroup");
+            }
         }
         public int AddedAmount
         {

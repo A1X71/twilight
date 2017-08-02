@@ -111,6 +111,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.LoopNoA = linkageConfigMixed.LoopNoA;
                     //器件编号A [当分类为“地址”时，存储的"器件编号"]
                     result.DeviceCodeA = linkageConfigMixed.DeviceCodeA;
+                    result.CategoryA = linkageConfigMixed.CategoryA;
                     //楼号A
                     result.BuildingNoA = linkageConfigMixed.BuildingNoA;
                     //区号A
@@ -122,6 +123,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.TypeB = linkageConfigMixed.TypeB;
                     result.LoopNoB = linkageConfigMixed.LoopNoB;
                     result.DeviceCodeB = linkageConfigMixed.DeviceCodeB;
+                    result.CategoryB = linkageConfigMixed.CategoryB;
                     result.BuildingNoB = linkageConfigMixed.BuildingNoB;
                     result.ZoneNoB = linkageConfigMixed.ZoneNoB;
                     result.LayerNoB = linkageConfigMixed.LayerNoB;

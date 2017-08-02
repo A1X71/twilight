@@ -100,21 +100,21 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool CreateTableForLinkageConfigGeneral()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigGeneral(ID integer not null primary key autoincrement,Code varchar(4) not null,ActionCoefficient integer, BuildingNoA integer,ZoneNoA integer, LayerNoA1 integer, LayerNoA2 integer, DeviceTypeCodeA integer references DeviceType(Code) on delete restrict deferrable initially deferred,TypeC varchar(20),MachineNoC varchar2(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer references DeviceType(Code) on delete restrict deferrable initially deferred,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigGeneral(ID integer not null primary key autoincrement,Code varchar(4) not null,ActionCoefficient integer, CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA1 integer, LayerNoA2 integer, DeviceTypeCodeA integer references DeviceType(Code) on delete restrict deferrable initially deferred,TypeC varchar(20),MachineNoC varchar2(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer references DeviceType(Code) on delete restrict deferrable initially deferred,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
             _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
             return true;
         }
 
         public bool CreateTableForLinkageconfigMixed()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigMixed(ID integer not null primary key autoincrement,Code varchar(4) not null, ActionCoefficient integer,ActionType varchar(10), TypeA varchar(20), LoopNoA varchar(10), DeviceCodeA varchar(10),BuildingNoA integer,ZoneNoA integer, LayerNoA integer, DeviceTypeCodeA integer , TypeB varchar(20), LoopNoB varchar(10), DeviceCodeB varchar(10),BuildingNoB integer,ZoneNoB integer, LayerNoB integer, DeviceTypeCodeB integer ,TypeC varchar(20),MachineNoC varchar(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigMixed(ID integer not null primary key autoincrement,Code varchar(4) not null, ActionCoefficient integer,ActionType varchar(10), TypeA varchar(20), LoopNoA varchar(10), DeviceCodeA varchar(10),CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA integer, DeviceTypeCodeA integer , TypeB varchar(20), LoopNoB varchar(10), DeviceCodeB varchar(10),CategoryB integer, BuildingNoB integer,ZoneNoB integer, LayerNoB integer, DeviceTypeCodeB integer ,TypeC varchar(20),MachineNoC varchar(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
             _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
             return true;
         }
 
         public bool CreateTableForManualControlBoard()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table ManualControlBoard(ID integer not null primary key autoincrement,Code varchar(4) not null, BoardNo varchar(10),SubBoardNo varchar(10),KeyNo varchar(10), DeviceCode varchar(10), SDPKey varchar(10),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table ManualControlBoard(ID integer not null primary key autoincrement,Code varchar(4) not null, BoardNo varchar(10),SubBoardNo varchar(10),KeyNo varchar(10), DeviceCode varchar(10), ControlType integer, LocalDevice1 varchar(20), LocalDevice2 varchar(20), LocalDevice3 varchar(20), LocalDevice4 varchar(20), BuildingNo varchar(10), AreaNo varhchar(10), FloorNo varchar(10), DeviceType integer, LinkageGroup varchar(10), NetDevice1 varchar(20), NetDevice2 varchar(20), NetDevice3 varchar(20),  NetDevice4 varchar(20), SDPKey varchar(10),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
             _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
             return true;
         }
@@ -1300,30 +1300,43 @@ namespace SCA.DatabaseAccess.DBContext
         public System.Collections.Generic.List<ManualControlBoard> GetManualControlBoard(ControllerModel controller)
         {
             List<ManualControlBoard> lstData = new List<ManualControlBoard>();
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,BoardNo,SubBoardNo,KeyNo,DeviceCode,SDPKey from ManualControlBoard where ControllerID=" + controller.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,BoardNo,SubBoardNo,KeyNo,DeviceCode,ControlType,LocalDevice1,LocalDevice2,LocalDevice3,LocalDevice4,BuildingNo,AreaNo,FloorNo,DeviceType,LinkageGroup,NetDevice1,NetDevice2,NetDevice3,NetDevice4,SDPKey from ManualControlBoard where ControllerID=" + controller.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 ManualControlBoard model = new ManualControlBoard();
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
-                ManualControlBoard manualControlBoard = new ManualControlBoard();
                 if (dt.Rows[i]["Code"].ToString() != "")
                 {
-                    manualControlBoard.Code = Convert.ToInt32(dt.Rows[i]["Code"]);
+                    model.Code = Convert.ToInt32(dt.Rows[i]["Code"]);
                 }
                 if (dt.Rows[i]["BoardNo"].ToString() != "")
                 {
-                    manualControlBoard.BoardNo = Convert.ToInt32(dt.Rows[i]["BoardNo"]);
+                    model.BoardNo = Convert.ToInt32(dt.Rows[i]["BoardNo"]);
                 }
                 if (dt.Rows[i]["SubBoardNo"].ToString() != "")
                 {
-                    manualControlBoard.SubBoardNo = Convert.ToInt32(dt.Rows[i]["SubBoardNo"]);
+                    model.SubBoardNo = Convert.ToInt32(dt.Rows[i]["SubBoardNo"]);
                 }
                 if (dt.Rows[i]["KeyNo"].ToString() != "")
                 {
-                    manualControlBoard.KeyNo = Convert.ToInt32(dt.Rows[i]["KeyNo"]);
+                    model.KeyNo = Convert.ToInt32(dt.Rows[i]["KeyNo"]);
                 }                  
                 model.DeviceCode = dt.Rows[i]["DeviceCode"].ToString();
+                model.ControlType = Convert.ToInt32(dt.Rows[i]["ControlType"]);
+                model.LocalDevice1 = (string)dt.Rows[i]["LocalDevice1"];
+                model.LocalDevice2 = (string)dt.Rows[i]["LocalDevice2"];
+                model.LocalDevice3 = (string)dt.Rows[i]["LocalDevice3"];
+                model.LocalDevice4 = (string)dt.Rows[i]["LocalDevice4"];
+                model.BuildingNo = (string)dt.Rows[i]["BuildingNo"];
+                model.AreaNo = (string)dt.Rows[i]["AreaNo"];
+                model.FloorNo = (string)dt.Rows[i]["FloorNo"];
+                model.DeviceType = Convert.ToInt16(dt.Rows[i]["DeviceType"]);
+                model.LinkageGroup = (string)dt.Rows[i]["LinkageGroup"];
+                model.NetDevice1 = (string)dt.Rows[i]["NetDevice1"];
+                model.NetDevice2 = (string)dt.Rows[i]["NetDevice2"];
+                model.NetDevice3 = (string)dt.Rows[i]["NetDevice3"];
+                model.NetDevice4 = (string)dt.Rows[i]["NetDevice4"];
                 model.SDPKey = dt.Rows[i]["SDPKey"].ToString();
                 model.Controller = controller;
                 model.ControllerID = controller.ID;
@@ -1652,7 +1665,7 @@ namespace SCA.DatabaseAccess.DBContext
 
         public int AddMixedLinkageConfigInfo(LinkageConfigMixed linkageConfigMixed)
         {
-            StringBuilder sbSQL = new StringBuilder("REPLACE INTO  LinkageConfigMixed(ID,Code, ActionCoefficient,ActionType, TypeA, LoopNoA, DeviceCodeA ,BuildingNoA,ZoneNoA , LayerNoA , DeviceTypeCodeA,TypeB,LoopNoB,DeviceCodeB,BuildingNoB ,ZoneNoB , LayerNoB , DeviceTypeCodeB  ,TypeC ,MachineNoC,LoopNoC ,DeviceCodeC ,BuildingNoC ,ZoneNoC , LayerNoC  ,DeviceTypeCodeC  ,controllerID)");
+            StringBuilder sbSQL = new StringBuilder("REPLACE INTO  LinkageConfigMixed(ID,Code, ActionCoefficient,ActionType, TypeA, LoopNoA, DeviceCodeA, CategoryA, BuildingNoA,ZoneNoA , LayerNoA , DeviceTypeCodeA,TypeB,LoopNoB,DeviceCodeB,CategoryB,BuildingNoB ,ZoneNoB , LayerNoB , DeviceTypeCodeB  ,TypeC ,MachineNoC,LoopNoC ,DeviceCodeC ,BuildingNoC ,ZoneNoC , LayerNoC  ,DeviceTypeCodeC  ,controllerID)");
             sbSQL.Append(" VALUES(");
             sbSQL.Append(linkageConfigMixed.ID + ",'");
             sbSQL.Append(linkageConfigMixed.Code + "','");
@@ -1660,14 +1673,16 @@ namespace SCA.DatabaseAccess.DBContext
             sbSQL.Append((int)linkageConfigMixed.ActionType + "','");
             sbSQL.Append((int)linkageConfigMixed.TypeA + "','");
             sbSQL.Append(linkageConfigMixed.LoopNoA + "','");
-            sbSQL.Append(linkageConfigMixed.DeviceTypeCodeA + "','");
+            sbSQL.Append(linkageConfigMixed.DeviceTypeCodeA + "',");
+            sbSQL.Append(linkageConfigMixed.CategoryA + ",'");
             sbSQL.Append(linkageConfigMixed.BuildingNoA + "','");
             sbSQL.Append(linkageConfigMixed.ZoneNoA + "','");
             sbSQL.Append(linkageConfigMixed.LayerNoA + "','");
             sbSQL.Append(linkageConfigMixed.DeviceTypeCodeA + "','");
             sbSQL.Append((int)linkageConfigMixed.TypeB + "','");
             sbSQL.Append(linkageConfigMixed.LoopNoB + "','");
-            sbSQL.Append(linkageConfigMixed.DeviceCodeB + "','");
+            sbSQL.Append(linkageConfigMixed.DeviceCodeB + "',");
+            sbSQL.Append(linkageConfigMixed.CategoryB + ",'");
             sbSQL.Append(linkageConfigMixed.BuildingNoB + "','");
             sbSQL.Append(linkageConfigMixed.ZoneNoB + "','");
             sbSQL.Append(linkageConfigMixed.LayerNoB + "','");
@@ -1686,11 +1701,12 @@ namespace SCA.DatabaseAccess.DBContext
 
         public int AddGeneralLinkageConfigInfo(LinkageConfigGeneral linkageConfigGeneral)
         {
-            StringBuilder sbSQL = new StringBuilder("REPLACE INTO  LinkageConfigGeneral(ID,Code,ActionCoefficient,BuildingNoA,ZoneNoA, LayerNoA1 , LayerNoA2 , DeviceTypeCodeA ,TypeC,MachineNoC ,LoopNoC,DeviceCodeC ,BuildingNoC,ZoneNoC, LayerNoC ,DeviceTypeCodeC ,controllerID)");
+            StringBuilder sbSQL = new StringBuilder("REPLACE INTO  LinkageConfigGeneral(ID,Code,ActionCoefficient,CategoryA,BuildingNoA,ZoneNoA, LayerNoA1 , LayerNoA2 , DeviceTypeCodeA ,TypeC,MachineNoC ,LoopNoC,DeviceCodeC ,BuildingNoC,ZoneNoC, LayerNoC ,DeviceTypeCodeC ,controllerID)");
             sbSQL.Append(" VALUES(");
             sbSQL.Append(linkageConfigGeneral.ID + ",'");
             sbSQL.Append(linkageConfigGeneral.Code + "','");
-            sbSQL.Append(linkageConfigGeneral.ActionCoefficient + "','");
+            sbSQL.Append(linkageConfigGeneral.ActionCoefficient + "',");
+            sbSQL.Append(linkageConfigGeneral.CategoryA + ",'");
             sbSQL.Append(linkageConfigGeneral.BuildingNoA + "','");
             sbSQL.Append(linkageConfigGeneral.ZoneNoA + "','");
             sbSQL.Append(linkageConfigGeneral.LayerNoA1 + "','");
@@ -1710,14 +1726,28 @@ namespace SCA.DatabaseAccess.DBContext
 
         public int AddManualControlBoardInfo(ManualControlBoard manualControlBoard)
         {
-            StringBuilder sbSQL = new StringBuilder("REPLACE INTO ManualControlBoard(ID,Code, BoardNo ,SubBoardNo ,KeyNo , DeviceCode , SDPKey ,controllerID) ");
+            StringBuilder sbSQL = new StringBuilder("REPLACE INTO ManualControlBoard(ID,Code, BoardNo ,SubBoardNo ,KeyNo, DeviceCode,ControlType,LocalDevice1,LocalDevice2,LocalDevice3,LocalDevice4,BuildingNo,AreaNo,FloorNo,DeviceType,LinkageGroup,NetDevice1,NetDevice2,NetDevice3,NetDevice4, SDPKey ,controllerID) ");
             sbSQL.Append("VALUES(");
             sbSQL.Append(manualControlBoard.ID + ",");
             sbSQL.Append(manualControlBoard.Code + ",'");
             sbSQL.Append(manualControlBoard.BoardNo + "','");
             sbSQL.Append(manualControlBoard.SubBoardNo + "','");
             sbSQL.Append(manualControlBoard.KeyNo + "','");
-            sbSQL.Append(manualControlBoard.DeviceCode + "','");
+            sbSQL.Append(manualControlBoard.DeviceCode + "',");
+            sbSQL.Append(manualControlBoard.ControlType + ",'");
+            sbSQL.Append(manualControlBoard.LocalDevice1 + "','");
+            sbSQL.Append(manualControlBoard.LocalDevice2 + "','");
+            sbSQL.Append(manualControlBoard.LocalDevice3 + "','");
+            sbSQL.Append(manualControlBoard.LocalDevice4 + "','");
+            sbSQL.Append(manualControlBoard.BuildingNo + "','");
+            sbSQL.Append(manualControlBoard.AreaNo + "','");
+            sbSQL.Append(manualControlBoard.FloorNo + "',");
+            sbSQL.Append(manualControlBoard.DeviceType + ",'");
+            sbSQL.Append(manualControlBoard.LinkageGroup + "','");
+            sbSQL.Append(manualControlBoard.NetDevice1 + "','");
+            sbSQL.Append(manualControlBoard.NetDevice2 + "','");
+            sbSQL.Append(manualControlBoard.NetDevice3 + "','");
+            sbSQL.Append(manualControlBoard.NetDevice4 + "','");
             sbSQL.Append(manualControlBoard.SDPKey + "','");
             sbSQL.Append(manualControlBoard.ControllerID + "');");
             return _databaseService.ExecuteBySql(sbSQL);
@@ -1762,7 +1792,7 @@ namespace SCA.DatabaseAccess.DBContext
         public List<LinkageConfigMixed> GetMixedLinkageConfig(ControllerModel controller)
         {
             List<LinkageConfigMixed> lstData = new List<LinkageConfigMixed>();
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code, ActionCoefficient,ActionType, TypeA, LoopNoA, DeviceCodeA ,BuildingNoA,ZoneNoA , LayerNoA , DeviceTypeCodeA,TypeB,LoopNoB,DeviceCodeB,BuildingNoB ,ZoneNoB , LayerNoB , DeviceTypeCodeB  ,TypeC ,MachineNoC,LoopNoC ,DeviceCodeC ,BuildingNoC ,ZoneNoC , LayerNoC  ,DeviceTypeCodeC  ,controllerID from LinkageConfigMixed where controllerID=" + controller.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code, ActionCoefficient,ActionType, TypeA, LoopNoA, DeviceCodeA,CategoryA, BuildingNoA,ZoneNoA , LayerNoA , DeviceTypeCodeA,TypeB,LoopNoB,DeviceCodeB,CategoryB, BuildingNoB ,ZoneNoB , LayerNoB , DeviceTypeCodeB  ,TypeC ,MachineNoC,LoopNoC ,DeviceCodeC ,BuildingNoC ,ZoneNoC , LayerNoC  ,DeviceTypeCodeC  ,controllerID from LinkageConfigMixed where controllerID=" + controller.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1774,6 +1804,7 @@ namespace SCA.DatabaseAccess.DBContext
                 model.TypeA = (LinkageType)Enum.ToObject(typeof(LinkageType), Convert.ToInt16(dt.Rows[i]["TypeA"]));
                 model.LoopNoA = dt.Rows[i]["LoopNoA"].ToString();
                 model.DeviceTypeCodeA = Convert.ToInt16(dt.Rows[i]["DeviceTypeCodeA"]);
+                model.CategoryA = Convert.ToInt32(dt.Rows[i]["CategoryA"]);
                 model.BuildingNoA = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["BuildingNoA"]));
                 model.ZoneNoA = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["ZoneNoA"]));
                 model.LayerNoA = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["LayerNoA"]));
@@ -1781,6 +1812,7 @@ namespace SCA.DatabaseAccess.DBContext
                 model.TypeB = (LinkageType)Enum.ToObject(typeof(LinkageType), Convert.ToInt16(dt.Rows[i]["TypeB"]));
                 model.LoopNoB = dt.Rows[i]["LoopNoB"].ToString();
                 model.DeviceCodeB = dt.Rows[i]["DeviceCodeB"].ToString();
+                model.CategoryB = Convert.ToInt32(dt.Rows[i]["CategoryB"]);
                 model.BuildingNoB = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["BuildingNoB"]));
                 model.ZoneNoB = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["ZoneNoB"]));
                 model.LayerNoB = new Nullable<Int16>(Convert.ToInt16(dt.Rows[i]["LayerNoB"]));
@@ -1803,7 +1835,7 @@ namespace SCA.DatabaseAccess.DBContext
         public List<LinkageConfigGeneral> GetGeneralLinkageConfig(ControllerModel controller)
         {
             List<LinkageConfigGeneral> lstData = new List<LinkageConfigGeneral>();
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,ActionCoefficient,BuildingNoA,ZoneNoA, LayerNoA1 , LayerNoA2 , DeviceTypeCodeA ,TypeC,MachineNoC ,LoopNoC,DeviceCodeC ,BuildingNoC,ZoneNoC, LayerNoC ,DeviceTypeCodeC ,controllerID from LinkageConfigGeneral where controllerID=" + controller.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,ActionCoefficient,CategoryA,BuildingNoA,ZoneNoA, LayerNoA1 , LayerNoA2 , DeviceTypeCodeA ,TypeC,MachineNoC ,LoopNoC,DeviceCodeC ,BuildingNoC,ZoneNoC, LayerNoC ,DeviceTypeCodeC ,controllerID from LinkageConfigGeneral where controllerID=" + controller.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1811,6 +1843,7 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["ActionCoefficient"]);
+                model.CategoryA = Convert.ToInt32(dt.Rows[i]["CategoryA"]);
                 model.BuildingNoA = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["BuildingNoA"]));
                 model.ZoneNoA = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["ZoneNoA"]));
                 model.LayerNoA1 = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["LayerNoA1"]));

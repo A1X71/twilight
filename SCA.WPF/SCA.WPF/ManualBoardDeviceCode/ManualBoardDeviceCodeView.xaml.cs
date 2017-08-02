@@ -16,10 +16,11 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 212 $
+*  $Revision: 185 $
 *  $Author: dennis_zhang $        
-*  $Date: 2017-08-01 16:23:47 +0800 (周二, 01 八月 2017) $
+*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
 ***************************************************************************/
+using SCA.WPF.ManualBoardDeviceCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,31 +35,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SCA.WPF.ViewsRoot.Views.DetailInfo
+namespace SCA.WPF.ViewsRoot.Views
 {
     /// <summary>
-    /// DeviceInfo8053View.xaml 的交互逻辑
+    /// ManualBoardDeviceCodeView.xaml 的交互逻辑
     /// </summary>
-    public partial class DeviceInfo8053View : UserControl
+    public partial class ManualBoardDeviceCodeView : UserControl
     {
-        public DeviceInfo8053View()
+        public ManualBoardDeviceCodeView()
         {
             InitializeComponent();
-        }
-
-        private void btnCopy_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnPaste_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

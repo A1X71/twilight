@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
-             xmlns:converter="clr-namespace:SCA.WPF.ViewModelsRoot.Converters"          
+             xmlns:converter="clr-namespace:SCA.WPF.ViewModelsRoot.Converters"    
+             xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
@@ -15,6 +16,7 @@
         <CollectionViewSource x:Key="TypeCCollection" Source="{Binding ValidDeviceTypeC}"/>
         <ObjectDataProvider x:Key="LinkageTypeEnumDS" ObjectType="{x:Type local:LinkageConfigGeneralViewModel}" MethodName="GetLinkageType">
         </ObjectDataProvider>
+        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
         <!--xmlns:model="clr-namespace:SCA.MODEL"-->
         <!--
         
@@ -125,6 +127,15 @@
                                 <sys:Int32>3</sys:Int32>
                                 <sys:Int32>4</sys:Int32>
                                 <sys:Int32>5</sys:Int32>
+                            </col:ArrayList>
+                        </dg:DataGridComboBoxColumn.ItemsSource>
+                    </dg:DataGridComboBoxColumn>
+                    <dg:DataGridComboBoxColumn Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
+                                               Visibility="{Binding  Data.IsVisualColumnGroup, Source={StaticResource proxy} }">
+                        <dg:DataGridComboBoxColumn.ItemsSource>
+                            <col:ArrayList>
+                                <sys:String>本系统</sys:String>
+                                <sys:String>它系统</sys:String>
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>

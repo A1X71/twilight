@@ -47,7 +47,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 loop.SetDevices<T>(deviceService.InitializeDevices(deviceAmount));   
                 lstLoopModel.Add(loop);
                 loop.IsLoopDataDirty = true;
-                //  SetDataDirty();
+              //  SetDataDirty();
+
             }
             return lstLoopModel;
         }

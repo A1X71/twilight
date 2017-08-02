@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
              xmlns:View="clr-namespace:SCA.WPF.ViewsRoot.Views"
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
-             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
+             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit" 
+             xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -15,6 +17,7 @@
                 <Setter Property="HorizontalAlignment" Value="Right" />
             </Style>
             <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
+            <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
         </Grid.Resources>
         <StackPanel>
             <Grid  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" x:Name="ToolBar">
@@ -125,9 +128,10 @@
                                        Binding="{Binding Path=KeyNo,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                            EditingElementStyle="{StaticResource errorStyle}"
-                                           />                 
+                                           />    
                     <dg:DataGridTemplateColumn Width="*"   
-                                       Header="器件编号"                         
+                                        Header="器件编号"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup1, Source={StaticResource proxy} }"
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -139,11 +143,176 @@
                             </DataTemplate>
                         </dg:DataGridTemplateColumn.CellTemplate>                        
                     </dg:DataGridTemplateColumn>
+                    
+                    <!-- NT8053 Begin -->
+                    <dg:DataGridComboBoxColumn Width="*" Header="被控类型" SelectedItemBinding="{Binding Path=ControlTypeString}"
+                                               Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }">
+                        <dg:DataGridComboBoxColumn.ItemsSource>
+                            <col:ArrayList>
+                                <sys:String>空器件</sys:String>
+                                <sys:String>本机设备</sys:String>
+                                <sys:String>楼区层</sys:String>
+                                <sys:String>输出组</sys:String>
+                                <sys:String>网络设备</sys:String>
+                            </col:ArrayList>
+                        </dg:DataGridComboBoxColumn.ItemsSource>
+                    </dg:DataGridComboBoxColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="本机设备1"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=LocalDevice1}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectLocalDevice1Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="本机设备2"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=LocalDevice2}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectLocalDevice2Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="本机设备3"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=LocalDevice3}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick"  Command="{Binding DataContext.SelectLocalDevice3Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="本机设备4"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=LocalDevice4}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectLocalDevice4Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTextColumn Width="*" 
+                                       Header="楼号" 
+                                       Binding="{Binding Path=BuildingNo,ValidatesOnDataErrors=True}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                           Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           EditingElementStyle="{StaticResource errorStyle}"
+                                           />
+                    <dg:DataGridTextColumn Width="*" 
+                                       Header="区号" 
+                                       Binding="{Binding Path=AreaNo,ValidatesOnDataErrors=True}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                           Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           EditingElementStyle="{StaticResource errorStyle}"
+                                           />
+                    <dg:DataGridTextColumn Width="*" 
+                                       Header="层号" 
+                                       Binding="{Binding Path=FloorNo,ValidatesOnDataErrors=True}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                           Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           EditingElementStyle="{StaticResource errorStyle}"
+                                           />
+                    <dg:DataGridComboBoxColumn Header="设备类型"  
+                                               DisplayMemberPath="Name"
+                                               SelectedValuePath="Code"
+                                               SelectedValueBinding="{Binding DeviceType}"                                                                      
+                                               ItemsSource="{Binding Source={StaticResource TypesCollection}}"
+                                               >
+                    </dg:DataGridComboBoxColumn>
+                    <dg:DataGridTextColumn Width="*" 
+                                        Header="输出组" 
+                                        Binding="{Binding Path=LinkageGroup,ValidatesOnDataErrors=True}" 
+                                        ElementStyle="{StaticResource tb_ElementStyle}"
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        EditingElementStyle="{StaticResource errorStyle}"
+                                           />
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="网络设备1"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=NetDevice1}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectNetDevice1Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="网络设备2"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=NetDevice2}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectNetDevice2Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="网络设备3"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=NetDevice3}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectNetDevice3Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+                    <dg:DataGridTemplateColumn Width="*"   
+                                        Header="网络设备4"   
+                                        Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                           >
+                        <dg:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=NetDevice4}">
+                                    <TextBlock.InputBindings >
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectNetDevice4Command,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </DataTemplate>
+                        </dg:DataGridTemplateColumn.CellTemplate>
+                    </dg:DataGridTemplateColumn>
+
+
+                    <!-- NT8053 End -->
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
         </StackPanel>
         <View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.CreateManualControlBoardVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
         <View:DeviceItemSelectorView DataContext="{Binding Path=DeviceItemSelectorVM}" x:Name="DeviceItemSelector" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.DeviceItemSelectorVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
+        <View:ManualBoardDeviceCodeView DataContext="{Binding Path=ManualDeviceCodeVM}" x:Name="ManualDeviceCode" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Data.ManualDeviceCodeVisibility, Source={StaticResource proxy}, Mode=TwoWay}" />
         
     </Grid>
 </UserControl>

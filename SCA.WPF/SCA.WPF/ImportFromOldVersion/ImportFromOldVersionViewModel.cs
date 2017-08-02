@@ -131,7 +131,7 @@ namespace SCA.WPF.ImportFromOldVersion
             //取得项目信息
             ProjectModel project = dbFileVersionService.GetProject(1);
             project.Name = this.ProjectName; //以当前设置的名称作为项目名
-            project.SavePath = this.SavedFilePath;  //以当前设置的路径作为项目的存储路径
+            project.SavePath = this.SavedFilePath + "\\" + project.Name + ".nt";  //以当前设置的路径作为项目的存储路径
             IControllerOperation controllerOperation = null;            
             //取得项目下所有控制器信息
             List<ControllerModel> lstController = dbFileVersionService.GetControllersByProject(project);

@@ -316,9 +316,18 @@ namespace SCA.BusinessLib.BusinessLogic
             //验证创建目录有效性
             //将“存储路径”存入内存对象中
             //创建项目对象
-            if (ValidateProjectName(project.Name)&& ValidateProjectSavePath(project.SavePath,fileService))
-            {          
-                return true;
+            if(project.SavePath!=null)
+            {
+                int lastIndexPosition=project.SavePath.LastIndexOf("\\");                
+                string filePath = project.SavePath.Substring(0,lastIndexPosition);
+                if (ValidateProjectName(project.Name)&& ValidateProjectSavePath(filePath,fileService))
+                {          
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

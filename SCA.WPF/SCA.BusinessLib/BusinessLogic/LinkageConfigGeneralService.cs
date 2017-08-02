@@ -105,6 +105,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.Code = linkageConfigGeneral.Code;
                     result.ActionCoefficient = linkageConfigGeneral.ActionCoefficient;
                     result.BuildingNoA = linkageConfigGeneral.BuildingNoA;
+                    result.CategoryA = linkageConfigGeneral.CategoryA;
                     result.ZoneNoA = linkageConfigGeneral.ZoneNoA;
                     result.LayerNoA1 = linkageConfigGeneral.LayerNoA1;
                     result.LayerNoA2 = linkageConfigGeneral.LayerNoA2;

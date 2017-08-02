@@ -1,4 +1,26 @@
-﻿using System;
+﻿/**************************************************************************
+*
+*  PROPRIETARY and CONFIDENTIAL
+*
+*  This file is licensed from, and is a trade secret of:
+*
+*                   Neat, Inc.
+*                   No. 66, Xigang North Road
+*                   Qinhuangdao City, Hebei Province, China
+*                   Telephone: 0335-3660312
+*                   WWW: www.neat.com.cn
+*
+*  Refer to your License Agreement for restrictions on use,
+*  duplication, or disclosure.
+*
+*  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
+*
+*  Unpublished - All rights reserved under the copyright laws of the China.
+*  $Revision: 212 $
+*  $Author: dennis_zhang $        
+*  $Date: 2017-08-01 16:23:47 +0800 (周二, 01 八月 2017) $
+***************************************************************************/
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -13,6 +35,7 @@ using SCA.WPF.Utility;
 using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.Interface.BusinessLogic;
+using Neat.Dennis.Common.LoggerManager;
 
 /* ==============================
 *
@@ -28,7 +51,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
     public class EditableManualControlBoard : ManualControlBoard, IEditableObject, IDataErrorInfo, INotifyPropertyChanged
     {
-
+        private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public event ItemEndEditEventHandler ItemEndEdit;
         private EditableManualControlBoard copy;
         public EditableManualControlBoard()
@@ -43,10 +66,25 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.SubBoardNo = mcb.SubBoardNo;
             this.KeyNo = mcb.KeyNo;
             this.DeviceCode = mcb.DeviceCode;
+            this.DeviceType = mcb.DeviceType;
+            this.LocalDevice1 = mcb.LocalDevice1;
+            this.LocalDevice2 = mcb.LocalDevice2;
+            this.LocalDevice3 = mcb.LocalDevice3;
+            this.LocalDevice4 = mcb.LocalDevice4;
+            this.NetDevice1 = mcb.NetDevice1;
+            this.NetDevice2 = mcb.NetDevice2;
+            this.NetDevice3 = mcb.NetDevice3;
+            this.NetDevice4 = mcb.NetDevice4;
+            this.BuildingNo = mcb.BuildingNo;
+            this.AreaNo = mcb.AreaNo;
+            this.FloorNo = mcb.FloorNo;
+            this.ControlType = mcb.ControlType;
+            this.LinkageGroup = mcb.LinkageGroup;
             this.SDPKey = mcb.SDPKey;
             this.MaxSubBoardNo = mcb.MaxSubBoardNo;
             this.Controller = mcb.Controller;
             this.ControllerID = mcb.ControllerID;
+            ToControlTypeString();
         }
         private string _deviceCode;
         public string DeviceCode 
@@ -65,6 +103,140 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
+
+        private string _localDevice1;
+        public string LocalDevice1
+        {
+            get { return _localDevice1; }
+            set
+            {
+                _localDevice1 = value;
+                RaisePropertyChanged("LocalDevice1");
+            }
+        }
+        private string _localDevice2;
+        public string LocalDevice2
+        {
+            get { return _localDevice2; }
+            set
+            {
+                _localDevice2 = value;
+                RaisePropertyChanged("LocalDevice2");
+            }
+        }
+        private string _localDevice3;
+        public string LocalDevice3
+        {
+            get { return _localDevice3; }
+            set
+            {
+                _localDevice3 = value;
+                RaisePropertyChanged("LocalDevice3");
+            }
+        }
+        private string _localDevice4;
+        public string LocalDevice4
+        {
+            get { return _localDevice4; }
+            set
+            {
+                _localDevice4 = value;
+                RaisePropertyChanged("LocalDevice4");
+            }
+        }
+
+        private string _netDevice1;
+        public string NetDevice1
+        {
+            get { return _netDevice1; }
+            set
+            {
+                _netDevice1 = value;
+                RaisePropertyChanged("NetDevice1");
+            }
+        }
+        private string _netDevice2;
+        public string NetDevice2
+        {
+            get { return _netDevice2; }
+            set
+            {
+                _netDevice2 = value;
+                RaisePropertyChanged("NetDevice2");
+            }
+        }
+        private string _netDevice3;
+        public string NetDevice3
+        {
+            get { return _netDevice3; }
+            set
+            {
+                _netDevice3 = value;
+                RaisePropertyChanged("NetDevice3");
+            }
+        }
+        private string _netDevice4;
+        public string NetDevice4
+        {
+            get { return _netDevice4; }
+            set
+            {
+                _netDevice4 = value;
+                RaisePropertyChanged("NetDevice4");
+            }
+        }
+
+        private string _controlTypeString;
+        public string ControlTypeString
+        {
+            get { return _controlTypeString; }
+            set
+            {
+                _controlTypeString = value;
+                RaisePropertyChanged("ControlTypeString");
+                switch(_controlTypeString)
+                {
+                    case "空器件":
+                        this.ControlType = 0;
+                        break;
+                    case "本机设备":
+                        this.ControlType = 1;
+                        break;
+                    case "楼区层":
+                        this.ControlType = 2;
+                        break;
+                    case "输出组":
+                        this.ControlType = 3;
+                        break;
+                    case "网络设备":
+                        this.ControlType = 4;
+                        break;
+                }
+            }
+        }
+
+        public void ToControlTypeString()
+        {
+            switch(this.ControlType)
+            {
+                case 0:
+                    ControlTypeString = "空器件";
+                    break;
+                case 1:
+                    ControlTypeString = "本机设备";
+                    break;
+                case 2:
+                    ControlTypeString = "楼区层";
+                    break;
+                case 3:
+                    ControlTypeString = "输出组";
+                    break;
+                case 4:
+                    ControlTypeString = "网络设备";
+                    break;
+            }
+        }
+
         public ManualControlBoard ToManualControlBoard()
         {
             ManualControlBoard mcb = new ManualControlBoard();
@@ -74,6 +246,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             mcb.SubBoardNo = this.SubBoardNo;
             mcb.KeyNo = this.KeyNo;
             mcb.DeviceCode = this.DeviceCode;
+            mcb.ControlType = this.ControlType;
+            mcb.LocalDevice1 = this.LocalDevice1;
+            mcb.LocalDevice2 = this.LocalDevice2;
+            mcb.LocalDevice3 = this.LocalDevice3;
+            mcb.LocalDevice4 = this.LocalDevice4;
+            mcb.NetDevice1 = this.NetDevice1;
+            mcb.NetDevice2 = this.NetDevice2;
+            mcb.NetDevice3 = this.NetDevice3;
+            mcb.NetDevice4 = this.NetDevice4;
+            mcb.BuildingNo = this.BuildingNo;
+            mcb.AreaNo = this.AreaNo;
+            mcb.FloorNo = this.FloorNo;
+            mcb.DeviceType = this.DeviceType;
+            mcb.LinkageGroup = this.LinkageGroup;
             mcb.SDPKey = this.SDPKey;
             mcb.MaxSubBoardNo = this.MaxSubBoardNo;
             mcb.Controller = this.Controller;
@@ -218,6 +404,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     }
     public class ManualControlBoardViewModel : PropertyChangedBase
     {
+        private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
         //private ObservableCollection<ManualControlBoard> _manualControlBoardInfoObservableCollection;
         private IManualControlBoardService _manualControlBoardService;
         private int _addedAmount = 1;
@@ -225,6 +412,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private List<ManualControlBoard> _lstManualControlBoard = null;
         private Visibility _createManualControlBoardVisibility = Visibility.Hidden; //添加手动盘数据视图可见性
         private Visibility _deviceItemSelectorVisibility= Visibility.Hidden; //选择器件视图可见性
+        private Visibility _manualDeviceCodeVisibility = Visibility.Hidden; //NT8053设备代码
         private string _addIconPath = @"Resources/Icon/Style1/loop-add.png";
         private string _delIconPath = @"Resources/Icon/Style1/loop-delete.png";
         private string _copyIconPath = @"Resources/Icon/Style1/copy.png";
@@ -236,6 +424,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         
         private SCA.WPF.CreateManualControlBoard.CreateManualControlBoardViewModel _createVM; //创建手动盘视图ViewModel
         private SCA.WPF.DeviceItemSelector.DeviceItemSelectorViewModel _deviceItemSelectorVM; //选择器件视图ViewModel
+        private SCA.WPF.ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel _manualDeviceCodeVM; //NT8053设备代码
 
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
@@ -244,6 +433,47 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string DownloadIconPath { get { return _appCurrentPath + _downloadIconPath; } }
         public string UploadIconPath { get { return _appCurrentPath + _uploadIconPath; } }
+
+        private Visibility _isVisualColumnGroup1 = Visibility.Visible;
+
+        public Visibility IsVisualColumnGroup1
+        {
+            get
+            {
+                return _isVisualColumnGroup1;
+            }
+            set
+            {
+                _isVisualColumnGroup1 = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+
+        private Visibility _isVisualColumnGroup2 = Visibility.Collapsed;
+
+        public Visibility IsVisualColumnGroup2
+        {
+            get
+            {
+                return _isVisualColumnGroup2;
+            }
+            set
+            {
+                _isVisualColumnGroup2 = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+
+        public List<DeviceType> ValidDeviceType
+        {
+            get
+            {
+                SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithAnyAlarm();                
+                return lstDeviceType;
+       
+            }
+        }
 
         public Visibility CreateManualControlBoardVisibility
         {
@@ -270,6 +500,19 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
+        public Visibility ManualDeviceCodeVisibility
+        {
+            get
+            {
+                return _deviceItemSelectorVisibility;
+            }
+            set
+            {
+                _deviceItemSelectorVisibility = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        
 
         
         public SCA.WPF.CreateManualControlBoard.CreateManualControlBoardViewModel CreateVM
@@ -296,11 +539,22 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }        
+        public SCA.WPF.ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel ManualDeviceCodeVM
+        {
+            get { return _manualDeviceCodeVM; }
+            set
+            {
+                _manualDeviceCodeVM = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+
         public ManualControlBoardViewModel()
         {
             _manualControlBoardService = new SCA.BusinessLib.BusinessLogic.ManualControlBoardService(TheController);
             EventMediator.Register("AddMoreLines", AddMoreLines);
             EventMediator.Register("RefreshCollection", RefreshCollection);
+            EventMediator.Register("RefreshDeviceCode", RefreshDeviceCode);
             
         }
         public int AddedAmount
@@ -414,6 +668,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
             }
         }
+        public ICommand SelectLocalDevice1Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectLocalDevice1Execute, null); } }
+        public ICommand SelectLocalDevice2Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectLocalDevice2Execute, null); } }
+        public ICommand SelectLocalDevice3Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectLocalDevice3Execute, null); } }
+        public ICommand SelectLocalDevice4Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectLocalDevice4Execute, null); } }
+
+        public ICommand SelectNetDevice1Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectNetDevice1Execute, null); } }
+        public ICommand SelectNetDevice2Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectNetDevice2Execute, null); } }
+        public ICommand SelectNetDevice3Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectNetDevice3Execute, null); } }
+        public ICommand SelectNetDevice4Command { get { return new SCA.WPF.Utility.RelayCommand<object>(SelectNetDevice4Execute, null); } }
+
         public void AddMoreRecordExecute()
         {
          //   SCA.WPF.Infrastructure.EventMediator.Unregister("ManualControlBoardAddMoreLines", ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).AddMoreLines);
@@ -424,7 +688,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             createVM.TheController = TheController;
             CreateVM = createVM;
             this.CreateManualControlBoardVisibility = Visibility.Visible;
-            this.DeviceItemSelectorVisibility = Visibility.Collapsed; 
+            this.DeviceItemSelectorVisibility = Visibility.Collapsed;
+            ManualDeviceCodeVisibility = Visibility.Collapsed;
             SCA.WPF.Infrastructure.EventMediator.Register("ManualControlBoardAddMoreLines", AddMoreLines);
         }
         public void AddNewRecordExecute(int rowsAmount)
@@ -458,15 +723,70 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             if (args != null)
             {
-                EditableManualControlBoard eMCB = (EditableManualControlBoard)args;
-                ManualControlBoard mcb = eMCB.ToManualControlBoard();
-                CreateManualControlBoardVisibility = Visibility.Collapsed;
-                DeviceItemSelectorVisibility = Visibility.Visible;
-                DeviceItemSelector.DeviceItemSelectorViewModel deviceItemSelectorVM = new DeviceItemSelector.DeviceItemSelectorViewModel();
-                deviceItemSelectorVM.TheController = TheController;
-                deviceItemSelectorVM.MCB = mcb;                
-                DeviceItemSelectorVM = deviceItemSelectorVM;
+                EditableManualControlBoard eMCB = args as EditableManualControlBoard;
+                if(eMCB != null)
+                {
+                    ManualControlBoard mcb = eMCB.ToManualControlBoard();
+                    CreateManualControlBoardVisibility = Visibility.Collapsed;
+                    DeviceItemSelectorVisibility = Visibility.Visible;
+                    ManualDeviceCodeVisibility = Visibility.Collapsed;
+                    DeviceItemSelector.DeviceItemSelectorViewModel deviceItemSelectorVM = new DeviceItemSelector.DeviceItemSelectorViewModel();
+                    deviceItemSelectorVM.TheController = TheController;
+                    deviceItemSelectorVM.MCB = mcb;
+                    DeviceItemSelectorVM = deviceItemSelectorVM;
+                }
             }            
+        }
+        public void SelectLocalDevice1Execute(object args)
+        {
+            SelectDeviceExecute(1, args);
+        }
+        public void SelectLocalDevice2Execute(object args)
+        {
+            SelectDeviceExecute(2, args);
+        }
+        public void SelectLocalDevice3Execute(object args)
+        {
+            SelectDeviceExecute(3, args);
+        }
+        public void SelectLocalDevice4Execute(object args)
+        {
+            SelectDeviceExecute(4, args);
+        }
+        public void SelectNetDevice1Execute(object args)
+        {
+            SelectDeviceExecute(5, args);
+        }
+        public void SelectNetDevice2Execute(object args)
+        {
+            SelectDeviceExecute(6, args);
+        }
+        public void SelectNetDevice3Execute(object args)
+        {
+            SelectDeviceExecute(7, args);
+        }
+        public void SelectNetDevice4Execute(object args)
+        {
+            SelectDeviceExecute(8, args);
+        }
+
+        public void SelectDeviceExecute(int id, object args)
+        {
+            if (args != null)
+            {
+                EditableManualControlBoard eMCB = args as EditableManualControlBoard;
+                if (eMCB != null)
+                {
+                    ManualControlBoard mcb = eMCB.ToManualControlBoard();
+                    CreateManualControlBoardVisibility = Visibility.Collapsed;
+                    DeviceItemSelectorVisibility = Visibility.Collapsed;
+                    ManualDeviceCodeVisibility = Visibility.Visible;
+                    ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel deviceCodeVM = new ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel();
+                    deviceCodeVM.ID = id;
+                    deviceCodeVM.MCB = mcb;
+                    ManualDeviceCodeVM = deviceCodeVM;
+                }
+            }
         }
         private void ManualControlBoardCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -533,6 +853,61 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 eMCB.DeviceCode=mcb.DeviceCode;
             }            
             DeviceItemSelectorVisibility = Visibility.Collapsed;                
+        }
+
+        public void RefreshDeviceCode(object param)
+        {
+            try
+            {
+                SCA.WPF.ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel deviceCodeVM = param as SCA.WPF.ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel;
+                EditableManualControlBoard eMCB = ManualControlBoardInfoObservableCollection.Where((d) => d.ID == deviceCodeVM.MCB.ID).FirstOrDefault();
+                if(deviceCodeVM != null)
+                {
+                    switch (deviceCodeVM.ID)
+                    {
+                        case 1:
+                            eMCB.LocalDevice1 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.LocalDevice1 = eMCB.LocalDevice1;
+                            break;
+                        case 2:
+                            eMCB.LocalDevice2 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.LocalDevice2 = eMCB.LocalDevice2;
+                            break;
+                        case 3:
+                            eMCB.LocalDevice3= deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.LocalDevice3 = eMCB.LocalDevice3;
+                            break;
+                        case 4:
+                            eMCB.LocalDevice4 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.LocalDevice4 = eMCB.LocalDevice4;
+                            break;
+                        case 5:
+                            eMCB.NetDevice1 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.NetDevice1 = eMCB.NetDevice1;
+                            break;
+                        case 6:
+                            eMCB.NetDevice2 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.NetDevice2 = eMCB.NetDevice2;
+                            break;
+                        case 7:
+                            eMCB.NetDevice3 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.NetDevice3 = eMCB.NetDevice3;
+                            break;
+                        case 8:
+                            eMCB.NetDevice4 = deviceCodeVM.GetResultCode();
+                            deviceCodeVM.MCB.NetDevice4 = eMCB.NetDevice4;
+                            break;
+                    }
+                }
+                ManualControlBoardService mcbService = new ManualControlBoardService(TheController);
+                mcbService.Update(deviceCodeVM.MCB);
+                ManualDeviceCodeVisibility = Visibility.Collapsed;   
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex.Message, ex);
+            }
+            
         }
     }
 }
