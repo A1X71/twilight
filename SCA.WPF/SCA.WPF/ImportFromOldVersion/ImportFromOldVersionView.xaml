@@ -34,7 +34,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!--MouseDown="AvatarGrid_MouseDown"-->
-                    <Label Grid.Row="0" Grid.Column="0" Content="_项目名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <Label Grid.Row="0" Grid.Column="0" Content="工程名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
                     <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100"  Text="{Binding Path=ProjectName}"/>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="导入文件路径" Target="{Binding ElementName=ImportFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
