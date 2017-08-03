@@ -181,9 +181,6 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             try
             {
-                if (id != null)
-                {
-
                         LinkageConfigMixed result = _controller.MixedConfig.Find(
                               delegate(LinkageConfigMixed x)
                               {
@@ -313,7 +310,7 @@ namespace SCA.BusinessLib.BusinessLogic
                                     break;
                             }
                         }
-                }
+                
             }
             catch (Exception ex)
             {

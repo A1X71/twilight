@@ -75,16 +75,19 @@
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                        Command="{Binding Path=SaveCommand}"
+                        >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}" >
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
+                </Button>-->
             </Grid>
+            <!--注意：此列名如果有变化，需要同步更改相应Service的UpdateViaSpecifiedColumnName方法中的名称，否则粘贴将出现问题 2017-08-03 william-->
             <local:DetailInfoGridControl x:Name="DataGrid_General" 
                      AutoGenerateColumns="False"                                                            
                      IsSynchronizedWithCurrentItem="True" 
@@ -94,7 +97,12 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"   
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding  Path=GeneralLinkageConfigInfoObservableCollection}" >
                 <local:DetailInfoGridControl.Resources>
                     
@@ -110,6 +118,7 @@
                 <local:DetailInfoGridControl.Columns>
                     <dg:DataGridTextColumn 
                                        Header="ID" 
+                                       Visibility="Hidden"
                                        Binding="{Binding Path=ID}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
@@ -130,7 +139,7 @@
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>
-                    <dg:DataGridComboBoxColumn Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
+                    <!--<dg:DataGridComboBoxColumn Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
                                                Visibility="{Binding  Data.IsVisualColumnGroup, Source={StaticResource proxy} }">
                         <dg:DataGridComboBoxColumn.ItemsSource>
                             <col:ArrayList>
@@ -138,14 +147,14 @@
                                 <sys:String>它系统</sys:String>
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
-                    </dg:DataGridComboBoxColumn>
+                    </dg:DataGridComboBoxColumn>-->
                     <dg:DataGridTextColumn
-                                       Header="A楼" 
+                                       Header="A楼号" 
                                        Binding="{Binding Path=BuildingNoA, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
-                                       Header="A区" 
+                                       Header="A区号" 
                                        Binding="{Binding Path=ZoneNoA, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
@@ -254,7 +263,7 @@
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
-                                       Header="C回路号" 
+                                       Header="C路号" 
                                        Binding="{Binding Path=LoopNoC, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>

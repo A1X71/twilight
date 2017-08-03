@@ -17,7 +17,8 @@ namespace SCA.Interface.BusinessLogic
         List<LinkageConfigGeneral> Create(int amount);
         bool Update(LinkageConfigGeneral linkageConfigGeneral);
         bool DeleteBySpecifiedID(int id);
-
+        bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data);
         void DownloadExecute(List<LinkageConfigGeneral> lstLinkageConfigGeneral);
+        bool SaveToDB();
     }
 }

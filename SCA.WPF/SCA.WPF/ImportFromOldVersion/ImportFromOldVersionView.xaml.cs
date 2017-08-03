@@ -42,6 +42,11 @@ namespace SCA.WPF.ViewsRoot.Views
             remove { RemoveHandler(CloseButtonClickEvent, value); }
         }
 
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(CloseButtonClickEvent));
+        }
+
    
 
 

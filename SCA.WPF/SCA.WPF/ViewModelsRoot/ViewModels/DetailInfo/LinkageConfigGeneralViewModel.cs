@@ -39,7 +39,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ID = linkageConfigGeneral.ID;
             this.Code=linkageConfigGeneral.Code;
             this.ActionCoefficient= linkageConfigGeneral.ActionCoefficient;
-            this.CategoryA = linkageConfigGeneral.CategoryA;
+           // this.CategoryA = linkageConfigGeneral.CategoryA;
             this.BuildingNoA=linkageConfigGeneral.BuildingNoA;
             this.ZoneNoA=linkageConfigGeneral.ZoneNoA;
             this.LayerNoA1=linkageConfigGeneral.LayerNoA1;
@@ -53,7 +53,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ZoneNoC=linkageConfigGeneral.ZoneNoC;
             this.LayerNoC=linkageConfigGeneral.LayerNoC;
             this.DeviceTypeCodeC = linkageConfigGeneral.DeviceTypeCodeC;
-            ToCategoryAString();
+          //  ToCategoryAString();
 
         }
         public LinkageConfigGeneral ToLinkageConfigGeneral()
@@ -65,7 +65,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigGeneral.ID = this.ID;
             linkageConfigGeneral.Code =this.Code;
             linkageConfigGeneral.ActionCoefficient = this.ActionCoefficient;
-            linkageConfigGeneral.CategoryA = this.CategoryA;
+           // linkageConfigGeneral.CategoryA = this.CategoryA;
             linkageConfigGeneral.BuildingNoA = this.BuildingNoA;
             linkageConfigGeneral.ZoneNoA = this.ZoneNoA;
             linkageConfigGeneral.LayerNoA1 = this.LayerNoA1;
@@ -82,38 +82,38 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             return linkageConfigGeneral;
         }
 
-        private string _categoryAString;
-        public string CategoryAString
-        {
-            get { return _categoryAString; }
-            set
-            {
-                _categoryAString = value;
-                RaisePropertyChanged("CategoryAString");
-                switch (_categoryAString)
-                {
-                    case "本系统":
-                        this.CategoryA = 0;
-                        break;
-                    case "它系统":
-                        this.CategoryA = 1;
-                        break;
-                }
-            }
-        }
+        //private string _categoryAString;
+        //public string CategoryAString
+        //{
+        //    get { return _categoryAString; }
+        //    set
+        //    {
+        //        _categoryAString = value;
+        //        RaisePropertyChanged("CategoryAString");
+        //        switch (_categoryAString)
+        //        {
+        //            case "本系统":
+        //                this.CategoryA = 0;
+        //                break;
+        //            case "它系统":
+        //                this.CategoryA = 1;
+        //                break;
+        //        }
+        //    }
+        //}
 
-        public void ToCategoryAString()
-        {
-            switch (this.CategoryA)
-            {
-                case 0:
-                    CategoryAString = "本系统";
-                    break;
-                case 1:
-                    CategoryAString = "它系统";
-                    break;
-            }
-        }
+        //public void ToCategoryAString()
+        //{
+        //    switch (this.CategoryA)
+        //    {
+        //        case 0:
+        //            CategoryAString = "本系统";
+        //            break;
+        //        case 1:
+        //            CategoryAString = "它系统";
+        //            break;
+        //    }
+        //}
 
         #region INotifyPropertyChanged Members
 
@@ -351,6 +351,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.General;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -387,7 +388,18 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
 
-
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
         public int AddedAmount
         {
             get
@@ -460,6 +472,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
         //public ICommand UploadCommand
         //{ 
 
@@ -471,17 +490,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public void AddNewRecordExecute(int rowsAmount)
         {
 
-            _linkageConfigGeneralService.TheController = this.TheController;
-            List<LinkageConfigGeneral> lstLinkageConfigGeneral = _linkageConfigGeneralService.Create(rowsAmount);
-            foreach (var v in lstLinkageConfigGeneral)
+            using (new WaitCursor())
             {
-                EditableLinkageConfigGeneral eLCG = new EditableLinkageConfigGeneral();
-                eLCG.Controller = v.Controller;
-                eLCG.ControllerID = v.ControllerID;
-                eLCG.ID = v.ID;
-                eLCG.Code = v.Code;
-                GeneralLinkageConfigInfoObservableCollection.Add(eLCG);
-            }            
+                _linkageConfigGeneralService.TheController = this.TheController;
+                List<LinkageConfigGeneral> lstLinkageConfigGeneral = _linkageConfigGeneralService.Create(rowsAmount);
+                foreach (var v in lstLinkageConfigGeneral)
+                {
+                    EditableLinkageConfigGeneral eLCG = new EditableLinkageConfigGeneral();
+                    eLCG.Controller = v.Controller;
+                    eLCG.ControllerID = v.ControllerID;
+                    eLCG.ID = v.ID;
+                    eLCG.Code = v.Code;
+                    GeneralLinkageConfigInfoObservableCollection.Add(eLCG);
+                }
+            }
         }
         public void DownloadExecute()
         {
@@ -512,7 +534,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return lstDeviceType;
             }
         }
-
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                SCA.Interface.BusinessLogic.ILinkageConfigGeneralService _mixedService = new LinkageConfigGeneralService(TheController);
+                _mixedService.SaveToDB();
+            }
+        }
 
     }
 

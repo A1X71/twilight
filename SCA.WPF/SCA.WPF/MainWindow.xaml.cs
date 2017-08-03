@@ -85,10 +85,10 @@ namespace SCA.WPF
             lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);            
             vm.SetNavigatingViewModel(lstProject);
             this.DataContext = vm;            
-            Navigator.DataContext = vm.NavigatingViewModel;
-            
+            Navigator.DataContext = vm.NavigatingViewModel;            
             this.ProjectUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
+            this.Menu.IsEnabled = true;
         }
         private void ProjectUserControl_CloseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -98,7 +98,9 @@ namespace SCA.WPF
             Navigator.DataContext = vm.NavigatingViewModel;
             this.DataContext = vm;
             this.ProjectUserControl.Visibility = Visibility.Collapsed;
+            this.ImportFromOldVersionUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
+            this.Menu.IsEnabled = true;
             
         }
         private void CreateControllerUserControl_AddButtonClick(object sender, RoutedEventArgs e)
@@ -108,7 +110,6 @@ namespace SCA.WPF
             vm.SetNavigatingViewModel(lstProject);
             this.DataContext = vm;
             Navigator.DataContext = vm.NavigatingViewModel;
-
             CreateControllerUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
         }
@@ -117,6 +118,7 @@ namespace SCA.WPF
             RefreshNavigator();
             ImportFromOldVersionUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
+            this.Menu.IsEnabled = true;
         }
 
         private void DisplayTheOpenedProject(object args)
@@ -128,6 +130,7 @@ namespace SCA.WPF
             this.WelcomeUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
             this.Navigator.Visibility = Visibility.Visible;
+            this.Menu.IsEnabled = true;
         }
         private void RefreshNavigator()
         {
@@ -479,11 +482,6 @@ namespace SCA.WPF
         }
         #endregion
 
-        private void ImportFromOldVersionUserControl_CloseButtonClick(object sender, RoutedEventArgs e)
-        {
-            this.ImportFromOldVersionUserControl.Visibility = Visibility.Collapsed;
-            this.DetailsPane.Visibility = Visibility.Visible;
-        }
 #endregion
         private void RefreshNavigator(object param)
         {

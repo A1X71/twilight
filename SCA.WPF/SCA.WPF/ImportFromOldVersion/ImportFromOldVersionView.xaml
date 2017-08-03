@@ -48,7 +48,7 @@
 
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                     <Button Content="_确定" x:Name="ConfirmButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" TabIndex="140" Width="64" Command="{Binding Path=ComfirmExecuteCommand}"/>
-                    <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60" Command="{Binding Path=CancelExecuteCommand}"/>
+                    <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left"  TabIndex="150" Margin="10,0,0,0" Width="60" Click="CloseButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

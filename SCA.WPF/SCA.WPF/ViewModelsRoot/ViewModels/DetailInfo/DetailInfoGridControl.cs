@@ -164,7 +164,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                                 columnDataIndex = columnDataIndex - 1;
                             }
                         }
-                        UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
+                    //    UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
                     }
                 }
                 else
@@ -256,6 +256,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                                   }
                                 );
                             ILinkageConfigMixedService mixedService = new LinkageConfigMixedService(controller);
+                            mixedService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.General:
+                        {
+                            int controllerID = ((EditableLinkageConfigGeneral)item).ControllerID;
+                            int itemID = ((EditableLinkageConfigGeneral)item).ID;
+                            ControllerModel controller = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
+                                  delegate(ControllerModel x)
+                                  {
+                                      return x.ID == controllerID;
+                                  }
+                                );
+                            ILinkageConfigGeneralService mixedService = new LinkageConfigGeneralService(controller);
                             mixedService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
                         }
                         break;

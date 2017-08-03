@@ -232,7 +232,8 @@ namespace SCA.WPF.ImportFromOldVersion
         }
         public void CancelExecute()
         {
-            //RaiseEvent(new RoutedEventArgs(CloseButtonClickEvent));
+          //  RaiseEvent(new RoutedEventArgs(CloseButtonClickEvent));
+            //EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
         }
         
         #endregion

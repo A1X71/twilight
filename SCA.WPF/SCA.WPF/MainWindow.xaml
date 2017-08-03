@@ -120,12 +120,14 @@
 
         <!--Menu Area-->
         <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top"  Background="{DynamicResource InputBackgroundBrush}" Height="25">
-            <View:MenuView  CreateControllerClick="MenuUserController_CreateControllerClick"
+            <View:MenuView  x:Name="Menu"
+                CreateControllerClick="MenuUserController_CreateControllerClick"
                             CreateLoopClick="MenuUserController_CreateLoopClick"
                             ProjectSettingClick="MenuUserController_ProjectSettingClick" 
                             CreateProjectClick="MenuUserController_CreateProjectClick" 
                             EditLoopsClick="MenuUserController_EditLoopsClick"                            
                             CloseProjectClick="ProjectUserControl_CloseButtonClick"                                                        
+                            IsEnabled="False"
                             >
                 <i:Interaction.Behaviors>
                     <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
@@ -223,7 +225,7 @@
 
             <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"
                                            ConfirmButtonClick="ImportFromOldVersionUserControl_ConfirmButtonClick" 
-                                           CloseButtonClick="ImportFromOldVersionUserControl_CloseButtonClick"/>
+                                           CloseButtonClick="ProjectUserControl_CloseButtonClick"/>
 
             <View:CreateControllerView x:Name="CreateControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"  AddButtonClick="CreateControllerUserControl_AddButtonClick"  CancelButtonClick="CreateControllerUserControl_CancelButtonClick"/>
 
