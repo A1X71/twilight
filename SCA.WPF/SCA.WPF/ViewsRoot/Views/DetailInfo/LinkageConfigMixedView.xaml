@@ -6,9 +6,12 @@
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"  
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              xmlns:utility="clr-namespace:SCA.WPF.Utility"
+             xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -32,7 +35,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--<ColumnDefinition Width="Auto"/>-->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -47,8 +50,11 @@
                     </Grid.RowDefinitions>
                     <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
                         <ComboBoxItem>
-                            添加更多项
+                            <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding DisplayMoreLinesViewCommand}"  Background="Transparent" BorderBrush="Transparent">                                
+                                添加更多项
+                            </Button>
                         </ComboBoxItem>
+                        
                     </ComboBox>
                     <Button Name="btnAddNewLine" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding Path=AddNewRecordCommand}" CommandParameter="{Binding Path=AddedAmount}">
                         <Image Source="{Binding Path=AddIconPath,Mode=OneWay}"/>
@@ -68,16 +74,19 @@
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                        Command="{Binding Path=SaveCommand}"
+                        >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}" >
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
-            </Grid>    
+                </Button>-->
+            </Grid>            
+            <!--注意：此列名如果有变化，需要同步更改相应Service的UpdateViaSpecifiedColumnName方法中的名称，否则粘贴将出现问题 2017-08-03 william-->
         <local:DetailInfoGridControl x:Name="DataGrid_Mixed" 
                      AutoGenerateColumns="False"                                                            
                      IsSynchronizedWithCurrentItem="True" 
@@ -165,19 +174,19 @@
                     </dg:DataGridComboBoxColumn.ItemsSource>
                 </dg:DataGridComboBoxColumn>
                 <dg:DataGridTextColumn Width="Auto" 
-                                    Header="A楼" 
+                                    Header="A楼号" 
                                     Binding="{Binding Path=BuildingNoA,ValidatesOnDataErrors=True}" 
                                     ElementStyle="{StaticResource tb_ElementStyle}"
                                     EditingElementStyle="{StaticResource errorStyle}"
                                     />
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="A区" 
+                                       Header="A区号" 
                                        Binding="{Binding Path=ZoneNoA,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="A层" 
+                                       Header="A层号" 
                                        Binding="{Binding Path=LayerNoA,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
@@ -212,19 +221,19 @@
                     </dg:DataGridComboBoxColumn.ItemsSource>
                 </dg:DataGridComboBoxColumn>
                 <dg:DataGridTextColumn Width="Auto" 
-                                    Header="B楼" 
+                                    Header="B楼号" 
                                     Binding="{Binding Path=BuildingNoB,ValidatesOnDataErrors=True}" 
                                     ElementStyle="{StaticResource tb_ElementStyle}"
                                     EditingElementStyle="{StaticResource errorStyle}"
                                     />
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="B区" 
+                                       Header="B区号" 
                                        Binding="{Binding Path=ZoneNoB,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="B层" 
+                                       Header="B层号" 
                                        Binding="{Binding Path=LayerNoB,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
@@ -240,11 +249,7 @@
                                        Binding="{Binding Path=DeviceCodeB,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
-                                       />
-                <dg:DataGridTextColumn Width="Auto" 
-                                       Header="B类型" 
-                                       Binding="{Binding Path=DeviceTypeCodeB}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       />                
                     
                     <dg:DataGridComboBoxColumn Header="B类型"  
                                                DisplayMemberPath="Name"
@@ -255,7 +260,7 @@
                     </dg:DataGridComboBoxColumn>
 
 
-                    <dg:DataGridComboBoxColumn Header="C分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeC,Mode=TwoWay}" />                    
+                 <dg:DataGridComboBoxColumn Header="C分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeC,Mode=TwoWay}" />                    
 
                 <dg:DataGridTextColumn Width="Auto" 
                                        Header="C楼号" 
@@ -281,7 +286,7 @@
                                        Binding="{Binding Path=MachineNoC}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="C回路号" 
+                                       Header="C路号" 
                                        Binding="{Binding Path=LoopNoC,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
@@ -292,7 +297,8 @@
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />                
-                    <dg:DataGridComboBoxColumn Header="C类型"  
+                    <dg:DataGridComboBoxColumn Header="C类型"
+                                               Width="*" 
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
                                                SelectedValueBinding="{Binding Path=DeviceTypeCodeC}"                                                                      
@@ -302,6 +308,16 @@
 
                 </local:DetailInfoGridControl.Columns>
         </local:DetailInfoGridControl>
+            <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300">
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
+                                                            Event="ConfirmClick" PassArguments="True"/>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesCloseCommand}"                                                             
+                                                            Event="CloseClick" PassArguments="False"/>
+                </i:Interaction.Behaviors>
+            </views:AddMoreLinesView>
+
+
         </StackPanel>
     </Grid>
 </UserControl>

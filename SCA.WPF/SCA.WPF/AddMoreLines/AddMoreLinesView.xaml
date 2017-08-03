@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="SCA.WPF.ViewsRoot.Views.AddMoreLinesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="Label" TargetType="Label">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment"  Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Background="{StaticResource WindowBackgroundBrush}" >
+        <!-- Header -->
+        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
+            <TextBlock Text="添加记录" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        </Border>
+        <!-- Content -->
+        <Grid  x:Name="AddControllerGrid"  VerticalAlignment="Center" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Content="数量" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right"/>
+            <TextBox x:Name="txtAmount" Grid.Column="1" Grid.Row="0"/>
+            <Separator Grid.ColumnSpan="2" Grid.Row="1"/>
+            <Grid  Grid.Column="1" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions/>
+                <Button x:Name="ConfirmButton" Width="50" Height="20" Grid.Column="1" Click="ConfirmButton_Click">确定</Button>
+                <Button x:Name="CloseButton" Width="50" Height="20"  Grid.Column="3" Click="CloseButton_Click">关闭</Button>
+            </Grid>
+        </Grid>
+        <!--Bottom-->
+        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" VerticalAlignment="Bottom" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+    </StackPanel>    
+</UserControl>

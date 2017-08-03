@@ -14,6 +14,7 @@ using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
 using SCA.Interface.BusinessLogic;
 using System.Windows;
+using SCA.Interface;
 /* ==============================
 *
 * Author     : William
@@ -485,8 +486,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
-        private object _detailType = ControllerNodeType.Mixed;
-
+        private object _detailType = GridDetailType.Mixed;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -511,6 +512,18 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 _isVisualColumnGroup = value;
                 NotifyOfPropertyChange("IsVisualColumnGroup");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
             }
         }
         public object DetailType
@@ -580,7 +593,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                SCA.Interface.IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
+                IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
                 return config.GetDeviceTypeInfo();
             }
         }
@@ -625,6 +638,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
+        }
+
         //public ICommand UploadCommand
         //{ 
 
@@ -635,21 +685,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <param name="rowsAmount"></param>
         public void AddNewRecordExecute(int rowsAmount)
         {
-            _linkageConfigMixedService.TheController = this.TheController;
-            List<LinkageConfigMixed> lstLinkageConfigMixed = _linkageConfigMixedService.Create(rowsAmount);
-            foreach (var v in lstLinkageConfigMixed)
-            {               
-                EditableLinkageConfigMixed eLCM = new EditableLinkageConfigMixed();
-                eLCM.Controller =v.Controller;
-                eLCM.ControllerID = v.ControllerID;
-                eLCM.ID = v.ID;
-                eLCM.Code =v.Code;
-                eLCM.ActionType = v.ActionType;
-                eLCM.TypeA = v.TypeA;
-                eLCM.TypeB = v.TypeB;
-                eLCM.TypeC = v.TypeC;                
-                MixedLinkageConfigInfoObservableCollection.Add(eLCM);
-            }            
+            using (new WaitCursor())
+            {
+                _linkageConfigMixedService.TheController = this.TheController;
+                List<LinkageConfigMixed> lstLinkageConfigMixed = _linkageConfigMixedService.Create(rowsAmount);
+                foreach (var v in lstLinkageConfigMixed)
+                {
+                    EditableLinkageConfigMixed eLCM = new EditableLinkageConfigMixed();
+                    eLCM.Controller = v.Controller;
+                    eLCM.ControllerID = v.ControllerID;
+                    eLCM.ID = v.ID;
+                    eLCM.Code = v.Code;
+                    eLCM.ActionType = v.ActionType;
+                    eLCM.TypeA = v.TypeA;
+                    eLCM.TypeB = v.TypeB;
+                    eLCM.TypeC = v.TypeC;
+                    MixedLinkageConfigInfoObservableCollection.Add(eLCM);
+                }
+            }
+        }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+                
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);                    
+                    AddNewRecordExecute(amount);
+                }
+                catch(Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+            
         }
         public void DownloadExecute()
         {
@@ -660,7 +731,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
 
         }
-
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                SCA.Interface.BusinessLogic.ILinkageConfigMixedService _mixedService = new LinkageConfigMixedService(TheController);
+                _mixedService.SaveToDB();
+            }
+        }
 
 
 

@@ -6,6 +6,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Image Source="../../../Resources/Icon/Style1/introduce.png"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>            
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image  Grid.Row="0" Grid.ColumnSpan="6" Source="../../../Resources/Icon/Style1/introduce.png" />
+        <TextBlock Grid.Row="1" Grid.Column="0">FT8000</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1">FT8003</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2">NT8001</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="3">NT8036</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="4">NT8021</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="5">NT8001</TextBlock>
+        <ItemsControl Grid.Row="2" Grid.Column="0" ></ItemsControl>
     </Grid>
 </UserControl>

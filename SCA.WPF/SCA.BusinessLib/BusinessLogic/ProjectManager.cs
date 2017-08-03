@@ -281,11 +281,7 @@ namespace SCA.BusinessLib
                 Project = project; //将对象信息赋给当前属性
                 ILogRecorder logger = null;
                 SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(Project.SavePath,logger, fileService);
-                _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
-                //_databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(Project.SaveFilePath, null, fileService);
-                
-                
-
+                _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);                
                 InitializeDefaultSetting();
 
             }
@@ -302,11 +298,7 @@ namespace SCA.BusinessLib
 
             SCA.BusinessLogic.DBFileVersionManager dbFileVersionManager = new SCA.BusinessLogic.DBFileVersionManager(strPath,logger,_fileService);
             _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
-            
-
-
-            InitializeDefaultSetting();
-            
+            InitializeDefaultSetting();            
             IDeviceDBServiceTest deviceDBService;
             ProjectModel project=_projectDBService.GetProject(1);
             List<ControllerModel> lstControllers = _controllerDBService.GetControllersByProject(project);

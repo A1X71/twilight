@@ -8,6 +8,8 @@ using System.Windows;
 using System.ComponentModel;
 using System.Windows.Data;
 using SCA.WPF.Utility;
+using SCA.Interface.BusinessLogic;
+using SCA.BusinessLib.BusinessLogic;
 using SCA.Model;
 /* ==============================
 *
@@ -84,106 +86,205 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             // parse the clipboard data            
             object obj = this.DetailType;
             List<string[]> rowData = ClipboardHelper.ParseClipboardData();  
-            bool hasAddedNewRow = false;
+            //bool hasAddedNewRow = false;
             if (rowData != null)
             { 
                 // call OnPastingCellClipboardContent for each cell
-                object item ;
-                if(CurrentItem==null)
+                if (this.SelectedIndex != -1)
                 {
-                    item = this.Items[this.SelectedIndex];//Added by william at 2017-04-20  工具条中的命令找不至CurrentItem
-                }
-                else
-                {
-                    item = CurrentItem;
-                }
-                
-                //int minRowIndex = LoopNameCollection.IndexOf(CurrentItem);
-                int minRowIndex = Items.IndexOf(item);
-                int maxRowIndex = Items.Count - 1;
+                    object item = null;
+                    if (CurrentItem == null)
+                    {
 
-                int minColumnDisplayIndex;
-                if (CurrentColumn != null)
-                {
-                    minColumnDisplayIndex = (SelectionUnit != DataGridSelectionUnit.FullRow) ? Columns.IndexOf(CurrentColumn) : 0;
-                }
-                else
-                {
-                    minColumnDisplayIndex = 0;
-                }
-                
-                
-                int maxColumnDisplayIndex = Columns.Count - 1;
-                int rowDataIndex = 1;
-                for (int i = minRowIndex; i <= maxRowIndex && rowDataIndex < rowData.Count; i++, rowDataIndex++)
-                {
-                    if (CanUserAddRows)
-                    { 
+                        item = this.Items[this.SelectedIndex];//Added by william at 2017-04-20  工具条中的命令找不至CurrentItem
+                    }
+                    else
+                    {
+                        item = CurrentItem;
+                    }
+
+                    //int minRowIndex = LoopNameCollection.IndexOf(CurrentItem);
+                    int minRowIndex = Items.IndexOf(item);
+                    int maxRowIndex = Items.Count - 1;
+
+                    int minColumnDisplayIndex;
+                    if (CurrentColumn != null)
+                    {
+                        minColumnDisplayIndex = (SelectionUnit != DataGridSelectionUnit.FullRow) ? Columns.IndexOf(CurrentColumn) : 0;
+                    }
+                    else
+                    {
+                        minColumnDisplayIndex = 0;
+                    }
+
+
+                    int maxColumnDisplayIndex = Columns.Count - 1;
+                    int rowDataIndex = 1;
+                    for (int i = minRowIndex; i <= maxRowIndex && rowDataIndex < rowData.Count; i++, rowDataIndex++)
+                    {
                         #region 将数据粘贴至新增的行中
-                        if (CanUserPasteToNewRows && CanUserAddRows && i == maxRowIndex)
-                        {
-                            // add a new row to be pasted to
-                            ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
-                            IEditableCollectionView iecv = cv as IEditableCollectionView;
-                            if (iecv != null)
-                            {
-                                hasAddedNewRow = true;
-                                iecv.AddNew();
+                        //if (CanUserAddRows)
+                        //{
 
-                                if (rowDataIndex + 1 < rowData.Count)
-                                {
-                                    // still has more items to paste, update the maxRowIndex
-                                    maxRowIndex = Items.Count - 1;
-                                }
+                        //    if (CanUserPasteToNewRows && CanUserAddRows && i == maxRowIndex)
+                        //    {
+                        //        // add a new row to be pasted to
+                        //        ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
+                        //        IEditableCollectionView iecv = cv as IEditableCollectionView;
+                        //        if (iecv != null)
+                        //        {
+                        //          //  hasAddedNewRow = true;
+                        //            iecv.AddNew();
+
+                        //            if (rowDataIndex + 1 < rowData.Count)
+                        //            {
+                        //                // still has more items to paste, update the maxRowIndex
+                        //                maxRowIndex = Items.Count - 1;
+                        //            }
+                        //        }
+                        //    }
+                        //    else if (i == maxRowIndex)
+                        //    {
+                        //        continue;
+                        //    }
+                        //}
+                        #endregion
+
+                        int columnDataIndex = 0;
+                        for (int j = minColumnDisplayIndex; j <= maxColumnDisplayIndex && columnDataIndex < rowData[rowDataIndex].Length; j++, columnDataIndex++)
+                        {
+                            DataGridColumn column = ColumnFromDisplayIndex(j);
+                            if (column.Visibility == Visibility.Visible)
+                            {
+                                
+                                column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
+                            }
+                            else
+                            {
+                                columnDataIndex = columnDataIndex - 1;
                             }
                         }
-                        else if (i == maxRowIndex)
-                        {
-                            continue;
-                        }
-                    }
-                    #endregion
-
-                    int columnDataIndex = 0;
-                    for (int j = minColumnDisplayIndex; j <= maxColumnDisplayIndex && columnDataIndex < rowData[rowDataIndex].Length; j++, columnDataIndex++)
-                    {
-                        DataGridColumn column = ColumnFromDisplayIndex(j);
-                        if (column.Visibility == Visibility.Visible)
-                        {
-                            column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
-                        }
-                        else
-                        {
-                            columnDataIndex = columnDataIndex - 1;
-                        }
-
+                        UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
                     }
                 }
-            
-                #region 更新选中区域
-                // update selection
-                if (hasAddedNewRow)
+                else
                 {
-                    UnselectAll();
-                    UnselectAllCells();
-
-                    CurrentItem = Items[minRowIndex];
-
-                    if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                    int rowDataIndex = 1;
+                    if (this.SelectedCells != null)  //更新列信息
                     {
-                        SelectedItem = Items[minRowIndex];
-                    }
-                    else if (SelectionUnit == DataGridSelectionUnit.CellOrRowHeader ||
-                             SelectionUnit == DataGridSelectionUnit.Cell)
-                    {
-                        SelectedCells.Add(new DataGridCellInfo(Items[minRowIndex], Columns[minColumnDisplayIndex]));
-
+                        bool singleColumnFlag = true;//仅允许选择一列进行粘贴
+                        if (SelectedCells.Count > 2)
+                        {
+                            
+                            int columnIndex = this.SelectedCells[0].Column.DisplayIndex;
+                            DataGridColumn column1 = ColumnFromDisplayIndex(columnIndex);
+                            columnIndex = this.SelectedCells[1].Column.DisplayIndex;
+                            DataGridColumn column2 = ColumnFromDisplayIndex(columnIndex);
+                            if (column1.Header != column2.Header)
+                            {
+                                singleColumnFlag = false;
+                            }
+                        }
+                        if (singleColumnFlag)
+                        { 
+                            for(int i=0;i<this.SelectedCells.Count;i++)
+                            {
+                                object item=this.SelectedCells[i].Item;
+                                int columnIndex=this.SelectedCells[i].Column.DisplayIndex;
+                                DataGridColumn column=ColumnFromDisplayIndex(columnIndex);                            
+                                if (column.Visibility == Visibility.Visible)
+                                {
+                                    if (column.Header.ToString() == rowData[0][0])//粘贴列与复制列为同一列
+                                    {
+                                        column.OnPastingCellClipboardContent(item, rowData[rowDataIndex][0]);//固定为1列
+                                        UpdateToModel(this.DetailType, item, rowData[0], rowData[rowDataIndex]);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                
+                                //((EditableLinkageConfigMixed)this.SelectedCells[0].Item).ID
+                            }
+                        }
                     }
                 }
+                
+
+
+            
+                #region 更新选中区域                
+                //if (hasAddedNewRow)
+                //{
+                //    UnselectAll();
+                //    UnselectAllCells();
+
+                //    CurrentItem = Items[minRowIndex];
+
+                //    if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                //    {
+                //        SelectedItem = Items[minRowIndex];
+                //    }
+                //    else if (SelectionUnit == DataGridSelectionUnit.CellOrRowHeader ||
+                //             SelectionUnit == DataGridSelectionUnit.Cell)
+                //    {
+                //        SelectedCells.Add(new DataGridCellInfo(Items[minRowIndex], Columns[minColumnDisplayIndex]));
+
+                //    }
+                //}
                 #endregion
             }
 
         }
+        private bool UpdateToModel(object type, object item,string[] columnNames, string[] data)
+        {
+            try
+            {
+                GridDetailType detailType = (GridDetailType)type;
+                switch (detailType)
+                {
+                    case GridDetailType.Mixed:
+                        {
 
+                            int controllerID = ((EditableLinkageConfigMixed)item).ControllerID;
+                            int itemID = ((EditableLinkageConfigMixed)item).ID;
+                            ControllerModel controller = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
+                                  delegate(ControllerModel x)
+                                  {
+                                      return x.ID == controllerID;
+                                  }
+                                );
+                            ILinkageConfigMixedService mixedService = new LinkageConfigMixedService(controller);
+                            mixedService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+    }
+    /// <summary>
+    /// 表格显示内容类型
+    /// </summary>
+    enum GridDetailType
+    {
+        Device8000,
+        Device8003,
+        Device8001,
+        Device8021,
+        Device8036,
+        Device8007,
+        Device8053,
+        Standard,
+        Mixed,
+        General,
+        ManualControlBoard,
     }
 }

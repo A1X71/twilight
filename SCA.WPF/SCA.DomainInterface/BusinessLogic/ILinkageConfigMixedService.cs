@@ -19,5 +19,15 @@ namespace SCA.Interface.BusinessLogic
         bool Update(LinkageConfigMixed linkageConfigMixed);
         bool DeleteBySpecifiedID(int id);
         void DownloadExecute(List<LinkageConfigMixed> lstLinkageConfigMixed);
+        /// <summary>
+        /// 更新指定混合组态ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data);
+        bool SaveToDB();
+
     }
 }

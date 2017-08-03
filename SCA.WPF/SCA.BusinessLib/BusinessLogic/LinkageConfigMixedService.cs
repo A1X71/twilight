@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using SCA.Model;
 using SCA.BusinessLib.Controller;
 using SCA.Interface.BusinessLogic;
-
+using SCA.BusinessLib.Utility;
+using SCA.BusinessLogic;
+using SCA.Interface;
+using SCA.Interface.DatabaseAccess;
+using SCA.DatabaseAccess.DBContext;
 /* ==============================
 *
 * Author     : William
@@ -27,7 +31,7 @@ namespace SCA.BusinessLib.BusinessLogic
        private ControllerModel _controller;
        private int _maxCode = 0;//当前标准组态最大编号
        private int _maxID = 0;//标准组态当前最大ID
-       private short _maxMixedLinkageConfigAmount = 0;
+       private short _maxMixedLinkageConfigAmount = 0;       
        public LinkageConfigMixedService(ControllerModel controller)
        {
            DataRecordAlreadySet = true;//初始状态
@@ -166,6 +170,157 @@ namespace SCA.BusinessLib.BusinessLogic
             return true;
         }
 
+        /// <summary>
+        /// 更新指定混合组态ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            try
+            {
+                if (id != null)
+                {
+
+                        LinkageConfigMixed result = _controller.MixedConfig.Find(
+                              delegate(LinkageConfigMixed x)
+                              {
+                                  return x.ID == id;
+                              }
+                              );
+                        for (int i = 0; i < columnNames.Length; i++)
+                        {
+                            switch (columnNames[i])
+                            { 
+                                case "编号":
+                                    result.Code = data[i];
+                                    break;
+                                case "动作常数":
+                                    result.ActionCoefficient = Convert.ToInt32(data[i]);
+                                    break;
+                                case "动作类型":
+                                    { 
+                                        LinkageActionType lActiontype = result.ActionType;
+                                        Enum.TryParse<LinkageActionType>(EnumUtility.GetEnumName(lActiontype.GetType(), data[i]), out lActiontype);
+                                        result.ActionType = lActiontype;
+                                    }
+                                    break;
+                                case "A分类":
+                                    { 
+                                        LinkageType linkageType = result.TypeA;
+                                        Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(linkageType.GetType(), data[i]), out linkageType);
+                                        result.TypeA = linkageType;
+                                    }
+                                    break;
+                                case "A类别":
+                                    { 
+                                        switch (data[i])
+                                        {
+                                            case "本系统":
+                                                result.CategoryA = 0;
+                                                break;
+                                            case "它系统":
+                                                result.CategoryA = 1;
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case "A楼号":
+                                    result.BuildingNoA =  new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "A区号":
+                                    result.ZoneNoA = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "A层号":
+                                    result.LayerNoA = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "A路号":
+                                    result.LoopNoA = data[i].ToString();
+                                    break;
+                                case "A编号":
+                                    result.DeviceCodeA = data[i].ToString();
+                                    break;
+                                case "A类型":
+                                    result.DeviceTypeCodeA = Convert.ToInt16(data[i]);
+                                    break;
+                                case "B分类":
+                                    {
+                                        LinkageType linkageType = result.TypeB;
+                                        Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(linkageType.GetType(), data[i]), out linkageType);
+                                        result.TypeB = linkageType;
+                                    }
+                                    break;
+                                case "B类别":
+                                    {
+                                        switch (data[i])
+                                        {
+                                            case "本系统":
+                                                result.CategoryB = 0;
+                                                break;
+                                            case "它系统":
+                                                result.CategoryB = 1;
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case "B楼号":
+                                    result.BuildingNoB = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "B区号":
+                                    result.ZoneNoB= new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "B层号":
+                                    result.LayerNoB = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "B路号":
+                                    result.LoopNoB = data[i].ToString();
+                                    break;
+                                case "B编号":
+                                    result.DeviceCodeB = data[i].ToString();
+                                    break;
+                                case "B类型":
+                                    result.DeviceTypeCodeB = Convert.ToInt16(data[i]);
+                                    break;
+                                case "C分类":
+                                    {
+                                        LinkageType linkageType = result.TypeC;
+                                        Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(linkageType.GetType(), data[i]), out linkageType);
+                                        result.TypeC = linkageType;
+                                    }
+                                    break;
+                                case "C楼号":
+                                    result.BuildingNoC = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "C区号":
+                                    result.ZoneNoC = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "C层号":
+                                    result.LayerNoC = new Nullable<int>(Convert.ToInt32(data[i]));
+                                    break;
+                                case "C机号":
+                                    result.MachineNoC = data[i].ToString();
+                                    break;
+                                case "C路号":
+                                    result.LoopNoC = data[i].ToString();
+                                    break;
+                                case "C编号":
+                                    result.DeviceCodeC = data[i].ToString();
+                                    break;
+                                case "C类型":
+                                    result.DeviceTypeCodeC = Convert.ToInt16(data[i]);
+                                    break;
+                            }
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+                return true;
+        }
         public bool DeleteBySpecifiedID(int id)
         {
             try
@@ -247,6 +402,23 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
             return false;
+        }
+        public bool SaveToDB()
+        {
+            try
+            {
+                ILogRecorder logger = null;
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                ILinkageConfigMixedDBService dbMixedService = new LinkageConfigMixedDBService(_dbFileVersionService);
+                dbMixedService.AddMixedLinkageConfigInfo(TheController.MixedConfig);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
