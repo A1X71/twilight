@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using SCA.WPF.Infrastructure;
 namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 {
     /// <summary>
@@ -26,21 +26,26 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel)this.DataContext).TheController;
-
-            var selectedItems = DataGrid_General.SelectedItems;
-            if (selectedItems != null)
+            if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                SCA.Interface.BusinessLogic.ILinkageConfigGeneralService lcsService = new SCA.BusinessLib.BusinessLogic.LinkageConfigGeneralService(controller);
-                foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigGeneral r in selectedItems)
+                using (new WaitCursor())
                 {
-                    if (r != null)
+                    SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel)this.DataContext).TheController;
+                    var selectedItems = DataGrid_General2.SelectedItems;
+                    if (selectedItems != null)
                     {
-                        lcsService.DeleteBySpecifiedID(r.ID);
+                        SCA.Interface.BusinessLogic.ILinkageConfigGeneralService lcsService = new SCA.BusinessLib.BusinessLogic.LinkageConfigGeneralService(controller);
+                        foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigGeneral r in selectedItems)
+                        {
+                            if (r != null)
+                            {
+                                lcsService.DeleteBySpecifiedID(r.ID);
+                            }
+                        }
+                        //刷新界面
+                        ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel)this.DataContext).GeneralLinkageConfigInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigGenerals(controller, controller.GeneralConfig);
                     }
                 }
-                //刷新界面
-                ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel)this.DataContext).GeneralLinkageConfigInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableLinkageConfigGenerals(controller, controller.GeneralConfig);
             }
         }
     }

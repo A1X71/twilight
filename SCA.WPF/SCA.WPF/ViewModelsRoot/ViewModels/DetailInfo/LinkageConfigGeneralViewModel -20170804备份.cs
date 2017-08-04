@@ -39,21 +39,22 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ID = linkageConfigGeneral.ID;
             this.Code=linkageConfigGeneral.Code;
             this.ActionCoefficient= linkageConfigGeneral.ActionCoefficient;
-            this.CategoryA = linkageConfigGeneral.CategoryA;
-            this.BuildingNoA = linkageConfigGeneral.BuildingNoA;
-            this.ZoneNoA = linkageConfigGeneral.ZoneNoA;
-            this.LayerNoA1 = linkageConfigGeneral.LayerNoA1;
-            this.LayerNoA2 = linkageConfigGeneral.LayerNoA2;
-            this.DeviceTypeCodeA = linkageConfigGeneral.DeviceTypeCodeA;
-            this.TypeC = linkageConfigGeneral.TypeC;
-            this.MachineNoC = linkageConfigGeneral.MachineNoC;
-            this.LoopNoC = linkageConfigGeneral.LoopNoC;
-            this.DeviceCodeC = linkageConfigGeneral.DeviceCodeC;
-            this.BuildingNoC = linkageConfigGeneral.BuildingNoC;
-            this.ZoneNoC = linkageConfigGeneral.ZoneNoC;
-            this.LayerNoC = linkageConfigGeneral.LayerNoC;
+           // this.CategoryA = linkageConfigGeneral.CategoryA;
+            this.BuildingNoA=linkageConfigGeneral.BuildingNoA;
+            this.ZoneNoA=linkageConfigGeneral.ZoneNoA;
+            this.LayerNoA1=linkageConfigGeneral.LayerNoA1;
+            this.LayerNoA2=linkageConfigGeneral.LayerNoA2;
+            this.DeviceTypeCodeA=linkageConfigGeneral.DeviceTypeCodeA;
+	        this.TypeC=linkageConfigGeneral.TypeC;
+            this.MachineNoC=linkageConfigGeneral.MachineNoC;
+            this.LoopNoC=linkageConfigGeneral.LoopNoC;
+            this.DeviceCodeC=linkageConfigGeneral.DeviceCodeC;
+            this.BuildingNoC=linkageConfigGeneral.BuildingNoC;
+            this.ZoneNoC=linkageConfigGeneral.ZoneNoC;
+            this.LayerNoC=linkageConfigGeneral.LayerNoC;
             this.DeviceTypeCodeC = linkageConfigGeneral.DeviceTypeCodeC;
-            ToCategoryAString();
+          //  ToCategoryAString();
+
         }
         public LinkageConfigGeneral ToLinkageConfigGeneral()
         {
@@ -64,7 +65,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigGeneral.ID = this.ID;
             linkageConfigGeneral.Code =this.Code;
             linkageConfigGeneral.ActionCoefficient = this.ActionCoefficient;
-            linkageConfigGeneral.CategoryA = this.CategoryA;
+           // linkageConfigGeneral.CategoryA = this.CategoryA;
             linkageConfigGeneral.BuildingNoA = this.BuildingNoA;
             linkageConfigGeneral.ZoneNoA = this.ZoneNoA;
             linkageConfigGeneral.LayerNoA1 = this.LayerNoA1;
@@ -80,260 +81,57 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigGeneral.DeviceTypeCodeC = this.DeviceTypeCodeC;
             return linkageConfigGeneral;
         }
-        
-        private string _code;
-        public new string Code
-        {
-            get
-            {
-                return _code;
-            }
-            set
-            {
-                if (_code != value)
-                { 
-                    _code = value;
-                    RaisePropertyChanged("Code");
-                }
-            }
-        }
-        private int _actionCoefficient;
-        public new int ActionCoefficient
-        {
-            get
-            {
-                return _actionCoefficient;
-            }
-            set
-            {
-                if (_actionCoefficient != value)
-                {
-                    _actionCoefficient = value;
-                    RaisePropertyChanged("ActionCoefficient");
-                }
-            }
-        }
-        private int? _buildingNoA;
-        public new int? BuildingNoA
-        {
-            get
-            {
-                return _buildingNoA;
-            }
-            set
-            {
-                _buildingNoA = value;
-                RaisePropertyChanged("BuildingNoA");
-            }
-        }
-        private int? _zoneNoA;
-        public new int? ZoneNoA
-        {
-            get
-            {
-                return _zoneNoA;
-            }
-            set
-            {
-                _zoneNoA = value;
-                RaisePropertyChanged("ZoneNoA");
-            }
-        }
-        private int? _layerNoA1;
-        public new int? LayerNoA1
-        {
-            get
-            {
-                return _layerNoA1;
-            }
-            set
-            {
-                _layerNoA1 = value;
-                RaisePropertyChanged("LayerNoA1");
-            }
-        }
-        private int? _layerNoA2;
-        public new int? LayerNoA2
-        {
-            get
-            {
-                return _layerNoA2;
-            }
-            set
-            {
-                _layerNoA2 = value;
-                RaisePropertyChanged("LayerNoA2");
-            }
-        }
-        private short _deivceTypeCodeA;
-        public new short DeviceTypeCodeA
-        {
-            get
-            {
-                return _deivceTypeCodeA;
-            }
-            set
-            {
-                _deivceTypeCodeA = value;
-                RaisePropertyChanged("DeviceTypeCodeA");
-            }
-        }
-        private LinkageType _typeC;
-        public new LinkageType TypeC
-        {
-            get
-            {
-                return _typeC;
-            }
-            set
-            {
-                _typeC = value;
-                RaisePropertyChanged("TypeC");
-            }    
-        }
-        private string _machineNoC;
-        public new string MachineNoC
-        {
-            get
-            {
-                return _machineNoC;
-            }
-            set
-            {
-                _machineNoC = value;
-                RaisePropertyChanged("MachineNoC");
-            }   
-        }
-        private string _loopNoC;
-        public  new string LoopNoC
-        {
-            get
-            {
-                return _loopNoC;
-            }
-            set
-            {
-                _loopNoC = value;
-                RaisePropertyChanged("LoopNoC");
-            }             
-        }
-        private string _deviceCodeC;
-        public new string DeviceCodeC
-        {
-            get
-            {
-                return _deviceCodeC;
-            }
-            set
-            {
-                _deviceCodeC = value;
-                RaisePropertyChanged("DeviceCodeC");
-            }
-        }
-        private int? _buildingNoC;
-        public new int? BuildingNoC
-        {
-            get
-            {
-                return _buildingNoC;
-            }
-            set
-            {
-                _buildingNoC = value;
-                RaisePropertyChanged("BuldingNoC");
-            }
-        }
-        private int? _zoneNoC;
-        public new int? ZoneNoC
-        {
-            get
-            {
-                return _zoneNoC;
-            }
-            set
-            {
-                _zoneNoC = value;
-                RaisePropertyChanged("ZoneNoC");
-            }
-        }
-        private int? _layerNoC;
-        public new  int? LayerNoC
-        {
-            get
-            {
-                return _layerNoC;
-            }
-            set
-            {
-                _layerNoC = value;
-                RaisePropertyChanged("LayerNoC");
-            }
-        }
-        private short _deviceTypeCodeC;
-        public new short DeviceTypeCodeC
-        {
-            get
-            {
-                return _deviceTypeCodeC;
-            }
-            set
-            {
-                _deviceTypeCodeC = value;
-                RaisePropertyChanged("DeviceTypeCodeC");
-            }
-        }
 
+        //private string _categoryAString;
+        //public string CategoryAString
+        //{
+        //    get { return _categoryAString; }
+        //    set
+        //    {
+        //        _categoryAString = value;
+        //        RaisePropertyChanged("CategoryAString");
+        //        switch (_categoryAString)
+        //        {
+        //            case "本系统":
+        //                this.CategoryA = 0;
+        //                break;
+        //            case "它系统":
+        //                this.CategoryA = 1;
+        //                break;
+        //        }
+        //    }
+        //}
 
-        private string _categoryAString;
-        public string CategoryAString
-        {
-            get { return _categoryAString; }
-            set
-            {
-                _categoryAString = value;
-                RaisePropertyChanged("CategoryAString");
-                switch (_categoryAString)
-                {
-                    case "本系统":
-                        this.CategoryA = 0;
-                        break;
-                    case "它系统":
-                        this.CategoryA = 1;
-                        break;
-                }
-            }
-        }
-
-        public void ToCategoryAString()
-        {
-            switch (this.CategoryA)
-            {
-                case 0:
-                    CategoryAString = "本系统";
-                    break;
-                case 1:
-                    CategoryAString = "它系统";
-                    break;
-            }
-        }
+        //public void ToCategoryAString()
+        //{
+        //    switch (this.CategoryA)
+        //    {
+        //        case 0:
+        //            CategoryAString = "本系统";
+        //            break;
+        //        case 1:
+        //            CategoryAString = "它系统";
+        //            break;
+        //    }
+        //}
 
         #region INotifyPropertyChanged Members
 
-       public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
         #region Methods
 
-       private void RaisePropertyChanged(string propertyName)
-       {
-           // take a copy to prevent thread issues
-           PropertyChangedEventHandler handler = PropertyChanged;
-           if (handler != null)
-           {
-               handler(this, new PropertyChangedEventArgs(propertyName));
-           }
-       }
+        private void RaisePropertyChanged(string propertyName)
+        {
+            // take a copy to prevent thread issues
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
         #endregion
 
         public void BeginEdit()
@@ -554,7 +352,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
         private object _detailType = GridDetailType.General;
-        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -590,18 +387,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 NotifyOfPropertyChange("IsVisualColumnGroup");
             }
         }
-        public Visibility AddMoreLinesUserControlVisibility
-        {
-            get
-            {
-                return _addMoreLinesUserControlVisibility;
-            }
-            set
-            {
-                _addMoreLinesUserControlVisibility = value;
-                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
-            }
-        }
+
         public object DetailType
         {
             get
@@ -693,36 +479,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
             }
         }
-        public ICommand AddMoreLinesConfirmCommand
-        {
-            get
-            {
-                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
-            }
-        }
-        public ICommand AddMoreLinesCloseCommand
-        {
-            get
-            {
-                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
-            }
-        }
-        public ICommand DisplayMoreLinesViewCommand
-        {
-            get
-            {
-                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
-            }
-        }
-        public void AddMoreLinesCloseExecute()
-        {
-            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
-        }
-        public void DisplayMoreLinesViewExecute()
-        {
-            AddMoreLinesUserControlVisibility = Visibility.Visible;
-        }
-
         //public ICommand UploadCommand
         //{ 
 
@@ -748,23 +504,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     GeneralLinkageConfigInfoObservableCollection.Add(eLCG);
                 }
             }
-        }
-        public void AddNewRecordExecute(object rowsAmount)
-        {
-            if (rowsAmount != null)
-            {
-
-                try
-                {
-                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
-                    AddNewRecordExecute(amount);
-                }
-                catch (Exception ex)
-                {
-                    //转换出错，不作任何处理
-                }
-            }
-            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
         }
         public void DownloadExecute()
         {

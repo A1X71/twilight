@@ -42,6 +42,14 @@ namespace SCA.WPF.ViewsRoot.Views
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllErrorMessage();
+            bool verifyFlag = true;
+            if (this.LoopCodeComboBox.SelectedItem == null)
+            {
+     
+                this.ErrorMessageLoopCode.Content = "请指定回路号";
+                verifyFlag = false;
+            }
 
             
             LoopModel loop = new LoopModel();
@@ -63,6 +71,13 @@ namespace SCA.WPF.ViewsRoot.Views
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(CancelButtonClickEvent));
+        }
+        private void ClearAllErrorMessage()
+        {
+            this.ErrorMessageDeviceAmount.Content = "";
+            this.ErrorMessageLoopAmount.Content = "";
+            this.ErrorMessageLoopName.Content = "";
+            this.ErrorMessageLoopCode.Content = "";
         }
         
 

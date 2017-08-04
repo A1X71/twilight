@@ -254,6 +254,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Standard;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -305,6 +307,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
+            }
+        }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
         public int AddedAmount
         {
             get
@@ -350,7 +376,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 if (_lcsCollection == null)
                 {
                     _lcsCollection = new EditableLinkageConfigStandards(TheController, null);
-                    _lcsCollection.CollectionChanged += new NotifyCollectionChangedEventHandler(StandardLinkageConfigInfoObservableCollectionChanged);
+                    
 
                 }
                 return _lcsCollection;
@@ -358,7 +384,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             set
             {
                 _lcsCollection = value;
-                _lcsCollection.CollectionChanged += new NotifyCollectionChangedEventHandler(StandardLinkageConfigInfoObservableCollectionChanged);
+                
                 //_maxCode = GetMaxCode(value);
                
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
@@ -378,6 +404,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
+        }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
         }
         //public ICommand UploadCommand
         //{ 
@@ -402,6 +464,24 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 StandardLinkageConfigInfoObservableCollection.Add(eLCS);
             }
         }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+
+        }
         public void DownloadExecute()
         {
             _linkageConfigStandardService.TheController = this.TheController;
@@ -411,14 +491,12 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         { 
             
         }
-        private void StandardLinkageConfigInfoObservableCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public void SaveExecute()
         {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
+            using (new WaitCursor())
             {
-                foreach (var item in e.OldItems)
-                {
-                    string s = "Fired";
-                }
+                SCA.Interface.BusinessLogic.ILinkageConfigStandardService _standardService = new LinkageConfigStandardService(TheController);
+                _standardService.SaveToDB();
             }
         }
         #region 作废->改为实现IEditableObject接口的集合

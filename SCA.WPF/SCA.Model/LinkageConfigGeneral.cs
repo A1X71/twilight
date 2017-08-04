@@ -75,9 +75,12 @@ namespace SCA.Model
         {
             get
             {
-                if (MachineNoC != "")
-                {
-                    return MachineNoC.PadLeft(Controller.MachineNumber.Length, '0');
+                if (MachineNoC != null)
+                { 
+                    if (MachineNoC != "")
+                    {                    
+                        return MachineNoC.PadLeft(Controller.MachineNumber.Length, '0');
+                    }
                 }
                 return MachineNoC;
             }
@@ -86,9 +89,12 @@ namespace SCA.Model
         {
             get
             {
-                if (LoopNoC != "")
-                {
-                    return LoopNoC.PadLeft(Controller.LoopAddressLength, '0');
+                if (LoopNoC != null)
+                { 
+                    if (LoopNoC != "")
+                    {
+                        return LoopNoC.PadLeft(Controller.LoopAddressLength, '0');
+                    }
                 }
                 return LoopNoC;
             }
@@ -97,9 +103,12 @@ namespace SCA.Model
         {
             get
             {
-                if (DeviceCodeC != "")
-                {
-                    return DeviceCodeC.PadLeft(Controller.DeviceAddressLength, '0');
+                if (DeviceCodeC != null)
+                { 
+                    if (DeviceCodeC != "")
+                    {
+                        return DeviceCodeC.PadLeft(Controller.DeviceAddressLength, '0');
+                    }
                 }
                 return DeviceCodeC;
             }

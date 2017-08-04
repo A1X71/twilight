@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using SCA.WPF.Infrastructure;
 namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 {
     /// <summary>
@@ -35,21 +35,27 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).TheController;
-            
-            var selectedItems = DataGrid_ManualBoard.SelectedItems;
-            if (selectedItems != null)
+            if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                SCA.Interface.BusinessLogic.IManualControlBoardService mcbService = new SCA.BusinessLib.BusinessLogic.ManualControlBoardService(controller); 
-                foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableManualControlBoard r in selectedItems)
+                using (new WaitCursor())
                 {
-                    if (r != null)
+                    SCA.Model.ControllerModel controller = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).TheController;
+
+                    var selectedItems = DataGrid_ManualBoard.SelectedItems;
+                    if (selectedItems != null)
                     {
-                        mcbService.DeleteBySpecifiedID(r.ID);
+                        SCA.Interface.BusinessLogic.IManualControlBoardService mcbService = new SCA.BusinessLib.BusinessLogic.ManualControlBoardService(controller);
+                        foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableManualControlBoard r in selectedItems)
+                        {
+                            if (r != null)
+                            {
+                                mcbService.DeleteBySpecifiedID(r.ID);
+                            }
+                        }
+                        //刷新界面
+                        ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).ManualControlBoardInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableManualControlBoards(controller, controller.ControlBoard);
                     }
-                }                
-                //刷新界面
-                ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel)this.DataContext).ManualControlBoardInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableManualControlBoards(controller, controller.ControlBoard);          
+                }
             }
         }
         //网络手动盘，添加多行事件

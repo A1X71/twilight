@@ -8,29 +8,27 @@
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
+             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"  
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
-        <CollectionViewSource x:Key="TypeCCollection" Source="{Binding ValidDeviceTypeC}"/>
-        <ObjectDataProvider x:Key="LinkageTypeEnumDS" ObjectType="{x:Type local:LinkageConfigGeneralViewModel}" MethodName="GetLinkageType">
-        </ObjectDataProvider>
-        <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
-        <!--xmlns:model="clr-namespace:SCA.MODEL"-->
-        <!--
+    <!--<UserControl.Resources>
         
-        
-        
-        <converter:LinkageConfigConverter x:Key="linkageTypeConverter"/>-->
-        
-    </UserControl.Resources>
+    </UserControl.Resources>-->
     <Grid>
         <Grid.Resources>
+            <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
+            <CollectionViewSource x:Key="TypeCCollection" Source="{Binding ValidDeviceTypeC}"/>
+            <ObjectDataProvider x:Key="LinkageTypeEnumDS" ObjectType="{x:Type local:LinkageConfigGeneralViewModel}" MethodName="GetLinkageType">
+            </ObjectDataProvider>
+            <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>        
             <Style x:Key="tb_ElementStyle" TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Right" />
             </Style>
         </Grid.Resources>
+
         <StackPanel>
             <Grid  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300">
                 <Grid.ColumnDefinitions>
@@ -54,10 +52,13 @@
                     </Grid.RowDefinitions>
                     <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
                         <ComboBoxItem>
-                            添加更多项
+                            <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding DisplayMoreLinesViewCommand}"  Background="Transparent" BorderBrush="Transparent">
+                                添加更多项
+                            </Button>
                         </ComboBoxItem>
                     </ComboBox>
-                    <Button Name="btnAddNewLine" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding Path=AddNewRecordCommand}" CommandParameter="{Binding Path=AddedAmount}">
+                    <Button Name="btnAddNewLine" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30"
+                            Command="{Binding Path=AddNewRecordCommand}" CommandParameter="{Binding Path=AddedAmount}">
                         <Image Source="{Binding Path=AddIconPath,Mode=OneWay}"/>
                     </Button>
                 </Grid>
@@ -66,12 +67,12 @@
                 </Button>
                 <Button Name="btnCopy" Grid.Column="2" Grid.Row="0" Width="30"  Height="30" Background="Transparent" BorderBrush="Transparent"
                         Command="ApplicationCommands.Copy"
-                        CommandTarget="{Binding ElementName=DataGrid_General}" >
+                        CommandTarget="{Binding ElementName=DataGrid_General2}" >
                     <Image Source="{Binding Path=CopyIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Name="btnPaste" Grid.Column="3" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
                         Command="ApplicationCommands.Paste"
-                        CommandTarget="{Binding ElementName=DataGrid_General}"
+                        CommandTarget="{Binding ElementName=DataGrid_General2}"
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
@@ -88,7 +89,7 @@
                 </Button>-->
             </Grid>
             <!--注意：此列名如果有变化，需要同步更改相应Service的UpdateViaSpecifiedColumnName方法中的名称，否则粘贴将出现问题 2017-08-03 william-->
-            <local:DetailInfoGridControl x:Name="DataGrid_General" 
+            <local:DetailInfoGridControl x:Name="DataGrid_General2" 
                      AutoGenerateColumns="False"                                                            
                      IsSynchronizedWithCurrentItem="True" 
                      Background="Transparent"
@@ -105,7 +106,7 @@
                      DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding  Path=GeneralLinkageConfigInfoObservableCollection}" >
                 <local:DetailInfoGridControl.Resources>
-                    
+
                     <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
                         <Style.Triggers>
                             <Trigger Property="Validation.HasError" Value="True">
@@ -179,14 +180,14 @@
                                                SelectedValueBinding="{Binding DeviceTypeCodeA}"                                                                      
                                                ItemsSource="{Binding Source={StaticResource TypesCollection}}"
                                                >
-                           
+
                     </dg:DataGridComboBoxColumn>
                     <!--<dg:DataGridTextColumn 
                                        Header="C分类" 
                                        Binding="{Binding Path=TypeC}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>-->
                     <!--ItemsSource="" LinkageTypeEnumDS-->
-                    
+
                     <!--<dg:DataGridComboBoxColumn.ElementStyle>
                         <Style TargetType="ComboBox">
                             <Setter Property="ItemsSource"
@@ -211,23 +212,27 @@
                     SelectedItemBinding="{Binding Path=TypeC, Converter={StaticResource linkageTypeConverter}}" >
                     -->
                     <dg:DataGridComboBoxColumn Header="C分类" ItemsSource="{Binding Source={StaticResource LinkageTypeEnumDS}}" SelectedValueBinding="{Binding Path=TypeC,Mode=TwoWay}" >
-                    
+
                         <!--<dg:DataGridComboBoxColumn.ElementStyle>
                             <Style TargetType="ComboBox">
-                                --><!--<Setter Property="ItemsSource"
+                                -->
+                        <!--<Setter Property="ItemsSource"
                                          Value="{Binding Source={StaticResource LinkageTypeEnumDS},Converter={StaticResource linkageTypeConverter}}"/>-->
-                                <!--<Setter Property="SelectionBoxItem"></Setter>-->
-                                <!--<Setter Property="SelectedValue"
+                        <!--<Setter Property="SelectionBoxItem"></Setter>-->
+                        <!--<Setter Property="SelectedValue"
                                              Value="{Binding Path=TypeC, Converter={StaticResource linkageTypeConverter}}"          
-                                            />--><!--
+                                            />-->
+                        <!--
                                 <Setter Property="SelectedItem" 
                                         Value="{Binding Path=TypeC }"
                                         />
                             </Style>                            
                         </dg:DataGridComboBoxColumn.ElementStyle>
 
-                        --><!--<Setter Property="ItemsSource"
-                                         Value="{Binding Source={StaticResource LinkageTypeEnumDS}}"/>--><!--
+                        -->
+                        <!--<Setter Property="ItemsSource"
+                                         Value="{Binding Source={StaticResource LinkageTypeEnumDS}}"/>-->
+                        <!--
                         <dg:DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
                                 <Setter Property="ItemsSource"
@@ -239,7 +244,7 @@
                             </Style>
                         </dg:DataGridComboBoxColumn.EditingElementStyle>-->
                     </dg:DataGridComboBoxColumn>
-                    
+
 
                     <dg:DataGridTextColumn
                                        Header="C楼号" 
@@ -285,9 +290,17 @@
                                                ItemsSource="{Binding Source={StaticResource TypeCCollection}}"
                                                >
                     </dg:DataGridComboBoxColumn>
-                    
+
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
+            <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300">
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
+                                                            Event="ConfirmClick" PassArguments="True"/>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesCloseCommand}"                                                             
+                                                            Event="CloseClick" PassArguments="False"/>
+                </i:Interaction.Behaviors>
+            </views:AddMoreLinesView>
         </StackPanel>
     </Grid>
 </UserControl>

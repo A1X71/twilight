@@ -26,7 +26,7 @@ using SCA.Interface;
 */
 namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 {
-    public class EditableLinkageConfigMixed: LinkageConfigMixed, IEditableObject,IDataErrorInfo
+    public class EditableLinkageConfigMixed : LinkageConfigMixed, IEditableObject, IDataErrorInfo,INotifyPropertyChanged
     {
         public event ItemEndEditEventHandler ItemEndEdit;
         private EditableLinkageConfigStandard copy;
@@ -120,6 +120,333 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigMixed.DeviceTypeCodeC = this.DeviceTypeCodeC;
             return linkageConfigMixed;
         }
+        private string _code;
+        public new  string Code
+        {
+            get
+            {
+                return _code;
+            }
+            set
+            {
+                _code = value;
+                RaisePropertyChanged("Code");
+            }
+        }
+        private int _actionCoefficient;
+        public new int ActionCoefficient
+        {
+            get
+            {
+                return _actionCoefficient;
+            }
+            set
+            {
+                _actionCoefficient = value;
+                RaisePropertyChanged("ActionCoefficient");
+            }
+        }
+        private  LinkageActionType _actionType;
+        public new LinkageActionType ActionType
+        {
+            get
+            {
+                return _actionType;
+            }
+            set
+            {
+                _actionType = value;
+                RaisePropertyChanged("ActionType");
+            }
+        }
+        private LinkageType _typeA;
+        public new LinkageType TypeA
+        {
+            get
+            {
+                return _typeA;
+            }
+            set
+            {
+                _typeA = value;
+                RaisePropertyChanged("TypeA");
+            }
+        }
+        private string _loopNoA;
+        public new string LoopNoA
+        {
+            get
+            {
+                return _loopNoA;
+            }
+            set
+            {
+                _loopNoA = value;
+                RaisePropertyChanged("LoopNoA");
+            }
+        }
+        private string _deviceCodeA;
+        public new string DeviceCodeA
+        {
+            get
+            {
+                return _deviceCodeA;
+            }
+            set
+            {
+                _deviceCodeA = value;
+                RaisePropertyChanged("DeviceCodeA");
+            }
+        }
+        private int? _buildingNoA;
+        public new int? BuildingNoA
+        {
+            get
+            {
+                return _buildingNoA;
+            }
+            set
+            {
+                _buildingNoA = value;
+                RaisePropertyChanged("BuildingNoA");
+            }
+        }
+        private int? _zoneNoA;
+        public new int? ZoneNoA
+        {
+            get
+            {
+                return _zoneNoA;
+            }
+            set
+            {
+                _zoneNoA = value;
+                RaisePropertyChanged("ZoneNoA");
+            }
+        }
+        private int? _layerNoA;
+        public new int? LayerNoA
+        {
+            get
+            {
+                return _layerNoA;
+            }
+            set
+            {
+                _layerNoA = value;
+                RaisePropertyChanged("LayerNoA");
+            }
+        }
+        private short _deviceTypeCodeA;
+        public new short DeviceTypeCodeA
+        {
+            get
+            {
+                return _deviceTypeCodeA;
+            }
+            set
+            {
+                _deviceTypeCodeA = value;
+                RaisePropertyChanged("DeviceTypeCodeA");
+            }
+        }
+        
+        private LinkageType _typeB;
+        public new LinkageType TypeB
+        {
+            get
+            {
+                return _typeB;
+            }
+            set
+            {
+                _typeB = value;
+                RaisePropertyChanged("TypeB");
+            }
+        }
+        private string _loopNoB;
+        public new string LoopNoB
+        {
+            get
+            {
+                return _loopNoB;
+            }
+            set
+            {
+                _loopNoB = value;
+                RaisePropertyChanged("LoopNoB");
+            }
+        }
+        private string _deviceCodeB;
+        public new string DeviceCodeB
+        {
+            get
+            {
+                return _deviceCodeB;
+            }
+            set
+            {
+                _deviceCodeB = value;
+                RaisePropertyChanged("DeviceCodeB");
+            }
+        }
+        private int? _buildingNoB;
+        public new int? BuildingNoB
+        {
+            get
+            {
+                return _buildingNoB;
+            }
+            set
+            {
+                _buildingNoB = value;
+                RaisePropertyChanged("BuildingNoB");
+            }
+        }
+        private int? _zoneNoB;
+        public new int? ZoneNoB
+        {
+            get
+            {
+                return _zoneNoB;
+            }
+            set
+            {
+                _zoneNoB = value;
+                RaisePropertyChanged("ZoneNoB");
+            }
+        }
+        private int? _layerNoB;
+        public new int? LayerNoB
+        {
+            get
+            {
+                return _layerNoB;
+            }
+            set
+            {
+                _layerNoB = value;
+                RaisePropertyChanged("LayerNoB");
+            }
+        }
+        private short _deviceTypeCodeB;
+        public new short DeviceTypeCodeB
+        {
+            get
+            {
+                return _deviceTypeCodeB;
+            }
+            set
+            {
+                _deviceTypeCodeB = value;
+                RaisePropertyChanged("DeviceTypeCodeB");
+            }
+        }
+        private LinkageType _typeC;
+        public new LinkageType TypeC
+        {
+            get
+            {
+                return _typeC;
+            }
+            set
+            {
+                _typeC = value;
+                RaisePropertyChanged("TypeC");
+            }
+        }
+        private string _machineNoC;
+        public new string MachineNoC
+        {
+            get
+            {
+                return _machineNoC;
+            }
+            set
+            {
+                _machineNoC = value;
+                RaisePropertyChanged("MachineNoC");
+            }
+        }
+        private string _loopNoC;
+        public new string LoopNoC
+        {
+            get
+            {
+                return _loopNoC;
+            }
+            set
+            {
+                _loopNoC = value;
+                RaisePropertyChanged("LoopNoC");
+            }
+        }
+        private string _deviceCodeC;
+        public new string DeviceCodeC
+        {
+            get
+            {
+                return _deviceCodeC;
+            }
+            set
+            {
+                _deviceCodeC = value;
+                RaisePropertyChanged("DeviceCodeC");
+            }
+        }
+        private int? _buildingNoC;
+        public new int? BuildingNoC
+        {
+            get
+            {
+                return _buildingNoC;
+            }
+            set
+            {
+                _buildingNoC = value;
+                RaisePropertyChanged("BuildingNoC");
+            }
+        }
+        private int? _zoneNoC;
+        public new int? ZoneNoC
+        {
+            get
+            {
+                return _zoneNoC;
+            }
+            set
+            {
+                _zoneNoC = value;
+                RaisePropertyChanged("ZoneNoC");
+            }
+        }
+        private int? _layerNoC;
+        public new int? LayerNoC
+        {
+            get
+            {
+                return _layerNoC;
+            }
+            set
+            {
+                _layerNoC = value;
+                RaisePropertyChanged("LayerNoC");
+            }
+        }
+        private short _deviceTypeCodeC;
+        public new short DeviceTypeCodeC
+        {
+            get
+            {
+                return _deviceTypeCodeC;
+            }
+            set
+            {
+                _deviceTypeCodeC = value;
+                RaisePropertyChanged("DeviceTypeCodeC");
+            }
+        }
+
 
         private string _categoryAString;
         public string CategoryAString

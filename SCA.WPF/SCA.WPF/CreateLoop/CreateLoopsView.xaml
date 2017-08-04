@@ -21,14 +21,15 @@
     <!--ItemsSource="{Binding Source={StaticResource LoopCodeEnumDS}}"--> 
     </UserControl.Resources>
     <StackPanel Background="{StaticResource WindowBackgroundBrush}">
-        <!--<Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
-            <TextBlock Text="创建回路" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18"  FontWeight="Bold" x:Name="HeaderTextBlock"/>
-        </Border>-->
+        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
+            <TextBlock Text="创建回路" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18"  FontWeight="Bold" x:Name="HeaderTextBlock" HorizontalAlignment="Center"/>
+        </Border>
         <!-- Content -->
         <Grid  x:Name="AddControllerGrid" Margin="0,0,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -51,18 +52,21 @@
                       VerticalAlignment="Center"
                       x:Name="LoopCodeComboBox"  Width="120" 
                       Margin="5,0,0,0" />
-            
-            <Label Grid.Row="2" Grid.Column="0" Content="_节点数" Style="{StaticResource Label}" />
+            <Label x:Name="ErrorMessageLoopCode" Grid.Row="1" Grid.Column="2"  Style="{StaticResource Label}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="节点数" Style="{StaticResource Label}" />
             <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox"  Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label Grid.Row="3" Grid.Column="0" Content="_回路数"  Style="{StaticResource Label}"/>            
+            <Label x:Name="ErrorMessageDeviceAmount" Grid.Row="2" Grid.Column="2"  Style="{StaticResource Label}" />
+            <Label Grid.Row="3" Grid.Column="0" Content="回路数"  Style="{StaticResource Label}"/>            
             <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label Grid.Row="4" Grid.Column="0" Content="_回路名" Style="{StaticResource Label}" />
-            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />            
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="15,15,15,15" Orientation="Horizontal">
-                <Button Content="_确定" x:Name="AddButton"  IsDefault="True" Click="AddButton_Click" TabIndex="140" Width="64"/>
-                <Button Content="_取消" x:Name="CloseButton" IsCancel="True"  Click="CancelButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
+            <Label   x:Name="ErrorMessageLoopAmount" Grid.Row="3" Grid.Column="2"  Style="{StaticResource Label}" />
+            <Label Grid.Row="4" Grid.Column="0" Content="回路名" Style="{StaticResource Label}" />
+            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />
+            <Label x:Name="ErrorMessageLoopName" Grid.Row="4" Grid.Column="2"  Style="{StaticResource Label}" />
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal"  HorizontalAlignment="Center">
+                <Button Content="确定" x:Name="AddButton"  IsDefault="True" Click="AddButton_Click" TabIndex="140" Width="64"/>
+                <Button Content="取消" x:Name="CloseButton" IsCancel="True"  Click="CancelButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>
         </Grid>
-        <!--<Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>-->
+        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
     </StackPanel>
 </UserControl>

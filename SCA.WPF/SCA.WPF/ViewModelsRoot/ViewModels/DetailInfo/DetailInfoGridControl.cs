@@ -154,17 +154,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         for (int j = minColumnDisplayIndex; j <= maxColumnDisplayIndex && columnDataIndex < rowData[rowDataIndex].Length; j++, columnDataIndex++)
                         {
                             DataGridColumn column = ColumnFromDisplayIndex(j);
-                            if (column.Visibility == Visibility.Visible)
-                            {
-                                
-                                column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
-                            }
-                            else
-                            {
-                                columnDataIndex = columnDataIndex - 1;
+                            if (column.Header.ToString() != "ID")
+                            { 
+                                if (column.Visibility == Visibility.Visible)
+                                {
+
+                                    column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
+                                }
+                                else
+                                {
+                                    columnDataIndex = columnDataIndex - 1;
+                                }
                             }
                         }
-                    //    UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
+                       UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
                     }
                 }
                 else
@@ -271,6 +274,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                                 );
                             ILinkageConfigGeneralService mixedService = new LinkageConfigGeneralService(controller);
                             mixedService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Standard:
+                        {
+                            int controllerID = ((EditableLinkageConfigStandard)item).ControllerID;
+                            int itemID = ((EditableLinkageConfigStandard)item).ID;
+                            ControllerModel controller = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
+                                  delegate(ControllerModel x)
+                                  {
+                                      return x.ID == controllerID;
+                                  }
+                                );
+                            ILinkageConfigStandardService standardService = new LinkageConfigStandardService(controller);
+                            standardService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
                         }
                         break;
 

@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 using SCA.Interface.BusinessLogic;
 using SCA.Model;
+using SCA.BusinessLib.Utility;
 using SCA.BusinessLib.Controller;
+using SCA.BusinessLogic;
+using SCA.Interface;
+using SCA.Interface.DatabaseAccess;
+using SCA.DatabaseAccess.DBContext;
 /* ==============================
 *
 * Author     : William
@@ -92,7 +97,10 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             _maxCode = tempCode;
             DataRecordAlreadySet = false;
-            
+            foreach (var singleItem in lstLinkageConfigStandard)
+            {
+                Update(singleItem);
+            }
             return lstLinkageConfigStandard;
         }
 
@@ -147,6 +155,125 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
             catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 更新指定混合组态ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            try
+            {
+                LinkageConfigStandard result = _controller.StandardConfig.Find(
+                      delegate(LinkageConfigStandard x)
+                      {
+                          return x.ID == id;
+                      }
+                      );
+                for (int i = 0; i < columnNames.Length; i++)
+                {
+                    switch (columnNames[i])
+                    {
+                        case "输出组号":
+                            result.Code = data[i];
+                            break;
+                        case "联动模块1":
+                            result.DeviceNo1 = data[i].ToString();
+                            break;
+                        case "联动模块2":
+                            result.DeviceNo2 = data[i].ToString();
+                            break;
+                        case "联动模块3":
+                            result.DeviceNo3 = data[i].ToString();
+                            break;
+                        case "联动模块4":
+                            result.DeviceNo4 = data[i].ToString();
+                            break;
+                        case "联动模块5":
+                            result.DeviceNo5 = data[i].ToString();
+                            break;
+                        case "联动模块6":
+                            result.DeviceNo6 = data[i].ToString();
+                            break;
+                        case "联动模块7":
+                            result.DeviceNo7 = data[i].ToString();
+                            break;
+                        case "联动模块8":
+                            result.DeviceNo8 = data[i].ToString();
+                            break;
+                        case "联动模块9":
+                            result.DeviceNo9 = data[i].ToString();
+                            break;
+                        case "联动模块10":
+                            result.DeviceNo10 = data[i].ToString();
+                            break;
+                        case "输入模块1":
+                            result.DeviceNo1 = data[i].ToString();
+                            break;
+                        case "输入模块2":
+                            result.DeviceNo2 = data[i].ToString();
+                            break;
+                        case "输入模块3":
+                            result.DeviceNo3 = data[i].ToString();
+                            break;
+                        case "输入模块4":
+                            result.DeviceNo4 = data[i].ToString();
+                            break;
+                        case "输入模块5":
+                            result.DeviceNo5 = data[i].ToString();
+                            break;
+                        case "输入模块6":
+                            result.DeviceNo6 = data[i].ToString();
+                            break;
+                        case "输入模块7":
+                            result.DeviceNo7 = data[i].ToString();
+                            break;
+                        case "输入模块8":
+                            result.DeviceNo8 = data[i].ToString();
+                            break;
+                        case "输入模块9":
+                            result.DeviceNo9 = data[i].ToString();
+                            break;
+                        case "输入模块10":
+                            result.DeviceNo10 = data[i].ToString();
+                            break;
+                        case "输入模块11":
+                            result.DeviceNo11 = data[i].ToString();
+                            break;
+                        case "输入模块12":
+                            result.DeviceNo12 = data[i].ToString();
+                            break;
+                        case "输出模块1":
+                            result.OutputDevice1 = data[i].ToString();
+                            break;
+                        case "输出模块2":
+                            result.OutputDevice2 = data[i].ToString();
+                            break;
+                        case "动作常数":
+                            result.ActionCoefficient = Convert.ToInt32(data[i]);
+                            break;
+                        case "联动组1":
+                            result.LinkageNo1 = data[i].ToString();
+                            break;
+                        case "联动组2":
+                            result.LinkageNo1 = data[i].ToString();
+                            break;
+                        case "联动组3":
+                            result.LinkageNo1 = data[i].ToString();
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception ex)
             {
                 return false;
             }
@@ -307,7 +434,23 @@ namespace SCA.BusinessLib.BusinessLogic
             return false;
         }
 
-
+        public bool SaveToDB()
+        {
+            try
+            {
+                ILogRecorder logger = null;
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                ILinkageConfigStandardDBService dbMixedService = new LinkageConfigStandardDBService(_dbFileVersionService);
+                dbMixedService.AddStandardLinkageConfigInfo(TheController.StandardConfig);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
 
         //public void DataRecordSetFlag(bool flag)
         //{

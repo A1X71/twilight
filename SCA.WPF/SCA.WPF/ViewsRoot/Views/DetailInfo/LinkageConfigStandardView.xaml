@@ -5,7 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"
              xmlns:infrastructure="clr-namespace:SCA.WPF.Infrastructure"
-             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
+             xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"                    
+             xmlns:utility="clr-namespace:SCA.WPF.Utility"
+             xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
@@ -25,7 +29,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--<ColumnDefinition Width="Auto"/>-->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -39,9 +43,9 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
-                        <ComboBoxItem>
+                        <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding DisplayMoreLinesViewCommand}"  Background="Transparent" BorderBrush="Transparent">
                             添加更多项
-                        </ComboBoxItem>
+                        </Button>
                     </ComboBox>
                     <Button Name="btnAddNewLine" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding Path=AddNewRecordCommand}" CommandParameter="{Binding Path=AddedAmount}">
                         <Image Source="{Binding Path=AddIconPath,Mode=OneWay}"/>
@@ -61,15 +65,17 @@
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                        Command="{Binding Path=SaveCommand}"
+                        >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}" >
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
+                </Button>-->
             </Grid>
             <local:DetailInfoGridControl x:Name="DataGrid_Standard" 
                      AutoGenerateColumns="False"                                                            
@@ -80,7 +86,12 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"    
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"          
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding Path=StandardLinkageConfigInfoObservableCollection}">
                 <local:DetailInfoGridControl.Resources>
                     <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
@@ -96,6 +107,7 @@
                 <local:DetailInfoGridControl.Columns>
                     <dg:DataGridTextColumn Width="Auto" 
                                             Header="ID" 
+                                            Visibility="Hidden"
                                             Binding="{Binding Path=ID}" 
                                             ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="120"                                        
@@ -255,6 +267,14 @@
 
             </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
+            <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300">
+                <i:Interaction.Behaviors>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
+                                                            Event="ConfirmClick" PassArguments="True"/>
+                    <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesCloseCommand}"                                                             
+                                                            Event="CloseClick" PassArguments="False"/>
+                </i:Interaction.Behaviors>
+            </views:AddMoreLinesView>
         </StackPanel>
     </Grid>
 </UserControl>
