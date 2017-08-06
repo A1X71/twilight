@@ -121,7 +121,7 @@
         <!--Menu Area-->
         <Border x:Name="MenuBorder" VerticalAlignment="Top" DockPanel.Dock="Top"  Background="{DynamicResource InputBackgroundBrush}" Height="25">
             <View:MenuView  x:Name="Menu"
-                CreateControllerClick="MenuUserController_CreateControllerClick"
+                            CreateControllerClick="MenuUserController_CreateControllerClick"
                             CreateLoopClick="MenuUserController_CreateLoopClick"
                             ProjectSettingClick="MenuUserController_ProjectSettingClick" 
                             CreateProjectClick="MenuUserController_CreateProjectClick" 

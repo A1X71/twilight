@@ -174,7 +174,8 @@ namespace SCA.BusinessLib.BusinessLogic
             //sdpKey 1~756
             dictDeviceInfoRE.Add("SDPKey", new RuleAndErrorMessage("^([1-9]|[1-6][0-9][0-9|7[0-4][0-9)|75[0-6]$", "区号取值范围为1~756"));    
             //区1~512
-            dictDeviceInfoRE.Add("ZoneNo", new RuleAndErrorMessage("^([1-9]|[1-4][0-9][0-9|5[0-1][0-2)$", "区号取值范围为1~512"));            
+            dictDeviceInfoRE.Add("ZoneNo", new RuleAndErrorMessage("^([1-9]|[1-4][0-9][0-9|5[0-1][0-2])$", "区号取值范围为1~512"));
+            
             //安装地点 26个字母+数字+中文
             dictDeviceInfoRE.Add("Location", new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF]{0,16}$", "安装地点为字母或汉字或中文,最长17位"));
             return dictDeviceInfoRE;
@@ -210,10 +211,8 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 //机号
                 dictControllerInfoRE.Add("MachineNumber", new RuleAndErrorMessage("^[0-9]{3}$", "请填写3位数字"));
-            }
-            
+            }            
             return dictControllerInfoRE;
-
         }
 
         public short GetMaxAmountForMixedLinkageConfig()

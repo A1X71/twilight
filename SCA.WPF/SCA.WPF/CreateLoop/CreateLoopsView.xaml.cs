@@ -42,29 +42,29 @@ namespace SCA.WPF.ViewsRoot.Views
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearAllErrorMessage();
-            bool verifyFlag = true;
-            if (this.LoopCodeComboBox.SelectedItem == null)
-            {
+            //ClearAllErrorMessage();
+            //bool verifyFlag = true;
+            //if (this.LoopCodeComboBox.SelectedItem == null)
+            //{
      
-                this.ErrorMessageLoopCode.Content = "请指定回路号";
-                verifyFlag = false;
-            }
+            //    this.ErrorMessageLoopCode.Content = "请指定回路号";
+            //    verifyFlag = false;
+            //}
 
             
-            LoopModel loop = new LoopModel();
-            string strMachineNumber = this.MachineNumberInputLabel.Content.ToString();
-            string strLoopCode = this.LoopCodeComboBox.SelectedItem.ToString();
-            string strDeviceAmount = this.DeviceAmountInputTextBox.Text;
-            int loopAmount = Convert.ToInt32(this.LoopAmountInputTextBox.Text);
-            string strLoopName = this.LoopNameInputTextBox.Text;
-            loop.Code = strLoopCode;
-            loop.DeviceAmount = Convert.ToInt32(strDeviceAmount);
-            loop.Name = strLoopName;
-            loop.Controller = ((SCA.WPF.CreateLoop.CreateLoopsViewModel)this.DataContext).TheController;
-            loop.ControllerID = loop.Controller.ID;            
-            SCA.Interface.ILoopService loopService = new SCA.BusinessLib.BusinessLogic.LoopService(loop.Controller);            
-            loopService.AddLoops(loop, strMachineNumber, loopAmount);
+            //LoopModel loop = new LoopModel();
+            //string strMachineNumber = this.MachineNumberInputLabel.Content.ToString();
+            //string strLoopCode = this.LoopCodeComboBox.SelectedItem.ToString();
+            //string strDeviceAmount = this.DeviceAmountInputTextBox.Text;
+            //int loopAmount = Convert.ToInt32(this.LoopAmountInputTextBox.Text);
+            //string strLoopName = this.LoopNameInputTextBox.Text;
+            //loop.Code = strLoopCode;
+            //loop.DeviceAmount = Convert.ToInt32(strDeviceAmount);
+            //loop.Name = strLoopName;
+            //loop.Controller = ((SCA.WPF.CreateLoop.CreateLoopsViewModel)this.DataContext).TheController;
+            //loop.ControllerID = loop.Controller.ID;            
+            //SCA.Interface.ILoopService loopService = new SCA.BusinessLib.BusinessLogic.LoopService(loop.Controller);            
+            //loopService.AddLoops(loop, strMachineNumber, loopAmount);
             RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
 
         }
@@ -72,13 +72,13 @@ namespace SCA.WPF.ViewsRoot.Views
         {
             RaiseEvent(new RoutedEventArgs(CancelButtonClickEvent));
         }
-        private void ClearAllErrorMessage()
-        {
-            this.ErrorMessageDeviceAmount.Content = "";
-            this.ErrorMessageLoopAmount.Content = "";
-            this.ErrorMessageLoopName.Content = "";
-            this.ErrorMessageLoopCode.Content = "";
-        }
+        //private void ClearAllErrorMessage()
+        //{
+        //    this.ErrorMessageDeviceAmount.Content = "";
+        //    this.ErrorMessageLoopAmount.Content = "";
+        //    this.ErrorMessageLoopName.Content = "";
+        //    this.ErrorMessageLoopCode.Content = "";
+        //}
         
 
     }

@@ -1109,5 +1109,26 @@ namespace SCA.DatabaseAccess.DBContext
         {
             throw new NotImplementedException();
         }
+
+
+        public int DeleteStandardLinkageConfigInfo(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteMixedLinkageConfigInfo(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteGeneralLinkageConfigInfo(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteManualControlBoardInfo(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

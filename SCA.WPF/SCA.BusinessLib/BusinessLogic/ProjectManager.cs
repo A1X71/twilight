@@ -351,6 +351,7 @@ namespace SCA.BusinessLib
             MaxIDForStandardLinkageConfig = this.GetMaxIDForStandardLinkage();
             MaxIDForMixedLinkageConfig = this.GetMaxIDForMixedLinkage();
             MaxIDForGeneralLinkageConfig = this.GetMaxIDForGeneralLinkage();
+            MaxIDForManualControlBoard = this.GetMaxIDForManualControlBoard();
             MaxIDForLoop = this.GetMaxIDForLoop();
             MaxIDForController = this.GetMaxIDForController();
         }

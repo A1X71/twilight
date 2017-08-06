@@ -162,7 +162,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
         /// <summary>
-        /// 更新指定混合组态ID的数据
+        /// 更新指定标准组态ID的数据
         /// </summary>
         /// <param name="id">待更新数据的ID</param>
         /// <param name="columnNames">列名</param>
@@ -289,9 +289,35 @@ namespace SCA.BusinessLib.BusinessLogic
                 if (o != null)
                 {
                     _controller.StandardConfig.Remove(o);
+                    DeleteFromDB(id);
                 }
             }
             catch
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool DeleteFromDB(int id)
+        {
+            try
+            {
+                IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
+                ILogRecorder logger = null;
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, _fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                ILinkageConfigStandardDBService standardDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigStandardDBService(_dbFileVersionService);
+                if (standardDBService.DeleteStandardLinkageConfigInfo(id))
+                {
+                    if (BusinessLib.ProjectManager.GetInstance.MaxIDForStandardLinkageConfig == id) //如果最大ID等于被删除的ID，则重新赋值
+                    {
+
+                        LinkageConfigStandardService standardService = new LinkageConfigStandardService(TheController);
+                        BusinessLib.ProjectManager.GetInstance.MaxIDForStandardLinkageConfig = standardService.GetMaxID();
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 return false;
             }

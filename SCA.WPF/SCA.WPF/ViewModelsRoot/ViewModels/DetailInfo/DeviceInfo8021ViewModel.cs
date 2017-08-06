@@ -131,71 +131,92 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     //    }
                     //    break;
                     case "CurrentThreshold":
-                        rule = dictMessage["CurrentThreshold"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.CurrentThreshold.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.CurrentThreshold != null)
+                        { 
+                            rule = dictMessage["CurrentThreshold"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.CurrentThreshold.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "TemperatureThreshold":
-                        rule = dictMessage["TemperatureThreshold"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.TemperatureThreshold.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.TemperatureThreshold != null)
+                        { 
+                            rule = dictMessage["TemperatureThreshold"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.TemperatureThreshold.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "BuildingNo":
-                        if (this.BuildingNo.ToString() != "")
-                        {
-                            rule = dictMessage["BuildingNo"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.BuildingNo.ToString()))
+                        if (this.BuildingNo != null)
+                        { 
+                            if (this.BuildingNo.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["BuildingNo"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.BuildingNo.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "ZoneNo":
-                        if (this.ZoneNo.ToString() != "")
-                        {
-                            rule = dictMessage["ZoneNo"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.ZoneNo.ToString()))
+                        if (this.ZoneNo != null)
+                        { 
+                            if (this.ZoneNo.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["ZoneNo"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.ZoneNo.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "FloorNo":
-                        if (this.FloorNo.ToString() != "")
-                        {
-                            rule = dictMessage["FloorNo"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.FloorNo.ToString()))
+                        if (this.FloorNo != null)
+                        { 
+                            if (this.FloorNo.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["FloorNo"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.FloorNo.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "RoomNo":
-                        if (this.RoomNo.ToString() != "")
-                        {
-                            rule = dictMessage["RoomNo"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.RoomNo.ToString()))
+                        if (this.RoomNo != null)
+                        { 
+                            if (this.RoomNo.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["RoomNo"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.RoomNo.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "Location":
-                        rule = dictMessage["Location"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.Location.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.Location != null)
+                        { 
+                            rule = dictMessage["Location"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.Location.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                 }

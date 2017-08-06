@@ -1879,6 +1879,34 @@ namespace SCA.DatabaseAccess.DBContext
             }
             return strResult == "" ? 0 : Convert.ToInt32(strResult);
         }
-       
+
+
+
+        public int DeleteStandardLinkageConfigInfo(int id)
+        {
+            StringBuilder sbSQL = new StringBuilder("Delete FROM LinkageConfigStandard where  id  = " + id + ";");
+            return _databaseService.ExecuteBySql(sbSQL);                         
+        }
+
+        public int DeleteMixedLinkageConfigInfo(int id)
+        {
+            StringBuilder sbSQL = new StringBuilder("Delete FROM LinkageConfigMixed where  id  = " + id + ";");
+            return _databaseService.ExecuteBySql(sbSQL);                         
+        }
+
+        public int DeleteGeneralLinkageConfigInfo(int id)
+        {
+            StringBuilder sbSQL = new StringBuilder("Delete FROM LinkageConfigGeneral where  id  = " + id + ";");
+            return _databaseService.ExecuteBySql(sbSQL);                         
+        }
+
+        public int DeleteManualControlBoardInfo(int id)
+        {
+            StringBuilder sbSQL = new StringBuilder("Delete FROM ManualControlBoard where  id  = " + id + ";");
+            return _databaseService.ExecuteBySql(sbSQL);                         
+        }
+
+
+        
     }
 }

@@ -29,7 +29,7 @@ namespace SCA.Interface.BusinessLogic
         bool IsExistSameCode(List<SCA.Model.LinkageConfigStandard> lstStandardConfig);
         int GetMaxID();
         /// <summary>
-        /// 更新指定混合组态ID的数据
+        /// 更新指定标准组态ID的数据
         /// </summary>
         /// <param name="id">待更新数据的ID</param>
         /// <param name="columnNames">列名</param>

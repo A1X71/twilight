@@ -139,43 +139,55 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     //    }
                     //    break;
                     case "SensitiveLevel":
-                        rule = dictMessage["SensitiveLevel"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.SensitiveLevel.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.SensitiveLevel != null)
+                        { 
+                            rule = dictMessage["SensitiveLevel"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.SensitiveLevel.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "LinkageGroup1":
-                        if (this.LinkageGroup1.ToString() != "")
+                        if (this.LinkageGroup1 != null)
                         {
-                            rule = dictMessage["StandardLinkageGroup"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageGroup1.ToString()))
+                            if (this.LinkageGroup1.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["StandardLinkageGroup"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.LinkageGroup1.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "LinkageGroup2":
-                        if (this.LinkageGroup2.ToString() != "")
-                        {
-                            rule = dictMessage["StandardLinkageGroup"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
+                        if (this.LinkageGroup2 != null)
+                        { 
+                            if (this.LinkageGroup2.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["StandardLinkageGroup"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
                     case "LinkageGroup3":
-                        if (this.LinkageGroup3.ToString() != "")
-                        {
-                            rule = dictMessage["StandardLinkageGroup"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageGroup3.ToString()))
+                        if (this.LinkageGroup3 != null)
+                        { 
+                            if (this.LinkageGroup3.ToString() != "")
                             {
-                                errorMessage = rule.ErrorMessage;
+                                rule = dictMessage["StandardLinkageGroup"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.LinkageGroup3.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                         }
                         break;
@@ -191,27 +203,36 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "SDPKey":
-                        rule = dictMessage["SDPKey"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.sdpKey.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.sdpKey != null)
+                        { 
+                            rule = dictMessage["SDPKey"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.sdpKey.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "ZoneNo":
-                        rule = dictMessage["ZoneNo"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.ZoneNo.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.ZoneNo != null)
+                        { 
+                            rule = dictMessage["ZoneNo"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.ZoneNo.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                     case "Location":
-                        rule = dictMessage["Location"];
-                        exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                        if (!exminator.IsMatch(this.Location.ToString()))
-                        {
-                            errorMessage = rule.ErrorMessage;
+                        if (this.Location != null)
+                        { 
+                            rule = dictMessage["Location"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.Location.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
                         }
                         break;
                 }

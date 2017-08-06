@@ -264,7 +264,7 @@
                     <HierarchicalDataTemplate x:Key="LoopTemplate" DataType="{x:Type local:NavigatorItemViewModel}" >
                         <StackPanel Orientation="Horizontal" >
                             <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
-                            <TextBlock Text="{Binding Path=DataItem.Code}">
+                            <TextBlock Text="{Binding Path=DataItem.Name}">
                                 <!--<TextBlock.InputBindings>
                                     --><!--<MouseBinding Command="{Binding GetDetails }" MouseAction="LeftClick"/>--><!--
                                     <MouseBinding Command="{Binding DataContext.NavigateToDeviceInfoCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" CommandParameter="{Binding Path=DataItem}" MouseAction="LeftClick"/>

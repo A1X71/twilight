@@ -44,6 +44,7 @@ namespace SCA.WPF
             EventMediator.Register("DisplayTheOpenedProject", DisplayTheOpenedProject);
             EventMediator.Register("RefreshNavigator", RefreshNavigator);
             EventMediator.Register("DisappearProgressBar", DisappearProgressBar);
+            EventMediator.Register("ShowDetailPane", ShowDetailPane);
             
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             //this.Left = System.Windows.SystemParameters.WorkArea.Width;// -this.Width;
@@ -158,12 +159,12 @@ namespace SCA.WPF
             SCA.WPF.CreateLoop.CreateLoopsViewModel vm=new CreateLoop.CreateLoopsViewModel();
 
             var createLoopsUI = new SCA.WPF.ViewsRoot.Views.CreateLoopsView();
-            
+            //EventMediator.Register("CreateLoopConfirm", RefreshNavigator_CreateLoop);
             createLoopsUI.Name = "CreateLoopUserControl";
             createLoopsUI.HorizontalAlignment = HorizontalAlignment.Center;
             createLoopsUI.VerticalAlignment = VerticalAlignment.Center;
-            createLoopsUI.AddButtonClick += CreateLoopUserControl_AddButtonClick;
-            createLoopsUI.CancelButtonClick += CreateLoopUserControl_CancelButtonClick;
+            //createLoopsUI.AddButtonClick += CreateLoopUserControl_AddButtonClick;
+            //createLoopsUI.CancelButtonClick += CreateLoopUserControl_CancelButtonClick;
             
             object o = e.OriginalSource;
             if (o.GetType().Name!="ControllerModel")//此对象如果不是ControllerModel对象，则为从菜单中调用,否则为从工具栏中调用
@@ -260,6 +261,19 @@ namespace SCA.WPF
            // CreateLoopUserControl.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
             CreateViewArea.Children.Clear();
+        }
+        private void RefreshNavigator_CreateLoop(object param)
+        {
+            List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+            lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
+            vm.SetNavigatingViewModel(lstProject);
+            this.DataContext = vm;
+            Navigator.DataContext = vm.NavigatingViewModel;
+            CreateControllerUserControl.Visibility = Visibility.Collapsed;
+            CreateViewArea.Visibility = Visibility.Collapsed;            
+            this.DetailsPane.Visibility = Visibility.Visible;
+            CreateViewArea.Children.Clear();
+           // EventMediator.Unregister("CreateLoopConfirm", RefreshNavigator_CreateLoop);
         }
         private void ProjectSettingUserControl_ConfirmButtonClick(object sender, RoutedEventArgs e)
         { 
@@ -485,13 +499,47 @@ namespace SCA.WPF
 #endregion
         private void RefreshNavigator(object param)
         {
-            List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
-            lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
-         
-            vm.SetNavigatingViewModel(lstProject);
-            this.DataContext = vm;
-            vm.NavigatingViewModel.Initialize(lstProject, param);
-            Navigator.DataContext = vm.NavigatingViewModel;
+            if (param != null)
+            {
+                if ((bool)param)//true需要重新加载数据
+                {
+                    List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+                    lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
+                    vm.SetNavigatingViewModel(lstProject);
+                    this.DataContext = vm;
+                    Navigator.DataContext = vm.NavigatingViewModel;
+                    vm.NavigatingViewModel.Initialize(lstProject, param);
+                    CreateControllerUserControl.Visibility = Visibility.Collapsed;
+                    CreateViewArea.Visibility = Visibility.Collapsed;
+                    this.DetailsPane.Visibility = Visibility.Visible;
+                    CreateViewArea.Children.Clear();
+                }
+                else
+                {
+                    CreateControllerUserControl.Visibility = Visibility.Collapsed;
+                    CreateViewArea.Visibility = Visibility.Collapsed;
+                    this.DetailsPane.Visibility = Visibility.Visible;
+                    CreateViewArea.Children.Clear();
+                }
+
+                
+                
+            }
+            else
+            { 
+                List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+                lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);         
+                vm.SetNavigatingViewModel(lstProject);
+                this.DataContext = vm;
+                Navigator.DataContext = vm.NavigatingViewModel;
+                vm.NavigatingViewModel.Initialize(lstProject, param);            
+            }
+        }
+        private void ShowDetailPane(object param)
+        {
+            CreateViewArea.Children.Clear();
+            CreateViewArea.Visibility = Visibility.Collapsed;
+            this.DetailsPane.Visibility = Visibility.Visible;
         }
     }
 

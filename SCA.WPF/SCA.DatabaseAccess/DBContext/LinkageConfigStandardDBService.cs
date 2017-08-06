@@ -101,7 +101,14 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool DeleteStandardLinkageConfigInfo(int id)
         {
-            throw new System.NotImplementedException();
+            if (_dbFileVersionService.DeleteStandardLinkageConfigInfo(id) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

@@ -8,6 +8,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Windows.Data;
 using SCA.WPF.Utility;
+using SCA.Interface;
 using SCA.Interface.BusinessLogic;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.Model;
@@ -155,7 +156,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         {
                             DataGridColumn column = ColumnFromDisplayIndex(j);
                             if (column.Header.ToString() != "ID")
-                            { 
+                            {
                                 if (column.Visibility == Visibility.Visible)
                                 {
 
@@ -166,6 +167,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                                     columnDataIndex = columnDataIndex - 1;
                                 }
                             }
+                            else
+                            {
+                                columnDataIndex = columnDataIndex - 1;
+                            }
+
                         }
                        UpdateToModel(this.DetailType, Items[i], rowData[0], rowData[rowDataIndex]);
                     }
@@ -288,6 +294,37 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                                 );
                             ILinkageConfigStandardService standardService = new LinkageConfigStandardService(controller);
                             standardService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.ManualControlBoard:
+                        {
+                            int controllerID = (( EditableManualControlBoard)item).ControllerID;
+                            int itemID = ((EditableManualControlBoard)item).ID;
+                            ControllerModel controller = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
+                                  delegate(ControllerModel x)
+                                  {
+                                      return x.ID == controllerID;
+                                  }
+                                );
+                            IManualControlBoardService mcbService = new ManualControlBoardService(controller);
+                            //mcbService
+                            mcbService.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8000:
+                        {
+                            //int loopID = ((EditableDeviceInfo8000)item).LoopID;
+                            LoopModel loop= ((EditableDeviceInfo8000)item).Loop;
+                            int itemID = ((EditableDeviceInfo8000)item).ID;
+                            //LoopModel loop = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
+                            //      delegate(LoopModel x)
+                            //      {
+                            //          return x.ID == controllerID;
+                            //      }
+                            //    );
+                            IDeviceService<DeviceInfo8000> service = new DeviceService8000();
+                            service.TheLoop = loop;                            
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
                         }
                         break;
 

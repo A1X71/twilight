@@ -3,6 +3,12 @@ using SCA.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using SCA.BusinessLib.Utility;
+using SCA.BusinessLib.Controller;
+using SCA.BusinessLogic;
+using SCA.Interface;
+using SCA.Interface.DatabaseAccess;
+using SCA.DatabaseAccess.DBContext;
 /* ==============================
 *
 * Author     : William
@@ -81,6 +87,11 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             _maxCode = tempCode;
             DataRecordAlreadySet = false;
+
+            foreach (var singleItem in lstMCB)
+            {
+                Update(singleItem);
+            }            
             return lstMCB;
         }
         
@@ -152,6 +163,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 if (board != null)
                 {
                     _controller.ControlBoard.Remove(board);
+                    DeleteFromDB(id);
                 }
             }
             catch
@@ -160,6 +172,31 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return true;
 
+        }
+        private bool DeleteFromDB(int id)
+        {
+            try
+            {
+                IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
+                ILogRecorder logger = null;
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, _fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                IManualControlBoardDBService mcbDBService = new SCA.DatabaseAccess.DBContext.ManualControlBoardDBService(_dbFileVersionService);
+                if (mcbDBService.DeleteManualControlBoardInfo(id))
+                {
+                    if (BusinessLib.ProjectManager.GetInstance.MaxIDForManualControlBoard == id) //如果最大ID等于被删除的ID，则重新赋值
+                    {
+
+                        ManualControlBoardService mcbService = new ManualControlBoardService(TheController);
+                        BusinessLib.ProjectManager.GetInstance.MaxIDForManualControlBoard = mcbService.GetMaxID();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
         private int GetMaxCode()
         {
@@ -196,7 +233,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
 
-        public List<ManualControlBoard> Create(int boardNo, int subBoardStartNo, int subBoardEndNo, int startKeyNo, int amount)
+        public List<ManualControlBoard> Create(int boardNo, int subBoardStartNo, int subBoardEndNo, int amount)
         {
             List<ManualControlBoard> lstMCB = new List<ManualControlBoard>();
             if (DataRecordAlreadySet) //如果数据已经填写完成，则可获取最大编号
@@ -214,27 +251,50 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = tempCode + amount - MaxManualControlBoardAmount;
             }
+            
 
             for (int j = subBoardStartNo; j <= subBoardEndNo; j++)
             { 
-                for (int i = startKeyNo; i < amount; i++)
+                SCA.Interface.IControllerConfig config =ControllerConfigManager.GetConfigObject(this.TheController.Type);
+                int totalMaxKeyNo=config.GetMaxAmountForKeyNoInManualControlBoardConfig();
+              
+                int maxKeyNo=0;
+                //获取当前板卡及回路下的最大"手键号"
+                if (TheController.ControlBoard.Count == 0)
                 {
-                    tempCode++;
-                    _maxID++;
-                    ManualControlBoard mcb = new ManualControlBoard();
-                    mcb.BoardNo = boardNo;
-                    mcb.SubBoardNo = j;
-                    mcb.KeyNo = i;
-                    mcb.Controller = _controller;                    
-                    mcb.ControllerID = _controller.ID;
-                    mcb.Code = tempCode;//.ToString().PadLeft(MaxManualControlBoardAmount.ToString().Length, '0');
-                    mcb.ID = _maxID;
-                    mcb.IsDirty = true;
-                    lstMCB.Add(mcb);
+                    maxKeyNo = 0;
                 }
+                else
+                {
+                    var result = TheController.ControlBoard.Where(mcb => mcb.SubBoardNo == j && mcb.BoardNo == boardNo);
+                    if(result.Count() != 0)
+                        maxKeyNo = TheController.ControlBoard.Where(mcb => mcb.SubBoardNo == j && mcb.BoardNo == boardNo).Max(mcb => mcb.KeyNo);
+                }
+                if (maxKeyNo < totalMaxKeyNo)
+                {
+                    for (int i = maxKeyNo; i <= amount; i++)
+                    {
+                        tempCode++;
+                        _maxID++;
+                        ManualControlBoard mcb = new ManualControlBoard();
+                        mcb.BoardNo = boardNo;
+                        mcb.SubBoardNo = j;
+                        mcb.KeyNo = i;
+                        mcb.Controller = _controller;
+                        mcb.ControllerID = _controller.ID;
+                        mcb.Code = tempCode;//.ToString().PadLeft(MaxManualControlBoardAmount.ToString().Length, '0');
+                        mcb.ID = _maxID;
+                        mcb.IsDirty = true;
+                        lstMCB.Add(mcb);
+                    }
+                }   
             }
             _maxCode = tempCode;
             DataRecordAlreadySet = false;
+            foreach (var singleItem in lstMCB)
+            {
+                Update(singleItem);
+            }
             return lstMCB;
         }
         /// <summary>
@@ -256,6 +316,69 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
             }
             return false;
+        }
+        /// <summary>
+        /// 更新指定ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            try
+            {
+                ManualControlBoard result = _controller.ControlBoard.Find(
+                      delegate(ManualControlBoard x)
+                      {
+                          return x.ID == id;
+                      }
+                      );
+                for (int i = 0; i < columnNames.Length; i++)
+                {
+                    switch (columnNames[i])
+                    {
+                        case "编号":
+                            result.Code = Convert.ToInt32(data[i]);
+                            break;
+                        case "板卡号":
+                            result.BoardNo = Convert.ToInt32(data[i]);
+                            break;
+                        case "手盘号":
+                            result.SubBoardNo = Convert.ToInt32(data[i]);
+                            break;
+                        case "手键号":
+                            result.KeyNo = Convert.ToInt32(data[i]);
+                            break;
+                        case "器件编号":
+                            result.DeviceCode = data[i].ToString();
+                            break;                       
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool SaveToDB()
+        {
+            try
+            {
+                ILogRecorder logger = null;
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                IManualControlBoardDBService dbMCBService = new ManualControlBoardDBService(_dbFileVersionService);
+                dbMCBService.AddManualControlBoardInfo(TheController.ControlBoard);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

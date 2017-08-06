@@ -85,14 +85,16 @@ namespace SCA.Interface.DatabaseAccess
         #region 组态及手动盘读取等操作        
         List<LinkageConfigStandard> GetStandardLinkageConfig(ControllerModel controller);
         int AddStandardLinkageConfigInfo(LinkageConfigStandard linkageConfigStandard);
-        
+        int DeleteStandardLinkageConfigInfo(int id);        
         List<LinkageConfigMixed> GetMixedLinkageConfig(Model.ControllerModel controller);
         int AddMixedLinkageConfigInfo(LinkageConfigMixed linkageConfigMixed);
-        
+        int DeleteMixedLinkageConfigInfo(int id);
         List<LinkageConfigGeneral> GetGeneralLinkageConfig(Model.ControllerModel controller);
         int AddGeneralLinkageConfigInfo(LinkageConfigGeneral linkageConfigGeneral);
+        int DeleteGeneralLinkageConfigInfo(int id);
         List<ManualControlBoard> GetManualControlBoard(ControllerModel controller);
         int AddManualControlBoardInfo(ManualControlBoard manualControlBoard);
+        int DeleteManualControlBoardInfo(int id);
         #endregion
         //bool GetControllerInfo(ref ControllerModel controllerInfo);
         ////适应新版及老版控制器数据读取

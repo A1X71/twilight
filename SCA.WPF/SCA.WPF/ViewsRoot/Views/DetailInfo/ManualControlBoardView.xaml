@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--<ColumnDefinition Width="Auto"/>-->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -42,8 +42,7 @@
                     </Grid.RowDefinitions>
                 <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
                         <ComboBoxItem>
-                            <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Click="btnAddMoreLine_Click"  Background="Transparent" BorderBrush="Transparent">
-                                <!--<Image Source="../../../Resources/Icon/Style1/loop-add.png"/>-->
+                            <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Click="btnAddMoreLine_Click"  Background="Transparent" BorderBrush="Transparent">                                
                                 添加更多项
                             </Button>                            
                         </ComboBoxItem>
@@ -66,15 +65,17 @@
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                      Command="{Binding Path=SaveCommand}"  
+                        >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
+                </Button>-->
 
             </Grid>
             <local:DetailInfoGridControl x:Name="DataGrid_ManualBoard" 
@@ -86,7 +87,12 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"                                         
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"   
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"          
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding Path=ManualControlBoardInfoObservableCollection}">
                 <local:DetailInfoGridControl.Resources>                    
                     
@@ -103,7 +109,9 @@
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                       Visibility="Hidden"
+                                           />
                     <dg:DataGridTextColumn Width="*"                                        
                                        Header="编号"                                       
                                        Binding="{Binding Path=Code,ValidatesOnDataErrors=True}"  
@@ -132,12 +140,13 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="器件编号"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup1, Source={StaticResource proxy} }"
-                                           >
+                                        ClipboardContentBinding="{Binding DeviceCode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
+                                        >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=DeviceCode}">
+                                <TextBlock Text="{Binding Path=DeviceCode}" >
                                     <TextBlock.InputBindings >
-                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectDeviceCommand,ElementName=ToolBar}" CommandParameter="{Binding}"/>
+                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DataContext.SelectDeviceCommand,ElementName=ToolBar}" CommandParameter="{Binding}"/>
                                     </TextBlock.InputBindings>                                    
                                 </TextBlock>
                             </DataTemplate>
@@ -238,6 +247,7 @@
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
                                                SelectedValueBinding="{Binding DeviceType}"                                                                      
+                                               Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
                                                ItemsSource="{Binding Source={StaticResource TypesCollection}}"
                                                >
                     </dg:DataGridComboBoxColumn>
@@ -310,9 +320,9 @@
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
         </StackPanel>
-        <View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.CreateManualControlBoardVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
-        <View:DeviceItemSelectorView DataContext="{Binding Path=DeviceItemSelectorVM}" x:Name="DeviceItemSelector" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding  Data.DeviceItemSelectorVisibility, Source={StaticResource proxy}, Mode=TwoWay}"/>
-        <View:ManualBoardDeviceCodeView DataContext="{Binding Path=ManualDeviceCodeVM}" x:Name="ManualDeviceCode" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Data.ManualDeviceCodeVisibility, Source={StaticResource proxy}, Mode=TwoWay}" />
+        <View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="TOP"  Visibility="{Binding  Data.CreateManualControlBoardVisibility, Source={StaticResource proxy}, Mode=TwoWay}" Margin="20,20,0,0"/>
+        <View:DeviceItemSelectorView DataContext="{Binding Path=DeviceItemSelectorVM}" x:Name="DeviceItemSelector" HorizontalAlignment="Center" VerticalAlignment="TOP"  Visibility="{Binding  Data.DeviceItemSelectorVisibility, Source={StaticResource proxy}, Mode=TwoWay}" Margin="20,20,0,0"/>
+        <View:ManualBoardDeviceCodeView DataContext="{Binding Path=ManualDeviceCodeVM}" x:Name="ManualDeviceCode" HorizontalAlignment="Center" VerticalAlignment="TOP" Visibility="{Binding Data.ManualDeviceCodeVisibility, Source={StaticResource proxy}, Mode=TwoWay}" Margin="20,20,0,0"/>
         
     </Grid>
 </UserControl>

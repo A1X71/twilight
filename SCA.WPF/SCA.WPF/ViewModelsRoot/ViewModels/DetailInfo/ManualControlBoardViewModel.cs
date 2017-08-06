@@ -86,26 +86,74 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.ControllerID = mcb.ControllerID;
             ToControlTypeString();
         }
+        private int _code;
+        private int _boardNo;
+        private int _subBoardNo;
+        private int _keyNo;        
+        public new int Code
+        {
+            get
+            {
+                return _code;
+            }
+            set
+            {
+                _code = value;
+                RaisePropertyChanged("Code");
+            }
+        }
+        public new int BoardNo
+        {
+            get
+            {
+                return _boardNo;
+            }
+            set
+            {
+                _boardNo = value;
+                RaisePropertyChanged("BoardNo");
+            }
+        }
+        public new int SubBoardNo
+        {
+            get
+            {
+                return _subBoardNo;
+            }
+            set
+            {
+                _subBoardNo = value;
+                RaisePropertyChanged("SubBoardNo");
+            }
+        }
+        public new int KeyNo
+        {
+            get
+            {
+                return _keyNo;
+            }
+            set
+            {
+                _keyNo = value;
+                RaisePropertyChanged("KeyNo");
+            }
+        }
         private string _deviceCode;
-        public string DeviceCode 
+        public new string DeviceCode 
         {
             get
             {
                 return _deviceCode;
             }
             set
-            {
-                
-                if(_deviceCode!=value )
-                {
+            {        
                     _deviceCode = value;
-                    RaisePropertyChanged("DeviceCode");
-                }
+                    RaisePropertyChanged("DeviceCode");            
             }
         }
 
         private string _localDevice1;
-        public string LocalDevice1
+        public new  string LocalDevice1
         {
             get { return _localDevice1; }
             set
@@ -115,7 +163,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _localDevice2;
-        public string LocalDevice2
+        public new string LocalDevice2
         {
             get { return _localDevice2; }
             set
@@ -125,7 +173,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _localDevice3;
-        public string LocalDevice3
+        public new string LocalDevice3
         {
             get { return _localDevice3; }
             set
@@ -135,7 +183,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _localDevice4;
-        public string LocalDevice4
+        public new string LocalDevice4
         {
             get { return _localDevice4; }
             set
@@ -146,7 +194,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
 
         private string _netDevice1;
-        public string NetDevice1
+        public new string NetDevice1
         {
             get { return _netDevice1; }
             set
@@ -156,7 +204,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _netDevice2;
-        public string NetDevice2
+        public new string NetDevice2
         {
             get { return _netDevice2; }
             set
@@ -166,7 +214,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _netDevice3;
-        public string NetDevice3
+        public new string NetDevice3
         {
             get { return _netDevice3; }
             set
@@ -176,7 +224,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
         private string _netDevice4;
-        public string NetDevice4
+        public new  string NetDevice4
         {
             get { return _netDevice4; }
             set
@@ -421,7 +469,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
-        
+        private object _detailType = GridDetailType.ManualControlBoard;
         private SCA.WPF.CreateManualControlBoard.CreateManualControlBoardViewModel _createVM; //创建手动盘视图ViewModel
         private SCA.WPF.DeviceItemSelector.DeviceItemSelectorViewModel _deviceItemSelectorVM; //选择器件视图ViewModel
         private SCA.WPF.ManualBoardDeviceCode.ManualBoardDeviceCodeViewModel _manualDeviceCodeVM; //NT8053设备代码
@@ -604,20 +652,29 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                if (_mcbCollection == null)
-                {
+                if (_mcbCollection == null)                {
                     _mcbCollection = new EditableManualControlBoards(TheController, null);
-                    _mcbCollection.CollectionChanged += new NotifyCollectionChangedEventHandler(ManualControlBoardCollectionChanged);
+                    
 
                 }
                 return _mcbCollection;
             }
             set
             {
-                _mcbCollection = value;
-                _mcbCollection.CollectionChanged += new NotifyCollectionChangedEventHandler(ManualControlBoardCollectionChanged);
-
+                _mcbCollection = value;       
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
             }
         }
         //public ObservableCollection<ManualControlBoard> ManualControlBoardInfoObservableCollection
@@ -651,7 +708,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
-
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
         public ICommand AddMoreRecordCommand
         {
             get
@@ -694,14 +757,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void AddNewRecordExecute(int rowsAmount)
         {
-            //原对象
-            // ObservableCollection<ManualControlBoard> ocMCB = ManualControlBoardInfoObservableCollection;
+            
             #region 调业务逻辑
             _manualControlBoardService.TheController = this.TheController;
             List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(rowsAmount);
             #endregion 调业务逻辑
-
-
             foreach (var v in lstMCB)
             {
                 EditableManualControlBoard mcb = new EditableManualControlBoard();
@@ -718,6 +778,14 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             _manualControlBoardService.TheController = this.TheController;
             _manualControlBoardService.DownloadExecute(ManualControlBoard);
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                SCA.Interface.BusinessLogic.IManualControlBoardService _mcbService = new ManualControlBoardService(TheController);
+                _mcbService.SaveToDB();
+            }
         }
         public void SelectDeviceExecute(object args)
         {
@@ -788,16 +856,6 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
-        private void ManualControlBoardCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    string s = "Fired";
-                }
-            }
-        }
         public void AddMoreLines(object param)
         {
             if (param != null)
@@ -806,26 +864,26 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 object[] values = (object[])param;
                 #region 调业务逻辑
                 _manualControlBoardService.TheController = this.TheController;
-                SCA.Interface.IControllerConfig config =ControllerConfigManager.GetConfigObject(this.TheController.Type);
-                int totalMaxKeyNo=config.GetMaxAmountForKeyNoInManualControlBoardConfig();
-                for (int i = Convert.ToInt32(values[1]); i <= Convert.ToInt32(values[2]); i++)
-                {
-                    int maxKeyNo=1;
-                    //获取当前板卡及回路下的最大"手键号"
-                    if (ManualControlBoardInfoObservableCollection.Count == 0)
-                    {
-                        maxKeyNo = 1;
-                    }
-                    else
-                    {
-                        var result = ManualControlBoardInfoObservableCollection.Where(mcb => mcb.MaxSubBoardNo == i && mcb.BoardNo == Convert.ToInt32(values[0]));
-                        if(result.Count() != 0)
-                            maxKeyNo = ManualControlBoardInfoObservableCollection.Where(mcb => mcb.MaxSubBoardNo == i && mcb.BoardNo == Convert.ToInt32(values[0])).Max(mcb => mcb.KeyNo);
-                    }
-                   if (maxKeyNo < totalMaxKeyNo)
-                   {
+                //SCA.Interface.IControllerConfig config =ControllerConfigManager.GetConfigObject(this.TheController.Type);
+                //int totalMaxKeyNo=config.GetMaxAmountForKeyNoInManualControlBoardConfig();
+                //for (int i = Convert.ToInt32(values[1]); i <= Convert.ToInt32(values[2]); i++)
+                //{
+                //    int maxKeyNo=1;
+                //    //获取当前板卡及回路下的最大"手键号"
+                //    if (ManualControlBoardInfoObservableCollection.Count == 0)
+                //    {
+                //        maxKeyNo = 1;
+                //    }
+                //    else
+                //    {
+                //        var result = ManualControlBoardInfoObservableCollection.Where(mcb => mcb.MaxSubBoardNo == Convert.ToInt32(values[1]) && mcb.BoardNo == Convert.ToInt32(values[0]));
+                //        if(result.Count() != 0)
+                //            maxKeyNo = ManualControlBoardInfoObservableCollection.Where(mcb => mcb.MaxSubBoardNo == Convert.ToInt32(values[1]) && mcb.BoardNo == Convert.ToInt32(values[0])).Max(mcb => mcb.KeyNo);
+                //    }
+                //   if (maxKeyNo < totalMaxKeyNo)
+                //   {
 
-                       List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(Convert.ToInt32(values[0]), Convert.ToInt32(values[1]), Convert.ToInt32(values[2]), maxKeyNo, Convert.ToInt32(values[3]));
+                       List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(Convert.ToInt32(values[0]), Convert.ToInt32(values[1]), Convert.ToInt32(values[2]),  Convert.ToInt32(values[3]));
                        foreach (var v in lstMCB)
                        {
                            EditableManualControlBoard mcb = new EditableManualControlBoard();
@@ -838,8 +896,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                            mcb.KeyNo = v.KeyNo;
                            ManualControlBoardInfoObservableCollection.Add(mcb);                       
                        }   
-                   }                
-                }
+                //   }                
+                //}
                 #endregion 调业务逻辑
             }            
             this.CreateManualControlBoardVisibility = Visibility.Collapsed;            

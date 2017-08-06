@@ -207,5 +207,17 @@ namespace SCA.BusinessLib.BusinessLogic
                 return true;
             }
         }
+
+
+        public bool SaveToDB()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

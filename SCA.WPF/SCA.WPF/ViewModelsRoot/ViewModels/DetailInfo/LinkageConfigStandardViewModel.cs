@@ -254,7 +254,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
-        private object _detailType = GridDetailType.Standard;
+        private object _detailType = GridDetailType.ManualControlBoard;
         private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }

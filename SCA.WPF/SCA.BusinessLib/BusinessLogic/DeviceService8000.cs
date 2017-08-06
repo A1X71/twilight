@@ -45,6 +45,10 @@ namespace SCA.BusinessLib.BusinessLogic
 
                 lstDeviceInfo8000.Add(dev);
             }
+            foreach (var singleItem in lstDeviceInfo8000)
+            {
+                Update(singleItem);
+            }
             return lstDeviceInfo8000;
         }
 
@@ -197,6 +201,95 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 return true;
             }
+        }
+        /// <summary>
+        /// 更新指定ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            try
+            {
+                DeviceInfo8000 result = TheLoop.GetDevices<DeviceInfo8000>().Find(
+                      delegate(DeviceInfo8000 x)
+                      {
+                          return x.ID == id;
+                      }
+                      );
+                for (int i = 0; i < columnNames.Length; i++)
+                {
+                    switch (columnNames[i])
+                    {
+                        case "编码":
+                            result.Code = data[i];
+                            break;
+                        case "器件类型":
+                            result.TypeCode = Convert.ToInt16(data[i]);
+                            break;
+                        case "特性":
+                            result.Feature =new Nullable<short>(Convert.ToInt16( data[i]));
+                            break;
+                        case "屏蔽":
+                            //需要将Disable存储为0或1
+                            result.Disable =new Nullable<bool>(data[i].ToString().ToUpper()=="TRUE"?true:false);
+                            break;
+                        case "灵敏度":
+                            result.SensitiveLevel =new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "输出组1":
+                            result.LinkageGroup1 = data[i].ToString();
+                            break;
+                        case "输出组2":
+                            result.LinkageGroup2 = data[i].ToString();
+                            break;
+                        case "输出组3":
+                            result.LinkageGroup3 = data[i].ToString();
+                            break;
+                        case "延时":
+                            result.DelayValue = new Nullable<short> (Convert.ToInt16(data[i]));
+                            break;
+                        case "手操号":
+                            result.sdpKey = data[i].ToString();
+                            break;
+                        case "区号":
+                            result.ZoneNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "广播分区":
+                            result.BroadcastZone = data[i].ToString();
+                            break;
+                        case "安装地点":
+                            result.Location = data[i].ToString();
+                            break;                      
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool SaveToDB()
+        {
+            try
+            {
+                ILogRecorder logger = null;
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this.TheLoop.Controller.Project.SavePath, logger, fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                IDeviceDBServiceTest dbService = new Device8000DBService(_dbFileVersionService);
+                dbService.AddDevice(TheLoop);                
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -150,8 +150,34 @@ namespace SCA.BusinessLib.BusinessLogic
                 //ControllerModel controller = ProjectManager.GetInstance.GetPrimaryController();
                 int[] loopsCode = GetAllLoopCode(_controller, null);
                 int currentMaxLoopCode = loopsCode.Max();
+                int specifiedLoopCode=0; //指定的回路号
+                bool loopCodeExistFlag=false; //回路号已经存在标志
+
+                if (loop.Code != "")
+                {
+                    specifiedLoopCode=Convert.ToInt32(loop.Code);
+                    if (specifiedLoopCode > currentMaxLoopCode)
+                    {
+                        currentMaxLoopCode = specifiedLoopCode;
+                    }
+                }
+
+                for (int i = 0; i < loopsCode.Length; i++)
+                { 
+                    if(loopsCode[i]==specifiedLoopCode)   
+                    {
+                        loopCodeExistFlag=true;
+                        break;
+                    }
+                }
+
+
                 IControllerConfig config=ControllerConfigManager.GetConfigObject(_controller.Type);
                 short allowMaxLoopValue=config.GetMaxLoopAmountValue();
+                if (loopsAmount == 0)
+                {
+                    return false;
+                }
                 if (loopsAmount > allowMaxLoopValue)
                 {
                     //超出最大数回数
@@ -174,14 +200,31 @@ namespace SCA.BusinessLib.BusinessLogic
                 {                    
                     LoopModel l = new LoopModel();
                     l.ID = ++loopID;
-                    l.Code = _controller.MachineNumber + (currentMaxLoopCode + i).ToString().PadLeft(_controller.LoopAddressLength, '0');
-                    l.Name = _controller.MachineNumber + (currentMaxLoopCode + i).ToString().PadLeft(_controller.LoopAddressLength, '0');
+                    if (!loopCodeExistFlag)
+                    {
+                        if (i == 1) //减少复杂性，只对指定的回路号使用一次
+                        {
+                            l.Code = _controller.MachineNumber + loop.Code.ToString().PadLeft(_controller.LoopAddressLength, '0');
+                        }
+                        else
+                        {                              
+                            l.Code = _controller.MachineNumber + (currentMaxLoopCode + i-1).ToString().PadLeft(_controller.LoopAddressLength, '0');                            
+                        }
+                        
+                    }                    
+                    else
+                    {
+                        l.Code = _controller.MachineNumber + (currentMaxLoopCode + i).ToString().PadLeft(_controller.LoopAddressLength, '0');
+                    }
+
+                    l.Name = loop.Name + "(" + l.Code + ")";// _controller.MachineNumber + (currentMaxLoopCode + i).ToString().PadLeft(_controller.LoopAddressLength, '0');
                     //l.Code = (currentMaxLoopCode + i).ToString().PadLeft(_controller.LoopAddressLength, '0');
                     //l.Name = loop.Name+i.ToString();
-                    l.DeviceAmount = loop.DeviceAmount;
+                    l.DeviceAmount = loop.DeviceAmount;                    
                     l.Controller = _controller;
+                    InitializeDevicesToLoop(_controller.Type, l);
                     _controller.Loops.Add(l);
-                 //   SetDataDirty();
+//                  SetDataDirty();
                 }
        
             }
@@ -192,7 +235,73 @@ namespace SCA.BusinessLib.BusinessLogic
             return true;
             
         }
-
+        /// <summary>
+        /// 根据器件数量初始化器件信息
+        /// </summary>
+        /// <param name="cType">控制器类型</param>
+        /// <param name="loop">回路对象</param>        
+        private void  InitializeDevicesToLoop(ControllerType cType,LoopModel loop)
+        {
+                    switch (cType)
+                    { 
+                        case ControllerType.FT8000:
+                            {
+                                DeviceService8000 deviceService = new DeviceService8000();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8000> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8000>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.FT8003:
+                            {
+                                DeviceService8003 deviceService = new DeviceService8003();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8003> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8003>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.NT8001:
+                            {
+                                DeviceService8001 deviceService = new DeviceService8001();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8001>  lstDeviceInfo=deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8001>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.NT8007:
+                            {
+                                DeviceService8007 deviceService = new DeviceService8007();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8007> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8007>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.NT8021:
+                            {
+                                DeviceService8021 deviceService = new DeviceService8021();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8021> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8021>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.NT8036:
+                            {
+                                DeviceService8036 deviceService = new DeviceService8036();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8036> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8036>(lstDeviceInfo);
+                                break;
+                            }
+                        case ControllerType.NT8053:
+                            {
+                                DeviceService8053 deviceService = new DeviceService8053();
+                                deviceService.TheLoop = loop;
+                                List<DeviceInfo8053> lstDeviceInfo = deviceService.Create(loop.DeviceAmount);
+                                loop.SetDevices<DeviceInfo8053>(lstDeviceInfo);
+                                break;
+                            }
+                    }
+        }
         public int[] GetAllLoopCode(ControllerModel controller,Func<int[],int[]> sort)
         {
             int[] loopCode = null;

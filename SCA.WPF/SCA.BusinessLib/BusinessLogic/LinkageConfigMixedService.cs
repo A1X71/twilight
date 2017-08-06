@@ -335,6 +335,31 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return true;
         }
+        private bool DeleteFromDB(int id)
+        {
+            try
+            {
+                IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
+                ILogRecorder logger = null;
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheController.Project.SavePath, logger, _fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                ILinkageConfigMixedDBService mixedDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigMixedDBService(_dbFileVersionService);
+                if (mixedDBService.DeleteMixedLinkageConfigInfo(id))
+                {
+                    if (BusinessLib.ProjectManager.GetInstance.MaxIDForMixedLinkageConfig == id) //如果最大ID等于被删除的ID，则重新赋值
+                    {
+
+                        LinkageConfigMixedService mixedService = new LinkageConfigMixedService(TheController);
+                        BusinessLib.ProjectManager.GetInstance.MaxIDForMixedLinkageConfig = mixedService.GetMaxID();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
         private int GetMaxCode()
         {
             int result = 0;

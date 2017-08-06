@@ -91,7 +91,14 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool DeleteManualControlBoardInfo(int id)
         {
-            throw new System.NotImplementedException();
+            if (_dbFileVersionService.DeleteManualControlBoardInfo(id) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

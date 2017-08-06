@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Collections.Specialized;
@@ -13,6 +14,7 @@ using SCA.WPF.Utility;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
 using SCA.WPF.Infrastructure;
+
 /* ==============================
 *
 * Author     : William
@@ -139,79 +141,103 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         //    }
                         //    break;
                         case "SensitiveLevel":
-                            rule = dictMessage["SensitiveLevel"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.SensitiveLevel.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
+                            if (this.SensitiveLevel != null)
+                            { 
+                                rule = dictMessage["SensitiveLevel"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.SensitiveLevel.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                             break;
                         case "LinkageGroup1":
-                            if (this.LinkageGroup1.ToString() != "")
-                            {
-                                rule = dictMessage["StandardLinkageGroup"];
-                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                                if (!exminator.IsMatch(this.LinkageGroup1.ToString()))
+                            if (this.LinkageGroup1 != null)
+                            { 
+                                if (this.LinkageGroup1.ToString() != "")
                                 {
-                                    errorMessage = rule.ErrorMessage;
-                                }
+                                    rule = dictMessage["StandardLinkageGroup"];
+                                    exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                    if (!exminator.IsMatch(this.LinkageGroup1.ToString()))
+                                    {
+                                        errorMessage = rule.ErrorMessage;
+                                    }
+                                }                                
                             }
                             break;
                         case "LinkageGroup2":
-                            if (this.LinkageGroup2.ToString() != "")
-                            {
-                                rule = dictMessage["StandardLinkageGroup"];
-                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                                if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
+                            if (this.LinkageGroup2 != null)
+                            { 
+                                if (this.LinkageGroup2.ToString() != "")
                                 {
-                                    errorMessage = rule.ErrorMessage;
-                                }
+                                    rule = dictMessage["StandardLinkageGroup"];
+                                    exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                    if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
+                                    {
+                                        errorMessage = rule.ErrorMessage;
+                                    }
+                                }                                
                             }
                             break;
                         case "LinkageGroup3":
-                            if (this.LinkageGroup3.ToString() != "")
-                            {
-                                rule = dictMessage["StandardLinkageGroup"];
-                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                                if (!exminator.IsMatch(this.LinkageGroup3.ToString()))
+                            if (this.LinkageGroup3 != null)
+                            { 
+                                if (this.LinkageGroup3.ToString() != "")
                                 {
-                                    errorMessage = rule.ErrorMessage;
+                                    rule = dictMessage["StandardLinkageGroup"];
+                                    exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                    if (!exminator.IsMatch(this.LinkageGroup3.ToString()))
+                                    {
+                                        errorMessage = rule.ErrorMessage;
+                                    }
                                 }
                             }
                             break;
                         case "DelayValue":
-                            if (this.DelayValue.ToString() != "")
-                            {
-                                rule = dictMessage["DelayValue"];
+                            if (this.DelayValue != null)
+                            { 
+                                if (this.DelayValue.ToString() != "")
+                                {
+                                    rule = dictMessage["DelayValue"];
+                                    exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                    if (!exminator.IsMatch(this.DelayValue.ToString()))
+                                    {
+                                        errorMessage = rule.ErrorMessage;
+                                    }
+                                }
+                            }
+                            break;
+                        case "SDPKey":
+                            if (this.sdpKey != null)
+                            { 
+                                rule = dictMessage["SDPKey"];
                                 exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                                if (!exminator.IsMatch(this.DelayValue.ToString()))
+                                if (!exminator.IsMatch(this.sdpKey.ToString()))
                                 {
                                     errorMessage = rule.ErrorMessage;
                                 }
                             }
                             break;
-                        case "SDPKey":
-                            rule = dictMessage["SDPKey"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.sdpKey.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                            break;
                         case "ZoneNo":
-                            rule = dictMessage["ZoneNo"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.ZoneNo.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
+                            if (this.ZoneNo != null)
+                            { 
+                                rule = dictMessage["ZoneNo"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.ZoneNo.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                             break;
                         case "Location":
-                            rule = dictMessage["Location"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.Location.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
+                            if (this.Location != null)
+                            { 
+                                rule = dictMessage["Location"];
+                                exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                                if (!exminator.IsMatch(this.Location.ToString()))
+                                {
+                                    errorMessage = rule.ErrorMessage;
+                                }
                             }
                             break;
                     }
@@ -255,11 +281,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
     }
     public class DeviceInfo8000ViewModel : PropertyChangedBase//, IDeviceInfoViewModel<DeviceInfo8001>
-    {
- 
+    { 
         private EditableDeviceInfo8000Collection _deviceInfoCollection;
         private List<DeviceInfo8000> _lstDeviceInfo8000;
-
         private int _maxCode = 0;//当前器件最大编号
         private int _addedAmount = 1;//向集合中新增信息的数量
         private short _maxDeviceAmount = 0;
@@ -271,6 +295,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Device8000;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -309,6 +335,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 SCA.BusinessLib.BusinessLogic.ControllerConfig8000 config = new BusinessLib.BusinessLogic.ControllerConfig8000();
                 return config.GetDeviceTypeInfo();
+            }
+        }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
             }
         }
 
@@ -378,6 +428,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
+        }
         public List<Model.DeviceInfo8000> DeviceInfo
         {
             get
@@ -417,7 +503,34 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                SCA.Interface.IDeviceService<DeviceInfo8000> _deviceService = new DeviceService8000();
+                _deviceService.TheLoop = this.TheLoop;
+                _deviceService.SaveToDB();
+            }
+        }
         #endregion
+ 
         private void UpdateProcessBarStatus(int currentValue, int totalValue,ControllerNodeType nodeType)
         {
             object[] status = new object[3];

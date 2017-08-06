@@ -113,7 +113,14 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool DeleteMixedLinkageConfigInfo(int id)
         {
-            throw new System.NotImplementedException();
+            if (_dbFileVersionService.DeleteMixedLinkageConfigInfo(id) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

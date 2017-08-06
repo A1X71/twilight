@@ -8,8 +8,8 @@
              mc:Ignorable="d" 
              d:DesignWidth="300">
     <UserControl.Resources>
-        
-             <!--Data provider for binding to the relationship types enum values 
+
+        <!--Data provider for binding to the relationship types enum values 
         <ObjectDataProvider x:Key="LoopCodeEnumDS" ObjectType="{x:Static DataContext.CreateLoopsViewModel}" MethodName="GetPrimaryControllerLoopsAmount" >
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="model:ControllerType"></x:Type>
@@ -18,7 +18,7 @@
         <Style x:Key="Label" TargetType="Label">
             <Setter Property="Foreground" Value="Black"/>
         </Style>
-    <!--ItemsSource="{Binding Source={StaticResource LoopCodeEnumDS}}"--> 
+        <!--ItemsSource="{Binding Source={StaticResource LoopCodeEnumDS}}"-->
     </UserControl.Resources>
     <StackPanel Background="{StaticResource WindowBackgroundBrush}">
         <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
@@ -43,29 +43,31 @@
             <Label x:Name="MachineNumberInputLabel" Grid.Row="0" Grid.Column="1"  Content="{Binding Path=ControllerMachineNumber}"  Style="{StaticResource Label}"/>
             <!--<TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="MachineNumberInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />-->
             <Label Grid.Row="1" Grid.Column="0" Content="回路号"  Style="{StaticResource Label}" />
-            
+
             <ComboBox Grid.Row="1" Grid.Column="1" IsSynchronizedWithCurrentItem="False"                      
                       ItemsSource="{Binding LoopsCode}"
+                      SelectedItem="{Binding Path=LoopCode}"
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
                       x:Name="LoopCodeComboBox"  Width="120" 
                       Margin="5,0,0,0" />
-            <Label x:Name="ErrorMessageLoopCode" Grid.Row="1" Grid.Column="2"  Style="{StaticResource Label}" />
+            <Label x:Name="ErrorMessageLoopCode" Grid.Row="1" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopCode}"/>
             <Label Grid.Row="2" Grid.Column="0" Content="节点数" Style="{StaticResource Label}" />
-            <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox"  Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label x:Name="ErrorMessageDeviceAmount" Grid.Row="2" Grid.Column="2"  Style="{StaticResource Label}" />
-            <Label Grid.Row="3" Grid.Column="0" Content="回路数"  Style="{StaticResource Label}"/>            
-            <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label   x:Name="ErrorMessageLoopAmount" Grid.Row="3" Grid.Column="2"  Style="{StaticResource Label}" />
+            <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox" Margin="5,0" TabIndex="100" Text="{Binding Path=DeviceAmount}"/>
+            <Label x:Name="ErrorMessageDeviceAmount" Grid.Row="2" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageDeviceAmount }" />
+            <Label Grid.Row="3" Grid.Column="0" Content="回路数"  Style="{StaticResource Label}"/>
+            <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" Margin="5,0" TabIndex="100"  Text="{Binding Path=LoopsAmount}"/>
+            <Label   x:Name="ErrorMessageLoopAmount" Grid.Row="3" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopAmount}"/>
             <Label Grid.Row="4" Grid.Column="0" Content="回路名" Style="{StaticResource Label}" />
-            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Width="180" Margin="5,0,0,0" TabIndex="100" />
-            <Label x:Name="ErrorMessageLoopName" Grid.Row="4" Grid.Column="2"  Style="{StaticResource Label}" />
+            <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Margin="5,0" TabIndex="100"  Text="{Binding Path=LoopName}"/>
+            <Label x:Name="ErrorMessageLoopName" Grid.Row="4" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopName}"/>
             <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal"  HorizontalAlignment="Center">
-                <Button Content="确定" x:Name="AddButton"  IsDefault="True" Click="AddButton_Click" TabIndex="140" Width="64"/>
-                <Button Content="取消" x:Name="CloseButton" IsCancel="True"  Click="CancelButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
+                <Button Content="确定" x:Name="AddButton"  IsDefault="True" Command="{Binding Path=ConfirmCommand }" TabIndex="140" Width="64"/>
+                <Button Content="取消" x:Name="CloseButton" IsCancel="True" Command="{Binding Path=CloseCommand }"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
             </StackPanel>
+            <!--Click="AddButton_Click"-->
         </Grid>
         <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
     </StackPanel>

@@ -21,6 +21,14 @@ namespace SCA.Interface
         /// <param name="deviceCode"></param>
         /// <returns></returns>
         bool IsExistSameDeviceCode(string deviceCode);
-
+        bool SaveToDB();
+        /// <summary>
+        /// 更新指定ID的数据
+        /// </summary>
+        /// <param name="id">待更新数据的ID</param>
+        /// <param name="columnNames">列名</param>
+        /// <param name="data">新数据</param>
+        /// <returns></returns>
+        bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data);
     }
 }

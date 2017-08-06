@@ -267,7 +267,7 @@
 
             </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
-            <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300">
+            <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0">
                 <i:Interaction.Behaviors>
                     <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
                                                             Event="ConfirmClick" PassArguments="True"/>

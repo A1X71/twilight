@@ -105,6 +105,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 if (o != null)
                 {                    
                     TheLoop.GetDevices<DeviceInfo8036>().Remove(o);
+                    DeleteDeviceFromDB(id);
                 }
             }
             catch
@@ -201,6 +202,18 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 return true;
             }
+        }
+
+
+        public bool SaveToDB()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
+        {
+            throw new NotImplementedException();
         }
     }
 }
