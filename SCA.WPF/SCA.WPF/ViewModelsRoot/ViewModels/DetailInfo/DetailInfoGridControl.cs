@@ -155,12 +155,19 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         for (int j = minColumnDisplayIndex; j <= maxColumnDisplayIndex && columnDataIndex < rowData[rowDataIndex].Length; j++, columnDataIndex++)
                         {
                             DataGridColumn column = ColumnFromDisplayIndex(j);
-                            if (column.Header.ToString() != "ID")
+                            if (column.Header.ToString() != "ID" )
                             {
-                                if (column.Visibility == Visibility.Visible)
+                                if (column.Header.ToString() != "编号" && column.Header.ToString() != "编码" && column.Header.ToString() != "输出组号")
                                 {
+                                    if (column.Visibility == Visibility.Visible)
+                                    {
 
-                                    column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
+                                        column.OnPastingCellClipboardContent(Items[i], rowData[rowDataIndex][columnDataIndex]);
+                                    }
+                                    else
+                                    {
+                                        columnDataIndex = columnDataIndex - 1;
+                                    }
                                 }
                                 else
                                 {

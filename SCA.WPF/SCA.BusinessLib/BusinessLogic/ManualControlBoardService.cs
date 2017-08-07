@@ -67,31 +67,33 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = 0;
             }
-
-            if ((tempCode + amount) > MaxManualControlBoardAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                amount = tempCode + amount - MaxManualControlBoardAmount;
-            }
+            else
+            { 
+                if ((tempCode + amount) > MaxManualControlBoardAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+                {
+                    amount = MaxManualControlBoardAmount - tempCode;
+                }
             
-            for (int i = 0; i < amount; i++)
-            {
-                tempCode++;
-                _maxID++;
-                ManualControlBoard mcb = new ManualControlBoard();
-                mcb.Controller = _controller;
-                mcb.ControllerID = _controller.ID;
-                mcb.Code = tempCode;//.ToString().PadLeft(MaxManualControlBoardAmount.ToString().Length, '0');
-                mcb.ID = _maxID;
-                mcb.IsDirty = true;
-                lstMCB.Add(mcb);
-            }
-            _maxCode = tempCode;
-            DataRecordAlreadySet = false;
+                for (int i = 0; i < amount; i++)
+                {
+                    tempCode++;
+                    _maxID++;
+                    ManualControlBoard mcb = new ManualControlBoard();
+                    mcb.Controller = _controller;
+                    mcb.ControllerID = _controller.ID;
+                    mcb.Code = tempCode;//.ToString().PadLeft(MaxManualControlBoardAmount.ToString().Length, '0');
+                    mcb.ID = _maxID;
+                    mcb.IsDirty = true;
+                    lstMCB.Add(mcb);
+                }
+                _maxCode = tempCode;
+                DataRecordAlreadySet = false;
 
-            foreach (var singleItem in lstMCB)
-            {
-                Update(singleItem);
-            }            
+                foreach (var singleItem in lstMCB)
+                {
+                    Update(singleItem);
+                }
+            }
             return lstMCB;
         }
         
@@ -338,9 +340,9 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     switch (columnNames[i])
                     {
-                        case "编号":
-                            result.Code = Convert.ToInt32(data[i]);
-                            break;
+                        //case "编号":
+                        //    result.Code = Convert.ToInt32(data[i]);
+                        //    break;
                         case "板卡号":
                             result.BoardNo = Convert.ToInt32(data[i]);
                             break;

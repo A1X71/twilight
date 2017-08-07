@@ -6,6 +6,7 @@ using SCA.Interface;
 using SCA.DatabaseAccess;
 using SCA.Interface.DatabaseAccess;
 using SCA.Model;
+using SCA.BusinessLogic;
 /* ==============================
 *
 * Author     : William
@@ -87,10 +88,11 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             try
             {
-                IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
-                ILogRecorder logger = null;
-                IDatabaseService _databaseService = new SCA.DatabaseAccess.SQLiteDatabaseAccess(_controller.Project.SavePath, logger, _fileService);                
-                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(_databaseService);
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                ILogRecorder logger = null;                
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(_controller.Project.SavePath, logger, fileService);
+                IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(dbFileVersionService);
                 loopDBService.DeleteLoopInfo(loopID);                
             }
             catch (Exception ex)
@@ -153,14 +155,14 @@ namespace SCA.BusinessLib.BusinessLogic
                 int specifiedLoopCode=0; //指定的回路号
                 bool loopCodeExistFlag=false; //回路号已经存在标志
 
-                if (loop.Code != "")
-                {
-                    specifiedLoopCode=Convert.ToInt32(loop.Code);
-                    if (specifiedLoopCode > currentMaxLoopCode)
-                    {
-                        currentMaxLoopCode = specifiedLoopCode;
-                    }
-                }
+                //if (loop.Code != "")
+                //{
+                //    specifiedLoopCode=Convert.ToInt32(loop.Code);
+                //    if (specifiedLoopCode > currentMaxLoopCode)
+                //    {
+                //        currentMaxLoopCode = specifiedLoopCode;
+                //    }
+                //}
 
                 for (int i = 0; i < loopsCode.Length; i++)
                 { 

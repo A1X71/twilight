@@ -56,7 +56,7 @@
         <GridViewColumnCollection x:Key="gvcc">
             <!--CellTemplate="{StaticResource CellTemplate_Name}"-->
             <GridViewColumn Header="名称" CellTemplate="{StaticResource CellTemplate_Name}"  Width="180"/>
-            <GridViewColumn Header="数量" DisplayMemberBinding="{Binding Number}"  Width="1000"/>
+            <GridViewColumn Header="数量" DisplayMemberBinding="{Binding Number}"  Width="100"/>
         </GridViewColumnCollection>
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="IsExpanded" Value="True"/>

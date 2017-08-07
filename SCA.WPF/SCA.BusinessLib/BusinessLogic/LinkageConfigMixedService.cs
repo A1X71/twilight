@@ -69,32 +69,35 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = 0;
             }
-            if ((tempCode + amount) > MaxMixedLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                amount = tempCode + amount - MaxMixedLinkageConfigAmount;
-            }
-            for (int i = 0; i < amount; i++)
-            {
-                //currentMaxCode++;
-                tempCode++;
-                _maxID++;
-                LinkageConfigMixed lcm = new LinkageConfigMixed();
-                lcm.Controller = _controller;
-                lcm.ControllerID = _controller.ID;                
-                lcm.ActionType = LinkageActionType.AND;
-                lcm.TypeA = LinkageType.ZoneLayer;
-                lcm.TypeB = LinkageType.ZoneLayer;
-                lcm.TypeC = LinkageType.ZoneLayer;
-                lcm.ID = _maxID;
-                lcm.Code = tempCode.ToString().PadLeft(MaxMixedLinkageConfigAmount.ToString().Length, '0');
-                lcm.IsDirty = true;
-                lstLinkageConfigMixed.Add(lcm);
-            }
-            _maxCode = tempCode;
-            DataRecordAlreadySet = false;
-            foreach (var singleItem in lstLinkageConfigMixed)
-            {
-                Update(singleItem);
+            else
+            { 
+                if ((tempCode + amount) > MaxMixedLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+                {
+                    amount = MaxMixedLinkageConfigAmount - tempCode;
+                }
+                for (int i = 0; i < amount; i++)
+                {
+                    //currentMaxCode++;
+                    tempCode++;
+                    _maxID++;
+                    LinkageConfigMixed lcm = new LinkageConfigMixed();
+                    lcm.Controller = _controller;
+                    lcm.ControllerID = _controller.ID;                
+                    lcm.ActionType = LinkageActionType.AND;
+                    lcm.TypeA = LinkageType.ZoneLayer;
+                    lcm.TypeB = LinkageType.ZoneLayer;
+                    lcm.TypeC = LinkageType.ZoneLayer;
+                    lcm.ID = _maxID;
+                    lcm.Code = tempCode.ToString().PadLeft(MaxMixedLinkageConfigAmount.ToString().Length, '0');
+                    lcm.IsDirty = true;
+                    lstLinkageConfigMixed.Add(lcm);
+                }
+                _maxCode = tempCode;
+                DataRecordAlreadySet = false;
+                foreach (var singleItem in lstLinkageConfigMixed)
+                {
+                    Update(singleItem);
+                }
             }
             return lstLinkageConfigMixed;
         }
@@ -191,9 +194,9 @@ namespace SCA.BusinessLib.BusinessLogic
                         {
                             switch (columnNames[i])
                             { 
-                                case "编号":
-                                    result.Code = data[i];
-                                    break;
+                                //case "编号":
+                                //    result.Code = data[i];
+                                //    break;
                                 case "动作常数":
                                     result.ActionCoefficient = Convert.ToInt32(data[i]);
                                     break;

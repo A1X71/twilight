@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SCA.WPF.Infrastructure;
 
 namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 {
@@ -28,6 +29,8 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
         {
             if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
+                using (new WaitCursor())
+                { 
                 SCA.Model.LoopModel loop = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8001ViewModel)this.DataContext).TheLoop;
                 var selectedItems = DataGrid_Device.SelectedItems;
                 if (selectedItems != null)
@@ -44,6 +47,7 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
                     }
                     //刷新界面
                     ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8001ViewModel)this.DataContext).DeviceInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8001Collection(loop, loop.GetDevices<Model.DeviceInfo8001>());
+                }
                 }
             }
         }

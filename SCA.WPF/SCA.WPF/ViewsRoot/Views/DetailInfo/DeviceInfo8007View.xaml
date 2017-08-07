@@ -22,7 +22,7 @@
                 <Setter Property="HorizontalAlignment" Value="Right" />
             </Style>
         </Grid.Resources>
-        <StackPanel>
+        <StackPanel Panel.ZIndex="4">
             <Grid  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -125,6 +125,7 @@
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
+                                       Visibility="Hidden"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="120"                                        
                                        Header="编码"                                       
@@ -221,7 +222,7 @@
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
         </StackPanel>
-        <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0">
+        <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0" Panel.ZIndex="5">
             <i:Interaction.Behaviors>
                 <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
                                                             Event="ConfirmClick" PassArguments="True"/>

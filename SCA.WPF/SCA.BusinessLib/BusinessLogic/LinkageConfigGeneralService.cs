@@ -68,28 +68,31 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = 0;
             }
-            if ((tempCode + amount) > MaxGeneralLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                amount = tempCode + amount - MaxGeneralLinkageConfigAmount;
-            }
+            else
+            { 
+                if ((tempCode + amount) > MaxGeneralLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+                {
+                    amount =  MaxGeneralLinkageConfigAmount - tempCode;
+                }
             
-            for (int i = 0; i < amount; i++)
-            {
-                tempCode++;
-                _maxID++;
-                LinkageConfigGeneral lcg = new LinkageConfigGeneral();
-                lcg.Controller = _controller;
-                lcg.ControllerID = _controller.ID;
-                lcg.ID = _maxID;
-                lcg.Code = tempCode.ToString().PadLeft(MaxGeneralLinkageConfigAmount.ToString().Length, '0');
-                lcg.IsDirty = true;
-                lstLinkageConfigGeneral.Add(lcg);
-            }
-            _maxCode = tempCode;
-            DataRecordAlreadySet = false;
-            foreach (var singleItem in lstLinkageConfigGeneral)
-            {
-                Update(singleItem);
+                for (int i = 0; i < amount; i++)
+                {
+                    tempCode++;
+                    _maxID++;
+                    LinkageConfigGeneral lcg = new LinkageConfigGeneral();
+                    lcg.Controller = _controller;
+                    lcg.ControllerID = _controller.ID;
+                    lcg.ID = _maxID;
+                    lcg.Code = tempCode.ToString().PadLeft(MaxGeneralLinkageConfigAmount.ToString().Length, '0');
+                    lcg.IsDirty = true;
+                    lstLinkageConfigGeneral.Add(lcg);
+                }
+                _maxCode = tempCode;
+                DataRecordAlreadySet = false;
+                foreach (var singleItem in lstLinkageConfigGeneral)
+                {
+                    Update(singleItem);
+                }
             }
             return lstLinkageConfigGeneral;
         }
@@ -114,9 +117,9 @@ namespace SCA.BusinessLib.BusinessLogic
                     {
                         switch (columnNames[i])
                         {
-                            case "编号":
-                                result.Code = data[i];
-                                break;
+                            //case "编号":
+                            //    result.Code = data[i];
+                            //    break;
                             case "动作常数":
                                 result.ActionCoefficient = Convert.ToInt32(data[i]);
                                 break;

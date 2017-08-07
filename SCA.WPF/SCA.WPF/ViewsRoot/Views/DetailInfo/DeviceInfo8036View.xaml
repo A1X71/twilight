@@ -102,6 +102,7 @@
                     <dg:DataGridTextColumn 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
+                                       Visibility="Hidden"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
                                        Header="编码"                                       
@@ -173,8 +174,9 @@
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
                                        Header="安装地点" 
+                                       Width="*"
                                        Binding="{Binding Path=Location,ValidatesOnDataErrors=True}" 
-                                           EditingElementStyle="{StaticResource errorStyle}"
+                                       EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>

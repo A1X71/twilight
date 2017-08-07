@@ -117,7 +117,9 @@
                 <dg:DataGridTextColumn 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                       Visibility="Hidden"  
+                  />
                 <dg:DataGridTextColumn
                                        Header="编码"                                       
                                        Binding="{Binding Path=Code}"  
@@ -154,10 +156,13 @@
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>
-                    <dg:DataGridTextColumn Width="Auto" 
+                    <!--<dg:DataGridTextColumn Width="Auto" 
                                        Header="屏蔽" 
                                        Binding="{Binding Path=Disable ,ValidatesOnDataErrors=True}"                                        
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"/>-->
+                    <dg:DataGridCheckBoxColumn Header="屏蔽" 
+                                               Binding="{Binding Path=Disable,ValidatesOnDataErrors=True}" 
+                                               Width="Auto"/>
                     <!--<dg:DataGridCheckBoxColumn Header="屏蔽" 
                                                Binding="{Binding Path=Disable,ValidatesOnDataErrors=True}" 
                                                />-->
@@ -240,7 +245,7 @@
                                        Binding="{Binding Path=Location,ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
-                    <dg:DataGridTextColumn Width="1*" />
+                    
                 </local:DetailInfoGridControl.Columns>
         </local:DetailInfoGridControl>
     

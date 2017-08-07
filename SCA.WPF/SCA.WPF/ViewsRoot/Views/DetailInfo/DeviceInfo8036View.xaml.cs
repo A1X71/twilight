@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using SCA.WPF.Infrastructure;
 namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 {
     /// <summary>
@@ -36,22 +36,28 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            SCA.Model.LoopModel loop = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).TheLoop;
-            var selectedItems = DataGrid_Device.SelectedItems;
-            if (selectedItems != null)
+            if (MessageBox.Show("确认删除吗?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                SCA.BusinessLib.BusinessLogic.DeviceService8036 deviceService = new SCA.BusinessLib.BusinessLogic.DeviceService8036();
-                deviceService.TheLoop = loop;
-
-                foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036 r in selectedItems)
+                using (new WaitCursor())
                 {
-                    if (r != null)
+                    SCA.Model.LoopModel loop = ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).TheLoop;
+                    var selectedItems = DataGrid_Device.SelectedItems;
+                    if (selectedItems != null)
                     {
-                        deviceService.DeleteBySpecifiedID(r.ID);
+                        SCA.BusinessLib.BusinessLogic.DeviceService8036 deviceService = new SCA.BusinessLib.BusinessLogic.DeviceService8036();
+                        deviceService.TheLoop = loop;
+
+                        foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036 r in selectedItems)
+                        {
+                            if (r != null)
+                            {
+                                deviceService.DeleteBySpecifiedID(r.ID);
+                            }
+                        }
+                        //刷新界面
+                        ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).DeviceInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036Collection(loop, loop.GetDevices<Model.DeviceInfo8036>());
                     }
                 }
-                //刷新界面
-                ((SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel)this.DataContext).DeviceInfoObservableCollection = new SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036Collection(loop, loop.GetDevices<Model.DeviceInfo8036>());
             }
         }
     }

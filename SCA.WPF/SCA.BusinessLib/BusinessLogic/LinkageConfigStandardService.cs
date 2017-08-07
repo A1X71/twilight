@@ -78,28 +78,30 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = 0;
             }
-
-            if ((tempCode + amount) > MaxStandardLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                amount = tempCode + amount - MaxStandardLinkageConfigAmount;
-            }
-            for (int i = 0; i < amount; i++)
-            {
-                tempCode++;
-                _maxID++;
-                LinkageConfigStandard lcs = new LinkageConfigStandard();
-                lcs.Controller = _controller;
-                lcs.ControllerID = _controller.ID;
-                lcs.ID = _maxID;
-                lcs.Code = tempCode.ToString().PadLeft(MaxStandardLinkageConfigAmount.ToString().Length, '0');
-                lcs.IsDirty = true;
-                lstLinkageConfigStandard.Add(lcs);
-            }
-            _maxCode = tempCode;
-            DataRecordAlreadySet = false;
-            foreach (var singleItem in lstLinkageConfigStandard)
-            {
-                Update(singleItem);
+            else
+            { 
+                if ((tempCode + amount) > MaxStandardLinkageConfigAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+                {
+                    amount = MaxStandardLinkageConfigAmount - tempCode;
+                }
+                for (int i = 0; i < amount; i++)
+                {
+                    tempCode++;
+                    _maxID++;
+                    LinkageConfigStandard lcs = new LinkageConfigStandard();
+                    lcs.Controller = _controller;
+                    lcs.ControllerID = _controller.ID;
+                    lcs.ID = _maxID;
+                    lcs.Code = tempCode.ToString().PadLeft(MaxStandardLinkageConfigAmount.ToString().Length, '0');
+                    lcs.IsDirty = true;
+                    lstLinkageConfigStandard.Add(lcs);
+                }
+                _maxCode = tempCode;
+                DataRecordAlreadySet = false;
+                foreach (var singleItem in lstLinkageConfigStandard)
+                {
+                    Update(singleItem);
+                }
             }
             return lstLinkageConfigStandard;
         }
@@ -182,9 +184,9 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     switch (columnNames[i])
                     {
-                        case "输出组号":
-                            result.Code = data[i];
-                            break;
+                        //case "输出组号":
+                        //    result.Code = data[i];
+                        //    break;
                         case "联动模块1":
                             result.DeviceNo1 = data[i].ToString();
                             break;

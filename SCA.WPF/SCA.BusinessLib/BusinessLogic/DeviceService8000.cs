@@ -52,30 +52,33 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 amount = 0;
             }
-            if ((currentMaxCode + amount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                amount = currentMaxCode + amount - MaxDeviceAmount;
+            else
+            { 
+                if ((currentMaxCode + amount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+                {
+                    amount = MaxDeviceAmount - currentMaxCode;
+                }
+                int deviceID = ProjectManager.GetInstance.MaxDeviceIDInController8000;
+                for (int i = 0; i < amount; i++)
+                {
+                    currentMaxCode++;
+                    deviceID++;
+                    DeviceInfo8000 dev = new DeviceInfo8000();
+                    dev.Loop = TheLoop;
+                    //需要根据器件编码指定编码位数
+                    //dev.Code = currentMaxCode.ToString();
+                    dev.Code = TheLoop.Code + currentMaxCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+                    dev.ID = deviceID;
+                    lstDeviceInfo8000.Add(dev);
+                }            
+                //更新最大ID值
+                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8000 = deviceID;
+                foreach (var singleItem in lstDeviceInfo8000)
+                {
+                    Update(singleItem);
+                }
+                TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8000>().Count;
             }
-            int deviceID = ProjectManager.GetInstance.MaxDeviceIDInController8000;
-            for (int i = 0; i < amount; i++)
-            {
-                currentMaxCode++;
-                deviceID++;
-                DeviceInfo8000 dev = new DeviceInfo8000();
-                dev.Loop = TheLoop;
-                //需要根据器件编码指定编码位数
-                //dev.Code = currentMaxCode.ToString();
-                dev.Code = TheLoop.Code + currentMaxCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
-                dev.ID = deviceID;
-                lstDeviceInfo8000.Add(dev);
-            }            
-            //更新最大ID值
-            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8000 = deviceID;
-            foreach (var singleItem in lstDeviceInfo8000)
-            {
-                Update(singleItem);
-            }
-            TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8000>().Count;
             return lstDeviceInfo8000;
         }        
         public bool Update(DeviceInfo8000 deviceInfo)
@@ -129,6 +132,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     TheLoop.GetDevices<DeviceInfo8000>().Remove(o);
                     DeleteDeviceFromDB(id);
+                    TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8000>().Count;
                 }
             }
             catch
@@ -249,9 +253,9 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     switch (columnNames[i])
                     {
-                        case "编码":
-                            result.Code = data[i];
-                            break;
+                        //case "编码":
+                        //    result.Code = data[i];
+                        //    break;
                         case "器件类型":
                             result.TypeCode = Convert.ToInt16(data[i]);
                             break;
