@@ -31,7 +31,7 @@ using System.Reflection;
 
 namespace SCA.DatabaseAccess.DBContext
 {
-    public class Device8053DBService:IDeviceDBServiceTest
+    class Device8053DBService:IDeviceDBServiceTest
     {
         private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

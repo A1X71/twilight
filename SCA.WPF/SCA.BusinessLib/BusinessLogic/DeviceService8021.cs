@@ -6,6 +6,7 @@ using SCA.Interface;
 using SCA.Interface.DatabaseAccess;
 using SCA.Model;
 using SCA.BusinessLogic;
+using SCA.DatabaseAccess.DBContext;
 /* ==============================
 *
 * Author     : William
@@ -19,6 +20,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class DeviceService8021:IDeviceService<DeviceInfo8021>
     {
+        private short _maxDeviceAmount = 0;
         public LoopModel TheLoop
         {
             get;
@@ -30,20 +32,48 @@ namespace SCA.BusinessLib.BusinessLogic
 
             throw new NotImplementedException();
         }
-        //commented by william at 2017-06-23 because of no using
+        public short MaxDeviceAmount
+        {
+            get
+            {
+                if (_maxDeviceAmount == 0)
+                {
+                    _maxDeviceAmount = new ControllerConfig8021().GetMaxDeviceAmountValue();
+                }
+                return _maxDeviceAmount;
+            }
+        }
         public List<DeviceInfo8021> Create(int amount)
         {
             List<DeviceInfo8021> lstDeviceInfo8021 = new List<DeviceInfo8021>();
             int currentMaxCode = GetMaxCode();
+            if (currentMaxCode >= MaxDeviceAmount)
+            {
+                amount = 0;
+            }
+            if ((currentMaxCode + amount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            {
+                amount = currentMaxCode + amount - MaxDeviceAmount;
+            }
+            int deviceID = ProjectManager.GetInstance.MaxDeviceIDInController8021;
             for (int i = 0; i < amount; i++)
             {
                 currentMaxCode++;
+                deviceID++;
                 DeviceInfo8021 dev = new DeviceInfo8021();
                 dev.Loop = TheLoop;
                 //需要根据器件编码指定编码位数
-                dev.Code = currentMaxCode.ToString();
+                dev.Code = TheLoop.Code + currentMaxCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+                dev.ID = deviceID;
                 lstDeviceInfo8021.Add(dev);
             }
+            //更新最大ID值
+            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = deviceID;
+            foreach (var singleItem in lstDeviceInfo8021)
+            {
+                Update(singleItem);
+            }
+            TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8021>().Count;
             return lstDeviceInfo8021;
         }
 
@@ -61,8 +91,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     result.Loop = deviceInfo.Loop;
                     result.LoopID = deviceInfo.LoopID;
-                    result.ID = deviceInfo.ID;
-                    result.Code = deviceInfo.Code;
+                    //result.ID = deviceInfo.ID;
+                 //   result.Code = deviceInfo.Code;
                     //result.SimpleCode = deviceInfo.SimpleCode;
                     result.TypeCode = deviceInfo.TypeCode;
                     result.Disable = deviceInfo.Disable;
@@ -114,7 +144,6 @@ namespace SCA.BusinessLib.BusinessLogic
                 DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheLoop.Controller.Project.SavePath, logger, _fileService);
                 IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
                 IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, _dbFileVersionService);
-
                 if (deviceDBService.DeleteDeviceByID(id))
                 {
                     if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 == id) //如果最大ID等于被删除的ID，则重新赋值
@@ -141,9 +170,10 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     foreach (var i in query)
                     {
-                        if (Convert.ToInt32(i) > result)
+                        string deviceCode = i.Substring(TheLoop.Code.Length);
+                        if (Convert.ToInt32(deviceCode) > result)
                         {
-                            result = Convert.ToInt32(i);
+                            result = Convert.ToInt32(deviceCode);
                         }
                     }
                 }
@@ -200,13 +230,79 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public bool SaveToDB()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ILogRecorder logger = null;
+                IFileService fileService = new SCA.BusinessLib.Utility.FileService();
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this.TheLoop.Controller.Project.SavePath, logger, fileService);
+                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
+                ILoopDBService _loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(_dbFileVersionService);
+                _loopDBService.AddLoopInfo(TheLoop);
+                IDeviceDBServiceTest dbService = DeviceManagerDBServiceTest.GetDeviceDBContext(ControllerType.NT8021,_dbFileVersionService);
+                dbService.AddDevice(TheLoop);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
 
         public bool UpdateViaSpecifiedColumnName(int id, string[] columnNames, string[] data)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DeviceInfo8021 result = TheLoop.GetDevices<DeviceInfo8021>().Find(
+                      delegate(DeviceInfo8021 x)
+                      {
+                          return x.ID == id;
+                      }
+                      );
+                for (int i = 0; i < columnNames.Length; i++)
+                {
+                    switch (columnNames[i])
+                    {
+                        case "编码":
+                            result.Code = data[i];
+                            break;
+                        case "器件类型":
+                            result.TypeCode = Convert.ToInt16(data[i]);
+                            break;                        
+                        case "屏蔽":
+                            //需要将Disable存储为0或1
+                            result.Disable = new Nullable<bool>(data[i].ToString().ToUpper() == "TRUE" ? true : false);
+                            break;
+                        case "电流报警值":
+                            result.CurrentThreshold = new Nullable<float>(Convert.ToSingle((data[i])));
+                            break;
+                        case "温度报警值":
+                            result.TemperatureThreshold = new Nullable<float>(Convert.ToSingle((data[i])));
+                            break;
+                        case "楼号":
+                            result.BuildingNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "区号":
+                            result.ZoneNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "层号":
+                            result.FloorNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "房间号":
+                            result.RoomNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            break;
+                        case "安装地点":
+                            result.Location = data[i].ToString();
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

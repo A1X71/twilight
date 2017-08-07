@@ -222,6 +222,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     //l.Name = loop.Name+i.ToString();
                     l.DeviceAmount = loop.DeviceAmount;                    
                     l.Controller = _controller;
+                    l.ControllerID = _controller.ID;
                     InitializeDevicesToLoop(_controller.Type, l);
                     _controller.Loops.Add(l);
 //                  SetDataDirty();

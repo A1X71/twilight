@@ -237,7 +237,7 @@ namespace SCA.WPF.CreateLoop
                 loop.DeviceAmount = Convert.ToInt32(DeviceAmount);
                 loop.Name = LoopName;
                 loop.Controller = TheController;
-                loop.ControllerID = loop.Controller.ID;
+                loop.ControllerID = TheController.ID;
                 SCA.Interface.ILoopService loopService = new SCA.BusinessLib.BusinessLogic.LoopService(loop.Controller);
                 bool result=loopService.AddLoops(loop, ControllerMachineNumber, Convert.ToInt32(LoopsAmount));
                 SCA.WPF.Infrastructure.EventMediator.NotifyColleagues("RefreshNavigator", result);

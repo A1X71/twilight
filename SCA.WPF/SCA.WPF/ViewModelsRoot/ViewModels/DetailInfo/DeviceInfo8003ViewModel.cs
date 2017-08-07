@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Collections.Specialized;
@@ -282,8 +283,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     {
         private EditableDeviceInfo8003Collection _deviceInfoCollection;
         private List<DeviceInfo8003> _lstDeviceInfo8003;
-
-        private int _maxCode = 0;//当前器件最大编号
+        private DeviceService8003 _deviceService8003;
+        //private int _maxCode = 0;//当前器件最大编号
         private int _addedAmount = 1;//向集合中新增信息的数量
         private short _maxDeviceAmount = 0;
         private string _addIconPath = @"Resources/Icon/Style1/loop-add.png";
@@ -294,6 +295,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Device8003;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -301,7 +304,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string DownloadIconPath { get { return _appCurrentPath + _downloadIconPath; } }
         public string UploadIconPath { get { return _appCurrentPath + _uploadIconPath; } }
-
+        public DeviceInfo8003ViewModel()
+        {
+            _deviceService8003 = new DeviceService8003();
+        }
         public short MaxDeviceAmount
         {
             get
@@ -333,7 +339,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return config.GetDeviceTypeInfo();
             }
         }
-
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
+            }
+        }
         public EditableDeviceInfo8003Collection DeviceInfoObservableCollection
         {
             get
@@ -348,8 +377,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             set
             {
                 _deviceInfoCollection = value;
-                _maxCode = GetMaxCode(value);
-                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003 = GetMaxID();
+                //_maxCode = GetMaxCode(value);
+                //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003 = GetMaxID();
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -367,29 +396,41 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <param name="rowsAmount"></param>
         public void AddNewRecordExecute(int rowsAmount)
         {
-            int tempCode = _maxCode;
-            if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
-            {
-                rowsAmount = 0;
-            }
+            //int tempCode = _maxCode;
+            //if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
+            //{
+            //    rowsAmount = 0;
+            //}
 
-            if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //{
+            //    rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+            //}
+            //int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003;
+            //for (int i = 0; i < rowsAmount; i++)
+            //{
+            //    tempCode++;
+            //    deviceID++;
+            //    EditableDeviceInfo8003 deviceInfo = new EditableDeviceInfo8003();
+            //    deviceInfo.Loop = TheLoop;
+            //    deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+            //    deviceInfo.ID = deviceID;
+            //    DeviceInfoObservableCollection.Add(deviceInfo);
+            //}
+            //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003 = deviceID;
+            //_maxCode = tempCode;
+            _deviceService8003.TheLoop = this.TheLoop;
+            List<DeviceInfo8003> lstDeviceInfo8003 = _deviceService8003.Create(rowsAmount);
+            foreach (var device in lstDeviceInfo8003)
             {
-                rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+                EditableDeviceInfo8003 editDevice8003 = new EditableDeviceInfo8003();
+                editDevice8003.Loop = device.Loop;
+                editDevice8003.LoopID = device.LoopID;
+                editDevice8003.Code = device.Code;
+                editDevice8003.ID = device.ID;
+                editDevice8003.TypeCode = device.TypeCode;
+                DeviceInfoObservableCollection.Add(editDevice8003);
             }
-            int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003;
-            for (int i = 0; i < rowsAmount; i++)
-            {
-                tempCode++;
-                deviceID++;
-                EditableDeviceInfo8003 deviceInfo = new EditableDeviceInfo8003();
-                deviceInfo.Loop = TheLoop;
-                deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
-                deviceInfo.ID = deviceID;
-                DeviceInfoObservableCollection.Add(deviceInfo);
-            }
-            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8003 = deviceID;
-            _maxCode = tempCode;
 
 
         }
@@ -399,6 +440,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
+        }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
         }
         public List<Model.DeviceInfo8003> DeviceInfo
         {
@@ -439,6 +516,31 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {                
+                _deviceService8003.TheLoop = this.TheLoop;
+                _deviceService8003.SaveToDB();
+            }
+        }
         #endregion
         private void UpdateProcessBarStatus(int currentValue, int totalValue,ControllerNodeType nodeType)
         {
@@ -448,29 +550,29 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             status[2] = nodeType;
             EventMediator.NotifyColleagues("UpdateProgressBarStatusEvent", status);
         }
-        private int GetMaxCode(EditableDeviceInfo8003Collection deviceInfoCollection)
-        {
-            int result = 0;
-            if (deviceInfoCollection != null)
-            {
-                var query = from r in deviceInfoCollection select r.SimpleCode;
-                if (query != null)
-                {
-                    foreach (var i in query)
-                    {
-                        if (Convert.ToInt32(i) > result)
-                        {
-                            result = Convert.ToInt32(i);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        private int GetMaxID()
-        {
-            ControllerOperation8003 controllerOperation = new ControllerOperation8003();
-            return controllerOperation.GetMaxDeviceID();
-        }
+        //private int GetMaxCode(EditableDeviceInfo8003Collection deviceInfoCollection)
+        //{
+        //    int result = 0;
+        //    if (deviceInfoCollection != null)
+        //    {
+        //        var query = from r in deviceInfoCollection select r.SimpleCode;
+        //        if (query != null)
+        //        {
+        //            foreach (var i in query)
+        //            {
+        //                if (Convert.ToInt32(i) > result)
+        //                {
+        //                    result = Convert.ToInt32(i);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+        //private int GetMaxID()
+        //{
+        //    ControllerOperation8003 controllerOperation = new ControllerOperation8003();
+        //    return controllerOperation.GetMaxDeviceID();
+        //}
     }
 }

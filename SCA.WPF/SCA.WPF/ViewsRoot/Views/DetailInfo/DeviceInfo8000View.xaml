@@ -126,7 +126,9 @@
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
-                                       ElementStyle="{StaticResource tb_ElementStyle}"/>
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                       Visibility="Hidden"
+                                           />
                     <dg:DataGridTextColumn Width="120"                                        
                                        Header="编码"                                       
                                        Binding="{Binding Path=Code}"  

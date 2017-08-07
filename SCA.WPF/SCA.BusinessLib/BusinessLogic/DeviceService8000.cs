@@ -20,6 +20,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class DeviceService8000:IDeviceService<DeviceInfo8000>
     {
+        private short _maxDeviceAmount = 0;
         public LoopModel TheLoop
         {
             get;
@@ -30,28 +31,53 @@ namespace SCA.BusinessLib.BusinessLogic
         {
       
             throw new NotImplementedException();
-        }        
+        }
+        public short MaxDeviceAmount
+        {
+            get
+            {
+                if (_maxDeviceAmount == 0)
+                {
+                    _maxDeviceAmount = new ControllerConfig8000().GetMaxDeviceAmountValue();
+                }
+                return _maxDeviceAmount;
+            }
+        }
         public List<DeviceInfo8000> Create(int amount)
         {
             List<DeviceInfo8000> lstDeviceInfo8000 = new List<DeviceInfo8000>();
             int currentMaxCode = GetMaxCode();
+
+            if (currentMaxCode >= MaxDeviceAmount)
+            {
+                amount = 0;
+            }
+            if ((currentMaxCode + amount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            {
+                amount = currentMaxCode + amount - MaxDeviceAmount;
+            }
+            int deviceID = ProjectManager.GetInstance.MaxDeviceIDInController8000;
             for (int i = 0; i < amount; i++)
             {
                 currentMaxCode++;
+                deviceID++;
                 DeviceInfo8000 dev = new DeviceInfo8000();
                 dev.Loop = TheLoop;
                 //需要根据器件编码指定编码位数
-                dev.Code = currentMaxCode.ToString();
-
+                //dev.Code = currentMaxCode.ToString();
+                dev.Code = TheLoop.Code + currentMaxCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+                dev.ID = deviceID;
                 lstDeviceInfo8000.Add(dev);
-            }
+            }            
+            //更新最大ID值
+            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8000 = deviceID;
             foreach (var singleItem in lstDeviceInfo8000)
             {
                 Update(singleItem);
             }
+            TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8000>().Count;
             return lstDeviceInfo8000;
-        }
-
+        }        
         public bool Update(DeviceInfo8000 deviceInfo)
         {
             try
@@ -82,8 +108,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
                 else
                 {
-                    TheLoop.SetDevice<DeviceInfo8000>(deviceInfo);
-                    TheLoop.IsDeviceDataDirty = true;
+                    TheLoop.SetDevice<DeviceInfo8000>(deviceInfo);                    
                 }
             }
             catch
@@ -149,9 +174,10 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     foreach (var i in query)
                     {
-                        if (Convert.ToInt32(i) > result)
+                        string deviceCode = i.Substring(TheLoop.Code.Length);
+                        if (Convert.ToInt32(deviceCode) > result)
                         {
-                            result = Convert.ToInt32(i);
+                            result = Convert.ToInt32(deviceCode);
                         }
                     }
                 }
@@ -282,8 +308,10 @@ namespace SCA.BusinessLib.BusinessLogic
                 IFileService fileService = new SCA.BusinessLib.Utility.FileService();
                 DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this.TheLoop.Controller.Project.SavePath, logger, fileService);
                 IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(SCA.BusinessLogic.DBFileVersionManager.CurrentDBFileVersion);
-                IDeviceDBServiceTest dbService = new Device8000DBService(_dbFileVersionService);
-                dbService.AddDevice(TheLoop);                
+                ILoopDBService _loopDBService  = new SCA.DatabaseAccess.DBContext.LoopDBService(_dbFileVersionService);
+                _loopDBService.AddLoopInfo(TheLoop);                
+                IDeviceDBServiceTest dbService = DeviceManagerDBServiceTest.GetDeviceDBContext(ControllerType.FT8000, _dbFileVersionService);
+                dbService.AddDevice(TheLoop);       
             }
             catch
             {

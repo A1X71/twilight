@@ -16,7 +16,7 @@ using SCA.Model;
 */
 namespace SCA.DatabaseAccess.DBContext
 {
-    public class Device8021DBService:IDeviceDBServiceTest
+    class Device8021DBService:IDeviceDBServiceTest
     {
         
         private IDBFileVersionService _dbFileVersionService;

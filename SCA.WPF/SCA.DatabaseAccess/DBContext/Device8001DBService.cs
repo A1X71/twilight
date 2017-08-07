@@ -14,7 +14,7 @@ using SCA.Interface.DatabaseAccess;
 */
 namespace SCA.DatabaseAccess.DBContext
 {
-    public class Device8001DBService:IDeviceDBServiceTest
+    class Device8001DBService:IDeviceDBServiceTest
     {
        
        private IDBFileVersionService _dbFileVersionService;

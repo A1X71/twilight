@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Reflection;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using Caliburn.Micro;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
@@ -419,6 +420,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Device8001;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -460,6 +463,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
                 return config.GetDeviceTypeInfo();
+            }
+        }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
             }
         }
 
@@ -525,8 +552,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 EditableDeviceInfo8001 editDevice8001 = new EditableDeviceInfo8001();
                 editDevice8001.Loop = device.Loop;
+                editDevice8001.LoopID = device.LoopID;
                 editDevice8001.Code = device.Code;
                 editDevice8001.ID = device.ID;
+                editDevice8001.TypeCode = device.TypeCode;
                 DeviceInfoObservableCollection.Add(editDevice8001);
             }
         }
@@ -537,6 +566,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
+        }
+
         public List<Model.DeviceInfo8001> DeviceInfo
         {
             get
@@ -576,6 +642,31 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                _deviceService8001.TheLoop = this.TheLoop;
+                _deviceService8001.SaveToDB();
+            }
+        }
         #endregion
         private void UpdateProcessBarStatus(int currentValue, int totalValue,ControllerNodeType nodeType)
         {
@@ -604,11 +695,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
             return result;
         }
-        private int GetMaxID()
-        {
-            ControllerOperation8001 controllerOperation = new ControllerOperation8001();
-            return controllerOperation.GetMaxDeviceID();            
-        }
+        //private int GetMaxID()
+        //{
+        //    ControllerOperation8001 controllerOperation = new ControllerOperation8001();
+        //    return controllerOperation.GetMaxDeviceID();            
+        //}
 
     }
 }

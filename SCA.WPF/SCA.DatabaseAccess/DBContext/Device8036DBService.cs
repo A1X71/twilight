@@ -121,7 +121,7 @@ namespace SCA.DatabaseAccess.DBContext
     //    }
     //}
 
-    public class Device8036DBServiceTest : IDeviceDBServiceTest
+    class Device8036DBServiceTest : IDeviceDBServiceTest
     {
         
         private IDBFileVersionService _dbFileVersionService;

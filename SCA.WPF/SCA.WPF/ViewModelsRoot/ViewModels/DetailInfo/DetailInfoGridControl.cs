@@ -169,7 +169,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                             }
                             else
                             {
-                                columnDataIndex = columnDataIndex - 1;
+                              //  columnDataIndex = columnDataIndex - 1;
                             }
 
                         }
@@ -313,17 +313,56 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         break;
                     case GridDetailType.Device8000:
                         {
-                            //int loopID = ((EditableDeviceInfo8000)item).LoopID;
+                            
                             LoopModel loop= ((EditableDeviceInfo8000)item).Loop;
-                            int itemID = ((EditableDeviceInfo8000)item).ID;
-                            //LoopModel loop = SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers.Find(
-                            //      delegate(LoopModel x)
-                            //      {
-                            //          return x.ID == controllerID;
-                            //      }
-                            //    );
+                            int itemID = ((EditableDeviceInfo8000)item).ID;                            
                             IDeviceService<DeviceInfo8000> service = new DeviceService8000();
                             service.TheLoop = loop;                            
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8001:
+                        {                            
+                            LoopModel loop = ((EditableDeviceInfo8001)item).Loop;
+                            int itemID = ((EditableDeviceInfo8001)item).ID;                
+                            IDeviceService<DeviceInfo8001> service = new DeviceService8001();
+                            service.TheLoop = loop;
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8003:
+                        {
+                            LoopModel loop = ((EditableDeviceInfo8003)item).Loop;
+                            int itemID = ((EditableDeviceInfo8003)item).ID;
+                            IDeviceService<DeviceInfo8003> service = new DeviceService8003();
+                            service.TheLoop = loop;
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8007:
+                        {
+                            LoopModel loop = ((EditableDeviceInfo8007)item).Loop;
+                            int itemID = ((EditableDeviceInfo8007)item).ID;
+                            IDeviceService<DeviceInfo8007> service = new DeviceService8007();
+                            service.TheLoop = loop;
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8021:
+                        {
+                            LoopModel loop = ((EditableDeviceInfo8021)item).Loop;
+                            int itemID = ((EditableDeviceInfo8021)item).ID;
+                            IDeviceService<DeviceInfo8021> service = new DeviceService8021();
+                            service.TheLoop = loop;
+                            service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
+                        }
+                        break;
+                    case GridDetailType.Device8036:
+                        {
+                            LoopModel loop = ((EditableDeviceInfo8036)item).Loop;
+                            int itemID = ((EditableDeviceInfo8036)item).ID;
+                            IDeviceService<DeviceInfo8036> service = new DeviceService8036();
+                            service.TheLoop = loop;
                             service.UpdateViaSpecifiedColumnName(itemID, columnNames, data);
                         }
                         break;

@@ -9,6 +9,9 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:debug="clr-namespace:SCA.WPF.Utility"
              mc:Ignorable="d" 
+             xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
@@ -32,7 +35,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--<ColumnDefinition Width="Auto"/>-->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -45,9 +48,9 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
-                        <ComboBoxItem>
+                        <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding DisplayMoreLinesViewCommand}"  Background="Transparent" BorderBrush="Transparent">
                             添加更多项
-                        </ComboBoxItem>
+                        </Button>
                     </ComboBox>
                     <Button Name="btnAddNewLine" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30"
                             Command="{Binding AddNewRecordCommand}" CommandParameter="{Binding Path=AddedAmount}">
@@ -68,15 +71,17 @@
                         >
                     <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                        Command="{Binding Path=SaveCommand}"
+                        >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
+                </Button>-->
             </Grid>
 
         
@@ -89,10 +94,14 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"         
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"          
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"   
                      ItemsSource="{Binding Path=DeviceInfoObservableCollection}" 
-                                     >
-            
+                                     >            
                 <local:DetailInfoGridControl.Resources>
                     <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
                         <Style.Triggers>
@@ -147,8 +156,7 @@
                     </dg:DataGridComboBoxColumn>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="屏蔽" 
-                                       Binding="{Binding Path=Disable ,ValidatesOnDataErrors=True}" 
-                                       EditingElementStyle="{StaticResource errorStyle}"
+                                       Binding="{Binding Path=Disable ,ValidatesOnDataErrors=True}"                                        
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <!--<dg:DataGridCheckBoxColumn Header="屏蔽" 
                                                Binding="{Binding Path=Disable,ValidatesOnDataErrors=True}" 
@@ -237,5 +245,13 @@
         </local:DetailInfoGridControl>
     
     </StackPanel>
+        <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0">
+            <i:Interaction.Behaviors>
+                <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
+                                                            Event="ConfirmClick" PassArguments="True"/>
+                <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesCloseCommand}"                                                             
+                                                            Event="CloseClick" PassArguments="False"/>
+            </i:Interaction.Behaviors>
+        </views:AddMoreLinesView>
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Reflection;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using Caliburn.Micro;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
@@ -263,6 +264,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     {
         private EditableDeviceInfo8021Collection _deviceInfoCollection;
         private List<DeviceInfo8021> _lstDeviceInfo8021;
+        private DeviceService8021 _deviceService8021;
         private string _addIconPath = @"Resources/Icon/Style1/loop-add.png";
         private string _delIconPath = @"Resources/Icon/Style1/loop-delete.png";
         private string _copyIconPath = @"Resources/Icon/Style1/copy.png";
@@ -271,6 +273,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Device8021;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -282,6 +286,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private int _maxCode = 0;//当前器件最大编号
         private int _addedAmount = 1;//向集合中新增信息的数量
         private short _maxDeviceAmount = 0;
+        public DeviceInfo8021ViewModel()
+        {
+            _deviceService8021 = new DeviceService8021();
+        }
         public short MaxDeviceAmount
         {
             get
@@ -313,6 +321,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return config.GetDeviceTypeInfo();
             }
         }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
+            }
+        }
         public EditableDeviceInfo8021Collection DeviceInfoObservableCollection
         {
             get
@@ -326,8 +358,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             set
             {
                 _deviceInfoCollection = value;
-                _maxCode = GetMaxCode(value);
-                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = GetMaxID();
+                //_maxCode = GetMaxCode(value);
+                //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = GetMaxID();
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -346,30 +378,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <param name="rowsAmount"></param>
         public void AddNewRecordExecute(int rowsAmount)
         {
-            int tempCode = _maxCode;
-            if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
-            {
-                rowsAmount = 0;
-            }
+            //int tempCode = _maxCode;
+            //if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
+            //{
+            //    rowsAmount = 0;
+            //}
 
-            if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //{
+            //    rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+            //}
+            //int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021;
+            //for (int i = 0; i < rowsAmount; i++)
+            //{
+            //    tempCode++;
+            //    deviceID++;
+            //    EditableDeviceInfo8021 deviceInfo = new EditableDeviceInfo8021();
+            //    deviceInfo.Loop = TheLoop;
+            //    deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+            //    deviceInfo.ID = deviceID;
+            //    DeviceInfoObservableCollection.Add(deviceInfo);
+            //}
+            //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = deviceID;
+            //_maxCode = tempCode; 
+            _deviceService8021.TheLoop = this.TheLoop;
+            List<DeviceInfo8021> lstDeviceInfo8021 = _deviceService8021.Create(rowsAmount);
+            foreach (var device in lstDeviceInfo8021)
             {
-                rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+                EditableDeviceInfo8021 editDevice8021 = new EditableDeviceInfo8021();
+                editDevice8021.Loop = device.Loop;
+                editDevice8021.LoopID = device.LoopID;
+                editDevice8021.Code = device.Code;
+                editDevice8021.ID = device.ID;
+                editDevice8021.TypeCode = device.TypeCode;
+                DeviceInfoObservableCollection.Add(editDevice8021);
             }
-            int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021;
-            for (int i = 0; i < rowsAmount; i++)
-            {
-                tempCode++;
-                deviceID++;
-                EditableDeviceInfo8021 deviceInfo = new EditableDeviceInfo8021();
-                deviceInfo.Loop = TheLoop;
-                deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
-                deviceInfo.ID = deviceID;
-                DeviceInfoObservableCollection.Add(deviceInfo);
-            }
-            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = deviceID;
-            _maxCode = tempCode;    
         }
+
         public ICommand DownloadCommand
         {
             get
@@ -377,6 +422,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
         }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
+        }
+
         public List<Model.DeviceInfo8021> DeviceInfo
         {
             get
@@ -416,6 +498,31 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 }
             }
         }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                _deviceService8021.TheLoop = this.TheLoop;
+                _deviceService8021.SaveToDB();
+            }
+        }
         #endregion
         private void UpdateProcessBarStatus(int currentValue, int totalValue, ControllerNodeType nodeType)
         {
@@ -425,29 +532,29 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             status[2] = nodeType;
             EventMediator.NotifyColleagues("UpdateProgressBarStatusEvent", status);
         }
-        private int GetMaxCode(EditableDeviceInfo8021Collection deviceInfoCollection)
-        {
-            int result = 0;
-            if (deviceInfoCollection != null)
-            {
-                var query = from r in deviceInfoCollection select r.SimpleCode;
-                if (query != null)
-                {
-                    foreach (var i in query)
-                    {
-                        if (Convert.ToInt32(i) > result)
-                        {
-                            result = Convert.ToInt32(i);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        private int GetMaxID()
-        {
-            ControllerOperation8021 controllerOperation = new ControllerOperation8021();
-            return controllerOperation.GetMaxDeviceID();
-        }
+        //private int GetMaxCode(EditableDeviceInfo8021Collection deviceInfoCollection)
+        //{
+        //    int result = 0;
+        //    if (deviceInfoCollection != null)
+        //    {
+        //        var query = from r in deviceInfoCollection select r.SimpleCode;
+        //        if (query != null)
+        //        {
+        //            foreach (var i in query)
+        //            {
+        //                if (Convert.ToInt32(i) > result)
+        //                {
+        //                    result = Convert.ToInt32(i);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+        //private int GetMaxID()
+        //{
+        //    ControllerOperation8021 controllerOperation = new ControllerOperation8021();
+        //    return controllerOperation.GetMaxDeviceID();
+        //}
     }
 }
