@@ -308,7 +308,9 @@ namespace SCA.BusinessLib.Controller
                 sendData[5] = 0x25;　//数据长度 ?? 暂定为01 ??
                 sendData[6] = 0xBB;　//发送器件命令
                 //sendData[7] = Convert.ToByte(deviceInfo.Count);　//器件总数
-                sendData[7] = Convert.ToByte(0x2E);　//器件总数
+                
+                //sendData[7] = Convert.ToByte(0x2E);　//器件总数
+                sendData[7] = Convert.ToByte(DownloadedDeviceInfoTotalAmountInCurrentLoop);
                 sendData[8] = Convert.ToByte(singleDevInfo.Loop.Controller.MachineNumber);　//控制器号
                 sendData[9] = Convert.ToByte(singleDevInfo.Loop.SimpleCode);　//回路号
 

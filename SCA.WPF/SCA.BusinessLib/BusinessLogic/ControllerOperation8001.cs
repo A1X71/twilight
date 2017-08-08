@@ -1506,6 +1506,10 @@ namespace SCA.BusinessLib.BusinessLogic
                                 {
                                     dictDeviceTypeStatistic.Add(dType.Name, typeCount);
                                 }
+                                else
+                                {
+                                    dictDeviceTypeStatistic[dType.Name] += typeCount;
+                                }
                                 //deviceCountInStatistic += typeCount;
                                 //if (deviceCountInStatistic == deviceCountInLoop)
                                 //{

@@ -289,14 +289,14 @@ namespace SCA.BusinessLib.BusinessLogic
                             result.TypeCode = Convert.ToInt16(data[i]);
                             break;
                         case "特性":
-                            result.Feature = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.Feature = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "屏蔽":
                             //需要将Disable存储为0或1
-                            result.Disable = new Nullable<bool>(data[i].ToString().ToUpper() == "TRUE" ? true : false);
+                            result.Disable =  data[i]==""?null:new Nullable<bool>(data[i].ToString().ToUpper() == "TRUE" ? true : false);
                             break;
                         case "灵敏度":
-                            result.SensitiveLevel = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.SensitiveLevel = data[i]==""?null:new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "输出组1":
                             result.LinkageGroup1 = data[i].ToString();
@@ -308,31 +308,31 @@ namespace SCA.BusinessLib.BusinessLogic
                             result.LinkageGroup3 = data[i].ToString();
                             break;
                         case "延时":
-                            result.DelayValue = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.DelayValue = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "板卡号":
-                            result.BoardNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.BoardNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "手盘号":
-                            result.SubBoardNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.SubBoardNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "手键号":
-                            result.KeyNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.KeyNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "广播分区":
                             result.BroadcastZone = data[i];
                             break;
                         case "楼号":
-                            result.BuildingNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.BuildingNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "区号":
-                            result.ZoneNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.ZoneNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "层号":
-                            result.FloorNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.FloorNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "房间号":
-                            result.RoomNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.RoomNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "安装地点":
                             result.Location = data[i].ToString();

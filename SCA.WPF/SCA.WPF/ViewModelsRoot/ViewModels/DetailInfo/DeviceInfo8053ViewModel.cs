@@ -29,6 +29,7 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Windows;
 using SCA.Model;
 using SCA.WPF.Utility;
 using SCA.BusinessLib.BusinessLogic;
@@ -36,6 +37,7 @@ using SCA.BusinessLib.Controller;
 using SCA.Interface.UIWPF;
 using SCA.WPF.Infrastructure;
 using SCA.BusinessLib;
+
 
 namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 {
@@ -332,7 +334,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     {
         private EditableDeviceInfo8053Collection _deviceInfoCollection;
         private List<DeviceInfo8053> _lstDeviceInfo8053;
-
+        private DeviceService8053 _deviceService8053;
         private int _maxCode = 0;//当前器件最大编号
         private int _addedAmount = 1;//向集合中新增信息的数量
         private short _maxDeviceAmount = 0;
@@ -344,6 +346,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
+        private object _detailType = GridDetailType.Device8053;
+        private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }
         public string CopyIconPath { get { return _appCurrentPath + _copyIconPath; } }
@@ -384,6 +388,30 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 return config.GetDeviceTypeInfo();
             }
         }
+        public object DetailType
+        {
+            get
+            {
+                return _detailType;
+            }
+            set
+            {
+                _detailType = value;
+                NotifyOfPropertyChange("DetailType");
+            }
+        }
+        public Visibility AddMoreLinesUserControlVisibility
+        {
+            get
+            {
+                return _addMoreLinesUserControlVisibility;
+            }
+            set
+            {
+                _addMoreLinesUserControlVisibility = value;
+                NotifyOfPropertyChange("AddMoreLinesUserControlVisibility");
+            }
+        }
         public EditableDeviceInfo8053Collection DeviceInfoObservableCollection
         {
             get
@@ -397,8 +425,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             set
             {
                 _deviceInfoCollection = value;
-                _maxCode = GetMaxCode(value);
-                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 = GetMaxID();
+                //_maxCode = GetMaxCode(value);
+                //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 = GetMaxID();
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -417,28 +445,41 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         /// <param name="rowsAmount"></param>
         public void AddNewRecordExecute(int rowsAmount)
         {
-            int tempCode = _maxCode;
-            if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
+            //int tempCode = _maxCode;
+            //if (tempCode >= MaxDeviceAmount) //如果已经达到上限，则不添加任何行
+            //{
+            //    rowsAmount = 0;
+            //}
+            //if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
+            //{
+            //    rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
+            //}
+            //int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053;
+            //for (int i = 0; i < rowsAmount; i++)
+            //{
+            //    tempCode++;
+            //    deviceID++;
+            //    EditableDeviceInfo8053 deviceInfo = new EditableDeviceInfo8053();
+            //    deviceInfo.Loop = TheLoop;
+            //    deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
+            //    deviceInfo.ID = deviceID;
+            //    DeviceInfoObservableCollection.Add(deviceInfo);
+            //}
+            //BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 = deviceID;
+            //_maxCode = tempCode;
+            _deviceService8053.TheLoop = this.TheLoop;
+            List<DeviceInfo8053> lstDeviceInfo8053 = _deviceService8053.Create(rowsAmount);
+            foreach (var device in lstDeviceInfo8053)
             {
-                rowsAmount = 0;
+                EditableDeviceInfo8053 editDevice8053 = new EditableDeviceInfo8053();
+                editDevice8053.Loop = device.Loop;
+                editDevice8053.LoopID = device.LoopID;
+                editDevice8053.Code = device.Code;
+                editDevice8053.ID = device.ID;
+                editDevice8053.TypeCode = device.TypeCode;
+                DeviceInfoObservableCollection.Add(editDevice8053);
             }
-            if ((tempCode + rowsAmount) > MaxDeviceAmount) //如果需要添加的行数将达上限，则增加剩余的行数
-            {
-                rowsAmount = tempCode + rowsAmount - MaxDeviceAmount;
-            }
-            int deviceID = BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053;
-            for (int i = 0; i < rowsAmount; i++)
-            {
-                tempCode++;
-                deviceID++;
-                EditableDeviceInfo8053 deviceInfo = new EditableDeviceInfo8053();
-                deviceInfo.Loop = TheLoop;
-                deviceInfo.Code = TheLoop.Code + tempCode.ToString().PadLeft(3, '0');//暂时将器件长度固定为3
-                deviceInfo.ID = deviceID;
-                DeviceInfoObservableCollection.Add(deviceInfo);
-            }
-            BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 = deviceID;
-            _maxCode = tempCode;
+
         }
         public ICommand DownloadCommand
         {
@@ -446,6 +487,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             {
                 return new SCA.WPF.Utility.RelayCommand(DownloadExecute, null);
             }
+        }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(SaveExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesConfirmCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand<object>(AddNewRecordExecute, null);
+            }
+        }
+        public ICommand AddMoreLinesCloseCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(AddMoreLinesCloseExecute, null);
+            }
+        }
+        public ICommand DisplayMoreLinesViewCommand
+        {
+            get
+            {
+                return new SCA.WPF.Utility.RelayCommand(DisplayMoreLinesViewExecute, null);
+            }
+        }
+        public void AddMoreLinesCloseExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void DisplayMoreLinesViewExecute()
+        {
+            AddMoreLinesUserControlVisibility = Visibility.Visible;
         }
         public List<Model.DeviceInfo8053> DeviceInfo
         {
@@ -487,6 +564,31 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
                     }
                 }
+            }
+        }
+        public void AddNewRecordExecute(object rowsAmount)
+        {
+            if (rowsAmount != null)
+            {
+
+                try
+                {
+                    int amount = Convert.ToInt32(((RoutedEventArgs)rowsAmount).OriginalSource);
+                    AddNewRecordExecute(amount);
+                }
+                catch (Exception ex)
+                {
+                    //转换出错，不作任何处理
+                }
+            }
+            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
+        }
+        public void SaveExecute()
+        {
+            using (new WaitCursor())
+            {
+                _deviceService8053.TheLoop = this.TheLoop;
+                _deviceService8053.SaveToDB();
             }
         }
         private void UpdateProcessBarStatus(int currentValue, int totalValue, ControllerNodeType nodeType)

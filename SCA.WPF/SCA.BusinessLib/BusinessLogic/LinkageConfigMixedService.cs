@@ -351,7 +351,6 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     if (BusinessLib.ProjectManager.GetInstance.MaxIDForMixedLinkageConfig == id) //如果最大ID等于被删除的ID，则重新赋值
                     {
-
                         LinkageConfigMixedService mixedService = new LinkageConfigMixedService(TheController);
                         BusinessLib.ProjectManager.GetInstance.MaxIDForMixedLinkageConfig = mixedService.GetMaxID();
                     }

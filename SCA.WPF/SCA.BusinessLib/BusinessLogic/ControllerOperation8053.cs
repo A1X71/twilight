@@ -804,11 +804,13 @@ namespace SCA.BusinessLib.BusinessLogic
                         {
                             DeviceType dType = config.GetDeviceTypeViaDeviceCode(device.TypeCode);
                             int typeCount = loop.GetDevices<DeviceInfo8053>().Count((d) => d.TypeCode == dType.Code);
-                            dictDeviceTypeStatistic.Add(dType.Name, typeCount);
-                            deviceCountInStatistic += typeCount;
-                            if (deviceCountInStatistic == deviceCountInLoop)
+                            if (!dictDeviceTypeStatistic.ContainsKey(dType.Name))
                             {
-                                break;
+                                dictDeviceTypeStatistic.Add(dType.Name, typeCount);
+                            }
+                            else
+                            {
+                                dictDeviceTypeStatistic[dType.Name] += typeCount;
                             }
                         }
                     }

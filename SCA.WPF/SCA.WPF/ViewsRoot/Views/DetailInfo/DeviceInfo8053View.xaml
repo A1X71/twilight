@@ -8,6 +8,9 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"             
              mc:Ignorable="d" 
+             xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
@@ -27,7 +30,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--<ColumnDefinition Width="Auto"/>-->
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -64,9 +67,9 @@
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=UploadIconPath,Mode=OneWay}"/>
-                </Button>
+                </Button>-->
             </Grid>
             <local:DetailInfoGridControl x:Name="DataGrid_Device" 
                      AutoGenerateColumns="False"                                                            
@@ -77,7 +80,12 @@
                      RowBackground="White" 
                      AlternatingRowBackground="LightGray"
                      AlternationCount="2"
-                     SelectionUnit="CellOrRowHeader"                 
+                     SelectionUnit="CellOrRowHeader"    
+                     ClipboardCopyMode="IncludeHeader"
+                     CanUserAddRows="False"          
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="False"
+                     DetailType="{Binding Path=DetailType,Mode=OneWay}"   
                      ItemsSource="{Binding Path=DeviceInfoObservableCollection}">
                 <local:DetailInfoGridControl.Resources>
                     <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
@@ -94,6 +102,7 @@
                     <dg:DataGridTextColumn 
                                        Header="ID" 
                                        Binding="{Binding Path=ID}" 
+                                       Visibility="Hidden"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
                                        Header="编码"                                       
@@ -162,6 +171,7 @@
                                            EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
+                                       Width="*"
                                        Header="安装地点" 
                                        Binding="{Binding Path=Location,ValidatesOnDataErrors=True}" 
                                            EditingElementStyle="{StaticResource errorStyle}"
@@ -169,5 +179,13 @@
                 </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
         </StackPanel>
+        <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0">
+            <i:Interaction.Behaviors>
+                <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesConfirmCommand}"                                                             
+                                                            Event="ConfirmClick" PassArguments="True"/>
+                <eventToCommand:EventToCommandBehavior  Command="{Binding Path=AddMoreLinesCloseCommand}"                                                             
+                                                            Event="CloseClick" PassArguments="False"/>
+            </i:Interaction.Behaviors>
+        </views:AddMoreLinesView>
     </Grid>
 </UserControl>

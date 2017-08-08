@@ -501,29 +501,47 @@ namespace SCA.WPF
         {
             if (param != null)
             {
-                if ((bool)param)//true需要重新加载数据
+                switch (param.GetType().ToString().ToUpper())
                 {
-                    List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
-                    lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
-                    vm.SetNavigatingViewModel(lstProject);
-                    this.DataContext = vm;
-                    Navigator.DataContext = vm.NavigatingViewModel;
-                    vm.NavigatingViewModel.Initialize(lstProject, param);
-                    CreateControllerUserControl.Visibility = Visibility.Collapsed;
-                    CreateViewArea.Visibility = Visibility.Collapsed;
-                    this.DetailsPane.Visibility = Visibility.Visible;
-                    CreateViewArea.Children.Clear();
+                    case "SCA.MODEL.CONTROLLERMODEL":
+                        { 
+                            List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+                            lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
+                            vm.SetNavigatingViewModel(lstProject);
+                            this.DataContext = vm;
+                            Navigator.DataContext = vm.NavigatingViewModel;
+                            vm.NavigatingViewModel.Initialize(lstProject, param);
+                            CreateControllerUserControl.Visibility = Visibility.Collapsed;
+                            CreateViewArea.Visibility = Visibility.Collapsed;
+                            this.DetailsPane.Visibility = Visibility.Visible;
+                            CreateViewArea.Children.Clear();
+                        }
+                        break;
+                    case "SYSTEM.BOOLEAN":
+                        { 
+                            if ((bool)param)//true需要重新加载数据
+                            {
+                                List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+                                lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
+                                vm.SetNavigatingViewModel(lstProject);
+                                this.DataContext = vm;
+                                Navigator.DataContext = vm.NavigatingViewModel;
+                                vm.NavigatingViewModel.Initialize(lstProject, param);
+                                CreateControllerUserControl.Visibility = Visibility.Collapsed;
+                                CreateViewArea.Visibility = Visibility.Collapsed;
+                                this.DetailsPane.Visibility = Visibility.Visible;
+                                CreateViewArea.Children.Clear();
+                            }
+                            else
+                            {
+                                CreateControllerUserControl.Visibility = Visibility.Collapsed;
+                                CreateViewArea.Visibility = Visibility.Collapsed;
+                                this.DetailsPane.Visibility = Visibility.Visible;
+                                CreateViewArea.Children.Clear();
+                            }
+                        }
+                        break;
                 }
-                else
-                {
-                    CreateControllerUserControl.Visibility = Visibility.Collapsed;
-                    CreateViewArea.Visibility = Visibility.Collapsed;
-                    this.DetailsPane.Visibility = Visibility.Visible;
-                    CreateViewArea.Children.Clear();
-                }
-
-                
-                
             }
             else
             { 

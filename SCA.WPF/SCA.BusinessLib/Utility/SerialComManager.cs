@@ -101,15 +101,21 @@ namespace SCA.BusinessLib.Utility
 
         public void Data_Received(object sender, SerialDataReceivedEventArgs e)
         {
-            //retrieve number of bytes in the buffer
-            int bytes = _serialPort.BytesToRead;
-            //create a byte array to hold the awaiting data
-            byte[] comBuffer = new byte[bytes];
-            //read the data and store it
-            _serialPort.Read(comBuffer, 0, bytes);
-            _buffer = comBuffer;
-            ReceivedData(_buffer);
-
+            try
+            {
+                //retrieve number of bytes in the buffer
+                int bytes = _serialPort.BytesToRead;
+                //create a byte array to hold the awaiting data
+                byte[] comBuffer = new byte[bytes];
+                //read the data and store it
+                _serialPort.Read(comBuffer, 0, bytes);
+                _buffer = comBuffer;
+                ReceivedData(_buffer);
+            }
+            catch (Exception ex)
+            {
+                ClosePort();
+            }
             //display the data to the user
             // return comBuffer;
         }
@@ -146,6 +152,7 @@ namespace SCA.BusinessLib.Utility
                 {
                     //display error message
                     //'' DisplayData(MessageType.Error, ex.Message + "\n");
+                    ClosePort();
                 }
                 finally
                 {

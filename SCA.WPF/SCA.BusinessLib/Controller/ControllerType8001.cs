@@ -161,37 +161,230 @@ namespace SCA.BusinessLib.Controller
         
         public override void SendDeviceInfo()
         {
+            //if (DeviceInfoList != null)
+            //{
+            //    if (DeviceInfoList.Count > 0)
+            //    {
+            //        //List<byte[]> lstPackagesByteses = AssemblePackageBB(DeviceInfoList);
+            //        byte[] sendingData = AssemblePackageBB(DeviceInfoList[0]);
+            //        //int i = 0;
+            //        //while (i < lstPackagesByteses.Count)
+            //        //{
+            //        if (SendingCMD == "BB" && ReceivedBBConfirmCommand) //如果先前发送的BB命令，已收到66确认命令,则发送下一条数据
+            //        {
+            //            //if (lstPackagesByteses.Count > 0)
+            //            if (DeviceInfoList.Count > 0) //移除已发送的数据
+            //            {
+            //                //lstPackagesByteses.RemoveAt(0);
+            //                DeviceInfoList.RemoveAt(0);
+            //            }
+
+            //            if (DeviceInfoList.Count > 0)  //##edit 
+            //            {
+            //                sendingData = AssemblePackageBB(DeviceInfoList[0]);
+            //                SendingCMD = "BB";
+            //                //log.Info("Send BB Message && 66:");
+            //                ReceivedBBConfirmCommand = false;
+            //                SerialManager.WriteData(sendingData);
+
+            //            }
+            //            else
+            //            {
+            //                //需要发送设置完成
+            //                SendingCMD = "BA";
+            //                SerialManager.WriteData(base.AssemblePackageBA());
+            //                ReceivedBAConfirmCommand = false;
+            //                Status = ControllerStatus.DataSended;
+            //            }
+
+
+            //        }
+            //        else　//否则重发本条数据
+            //        {
+            //            if (sendingData != null)
+            //            {
+            //                SendingCMD = "BB";
+            //                // log.Info("Send BB Message && Without 66:");
+            //                SerialManager.WriteData(sendingData);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Status = ControllerStatus.DataSended;
+            //    }
+            //    // }
+            //    //Status = ControllerStatus.DataSended; //数据发送结束
+            //}
+            //else
+            //{
+            //    Status = ControllerStatus.DataSended;
+            //}
+            if (CurrentLoopForDownloadedDeviceInfo == null)
+            {
+                DeviceInfoList = Loops[0].GetDevices<DeviceInfo8001>().ToList<DeviceInfo8001>();
+            }
+
+            if (RemoveLoopWhenDeviceDownloaded())
+            {
+                if (Loops.Count > 0)
+                {
+                    DeviceInfoList = Loops[0].GetDevices<DeviceInfo8001>().ToList<DeviceInfo8001>();
+                }
+                else
+                {
+                    DeviceInfoList = null;
+                }
+            }
             if (DeviceInfoList != null)
             {
                 if (DeviceInfoList.Count > 0)
                 {
-                    //List<byte[]> lstPackagesByteses = AssemblePackageBB(DeviceInfoList);
+                    //List<byte[]> lstPackagesByteses = AssemblePackageBB(DeviceInfoList); //commented at 2017-04-05
                     byte[] sendingData = AssemblePackageBB(DeviceInfoList[0]);
+
+                    CurrentLoopForDownloadedDeviceInfo = DeviceInfoList[0].Loop;
+
                     //int i = 0;
                     //while (i < lstPackagesByteses.Count)
                     //{
                     if (SendingCMD == "BB" && ReceivedBBConfirmCommand) //如果先前发送的BB命令，已收到66确认命令,则发送下一条数据
                     {
-                        //if (lstPackagesByteses.Count > 0)
-                        if (DeviceInfoList.Count > 0) //移除已发送的数据
+                        if (DeviceInfoList.Count > 0)
                         {
-                            //lstPackagesByteses.RemoveAt(0);
                             DeviceInfoList.RemoveAt(0);
+                            DownloadedDeviceInfoAccumulatedAmountInCurrentLoop++; //已下传的器件记数 2017-04-06
                         }
-
-                        if (DeviceInfoList.Count > 0)  //##edit 
+                        //i++;
+                        if (DeviceInfoList.Count > 0)
                         {
                             sendingData = AssemblePackageBB(DeviceInfoList[0]);
                             SendingCMD = "BB";
-                            //log.Info("Send BB Message && 66:");
+                            //     log.Info("Send BB Message && 66:");
                             ReceivedBBConfirmCommand = false;
                             SerialManager.WriteData(sendingData);
 
                         }
                         else
                         {
-                            //需要发送设置完成
+                            SetStatusForAllDevicesDownloaded();
                             SendingCMD = "BA";
+                            SerialManager.WriteData(base.AssemblePackageBA()); //发送设置完成
+                            //Status = ControllerStatus.DataSended;
+                            ReceivedBAConfirmCommand = false;
+
+
+                        }
+                        //System.Threading.Thread.Sleep (2000);
+                    }
+                    else　//否则重发本条数据
+                    {
+                        //if (lstPackagesByteses.Count > 0)
+                        if (sendingData != null)
+                        {
+                            SendingCMD = "BB";
+                            // log.Info("Send BB Message && Without 66:");
+                            SerialManager.WriteData(sendingData);
+                        }
+                        //System.Threading.Thread.Sleep(2000);
+                    }
+                    //  }            
+                }
+                else
+                {
+                    Status = ControllerStatus.DataSended;
+                }
+            }
+            else
+            {
+                Status = ControllerStatus.DataSended;
+            }
+        }
+        //注释2017-08-08
+        //public override void SendStandardLinkageConfigInfo()
+        //{
+        //    if (StandardLinkageConfigList.Count > 0)
+        //    {
+
+        //        byte[] sendingData = AssemblePackageBC(StandardLinkageConfigList[0]);
+
+        //        if (SendingCMD == "BC" && ReceivedBCConfirmCommand) //如果先前发送的BC命令，已收到66确认命令,则发送下一条数据
+        //        {
+        //            //if (lstPackagesByteses.Count > 0)
+        //            if (StandardLinkageConfigList.Count > 0) //移除已发送的数据
+        //            {
+
+        //                StandardLinkageConfigList.RemoveAt(0);
+        //            }
+
+        //            if (StandardLinkageConfigList.Count > 0)  //##edit 
+        //            {
+        //                sendingData = AssemblePackageBC(StandardLinkageConfigList[0]);
+        //                SendingCMD = "BC";
+        //               // log.Info("Send BC Message && 66:");
+        //                ReceivedBCConfirmCommand = false;
+        //                SerialManager.WriteData(sendingData);
+
+        //            }
+        //            else
+        //            {
+        //                SendingCMD = "BA";
+        //                //需要发送设置完成
+        //                SerialManager.WriteData(base.AssemblePackageBA());
+        //                ReceivedBAConfirmCommand = false;
+        //                Status = ControllerStatus.DataSended;
+        //            }
+        //        }
+        //        else　//否则重发本条数据
+        //        {
+        //            if (sendingData != null)
+        //            {
+        //                SendingCMD = "BC";
+        //              //  log.Info("Send BC Message && Without 66:");
+        //                SerialManager.WriteData(sendingData);
+        //            }
+        //        }
+
+        //    }
+        //    else        
+        //    {
+        //        Status = ControllerStatus.DataSended;
+        //    }
+            
+        //}
+        /// <summary>
+        /// 下传混合组态信息
+        /// </summary>
+        public override void SendMixedLinkageConfigInfo()
+        {
+            if (MixedLinkageConfigList != null)
+            {
+                if (MixedLinkageConfigList.Count > 0)
+                {
+
+                    byte[] sendingData = AssemblePackageBD(MixedLinkageConfigList[0]);
+
+                    if (SendingCMD == "BD" && ReceivedBDConfirmCommand) //如果先前发送的BC命令，已收到66确认命令,则发送下一条数据
+                    {
+                        //if (lstPackagesByteses.Count > 0)
+                        if (MixedLinkageConfigList.Count > 0) //移除已发送的数据
+                        {
+                            MixedLinkageConfigList.RemoveAt(0);
+                        }
+
+                        if (MixedLinkageConfigList.Count > 0)  //##edit 
+                        {
+                            sendingData = AssemblePackageBD(MixedLinkageConfigList[0]);
+                            SendingCMD = "BD";
+                            //    log.Info("Send BD Message && 66:");
+                            ReceivedBDConfirmCommand = false;
+                            SerialManager.WriteData(sendingData);
+
+                        }
+                        else
+                        {
+                            SendingCMD = "BA";
+                            //需要发送设置完成
                             SerialManager.WriteData(base.AssemblePackageBA());
                             ReceivedBAConfirmCommand = false;
                             Status = ControllerStatus.DataSended;
@@ -203,129 +396,25 @@ namespace SCA.BusinessLib.Controller
                     {
                         if (sendingData != null)
                         {
-                            SendingCMD = "BB";
-                            // log.Info("Send BB Message && Without 66:");
+                            SendingCMD = "BD";
+                            // log.Info("Send BD Message && Without 66:");
                             SerialManager.WriteData(sendingData);
                         }
                     }
                 }
                 else
                 {
-                    Status = ControllerStatus.DataSended;
+                    //Status = ControllerStatus.DataSended;
+                    SetStatusForMixedLinkageConfigDownLoad();
+                    MixedLinkageConfigDownloaded = true;
                 }
-                // }
-                //Status = ControllerStatus.DataSended; //数据发送结束
             }
             else
             {
-                Status = ControllerStatus.DataSended;
-            }
-        }
-
-        public override void SendStandardLinkageConfigInfo()
-        {
-            if (StandardLinkageConfigList.Count > 0)
-            {
-
-                byte[] sendingData = AssemblePackageBC(StandardLinkageConfigList[0]);
-
-                if (SendingCMD == "BC" && ReceivedBCConfirmCommand) //如果先前发送的BC命令，已收到66确认命令,则发送下一条数据
-                {
-                    //if (lstPackagesByteses.Count > 0)
-                    if (StandardLinkageConfigList.Count > 0) //移除已发送的数据
-                    {
-
-                        StandardLinkageConfigList.RemoveAt(0);
-                    }
-
-                    if (StandardLinkageConfigList.Count > 0)  //##edit 
-                    {
-                        sendingData = AssemblePackageBC(StandardLinkageConfigList[0]);
-                        SendingCMD = "BC";
-                       // log.Info("Send BC Message && 66:");
-                        ReceivedBCConfirmCommand = false;
-                        SerialManager.WriteData(sendingData);
-
-                    }
-                    else
-                    {
-                        SendingCMD = "BA";
-                        //需要发送设置完成
-                        SerialManager.WriteData(base.AssemblePackageBA());
-                        ReceivedBAConfirmCommand = false;
-                        Status = ControllerStatus.DataSended;
-                    }
-                }
-                else　//否则重发本条数据
-                {
-                    if (sendingData != null)
-                    {
-                        SendingCMD = "BC";
-                      //  log.Info("Send BC Message && Without 66:");
-                        SerialManager.WriteData(sendingData);
-                    }
-                }
-
-            }
-            else        
-            {
-                Status = ControllerStatus.DataSended;
-            }
-            
-        }
-        /// <summary>
-        /// 下传混合组态信息
-        /// </summary>
-        public override void SendMixedLinkageConfigInfo()
-        {
-            if (MixedLinkageConfigList.Count > 0)
-            {
-
-                byte[] sendingData = AssemblePackageBD(MixedLinkageConfigList[0]);
-
-                if (SendingCMD == "BD" && ReceivedBDConfirmCommand) //如果先前发送的BC命令，已收到66确认命令,则发送下一条数据
-                {
-                    //if (lstPackagesByteses.Count > 0)
-                    if (MixedLinkageConfigList.Count > 0) //移除已发送的数据
-                    {
-                        MixedLinkageConfigList.RemoveAt(0);
-                    }
-
-                    if (MixedLinkageConfigList.Count > 0)  //##edit 
-                    {
-                        sendingData = AssemblePackageBD(MixedLinkageConfigList[0]);
-                        SendingCMD = "BD";
-                    //    log.Info("Send BD Message && 66:");
-                        ReceivedBDConfirmCommand = false;
-                        SerialManager.WriteData(sendingData);
-
-                    }
-                    else
-                    {
-                        SendingCMD = "BA";
-                        //需要发送设置完成
-                        SerialManager.WriteData(base.AssemblePackageBA());
-                        ReceivedBAConfirmCommand = false;
-                        Status = ControllerStatus.DataSended;
-                    }
-
-
-                }
-                else　//否则重发本条数据
-                {
-                    if (sendingData != null)
-                    {
-                        SendingCMD = "BD";
-                       // log.Info("Send BD Message && Without 66:");
-                        SerialManager.WriteData(sendingData);
-                    }
-                }
-            }
-            else        
-            {
-                Status = ControllerStatus.DataSended;
-            }
-            
+                //Status = ControllerStatus.DataSended;
+                SetStatusForMixedLinkageConfigDownLoad();
+                MixedLinkageConfigDownloaded = true;
+            }            
         }
         public override void SendGeneralLinkageConfigInfo()
         {
@@ -577,12 +666,12 @@ namespace SCA.BusinessLib.Controller
                 sendData[5] = 0x30;　//数据长度 ?? 暂定为01 ??
                 sendData[6] = 0xBB;　//发送器件命令
                 //sendData[7] = Convert.ToByte(deviceInfo.Count);　//器件总数
-                sendData[7] = Convert.ToByte(0x13);　//器件总数
+                sendData[7] = Convert.ToByte(DownloadedDeviceInfoTotalAmountInCurrentLoop);　//器件总数
                 sendData[8] = Convert.ToByte(singleDevInfo.Loop.Controller.MachineNumber);　//控制器号
-                sendData[9] = Convert.ToByte(singleDevInfo.Loop.Code);　//回路号
+                sendData[9] = Convert.ToByte(singleDevInfo.Loop.SimpleCode);　//回路号
                 sendData[10] = Convert.ToByte(singleDevInfo.Code.Substring(singleDevInfo.Loop.Code.Length, 3));　//地编号
                 //singleDevInfo.Loop.Controller.MachineNumber.Length + 
-                sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable==true?1:0) * 4 + singleDevInfo.SensitiveLevel-1);//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
+                sendData[11] = Convert.ToByte(GetDevType(Convert.ToInt16(singleDevInfo.TypeCode), Convert.ToInt16(singleDevInfo.Feature == null ? 0 : singleDevInfo.Feature)) * 8 + (singleDevInfo.Disable == true ? 1 : 0) * 4 + ((singleDevInfo.SensitiveLevel == null || singleDevInfo.SensitiveLevel == 0) ? 0 : (singleDevInfo.SensitiveLevel - 1)));//器件状态（灵敏度、屏蔽）;NT8001还有特性;根据这些值转换为“器件内部编码”
 
                 //GetDevType(CInt(leixing)) * 8 + geli * 4
                 sendData[12] = Convert.ToByte(singleDevInfo.TypeCode); //设备类型
@@ -593,17 +682,19 @@ namespace SCA.BusinessLib.Controller
                 }
 
                 sendData[13] = Convert.ToByte("00"); //输出组1高位
-                sendData[14] = Convert.ToByte(singleDevInfo.LinkageGroup1); //输出组1低位
+                //sendData[14] = Convert.ToByte(singleDevInfo.LinkageGroup1 == null ? "" : singleDevInfo.LinkageGroup1); //输出组1低位
+                sendData[14] = Convert.ToByte(singleDevInfo.LinkageGroup1.NullToZero()); //输出组1 低位
 
                 sendData[15] = Convert.ToByte("00"); //输出组2 高位
-                sendData[16] = Convert.ToByte(singleDevInfo.LinkageGroup2); //输出组2 低位
+                //sendData[16] = Convert.ToByte(singleDevInfo.LinkageGroup2== null ? "" :singleDevInfo.LinkageGroup2); //输出组2 低位
+                sendData[16] = Convert.ToByte(singleDevInfo.LinkageGroup2.NullToZero()); //输出组1 低位
 
-                sendData[17] = Convert.ToByte("00"); //输出组2 高位
-                sendData[18] = Convert.ToByte(singleDevInfo.LinkageGroup3); //输出组2 低位
+                sendData[17] = Convert.ToByte("00"); //输出组3 高位
+                //sendData[18] = Convert.ToByte(singleDevInfo.LinkageGroup3== null ? "" :singleDevInfo.LinkageGroup3); //输出组3 低位
+                sendData[18] = Convert.ToByte(singleDevInfo.LinkageGroup3.NullToZero()); //输出组1 低位
 
 
-
-                sendData[19] = Convert.ToByte(singleDevInfo.DelayValue); //延时
+                sendData[19] = Convert.ToByte(singleDevInfo.DelayValue == null ? 0 : singleDevInfo.DelayValue); //延时
                 //                DipSkpAddr = Trim(.Text)
                 //If DipSkpAddr = "" Then DipSkpAddr = 0
 
@@ -623,7 +714,7 @@ namespace SCA.BusinessLib.Controller
                 //将地点信息逐字符取出，将每个字符转换为ANSI代码后，存入sendData数据中；
                 //Convert.ToBase64String();     
                 int startIndex = 25;
-                char[] charArrayLocation = singleDevInfo.Location.ToArray();
+                char[] charArrayLocation = singleDevInfo.Location==null?"".ToArray():singleDevInfo.Location.ToArray();
                 //采用Base64编码传递数据
                 System.Text.Encoding ascii = System.Text.Encoding.GetEncoding(54936);
                 for (int j = 0; j < charArrayLocation.Length; j++)

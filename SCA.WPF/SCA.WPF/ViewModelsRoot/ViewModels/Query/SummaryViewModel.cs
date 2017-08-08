@@ -223,14 +223,12 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                             //下传所有回路信息
                       //      foreach (var linkage in TheController.Loops)
                            // {
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                                //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
                                 List<LoopModel> lstLoopsModel = new List<LoopModel>();
                                 lstLoopsModel = TheController.Loops.ToList<LoopModel>();
                                 ((ControllerType8036)iCC.TheControllerType).Loops = lstLoopsModel;
-                                //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = linkage.GetDevices<DeviceInfo8036>().ToList<DeviceInfo8036>();
-                            
+                                //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = linkage.GetDevices<DeviceInfo8036>().ToList<DeviceInfo8036>();                            
                                 ((ControllerType8036)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-
                                 iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
                                 iCC.TheControllerType.Status = ControllerStatus.DataSending;    
                        //     }
@@ -249,37 +247,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                         if (iCC.TheControllerType.ControllerType == ControllerType.NT8001) //如果控制器类型不相符，则不执行操作
                         {
                             //下传所有回路信息
-                            foreach (var l in TheController.Loops)
-                            {
+                            //foreach (var l in TheController.Loops)
+                            //{
                                 iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                                ((ControllerType8001)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8001>();
-                                iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+                                List<LoopModel> lstLoopsModel = new List<LoopModel>();
+                                lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+                                //((ControllerType8001)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8001>();
+                                ((ControllerType8001)iCC.TheControllerType).Loops = lstLoopsModel;
+                                ((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
+                                ((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig.ToList<LinkageConfigMixed>();
+                                ((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig.ToList<LinkageConfigGeneral>();
+                                ((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard.ToList<ManualControlBoard>();
+                                iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
                                 iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            }
+                            //}
+                            ////下传所有标准组态信息
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            //((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
+                            //iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                            //下传所有标准组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                            ////下传所有混合组态信息
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            //((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
+                            //iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                            //下传所有混合组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                            ////下传所有通用组态信息
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            //((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
+                            //iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                            //下传所有通用组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-
-                            //下传所有网络手动盘信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+                            ////下传所有网络手动盘信息
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+                            //((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
+                            //iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
+                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
                         }
 
                         #endregion 
