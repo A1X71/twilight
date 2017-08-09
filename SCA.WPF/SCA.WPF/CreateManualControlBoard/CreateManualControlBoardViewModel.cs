@@ -93,7 +93,7 @@ namespace SCA.WPF.CreateManualControlBoard
                 {
                     maxSubBoardNumber = ControllerConfigManager.GetConfigObject(TheController.Type).GetMaxAmountForSubBoardNoInManualControlBoardConfig();   
                 }
-                for (int i = 1; i < maxSubBoardNumber; i++)
+                for (int i = 1; i <= maxSubBoardNumber; i++)
                 {
                     _subBoardList.Add(i);
                 }

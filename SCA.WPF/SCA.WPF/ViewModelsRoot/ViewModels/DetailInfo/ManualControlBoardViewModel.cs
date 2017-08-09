@@ -332,7 +332,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
 
-
+        private SCA.Interface.IControllerConfig Config
+        {
+            get
+            {
+                return ControllerConfigManager.GetConfigObject(Controller.Type);
+            }
+        }
         public string Error
         {
             get { return String.Empty; }
@@ -342,8 +348,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                ControllerConfig8001 config = new ControllerConfig8001();
-                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = config.GetManualControlBoardRegularExpression(8);
+                
+                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = Config.GetManualControlBoardRegularExpression(this.Controller.DeviceAddressLength);                
                 SCA.Model.RuleAndErrorMessage rule;
                 System.Text.RegularExpressions.Regex exminator;
                 string errorMessage = String.Empty;

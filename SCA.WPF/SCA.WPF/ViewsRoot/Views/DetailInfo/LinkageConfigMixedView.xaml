@@ -101,6 +101,8 @@
                      CanUserAddRows="False"          
                      CanUserReorderColumns="False"
                      CanUserSortColumns="False"
+                     EnableRowVirtualization="True"   
+                     EnableColumnVirtualization="True"
                      DetailType="{Binding Path=DetailType,Mode=OneWay}"
                      ItemsSource="{Binding Path=MixedLinkageConfigInfoObservableCollection}">
                 <local:DetailInfoGridControl.Resources>                    
@@ -170,6 +172,7 @@
                         <col:ArrayList>
                             <sys:String>本系统</sys:String>
                             <sys:String>它系统</sys:String>
+                            <sys:String>全系统</sys:String>
                         </col:ArrayList>
                     </dg:DataGridComboBoxColumn.ItemsSource>
                 </dg:DataGridComboBoxColumn>
@@ -217,6 +220,7 @@
                         <col:ArrayList>
                             <sys:String>本系统</sys:String>
                             <sys:String>它系统</sys:String>
+                            <sys:String>全系统</sys:String>
                         </col:ArrayList>
                     </dg:DataGridComboBoxColumn.ItemsSource>
                 </dg:DataGridComboBoxColumn>

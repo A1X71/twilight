@@ -101,9 +101,10 @@ namespace SCA.Interface
        /// 获取标准组态有效性验证表达式及错误信息
        /// </summary>
        /// <returns></returns>
-       Dictionary<string, SCA.Model.RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression();
-       //Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength); //由于仅8001需要此配置，暂不需要接口
-       //Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength); //由于仅8001需要此配置，暂不需要接口
+       Dictionary<string, SCA.Model.RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength);
+       Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength); 
+       Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength); 
+       Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength); 
        List<Model.DeviceType> GetALLDeviceTypeInfo(int? projectID);
        //获取控制器可用器件类型
        List<DeviceType> GetDeviceTypeInfo();

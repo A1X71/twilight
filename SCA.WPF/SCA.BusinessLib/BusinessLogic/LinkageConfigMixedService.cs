@@ -224,6 +224,9 @@ namespace SCA.BusinessLib.BusinessLogic
                                             case "它系统":
                                                 result.CategoryA = 1;
                                                 break;
+                                            case "全系统":
+                                                result.CategoryA = 2;
+                                                break;
                                         }
                                     }
                                     break;
@@ -261,6 +264,9 @@ namespace SCA.BusinessLib.BusinessLogic
                                                 break;
                                             case "它系统":
                                                 result.CategoryB = 1;
+                                                break;
+                                            case "全系统":
+                                                result.CategoryB = 2;
                                                 break;
                                         }
                                     }

@@ -95,12 +95,12 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         /// <summary>
-        /// 取得8036可以设置的器件类型信息
+        /// 取得8053可以设置的器件类型信息
         /// </summary>
         /// <returns></returns>
         public string GetDeviceTypeCodeInfo()
         {
-            string strMatchingDeviceNo = "0,9,31,32,36,89";
+            string strMatchingDeviceNo = "0,12,87,90,91,92,93,101,102,103,104";
             return strMatchingDeviceNo;
         }
         /// <summary>
@@ -173,7 +173,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <returns></returns>
         public short GetMaxMachineAmountValue(int deviceAddress)
         {
-            return 95;
+            return 199;
         }
         /// <summary>
         /// 起始为1
@@ -181,7 +181,7 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <returns></returns>
         public short GetMaxDeviceAmountValue()
         {
-            return 128;
+            return 252;
         }
 
 
@@ -195,24 +195,10 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public short GetMaxAmountForStandardLinkageConfig()
         {
-            return 150;
+            return 8000;
         }
 
-        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression()
-        {
-            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
-            //输出组号
-            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^(00[1-9]|0[0-9][0-9]|1[0-4][0-9]|150)$", "输出组取值范围为000~150"));
-
-            //联动模块 考虑是手输还是选择，如果选择就不需要验证
-
-            //动作常数
-            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
-            //联动组 与输出组号相同            
-
-            //备注
-            return dictExpressionAndInfo;
-        }
+        
 
 
         public short GetMaxAmountForMixedLinkageConfig()
@@ -227,7 +213,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public short GetMaxAmountForManualControlBoardConfig()
         {
-            return 6804;
+            return 63;
         }
 
 
@@ -267,19 +253,14 @@ namespace SCA.BusinessLib.BusinessLogic
             //器件类型为“下拉框”，不需要验证
 
             //屏蔽
-            dictDeviceInfoRE.Add("Disable", new RuleAndErrorMessage("^([01])$", "屏蔽取值范围为0或1"));
+            //dictDeviceInfoRE.Add("Disable", new RuleAndErrorMessage("^([true]|[false])$", "屏蔽取值范围为0或1"));
 
             //延时
-            dictDeviceInfoRE.Add("DelayValue", new RuleAndErrorMessage("^([1-9]|[1-9][1-9]|1[0-7][0-9]|180)$", "延时取值范围为1~180"));
+            dictDeviceInfoRE.Add("DelayValue", new RuleAndErrorMessage("^([0-9]|[1-9][1-9]|1[0-7][0-9]|180)$", "延时取值范围为0~180"));
 
-            //预警浓度
-            dictDeviceInfoRE.Add("ForcastValue", new RuleAndErrorMessage("^(([0-9]|[1-9][0-9]|100){1})(\\.[0-9]){0,1}$", "预警浓度取值范围为0~100.9, 1位小数"));
-
-            //报警浓度
-            dictDeviceInfoRE.Add("AlertValue", new RuleAndErrorMessage("^(([0-9]|[1-9][0-9]|100){1})(\\.[0-9]){0,1}$", "报警浓度取值范围为0~100.9, 1位小数"));
-
-            //输出组 001~150
-            dictDeviceInfoRE.Add("StandardLinkageGroup", new RuleAndErrorMessage("^(00[1-9]|0[0-9][0-9]|1[0-4][0-9]|150)$", "输出组取值范围为000~150"));
+        
+            //输出组 0001~8000
+            dictDeviceInfoRE.Add("StandardLinkageGroup", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
             
 
             //允许楼、区、层、房间号同时为0，如果单独为0时，在其它规则里检查2017-04-20
@@ -317,17 +298,17 @@ namespace SCA.BusinessLib.BusinessLogic
         }
         public short GetMaxAmountForBoardNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public short GetMaxAmountForSubBoardNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public short GetMaxAmountForKeyNoInManualControlBoardConfig()
         {
-            throw new NotImplementedException();
+            return 63;
         }
 
 
@@ -395,6 +376,69 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
+
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
+            //dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^([0-9]{" + addressLength.ToString() + "})[,~]([0-9]{" + addressLength.ToString() + "})$", "格式为<器件编码,~器件编码>，器件编码长度为" + addressLength.ToString() + "位"));
+            dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^([0-9]{"+addressLength.ToString()+"})[,~]([0-9]{"+addressLength.ToString()+"})$", "格式为<器件编码,~器件编码>，器件编码长度为" + addressLength.ToString() + "位"));            
+            
+            //联动组 与输出组号相同            
+
+            //备注
+            dictExpressionAndInfo.Add("Memo", new RuleAndErrorMessage("^[\\s\\S]{30}$", "长度为30个字符"));   
+            return dictExpressionAndInfo;
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //编号 1-6804
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-6][0-7][0-9][0-9]|680[0-4])$", "输出组取值范围为0000~6804"));
+
+            //板卡号
+            dictExpressionAndInfo.Add("BoardNo", new RuleAndErrorMessage("^([0-8])$", "板卡号范围为0~8"));
+
+            //手盘号
+            dictExpressionAndInfo.Add("SubBoardNo", new RuleAndErrorMessage("^([1])$", "手盘号范围为1"));
+
+            //手键号
+            dictExpressionAndInfo.Add("KeyNo", new RuleAndErrorMessage("^([1-9]|[1-5][0-9]|6[0-3])$", "手键号范围为1~63"));
+
+            //if (addressLength == 7) //7位地址
+            //{
+            //    dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^[0-9]{7}$", "地编号最长7位"));
+            //}
+            //else //8位地址
+            //{
+            //    //地编号
+            //    dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^[0-9]{8}$", "地编号最长8位"));
+            //}
+
+
+
+            return dictExpressionAndInfo;
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
             throw new NotImplementedException();
         }

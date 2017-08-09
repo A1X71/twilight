@@ -464,6 +464,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     case "它系统":
                         this.CategoryA = 1;
                         break;
+                    case "全系统":
+                        this.CategoryA = 2;
+                        break;
                 }
             }
         }
@@ -484,6 +487,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     case "它系统":
                         this.CategoryB = 1;
                         break;
+                    case "全系统":
+                        this.CategoryB = 2;
+                        break;
                 }
             }
         }
@@ -498,6 +504,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 case 1:
                     CategoryAString = "它系统";
                     break;
+                case 2:
+                    CategoryAString = "全系统";
+                    break;
             }
             switch (this.CategoryB)
             {
@@ -506,6 +515,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     break;
                 case 1:
                     CategoryBString = "它系统";
+                    break;
+                case 2:
+                    CategoryBString = "全系统";
                     break;
             }
         }
@@ -547,7 +559,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
 
-
+        private SCA.Interface.IControllerConfig Config
+        {
+            get
+            {
+                return ControllerConfigManager.GetConfigObject(Controller.Type);
+            }
+        }
         public string Error
         {
             get { return string.Empty; }
@@ -556,9 +574,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string this[string columnName]
         {
             get
-            {
-                ControllerConfig8001 config = new ControllerConfig8001();
-                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = config.GetGeneralLinkageConfigRegularExpression(8);
+            {               
+                
+                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = Config.GetMixedLinkageConfigRegularExpression(this.Controller.DeviceAddressLength);
                 SCA.Model.RuleAndErrorMessage rule;
                 System.Text.RegularExpressions.Regex exminator;
                 string errorMessage = String.Empty;
@@ -1046,8 +1064,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     //转换出错，不作任何处理
                 }
             }
-            AddMoreLinesUserControlVisibility = Visibility.Collapsed;
-            
+           AddMoreLinesUserControlVisibility = Visibility.Collapsed;            
         }
         public void DownloadExecute()
         {

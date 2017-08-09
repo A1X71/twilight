@@ -203,21 +203,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return 150;
         }
 
-        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression()
-        {
-            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
-            //输出组号
-            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^(00[1-9]|0[0-9][0-9]|1[0-4][0-9]|150)$", "输出组取值范围为000~150"));
-
-            //联动模块 考虑是手输还是选择，如果选择就不需要验证
-
-            //动作常数
-            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
-            //联动组 与输出组号相同            
-
-            //备注
-            return dictExpressionAndInfo;
-        }
+        
 
 
         public short GetMaxAmountForMixedLinkageConfig()
@@ -400,6 +386,42 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^(00[1-9]|0[0-9][0-9]|1[0-4][0-9]|150)$", "输出组取值范围为000~150"));
+
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
+            dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^[0-9]{" + addressLength.ToString() + "}$", "必须为数字，长度为" + addressLength.ToString() + "位"));
+            //联动组 与输出组号相同            
+
+            //备注
+            dictExpressionAndInfo.Add("Memo", new RuleAndErrorMessage("^[\\s\\S]{30}$", "长度为30个字符"));   
+            return dictExpressionAndInfo;
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
             throw new NotImplementedException();
         }

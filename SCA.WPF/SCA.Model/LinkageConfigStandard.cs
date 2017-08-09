@@ -53,7 +53,7 @@ namespace SCA.Model
         public string LinkageNo1 { get; set; }
         public string LinkageNo2 { get; set; }
         public string LinkageNo3 { get; set; }
-
+        public string Memo { get; set; }
         /// <summary>
         /// 取得所有的器件信息
         /// </summary>

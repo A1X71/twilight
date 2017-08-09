@@ -163,72 +163,75 @@
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块1" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo1}" 
+                                       Binding="{Binding Path=DeviceNo1, ValidatesOnDataErrors=True}" 
+                                       EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块2" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo2}" 
+                                       Binding="{Binding Path=DeviceNo2, ValidatesOnDataErrors=True}" 
+                                       EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块3" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo3}" 
+                                       Binding="{Binding Path=DeviceNo3, ValidatesOnDataErrors=True}" 
+                                       EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块4" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo4}" 
+                                       Binding="{Binding Path=DeviceNo4, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块5" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo5}" 
+                                       Binding="{Binding Path=DeviceNo5, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块6" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo6}" 
+                                       Binding="{Binding Path=DeviceNo6, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块7" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo7}" 
+                                       Binding="{Binding Path=DeviceNo7, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块8" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo8}" 
+                                       Binding="{Binding Path=DeviceNo8, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块9" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo9}" 
+                                       Binding="{Binding Path=DeviceNo9, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块10" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo10}" 
+                                       Binding="{Binding Path=DeviceNo10, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块11" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo11}" 
+                                       Binding="{Binding Path=DeviceNo11, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输入模块12" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=DeviceNo12}" 
+                                       Binding="{Binding Path=DeviceNo12, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输出模块1" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=OutputDevice1}" 
+                                       Binding="{Binding Path=OutputDevice1, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn Width="Auto" 
                                        Header="输出模块2" 
                                        Visibility="{Binding  Data.IsVisualColumnGroup3, Source={StaticResource proxy} }"
-                                       Binding="{Binding Path=OutputDevice2}" 
+                                       Binding="{Binding Path=OutputDevice2, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
 
                     <!-- NT8053 End -->
@@ -258,14 +261,20 @@
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />
-                <dg:DataGridTextColumn Width="*" 
+                    <dg:DataGridTextColumn  Width="Auto" 
                                        Header="联动组3" 
                                        Binding="{Binding Path=LinkageNo3, ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        />
+                    <dg:DataGridTextColumn Width="*" 
+                                       Header="备注" 
+                                       Binding="{Binding Path=Memo, ValidatesOnDataErrors=True}" 
+                                       ElementStyle="{StaticResource tb_ElementStyle}"
+                                       EditingElementStyle="{StaticResource errorStyle}"
+                                       />
 
-            </local:DetailInfoGridControl.Columns>
+                </local:DetailInfoGridControl.Columns>
             </local:DetailInfoGridControl>
             <views:AddMoreLinesView x:Name="ucMoreLines" Visibility="{Binding Path=AddMoreLinesUserControlVisibility}" Width="300"  VerticalAlignment="Top"  Margin="20,20,0,0">
                 <i:Interaction.Behaviors>

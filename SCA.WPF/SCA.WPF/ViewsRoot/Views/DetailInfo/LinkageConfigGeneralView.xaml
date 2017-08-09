@@ -140,15 +140,16 @@
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>
-                    <!--<dg:DataGridComboBoxColumn Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
+                    <dg:DataGridComboBoxColumn Header="A类别" SelectedItemBinding="{Binding Path=CategoryAString}"
                                                Visibility="{Binding  Data.IsVisualColumnGroup, Source={StaticResource proxy} }">
                         <dg:DataGridComboBoxColumn.ItemsSource>
                             <col:ArrayList>
                                 <sys:String>本系统</sys:String>
                                 <sys:String>它系统</sys:String>
+                                <sys:String>全系统</sys:String>
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
-                    </dg:DataGridComboBoxColumn>-->
+                    </dg:DataGridComboBoxColumn>
                     <dg:DataGridTextColumn
                                        Header="A楼号" 
                                        Binding="{Binding Path=BuildingNoA, ValidatesOnDataErrors=True}" 

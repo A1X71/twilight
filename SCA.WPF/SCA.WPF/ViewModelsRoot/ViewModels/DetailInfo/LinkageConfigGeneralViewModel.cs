@@ -300,6 +300,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     case "它系统":
                         this.CategoryA = 1;
                         break;
+                    case "全系统":
+                        this.CategoryA = 2;
+                        break;
                 }
             }
         }
@@ -313,6 +316,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                     break;
                 case 1:
                     CategoryAString = "它系统";
+                    break;
+                case 2:
+                    CategoryAString = "全系统";
                     break;
             }
         }
@@ -353,7 +359,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 ItemEndEdit(this);
             }
         }
-
+        private SCA.Interface.IControllerConfig Config
+        {
+            get
+            {
+                return ControllerConfigManager.GetConfigObject(Controller.Type);
+            }
+        }
 
 
         public string Error
@@ -364,9 +376,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string this[string columnName]
         {
             get
-            {
-                ControllerConfig8001 config = new ControllerConfig8001();
-                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = config.GetGeneralLinkageConfigRegularExpression(8);
+            {                
+                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = Config.GetGeneralLinkageConfigRegularExpression(this.Controller.DeviceAddressLength);
                 SCA.Model.RuleAndErrorMessage rule;
                 System.Text.RegularExpressions.Regex exminator;
                 string errorMessage = String.Empty;

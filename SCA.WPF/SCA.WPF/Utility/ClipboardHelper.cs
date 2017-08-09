@@ -77,44 +77,51 @@ namespace SCA.WPF.Utility
         private static string[] ParseCsvOrTextFormat(string value, bool isCSV)
         {
             List<string> outputList = new List<string>();
-
-            char separator = isCSV ? ',' : '\t';
-            int startIndex = 0;
-            int endIndex = 0;
-
-            for (int i = 0; i < value.Length; i++)
+            if (value[0] == '\"' && value[value.Length-1] == '\"')//对于包含逗号的字符串进行特殊处理
             {
-                char ch = value[i];
-                if (ch == separator)
+                outputList.Add(value.Substring(1, value.Length - 2));
+            }
+            else
+            { 
+                char separator = isCSV ? ',' : '\t';
+                int startIndex = 0;
+                int endIndex = 0;
+                for (int i = 0; i < value.Length; i++)
                 {
-                    outputList.Add(value.Substring(startIndex, endIndex - startIndex));
-
-                    startIndex = endIndex + 1;
-                    endIndex = startIndex;
-                }
-                else if (ch == '\"' && isCSV)
-                {
-                    // skip until the ending quotes
-                    i++;
-                    if (i >= value.Length)
+                    char ch = value[i];
+                    if (ch == separator)
                     {
-                        throw new FormatException(string.Format("value: {0} had a format exception", value));
-                    }
-                    char tempCh = value[i];
-                    while (tempCh != '\"' && i < value.Length)
-                        i++;
+                        outputList.Add(value.Substring(startIndex, endIndex - startIndex).Trim('\"'));
 
-                    endIndex = i;
-                }
-                else if (i + 1 == value.Length)
-                {
-                    // add the last value
-                    outputList.Add(value.Substring(startIndex));
-                    break;
-                }
-                else
-                {
-                    endIndex++;
+                        startIndex = endIndex + 1;
+                        endIndex = startIndex;
+                    }
+                    else if (ch == '\"' && isCSV)
+                    {
+                        // skip until the ending quotes
+                        i++;
+                        if (i >= value.Length)
+                        {
+                            throw new FormatException(string.Format("value: {0} had a format exception", value));
+                        }
+                        char tempCh = value[i];
+                        while (tempCh != '\"' && i < value.Length)
+                        {                        
+                            i++;
+                            tempCh = value[i];
+                        }                    
+                        endIndex = i+1;
+                    }
+                    else if (i + 1 == value.Length)
+                    {
+                        // add the last value
+                        outputList.Add(value.Substring(startIndex));
+                        break;
+                    }
+                    else
+                    {
+                        endIndex++;
+                    }
                 }
             }
             return outputList.ToArray();

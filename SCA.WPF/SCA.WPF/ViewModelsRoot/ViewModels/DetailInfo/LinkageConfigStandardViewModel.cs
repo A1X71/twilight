@@ -58,6 +58,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             this.LinkageNo1 = linkageConfigStandard.LinkageNo1;
             this.LinkageNo2 = linkageConfigStandard.LinkageNo2;
             this.LinkageNo3 = linkageConfigStandard.LinkageNo3;
+            this.Memo = linkageConfigStandard.Memo;
 
         }
         public LinkageConfigStandard ToLinkageConfigStandard()
@@ -86,6 +87,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             linkageConfigStandard.LinkageNo1 = this.LinkageNo1;
             linkageConfigStandard.LinkageNo2 = this.LinkageNo2;
             linkageConfigStandard.LinkageNo3 = this.LinkageNo3;
+            linkageConfigStandard.Memo = this.Memo;
             return linkageConfigStandard;
         }
 
@@ -122,8 +124,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = Config.GetStandardLinkageConfigRegularExpression();
-                
+                Dictionary<string, SCA.Model.RuleAndErrorMessage> dictMessage = Config.GetStandardLinkageConfigRegularExpression(this.Controller.DeviceAddressLength);
+                ControllerType currentType = this.Controller.Type;
                 SCA.Model.RuleAndErrorMessage rule;
                 System.Text.RegularExpressions.Regex exminator;
                 string errorMessage = String.Empty;
@@ -151,14 +153,146 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                             }
                         }
                         break;
-                    //case "ActionCoefficient":
-                    //    rule = dictMessage["ActionCoefficient"];
-                    //    exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                    //    if (!exminator.IsMatch(this.ActionCoefficient.ToString()))
-                    //    {
-                    //        errorMessage = rule.ErrorMessage;
-                    //    }
-                    //    break;
+                    case "DeviceNo1":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo1.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo2":
+                      {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo2.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo3":
+                         {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo3.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo4":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo4.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo5":
+                        {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo5.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo6":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo6.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo7":
+                        {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo7.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo8":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo8.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo9":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo9.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo10":
+                        {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo10.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo11":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo11.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "DeviceNo12":
+                        {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.DeviceNo12.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "OutputDevice1":
+                       {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.OutputDevice1.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
+                    case "OutputDevice2":
+                        {                   
+                            rule = dictMessage["DeviceCode"];
+                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                            if (!exminator.IsMatch(this.OutputDevice2.ToString()))
+                            {
+                                errorMessage = rule.ErrorMessage;
+                            }
+                        }
+                        break;
                     case "LinkageNo1":
                         if (!string.IsNullOrEmpty(this.LinkageNo1))
                         { 
@@ -254,7 +388,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         private string _downloadIconPath = @"Resources/Icon/Style1/c_download.png";
         private string _uploadIconPath = @"Resources/Icon/Style1/c_upload.png";
         private string _appCurrentPath = AppDomain.CurrentDomain.BaseDirectory;
-        private object _detailType = GridDetailType.ManualControlBoard;
+        private object _detailType = GridDetailType.Standard;
         private Visibility _addMoreLinesUserControlVisibility = Visibility.Collapsed;
         public string AddIconPath { get { return _appCurrentPath + _addIconPath; } }
         public string DelIconPath { get { return _appCurrentPath + _delIconPath; } }

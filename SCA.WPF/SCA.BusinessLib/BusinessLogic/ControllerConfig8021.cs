@@ -172,10 +172,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
 
-        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression()
-        {
-            throw new NotImplementedException();
-        }
+  
 
 
         public short GetMaxAmountForMixedLinkageConfig()
@@ -263,6 +260,29 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
             throw new NotImplementedException();
         }

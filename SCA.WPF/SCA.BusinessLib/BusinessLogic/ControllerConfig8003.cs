@@ -169,21 +169,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
 
-        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression()
-        {
-            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
-            //输出组号
-            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
 
-            //联动模块 考虑是手输还是选择，如果选择就不需要验证
-
-            //动作常数
-            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
-            //联动组 与输出组号相同            
-
-            //备注
-            return dictExpressionAndInfo;
-        }
         public Dictionary<string, RuleAndErrorMessage> GetControllerInfoRegularExpression(int deviceAddressLength)
         {
             Dictionary<string, RuleAndErrorMessage> dictControllerInfoRE = new Dictionary<string, RuleAndErrorMessage>();
@@ -289,6 +275,44 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
         public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
+
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
+            //联动组 与输出组号相同            
+
+            dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^[0-9]{" + addressLength.ToString() + "}$", "必须为数字，长度为" + addressLength.ToString() + "位"));                   
+
+            //备注
+            dictExpressionAndInfo.Add("Memo", new RuleAndErrorMessage("^[\\s\\S]{30}$", "长度为30个字符"));   
+         
+            return dictExpressionAndInfo;
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetManualControlBoardRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
             throw new NotImplementedException();
         }

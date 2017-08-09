@@ -121,6 +121,7 @@
                     </dg:DataGridTextColumn>
                     <dg:DataGridTextColumn Width="*" 
                                        Header="板卡号" 
+                                       Visibility="{Binding  Data.IsVisualColumnGroup1, Source={StaticResource proxy} }"
                                        Binding="{Binding Path=BoardNo,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                            EditingElementStyle="{StaticResource errorStyle}"
@@ -169,6 +170,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="本机设备1"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding LocalDevice1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -183,6 +185,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="本机设备2"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding LocalDevice2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -197,6 +200,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="本机设备3"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding LocalDevice3,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -211,6 +215,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="本机设备4"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding LocalDevice4,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -261,6 +266,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="网络设备1"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding NetDevice1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -275,6 +281,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="网络设备2"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding NetDevice2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -289,6 +296,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="网络设备3"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding NetDevice3,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -303,6 +311,7 @@
                     <dg:DataGridTemplateColumn Width="*"   
                                         Header="网络设备4"   
                                         Visibility="{Binding  Data.IsVisualColumnGroup2, Source={StaticResource proxy} }"
+                                        ClipboardContentBinding="{Binding NetDevice4,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   
                                            >
                         <dg:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

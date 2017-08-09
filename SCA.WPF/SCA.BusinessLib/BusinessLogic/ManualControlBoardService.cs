@@ -251,7 +251,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
             if ((tempCode + amount) > MaxManualControlBoardAmount) //如果需要添加的行数将达上限，则增加剩余的行数
             {
-                amount = tempCode + amount - MaxManualControlBoardAmount;
+                amount = MaxManualControlBoardAmount - tempCode;
             }
             
 
@@ -260,11 +260,11 @@ namespace SCA.BusinessLib.BusinessLogic
                 SCA.Interface.IControllerConfig config =ControllerConfigManager.GetConfigObject(this.TheController.Type);
                 int totalMaxKeyNo=config.GetMaxAmountForKeyNoInManualControlBoardConfig();
               
-                int maxKeyNo=0;
+                int maxKeyNo=1;
                 //获取当前板卡及回路下的最大"手键号"
                 if (TheController.ControlBoard.Count == 0)
                 {
-                    maxKeyNo = 0;
+                    maxKeyNo = 1;
                 }
                 else
                 {

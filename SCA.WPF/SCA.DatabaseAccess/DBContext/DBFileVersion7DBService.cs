@@ -93,29 +93,29 @@ namespace SCA.DatabaseAccess.DBContext
 
         public bool CreateTableForLinkageConfigStandard()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigStandard(ID integer not null primary key autoincrement,Code varchar(4) not null, DeviceNo1 varchar(20),DeviceNo2 varchar(20), DeviceNo3 varchar(20), DeviceNo4 varchar(20), DeviceNo5 varchar(20), DeviceNo6 varchar(20),DeviceNo7 varchar(20),DeviceNo8 varchar(20),DeviceNo9 varchar(20),DeviceNo10 varchar(20), DeviceNo11 varchar(20), DeviceNo12 varchar(20), OutputDevice1 varchar(20), OutputDevice2 varchar(20), ActionCoefficient integer, LinkageNo1 varchar(4),LinkageNo2 varchar(4),LinkageNo3 varchar(4),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigStandard(ID integer not null primary key autoincrement,Code varchar(4) not null, DeviceNo1 varchar(20),DeviceNo2 varchar(20), DeviceNo3 varchar(20), DeviceNo4 varchar(20), DeviceNo5 varchar(20), DeviceNo6 varchar(20),DeviceNo7 varchar(20),DeviceNo8 varchar(20),DeviceNo9 varchar(20),DeviceNo10 varchar(20), DeviceNo11 varchar(20), DeviceNo12 varchar(20), OutputDevice1 varchar(20), OutputDevice2 varchar(20), ActionCoefficient integer, LinkageNo1 varchar(4),LinkageNo2 varchar(4),LinkageNo3 varchar(4),Memo varchar(30),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
             _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
             return true;
         }
 
         public bool CreateTableForLinkageConfigGeneral()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigGeneral(ID integer not null primary key autoincrement,Code varchar(4) not null,ActionCoefficient integer, CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA1 integer, LayerNoA2 integer, DeviceTypeCodeA integer references DeviceType(Code) on delete restrict deferrable initially deferred,TypeC varchar(20),MachineNoC varchar2(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer references DeviceType(Code) on delete restrict deferrable initially deferred,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
-            _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
+            StringBuilder sbLinkageConfigGeneralSQL = new StringBuilder("Create table LinkageConfigGeneral(ID integer not null primary key autoincrement,Code varchar(4) not null,ActionCoefficient integer, CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA1 integer, LayerNoA2 integer, DeviceTypeCodeA integer references DeviceType(Code) on delete restrict deferrable initially deferred,TypeC varchar(20),MachineNoC varchar2(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer references DeviceType(Code) on delete restrict deferrable initially deferred,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            _databaseService.ExecuteBySql(sbLinkageConfigGeneralSQL);
             return true;
         }
 
         public bool CreateTableForLinkageconfigMixed()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table LinkageConfigMixed(ID integer not null primary key autoincrement,Code varchar(4) not null, ActionCoefficient integer,ActionType varchar(10), TypeA varchar(20), LoopNoA varchar(10), DeviceCodeA varchar(10),CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA integer, DeviceTypeCodeA integer , TypeB varchar(20), LoopNoB varchar(10), DeviceCodeB varchar(10),CategoryB integer, BuildingNoB integer,ZoneNoB integer, LayerNoB integer, DeviceTypeCodeB integer ,TypeC varchar(20),MachineNoC varchar(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
-            _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
+            StringBuilder sbLinkageConfigMixedSQL = new StringBuilder("Create table LinkageConfigMixed(ID integer not null primary key autoincrement,Code varchar(4) not null, ActionCoefficient integer,ActionType varchar(10), TypeA varchar(20), LoopNoA varchar(10), DeviceCodeA varchar(10),CategoryA integer, BuildingNoA integer,ZoneNoA integer, LayerNoA integer, DeviceTypeCodeA integer , TypeB varchar(20), LoopNoB varchar(10), DeviceCodeB varchar(10),CategoryB integer, BuildingNoB integer,ZoneNoB integer, LayerNoB integer, DeviceTypeCodeB integer ,TypeC varchar(20),MachineNoC varchar(10),LoopNoC varchar(10),DeviceCodeC varchar(10),BuildingNoC integer,ZoneNoC integer, LayerNoC integer ,DeviceTypeCodeC integer,controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            _databaseService.ExecuteBySql(sbLinkageConfigMixedSQL);
             return true;
         }
 
         public bool CreateTableForManualControlBoard()
         {
-            StringBuilder sbLinkageConfigStandardSQL = new StringBuilder("Create table ManualControlBoard(ID integer not null primary key autoincrement,Code varchar(4) not null, BoardNo varchar(10),SubBoardNo varchar(10),KeyNo varchar(10), DeviceCode varchar(10), ControlType integer, LocalDevice1 varchar(20), LocalDevice2 varchar(20), LocalDevice3 varchar(20), LocalDevice4 varchar(20), BuildingNo varchar(10), AreaNo varhchar(10), FloorNo varchar(10), DeviceType integer, LinkageGroup varchar(10), NetDevice1 varchar(20), NetDevice2 varchar(20), NetDevice3 varchar(20),  NetDevice4 varchar(20), SDPKey varchar(10),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
-            _databaseService.ExecuteBySql(sbLinkageConfigStandardSQL);
+            StringBuilder sbLinkageConfigMCBSQL = new StringBuilder("Create table ManualControlBoard(ID integer not null primary key autoincrement,Code varchar(4) not null, BoardNo varchar(10),SubBoardNo varchar(10),KeyNo varchar(10), DeviceCode varchar(10), ControlType integer, LocalDevice1 varchar(20), LocalDevice2 varchar(20), LocalDevice3 varchar(20), LocalDevice4 varchar(20), BuildingNo varchar(10), AreaNo varhchar(10), FloorNo varchar(10), DeviceType integer, LinkageGroup varchar(10), NetDevice1 varchar(20), NetDevice2 varchar(20), NetDevice3 varchar(20),  NetDevice4 varchar(20), SDPKey varchar(10),controllerID integer references Controller(ID) on delete restrict deferrable initially deferred not null,unique(Code,controllerID))");
+            _databaseService.ExecuteBySql(sbLinkageConfigMCBSQL);
             return true;
         }
 
@@ -1185,7 +1185,8 @@ namespace SCA.DatabaseAccess.DBContext
 
         public LoopModel GetDevicesByLoopForControllerType8053(LoopModel loop)
         {
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,BoardNo,SubBoardNo,KeyNo,BroadcastZone,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,SDPKey,MCBID,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);
+            //StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,BoardNo,SubBoardNo,KeyNo,BroadcastZone,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,SDPKey,MCBID,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID); commented by william at 2017-08-09
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);//added by william at 2017-08-09
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1637,7 +1638,7 @@ namespace SCA.DatabaseAccess.DBContext
 
         public int AddStandardLinkageConfigInfo(LinkageConfigStandard linkageConfigStandard)
         {
-            StringBuilder sbSQL = new StringBuilder("REPLACE INTO LinkageConfigStandard(ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10, DeviceNo11, DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID) ");
+            StringBuilder sbSQL = new StringBuilder("REPLACE INTO LinkageConfigStandard(ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10, DeviceNo11, DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,Memo,controllerID) ");
             sbSQL.Append("VALUES(");
             sbSQL.Append(linkageConfigStandard.ID + ",'");
             sbSQL.Append(linkageConfigStandard.Code + "','");
@@ -1658,8 +1659,10 @@ namespace SCA.DatabaseAccess.DBContext
             sbSQL.Append(linkageConfigStandard.ActionCoefficient + "','");
             sbSQL.Append(linkageConfigStandard.LinkageNo1 + "','");
             sbSQL.Append(linkageConfigStandard.LinkageNo2 + "','");
-            sbSQL.Append(linkageConfigStandard.LinkageNo3 + "',");
+            sbSQL.Append(linkageConfigStandard.LinkageNo3 + "','");
+            sbSQL.Append(linkageConfigStandard.Memo+ "',");
             sbSQL.Append(linkageConfigStandard.ControllerID + ");");
+
             return  _databaseService.ExecuteBySql(sbSQL);
         }
 
@@ -1757,7 +1760,7 @@ namespace SCA.DatabaseAccess.DBContext
         public List<LinkageConfigStandard> GetStandardLinkageConfig(ControllerModel controller)
         {
             List<LinkageConfigStandard> lstData = new List<LinkageConfigStandard>();
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10,DeviceNo11,DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID from LinkageConfigStandard where controllerID=" + controller.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,DeviceNo1,DeviceNo2 , DeviceNo3 , DeviceNo4, DeviceNo5,DeviceNo6,DeviceNo7,DeviceNo8,DeviceNo9,DeviceNo10,DeviceNo11,DeviceNo12, OutputDevice1, OutputDevice2, ActionCoefficient , LinkageNo1 ,LinkageNo2 ,LinkageNo3,controllerID,Memo from LinkageConfigStandard where controllerID=" + controller.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1782,6 +1785,7 @@ namespace SCA.DatabaseAccess.DBContext
                 model.LinkageNo1 = dt.Rows[i]["LinkageNo1"].ToString();
                 model.LinkageNo2 = dt.Rows[i]["LinkageNo2"].ToString();
                 model.LinkageNo3 = dt.Rows[i]["LinkageNo3"].ToString();
+                model.Memo = dt.Rows[i]["Memo"].ToString();
                 model.Controller = controller;
                 model.ControllerID = controller.ID;
                 lstData.Add(model);

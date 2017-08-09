@@ -358,7 +358,7 @@ namespace SCA.BusinessLib.BusinessLogic
            dictDeviceInfoRE.Add("StandardLinkageGroup", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
            //广播分区 说明书的有效范围为1~240【上一版软件的有效范围0~240】。仅“广播模块”可设置此项属性（如“070常规广播”），其余模块一律置0。
            //对于广播模块为0的状态，移至整体验证中
-           dictDeviceInfoRE.Add("BroadcastZone", new RuleAndErrorMessage("^([0-9]|[1-9][0-9]|1[0-7][0-9]|180)$", "输出组取值范围为000~180"));
+           dictDeviceInfoRE.Add("BroadcastZone", new RuleAndErrorMessage("^([0-9]|[1-9][0-9]|1[0-7][0-9]|180)$", "广播分区取值范围为000~180"));
 
            //允许楼、区、层、房间号同时为0，如果单独为0时，在其它规则里检查2017-04-20
            //楼 1~63
@@ -373,21 +373,7 @@ namespace SCA.BusinessLib.BusinessLogic
            dictDeviceInfoRE.Add("Location", new RuleAndErrorMessage("^[A-Za-z0-9\u4E00-\u9FFF]{0,16}$", "安装地点为字母或汉字或中文,最长16位"));
            return dictDeviceInfoRE;
        }
-       public virtual Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression()
-       {
-           Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
-           //输出组号
-           dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
-
-           //联动模块 考虑是手输还是选择，如果选择就不需要验证
-
-           //动作常数
-           dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
-           //联动组 与输出组号相同            
-
-           //备注
-           return dictExpressionAndInfo;
-       }
+       
        public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
        {
            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
@@ -505,10 +491,10 @@ namespace SCA.BusinessLib.BusinessLogic
             dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-6][0-7][0-9][0-9]|680[0-4])$", "输出组取值范围为0000~6804"));
             
             //板卡号
-            dictExpressionAndInfo.Add("BoardNo", new RuleAndErrorMessage("^([0-8])$", "动作常数为0~8"));            
+            dictExpressionAndInfo.Add("BoardNo", new RuleAndErrorMessage("^([0-8])$", "板卡号范围为0~8"));            
             
             //手盘号
-            dictExpressionAndInfo.Add("SubBoardNo", new RuleAndErrorMessage("^([1-9]|1[0-2])$", "手盘号范围为1~12"));
+            dictExpressionAndInfo.Add("SubBoardNo", new RuleAndErrorMessage("^([1-9]|1[0-2])$", "手盘号范围为1~11"));
 
             //手键号
             dictExpressionAndInfo.Add("KeyNo", new RuleAndErrorMessage("^([1-9]|[1-5][0-9]|6[0-3])$", "手键号范围为1~63"));
@@ -572,7 +558,7 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public short GetMaxAmountForSubBoardNoInManualControlBoardConfig()
         {
-            return 12;
+            return 11;
         }
 
         public short GetMaxAmountForKeyNoInManualControlBoardConfig()
@@ -591,6 +577,25 @@ namespace SCA.BusinessLib.BusinessLogic
                 _defaultDeviceTypeCode = value;
             }
         }
-  
+
+
+
+        public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
+        {
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-7][0-9][0-9][1-9]|[0-7][0-9][1-9][0-9]|8000)$", "输出组取值范围为0001~8000"));
+
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([1-5])$", "动作常数为1~5"));
+            dictExpressionAndInfo.Add("DeviceCode", new RuleAndErrorMessage("^[0-9]{"+addressLength.ToString()+"}$","必须为数字，长度为"+addressLength.ToString()+"位"));
+            //联动组 与输出组号相同            
+
+            //备注
+            dictExpressionAndInfo.Add("Memo", new RuleAndErrorMessage("^[\\s\\S]{30}$","长度为30个字符"));   
+            return dictExpressionAndInfo;
+        }
     }
 }

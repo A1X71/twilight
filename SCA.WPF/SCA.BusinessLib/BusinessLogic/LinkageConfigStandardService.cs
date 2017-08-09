@@ -140,6 +140,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     result.LinkageNo1 = linkageConfigStandard.LinkageNo1;
                     result.LinkageNo2 = linkageConfigStandard.LinkageNo2;
                     result.LinkageNo3 = linkageConfigStandard.LinkageNo3;
+                    result.Memo = linkageConfigStandard.Memo;
                 }
                 else
                 {
@@ -188,88 +189,91 @@ namespace SCA.BusinessLib.BusinessLogic
                         //    result.Code = data[i];
                         //    break;
                         case "联动模块1":
-                            result.DeviceNo1 = data[i].ToString();
+                            result.DeviceNo1 = data[i];
                             break;
                         case "联动模块2":
-                            result.DeviceNo2 = data[i].ToString();
+                            result.DeviceNo2 = data[i];
                             break;
                         case "联动模块3":
-                            result.DeviceNo3 = data[i].ToString();
+                            result.DeviceNo3 = data[i];
                             break;
                         case "联动模块4":
-                            result.DeviceNo4 = data[i].ToString();
+                            result.DeviceNo4 = data[i];
                             break;
                         case "联动模块5":
-                            result.DeviceNo5 = data[i].ToString();
+                            result.DeviceNo5 = data[i];
                             break;
                         case "联动模块6":
-                            result.DeviceNo6 = data[i].ToString();
+                            result.DeviceNo6 = data[i];
                             break;
                         case "联动模块7":
-                            result.DeviceNo7 = data[i].ToString();
+                            result.DeviceNo7 = data[i];
                             break;
                         case "联动模块8":
-                            result.DeviceNo8 = data[i].ToString();
+                            result.DeviceNo8 = data[i];
                             break;
                         case "联动模块9":
-                            result.DeviceNo9 = data[i].ToString();
+                            result.DeviceNo9 = data[i];
                             break;
                         case "联动模块10":
-                            result.DeviceNo10 = data[i].ToString();
+                            result.DeviceNo10 = data[i];
                             break;
                         case "输入模块1":
-                            result.DeviceNo1 = data[i].ToString();
+                            result.DeviceNo1 = data[i];
                             break;
                         case "输入模块2":
-                            result.DeviceNo2 = data[i].ToString();
+                            result.DeviceNo2 = data[i];
                             break;
                         case "输入模块3":
-                            result.DeviceNo3 = data[i].ToString();
+                            result.DeviceNo3 = data[i];
                             break;
                         case "输入模块4":
-                            result.DeviceNo4 = data[i].ToString();
+                            result.DeviceNo4 = data[i];
                             break;
                         case "输入模块5":
-                            result.DeviceNo5 = data[i].ToString();
+                            result.DeviceNo5 = data[i];
                             break;
                         case "输入模块6":
-                            result.DeviceNo6 = data[i].ToString();
+                            result.DeviceNo6 = data[i];
                             break;
                         case "输入模块7":
-                            result.DeviceNo7 = data[i].ToString();
+                            result.DeviceNo7 = data[i];
                             break;
                         case "输入模块8":
-                            result.DeviceNo8 = data[i].ToString();
+                            result.DeviceNo8 = data[i];
                             break;
                         case "输入模块9":
-                            result.DeviceNo9 = data[i].ToString();
+                            result.DeviceNo9 = data[i];
                             break;
                         case "输入模块10":
-                            result.DeviceNo10 = data[i].ToString();
+                            result.DeviceNo10 = data[i];
                             break;
                         case "输入模块11":
-                            result.DeviceNo11 = data[i].ToString();
+                            result.DeviceNo11 = data[i];
                             break;
                         case "输入模块12":
-                            result.DeviceNo12 = data[i].ToString();
+                            result.DeviceNo12 = data[i];
                             break;
                         case "输出模块1":
-                            result.OutputDevice1 = data[i].ToString();
+                            result.OutputDevice1 = data[i];
                             break;
                         case "输出模块2":
-                            result.OutputDevice2 = data[i].ToString();
+                            result.OutputDevice2 = data[i];
                             break;
                         case "动作常数":
                             result.ActionCoefficient = Convert.ToInt32(data[i]);
                             break;
                         case "联动组1":
-                            result.LinkageNo1 = data[i].ToString();
+                            result.LinkageNo1 = data[i];
                             break;
                         case "联动组2":
-                            result.LinkageNo1 = data[i].ToString();
+                            result.LinkageNo1 = data[i];
                             break;
                         case "联动组3":
-                            result.LinkageNo1 = data[i].ToString();
+                            result.LinkageNo1 = data[i];
+                            break;
+                        case "备注":
+                            result.Memo = data[i];
                             break;
                     }
                 }

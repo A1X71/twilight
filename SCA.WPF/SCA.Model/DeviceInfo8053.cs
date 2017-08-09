@@ -35,7 +35,19 @@ namespace SCA.Model
         public int LoopID { get; set; }                 //回路ID
         public string Code { get; set; }                //器件编码  (机号+路号+器件编号):七位示例->0102003; 八位示例->00102003
         public Int16 TypeCode { get; set; }             //器件类型
-        public bool Disable { get; set; }               //屏蔽
+        //屏蔽
+        private bool _disable = false;  //增加默认值  by william at 2017-08-09
+        public bool Disable {
+            get
+            {
+                return _disable;
+            }
+            set
+            {
+                _disable = value;
+            }
+        
+        } 
         public Int16? DelayValue { get; set; }          //延时
         public Int16? Feature { get; set; }             //特性        器件内部编码
         public Int16? BuildingNo { get; set; }          //楼号
