@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace SCA.WPF.ViewsRoot.Views
 {
@@ -25,6 +26,8 @@ namespace SCA.WPF.ViewsRoot.Views
         public WelcomeView()
         {
             InitializeComponent();
+            DisplayRecentFiles();
+            DisplayVersion();
         }
         
         public event RoutedEventHandler NewButtonClick
@@ -56,7 +59,25 @@ namespace SCA.WPF.ViewsRoot.Views
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(OpenButtonClickEvent));
+            RaiseEvent(new RoutedEventArgs(OpenButtonClickEvent,sender));
+        }
+        private void DisplayRecentFiles()
+        {
+            foreach (string file in SCA.BusinessLib.ProjectManager.GetInstance.RecentFiles)
+            {
+                Button fileButton = new Button();
+                fileButton.Content = System.IO.Path.GetFileName(file);
+                fileButton.CommandParameter = file;
+                fileButton.Style = (Style)FindResource("RecentFileButtonStyle");
+                fileButton.Click += new RoutedEventHandler(OpenButton_Click);
+                RecentFilesStackPanel.Children.Add(fileButton);
+            }   
+        }
+        private void DisplayVersion()
+        {
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            VersionLabel.Content += string.Format(CultureInfo.CurrentCulture,
+                "{0}.{1}.{2}", version.Major, version.Minor, version.Build);
         }
         
     }

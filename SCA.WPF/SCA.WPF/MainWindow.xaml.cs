@@ -135,11 +135,14 @@ namespace SCA.WPF
         }
         private void RefreshNavigator()
         {
-            List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
-            lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
-            vm.SetNavigatingViewModel(lstProject);
-            this.DataContext = vm;
-            Navigator.DataContext = vm.NavigatingViewModel;            
+            using (new WaitCursor())
+            { 
+                List<SCA.Model.ProjectModel> lstProject = new List<SCA.Model.ProjectModel>();
+                lstProject.Add(SCA.BusinessLib.ProjectManager.GetInstance.Project);
+                vm.SetNavigatingViewModel(lstProject);
+                this.DataContext = vm;
+                Navigator.DataContext = vm.NavigatingViewModel;
+            }
             
         }
         private void CreateControllerUserControl_CancelButtonClick(object sender, RoutedEventArgs e)
@@ -558,7 +561,7 @@ namespace SCA.WPF
             CreateViewArea.Children.Clear();
             CreateViewArea.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
-        }
+        }    
     }
 
 }

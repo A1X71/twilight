@@ -355,7 +355,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         public string SaveIconPath { get { return _appCurrentPath + _saveIconPath; } }
         public string DownloadIconPath { get { return _appCurrentPath + _downloadIconPath; } }
         public string UploadIconPath { get { return _appCurrentPath + _uploadIconPath; } }
-
+         public DeviceInfo8053ViewModel()
+        {
+            _deviceService8053 = new DeviceService8053();
+        }
         public short MaxDeviceAmount
         {
             get

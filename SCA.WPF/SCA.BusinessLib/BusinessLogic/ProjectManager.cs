@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using System.Data;
 using SCA.Interface;
 using SCA.Interface.DatabaseAccess;
 using SCA.Model;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib;
+using System.Collections.Specialized;
 namespace SCA.BusinessLib
 {
     public class ProjectManager:SCA.Interface.IProjectManager
@@ -40,10 +42,57 @@ namespace SCA.BusinessLib
         //private IDatabaseService _databaseService;
         private IDBFileVersionService _dbFileVersionService;
         private IFileService _fileService;
+        private readonly string RECENT_FILES_FILE_PATH =AppDomain.CurrentDomain.BaseDirectory+"RecentFiles.xml";        
         /// <summary>
         /// 存储从外部导入的控制器信息
         /// </summary>
         public ControllerModel TheControllerViaImporting { get; set; }
+        private StringCollection _recentFiles;
+        /// <summary>
+        /// 存储最近文件路径
+        /// </summary>
+        public StringCollection RecentFiles
+        {
+            get
+            {
+                if (_recentFiles == null)
+                {
+                    _recentFiles = new StringCollection();
+                }
+                return _recentFiles;
+            }
+            set
+            {
+                _recentFiles = value;
+            }
+            
+        }
+        /// <summary>
+        /// 加载最近打开的文件
+        /// </summary>
+        public  void  LoadRecentFiles()
+        {
+            RecentFiles = _fileService.ReadStringCollectionFromXML(RECENT_FILES_FILE_PATH);            
+            for (int i = 0; i < RecentFiles.Count; i++)
+                {
+                    if (!_fileService.IsExistFile(RecentFiles[i]))
+                    {
+                        RecentFiles.RemoveAt(i);
+                    }
+                }
+            while (RecentFiles.Count > 3)
+            {
+                RecentFiles.RemoveAt(3);
+            }            
+        }
+
+        /// <summary>
+        /// 保存最近打开的文件
+        /// </summary>
+        public  void SaveRecentFiles()
+        {
+            _fileService.WriteStringCollectionToXML(RECENT_FILES_FILE_PATH, RecentFiles);            
+        }
         public static  ProjectManager GetInstance
         {
             get
@@ -215,6 +264,7 @@ namespace SCA.BusinessLib
             {
                 _fileService = new SCA.BusinessLib.Utility.FileService();
             }
+            LoadRecentFiles();
         }
         private void InitializeDefaultSetting()
         {
@@ -675,6 +725,8 @@ namespace SCA.BusinessLib
                         }
                     }
                 }
+                RecentFiles.Add(Project.SavePath);
+                SaveRecentFiles();
                 Project.IsDirty = false;
             }
         }
