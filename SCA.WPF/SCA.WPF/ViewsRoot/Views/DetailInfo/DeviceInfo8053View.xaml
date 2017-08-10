@@ -55,15 +55,19 @@
                 <Button Name="btnDelete" Grid.Column="1" Grid.Row="0" Width="30"  Height="30" Click="btnDelete_Click"  Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=DelIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Name="btnCopy" Grid.Column="2" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Name="btnCopy" Grid.Column="2" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
 					    Command="ApplicationCommands.Copy"
-                        CommandTarget="{Binding ElementName=DataGrid_Device}" >                       <Image Source="{Binding Path=CopyIconPath,Mode=OneWay}"/>
+                        CommandTarget="{Binding ElementName=DataGrid_Device}" >        
+                    <Image Source="{Binding Path=CopyIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Name="btnPaste" Grid.Column="3" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+                <Button Name="btnPaste" Grid.Column="3" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent"
 						Command="ApplicationCommands.Paste"
-                        CommandTarget="{Binding ElementName=DataGrid_Device}"                    <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
+                        CommandTarget="{Binding ElementName=DataGrid_Device}"  >
+                    <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                        Command="{Binding Path=SaveCommand}"                    <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
+                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
+                        Command="{Binding Path=SaveCommand}">
+                <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
