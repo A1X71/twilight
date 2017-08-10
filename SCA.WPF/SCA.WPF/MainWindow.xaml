@@ -217,7 +217,7 @@
             <View:WelcomeView x:Name="WelcomeUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   NewButtonClick="WelcomeUserControl_NewButtonClick"  ImportButtonClick="WelcomeUserControl_ImportButtonClick">
                 <i:Interaction.Behaviors>
                     <eventToCommand:EventToCommandBehavior  Command="{Binding DataContext.OpenProjectFileCommand, RelativeSource={RelativeSource  AncestorType={x:Type Window}}}" 
-                                                                    Event="OpenButtonClick" PassArguments="False"/>
+                                                                    Event="OpenButtonClick" PassArguments="True"/>
                 </i:Interaction.Behaviors>
             </View:WelcomeView>
             <!--<View:ProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  />-->

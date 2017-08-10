@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Collections.Specialized;
 namespace SCA.Interface
 {
     /// <summary>
@@ -94,6 +95,20 @@ namespace SCA.Interface
                 /// <param name="fileName">保存文件名</param>
                 void SaveToFile(MemoryStream ms, string fileName);
         #endregion 
+        
+        /// <summary>
+        /// 取得XML文件中的字符串值集合
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        StringCollection ReadStringCollectionFromXML(string filePath);
+        /// <summary>
+        /// 将字符串集合写入XML文件
+        /// </summary>
+        /// <param name="filePath">路径</param>
+        /// <param name="recentFiles">内容</param>
+        /// <returns></returns>
+        void WriteStringCollectionToXML(string filePath,StringCollection recentFiles);
 
     }
 }

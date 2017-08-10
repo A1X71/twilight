@@ -55,21 +55,15 @@
                 <Button Name="btnDelete" Grid.Column="1" Grid.Row="0" Width="30"  Height="30" Click="btnDelete_Click"  Background="Transparent" BorderBrush="Transparent">
                     <Image Source="{Binding Path=DelIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Name="btnCopy" Grid.Column="2" Grid.Row="0" Width="30"  Height="30" Click="btnCopy_Click"  Background="Transparent" BorderBrush="Transparent"
-                                 Command="ApplicationCommands.Copy"
-                        CommandTarget="{Binding ElementName=DataGrid_Device}" >                        
-                    <Image Source="{Binding Path=CopyIconPath,Mode=OneWay}"/>
+                <Button Name="btnCopy" Grid.Column="2" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+					    Command="ApplicationCommands.Copy"
+                        CommandTarget="{Binding ElementName=DataGrid_Device}" >                       <Image Source="{Binding Path=CopyIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Name="btnPaste" Grid.Column="3" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
-                        Command="ApplicationCommands.Paste"
-                        CommandTarget="{Binding ElementName=DataGrid_Device}"
-                        >
-                    <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
+                <Button Name="btnPaste" Grid.Column="3" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent">
+						Command="ApplicationCommands.Paste"
+                        CommandTarget="{Binding ElementName=DataGrid_Device}"                    <Image Source="{Binding Path=PasteIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"
-                        Command="{Binding Path=SaveCommand}"
-                        >
-                    <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
+                        Command="{Binding Path=SaveCommand}"                    <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
                 <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent"  Command="{Binding Path=DownloadCommand}">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
@@ -140,7 +134,7 @@
                     <dg:DataGridTextColumn 
                                        Header="输出组1" 
                                        Binding="{Binding Path=LinkageGroup1,ValidatesOnDataErrors=True}" 
-                                           EditingElementStyle="{StaticResource errorStyle}"
+                                       EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn 
                                        Header="输出组2" 

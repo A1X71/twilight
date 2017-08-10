@@ -189,7 +189,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         }
         public ICommand OpenProjectFileCommand
         {
-            get { return new SCA.WPF.Utility.RelayCommand(OpenProjectFileExecute, null); }
+            get { return new SCA.WPF.Utility.RelayCommand<object>(OpenProjectFileExecute, null); }
         }
         public void DeleteLoopInfoExecute(object o)
         {
@@ -200,16 +200,37 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                 loopService.DeleteLoopBySpecifiedLoopCode(loop.Code);                
             }
         }
-        public void OpenProjectFileExecute()
+        public void OpenProjectFileExecute(object param)
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
-            dialog.Filter = "工程文件 (*.nt)|*.nt";
-            dialog.ShowDialog();
-            if (dialog.FileName != "")
+            if (param != null)
             { 
-                ProjectManager.GetInstance.OpenProject(dialog.FileName);
-                EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
-            }
+                if(((RoutedEventArgs)param).OriginalSource.GetType().Name=="Button")
+                {
+                    if (((System.Windows.Controls.Button)((RoutedEventArgs)param).OriginalSource).CommandParameter == null)
+                    {
+                        VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+                        dialog.Filter = "工程文件 (*.nt)|*.nt";
+                        dialog.ShowDialog();
+                        if (dialog.FileName != "")
+                        {
+                            using (new WaitCursor())
+                            { 
+                                ProjectManager.GetInstance.OpenProject(dialog.FileName);
+                                EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (new WaitCursor())
+                        {
+                            string fileName = ((System.Windows.Controls.Button)((RoutedEventArgs)param).OriginalSource).CommandParameter.ToString();
+                            ProjectManager.GetInstance.OpenProject(fileName);
+                            EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
+                        }
+                    }
+                }
+            }           
         }
         public void NavigateToDetailInfoExecute(object o)
         {
