@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.ComponentModel;
 using SCA.Interface;
 using SCA.Model;
 
@@ -31,7 +33,7 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class ControllerConfig8053 :ControllerConfigBase, IControllerConfig
     {
-        private int _defaultDeviceTypeCode = 9;
+        private int _defaultDeviceTypeCode = 104;
         public Model.ControllerNodeModel[] GetNodes()
         {
             return new ControllerNodeModel[]
@@ -52,17 +54,17 @@ namespace SCA.BusinessLib.BusinessLogic
             columnDefinitionArray[0] = new ColumnConfigInfo();
             columnDefinitionArray[0].ColumnName = "编码";
             columnDefinitionArray[1] = new ColumnConfigInfo();
-            columnDefinitionArray[1].ColumnName = "器件类型";            
+            columnDefinitionArray[1].ColumnName = "器件类型";
             columnDefinitionArray[2] = new ColumnConfigInfo();
-            columnDefinitionArray[2].ColumnName = "屏蔽";
+            columnDefinitionArray[2].ColumnName = "特性";
             columnDefinitionArray[3] = new ColumnConfigInfo();
-            columnDefinitionArray[3].ColumnName = "输出组1";
+            columnDefinitionArray[3].ColumnName = "屏蔽";
             columnDefinitionArray[4] = new ColumnConfigInfo();
-            columnDefinitionArray[4].ColumnName = "输出组2";            
+            columnDefinitionArray[4].ColumnName = "输出组1";
             columnDefinitionArray[5] = new ColumnConfigInfo();
-            columnDefinitionArray[5].ColumnName = "报警浓度";
+            columnDefinitionArray[5].ColumnName = "输出组2";
             columnDefinitionArray[6] = new ColumnConfigInfo();
-            columnDefinitionArray[6].ColumnName = "预警浓度";
+            columnDefinitionArray[6].ColumnName = "输出组3";
             columnDefinitionArray[7] = new ColumnConfigInfo();
             columnDefinitionArray[7].ColumnName = "延时";
             columnDefinitionArray[8] = new ColumnConfigInfo();
@@ -80,27 +82,202 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[20];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "输出组号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "输入模块1";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "输入模块2";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "输入模块3";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "输入模块4";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "输入模块5";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "输入模块6";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "输入模块7";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "输入模块8";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "输入模块9";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "输入模块10";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "输入模块11";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "输入模块12";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "输出模块1";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "输出模块2";
+            columnDefinitionArray[15] = new ColumnConfigInfo();
+            columnDefinitionArray[15].ColumnName = "动作常数";
+            columnDefinitionArray[16] = new ColumnConfigInfo();
+            columnDefinitionArray[16].ColumnName = "联动组1";
+            columnDefinitionArray[17] = new ColumnConfigInfo();
+            columnDefinitionArray[17].ColumnName = "联动组2";
+            columnDefinitionArray[18] = new ColumnConfigInfo();
+            columnDefinitionArray[18].ColumnName = "联动组3";
+            columnDefinitionArray[19] = new ColumnConfigInfo();
+            columnDefinitionArray[19].ColumnName = "备注";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetGeneralLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[16];
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "动作常数";
+
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "A类别";
+
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "A楼号";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "A区号";
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "A层号1";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "A层号2";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "A类型";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "C分类";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "C楼号";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "C区号";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "C层号";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "C机号";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "C回路号";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "C编号";
+            columnDefinitionArray[15] = new ColumnConfigInfo();
+            columnDefinitionArray[15].ColumnName = "C类型";
+            return columnDefinitionArray;
         }
 
         public Model.ColumnConfigInfo[] GetMixedLinkageConfigColumns()
         {
-            throw new NotImplementedException();
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[27];
+            ColumnConfigInfo code = new ColumnConfigInfo();
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编号";
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "动作常数";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "动作类型";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "A分类";
+
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "A类别";
+
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "A楼号";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "A区号";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "A层号";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "A路号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "A编号";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "A类型";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "B分类";
+
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "B类别";
+
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "B楼号";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "B区号";
+            columnDefinitionArray[15] = new ColumnConfigInfo();
+            columnDefinitionArray[15].ColumnName = "B层号";
+            columnDefinitionArray[16] = new ColumnConfigInfo();
+            columnDefinitionArray[16].ColumnName = "B路号";
+            columnDefinitionArray[17] = new ColumnConfigInfo();
+            columnDefinitionArray[17].ColumnName = "B编号";
+            columnDefinitionArray[18] = new ColumnConfigInfo();
+            columnDefinitionArray[18].ColumnName = "B类型";
+            columnDefinitionArray[19] = new ColumnConfigInfo();
+            columnDefinitionArray[19].ColumnName = "C分类";
+            columnDefinitionArray[20] = new ColumnConfigInfo();
+            columnDefinitionArray[20].ColumnName = "C楼号";
+            columnDefinitionArray[21] = new ColumnConfigInfo();
+            columnDefinitionArray[21].ColumnName = "C区号";
+            columnDefinitionArray[22] = new ColumnConfigInfo();
+            columnDefinitionArray[22].ColumnName = "C层号";
+            columnDefinitionArray[23] = new ColumnConfigInfo();
+            columnDefinitionArray[23].ColumnName = "C机号";
+            columnDefinitionArray[24] = new ColumnConfigInfo();
+            columnDefinitionArray[24].ColumnName = "C回路号";
+            columnDefinitionArray[25] = new ColumnConfigInfo();
+            columnDefinitionArray[25].ColumnName = "C编号";
+            columnDefinitionArray[26] = new ColumnConfigInfo();
+            columnDefinitionArray[26].ColumnName = "C类型";
+            return columnDefinitionArray;
         }
 
-
+        public ColumnConfigInfo[] GetManualControlBoardColumns()
+        {
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[17];
+            columnDefinitionArray[0] = new ColumnConfigInfo();
+            columnDefinitionArray[0].ColumnName = "编号";            
+            columnDefinitionArray[1] = new ColumnConfigInfo();
+            columnDefinitionArray[1].ColumnName = "手盘号";
+            columnDefinitionArray[2] = new ColumnConfigInfo();
+            columnDefinitionArray[2].ColumnName = "手键号";
+            columnDefinitionArray[3] = new ColumnConfigInfo();
+            columnDefinitionArray[3].ColumnName = "被控类型";
+            columnDefinitionArray[4] = new ColumnConfigInfo();
+            columnDefinitionArray[4].ColumnName = "本机设备1";            
+            columnDefinitionArray[5] = new ColumnConfigInfo();
+            columnDefinitionArray[5].ColumnName = "本机设备2";
+            columnDefinitionArray[6] = new ColumnConfigInfo();
+            columnDefinitionArray[6].ColumnName = "本机设备3";
+            columnDefinitionArray[7] = new ColumnConfigInfo();
+            columnDefinitionArray[7].ColumnName = "本机设备4";
+            columnDefinitionArray[8] = new ColumnConfigInfo();
+            columnDefinitionArray[8].ColumnName = "楼号";
+            columnDefinitionArray[9] = new ColumnConfigInfo();
+            columnDefinitionArray[9].ColumnName = "区号";
+            columnDefinitionArray[10] = new ColumnConfigInfo();
+            columnDefinitionArray[10].ColumnName = "层号";
+            columnDefinitionArray[11] = new ColumnConfigInfo();
+            columnDefinitionArray[11].ColumnName = "设备类型";
+            columnDefinitionArray[12] = new ColumnConfigInfo();
+            columnDefinitionArray[12].ColumnName = "输出组";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "网络设备1";
+            columnDefinitionArray[14] = new ColumnConfigInfo();
+            columnDefinitionArray[14].ColumnName = "网络设备2";
+            columnDefinitionArray[15] = new ColumnConfigInfo();
+            columnDefinitionArray[15].ColumnName = "网络设备3";
+            columnDefinitionArray[16] = new ColumnConfigInfo();
+            columnDefinitionArray[16].ColumnName = "网络设备4";
+            return columnDefinitionArray;
+        }
         /// <summary>
         /// 取得8053可以设置的器件类型信息
         /// </summary>
         /// <returns></returns>
         public string GetDeviceTypeCodeInfo()
         {
-            string strMatchingDeviceNo = "0,12,87,90,91,92,93,101,102,103,104";
+            string strMatchingDeviceNo = "0,12,87,101,102,103,104";
             return strMatchingDeviceNo;
         }
         /// <summary>
@@ -335,35 +512,11 @@ namespace SCA.BusinessLib.BusinessLogic
             }
         }
 
-
-        public override List<string> GetFeatureList()
-        {
-            return null;
-        }
+     
         public override List<string> GetSensitiveLevelList()
         {
             return null;
         }
-        //public List<int> GetActionCoefficient()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public override List<LinkageActionType> GetLinkageActionType()
-        {
-            return null;
-        }
-
-        public override List<LinkageType> GetLinkageTypeWithCastration()
-        {
-            return null;
-        }
-
-        public override List<LinkageType> GetLinkageType()
-        {
-            return null;
-        }
-
         public List<DeviceType> GetDeviceTypeInfoWithAnyAlarm()
         {
             return null;
@@ -375,10 +528,7 @@ namespace SCA.BusinessLib.BusinessLogic
         }
 
 
-        public ColumnConfigInfo[] GetManualControlBoardColumns()
-        {
-            throw new NotImplementedException();
-        }
+
 
 
         public Dictionary<string, RuleAndErrorMessage> GetStandardLinkageConfigRegularExpression(int addressLength)
@@ -441,6 +591,66 @@ namespace SCA.BusinessLib.BusinessLogic
         public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
             throw new NotImplementedException();
+        }
+
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageInput()
+        {
+            string strMatchingDeviceNo = "0,1,4,5,6,7,9,10,11,12,13,14,15,24,25,26,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88";
+            return base.ConvertDeviceTypeCodeToDeviceType(strMatchingDeviceNo);
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageOutput()
+        {
+            string deviceType = GetDeviceTypeCodeInfo();
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageInput()
+        {
+            FieldInfo fi = SpecialValue.AnyAlarm.GetType().GetField(SpecialValue.AnyAlarm.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            string alarmName = "初始化";
+            if (attributes.Length > 0)
+            {
+                alarmName = attributes[0].Description;
+            }
+            DeviceType anyAlarmType = new DeviceType();
+            anyAlarmType.Code = (int)SpecialValue.AnyAlarm;
+            anyAlarmType.Name = alarmName;
+            string strMatchingDeviceNo = "0,1,4,5,6,7,9,10,11,12,13,14,15,24,25,26,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88";
+
+            List<DeviceType> lstDeviceType = base.ConvertDeviceTypeCodeToDeviceType(strMatchingDeviceNo);
+            lstDeviceType.Add(anyAlarmType);
+            return lstDeviceType;
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageOutput()
+        {
+            string deviceType = GetDeviceTypeCodeInfo();
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
+        }
+
+
+        public  List<LinkageInputPartType> GetLinkageInputType()
+        {
+            List<LinkageInputPartType> lstLinkageInputType = new List<LinkageInputPartType>();
+            foreach (LinkageInputPartType type in Enum.GetValues(typeof(LinkageInputPartType)))
+            {
+                lstLinkageInputType.Add(type);
+            }
+            return lstLinkageInputType;
+        }
+
+
+        public List<ManualControlBoardControlType> GetManualControlBoardControlType()
+        {
+            List<ManualControlBoardControlType> lstManualControlBoardControlType = new List<ManualControlBoardControlType>();
+            foreach (ManualControlBoardControlType type in Enum.GetValues(typeof(ManualControlBoardControlType)))
+            {
+                lstManualControlBoardControlType.Add(type);
+            }
+            return lstManualControlBoardControlType;
         }
     }
 }

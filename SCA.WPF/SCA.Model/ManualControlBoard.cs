@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.ComponentModel;
 /* ==============================
 *
 * Author     : William
@@ -97,4 +97,21 @@ namespace SCA.Model
         }
         #endregion
     }
+    /// <summary>
+    /// 网络手动盘被控设备类型
+    /// </summary>
+    public enum ManualControlBoardControlType
+    {
+        [Description("空器件")]
+        EmptyDevice=0,
+        [Description("本机设备")]
+        LocalDevice=1,
+        [Description("楼区层")]
+        ZoneLayer=2,
+        [Description("输出组")]
+        OutputGroup=3,
+        [Description("网络设备")]
+        NetDevice=4             
+    }
+
 }

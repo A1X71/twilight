@@ -296,6 +296,7 @@ namespace SCA.BusinessLib.BusinessLogic
             string strMatchingDeviceNo = "31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,74,75,76,77,78";
             return strMatchingDeviceNo;
         }
+
         #region EXCEL 模板
         /// <summary>
         /// EXCEL模板->摘要信息->控制器设置->行数，名称
@@ -428,8 +429,12 @@ namespace SCA.BusinessLib.BusinessLogic
         Feature=9,//特性
         Disable=10,//屏蔽
         SensitiveLevel=11, //灵敏度
-        DeviceTypeWithAnyAlarm=12,//器件类型(包含任意火警)
-        DeviceTypeWithoutFireDevice=13 //器件类型（不包含可报火警的器件）
+        DeviceTypeInfoForGeneralLinkageInput = 12,//通用组态输入部分器件类型
+        DeviceTypeInfoForGeneralLinkageOutput = 13, //通用组态输出部分器件类型
+        DeviceTypeInfoForMixedLinkageInput = 14,//混合组态输入部分器件类型
+        DeviceTypeInfoForMixedLinkageOutput = 15,  //混合组态输出部分器件类型
+        LinkageInputPartType=16, //组态输入部分类别[8053使用]
+        ManualControlBoardControlType=17 //网络手动盘被控类型
 
 
     }

@@ -333,5 +333,37 @@ namespace SCA.BusinessLib.BusinessLogic
                 
             }            
         }
+
+
+        //public bool UpdateLoop(LoopModel loop)
+        //{
+            
+        //}
+        //private bool UpdateLoopToDB(LoopModel loop)
+        //{
+        //    try
+        //    {
+        //        IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
+        //        ILogRecorder logger = null;
+        //        DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this._controller.Project.SavePath, logger, _fileService);
+        //        IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+        //        ILoopDBService deviceDBService = new SCA.DatabaseAccess.DBContext.LoopDBService( _dbFileVersionService);
+        //        if()
+        //        if (deviceDBService.DeleteDeviceByID(id))
+        //        {
+        //            if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 == id) //如果最大ID等于被删除的ID，则重新赋值
+        //            {
+        //                ControllerOperation8053 controllerOperation = new ControllerOperation8053();
+        //                BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8053 = controllerOperation.GetMaxDeviceID();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+
+        //}
     }
 }

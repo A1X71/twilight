@@ -108,7 +108,11 @@ namespace SCA.Interface
        List<Model.DeviceType> GetALLDeviceTypeInfo(int? projectID);
        //获取控制器可用器件类型
        List<DeviceType> GetDeviceTypeInfo();
-       List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm(); 
+       List<DeviceType> GetAllowedDeviceTypeInfoForAnyAlarm();
+       /// <summary>
+       /// 标准组态：联动组号为8000时，可启动的器件类型
+       /// </summary>
+       /// <returns></returns>
        List<DeviceType> GetAllowedDeviceTypeInfoForLinkageGroup8000();
        /// <summary>
        /// 取得控制器类型
@@ -139,15 +143,53 @@ namespace SCA.Interface
        /// </summary>
        /// <returns></returns>
        List<Model.LinkageType> GetLinkageType();
-
+       /// <summary>
+       /// 取得联动输入类别
+       /// </summary>
+       /// <returns></returns>
+       List<LinkageInputPartType> GetLinkageInputType();
        List<string> GetFeatureList();
 
        List<string> GetDisableList();
 
        List<string> GetSensitiveLevelList();
 
+       /// <summary>
+       /// 取得增加了"任意火警"的器件列表
+       /// </summary>
+       /// <returns></returns>
        List<DeviceType> GetDeviceTypeInfoWithAnyAlarm();
+       /// <summary>
+       /// 取得除报火警器件之外的器件信息
+       /// </summary>
+       /// <returns></returns>
        List<DeviceType> GetDeviceTypeInfoWithoutFireDevice();
+       /// <summary>
+       /// 取得混合组态输入器件类型
+       /// </summary>
+       /// <returns></returns>
+       List<DeviceType> GetDeviceTypeInfoForMixedLinkageInput();
+       /// <summary>
+       /// 取得混合组态输出器件类型
+       /// </summary>
+       /// <returns></returns>
+       List<DeviceType> GetDeviceTypeInfoForMixedLinkageOutput();
+       /// <summary>
+       /// 取得通用组态输入器件类型 
+       /// </summary>
+       /// <returns></returns>
+       List<DeviceType> GetDeviceTypeInfoForGeneralLinkageInput();
+       /// <summary>
+       /// 取得通用组态输出器件类型
+       /// </summary>
+       /// <returns></returns>       
+       List<DeviceType> GetDeviceTypeInfoForGeneralLinkageOutput();
+       /// <summary>
+       /// 取得网络手动盘被控类型
+       /// </summary>
+       /// <returns></returns>
+       List<ManualControlBoardControlType> GetManualControlBoardControlType();
+      
        Dictionary<int, string> GetNameOfControllerSettingInSummaryInfoOfExcelTemplate();
 
        /// <summary>

@@ -36,6 +36,7 @@ using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.Interface.BusinessLogic;
 using Neat.Dennis.Common.LoggerManager;
+using SCA.Interface;
 
 /* ==============================
 *
@@ -233,7 +234,72 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 RaisePropertyChanged("NetDevice4");
             }
         }
+        private string _buildingNo;
+        public new string BuildingNo
+        {
+            get
+            {
+                return _buildingNo;
+            }
+            set
+            {
+                _buildingNo=value;
+                RaisePropertyChanged("BuildingNo");
+            }
+        }
+        private string _areaNo;
+        public new string AreaNo
+        {
+            get
+            {
+                return _areaNo;
+            }
+            set
+            {
+                _areaNo=value;
+                RaisePropertyChanged("AreaNo");
+            }
+        }
+        private string _floorNo;
+        public string FloorNo
+        {
+            get
+            {
+                return _floorNo;
+            }
+            set
+            {
 
+                _floorNo=value;
+                RaisePropertyChanged("FloorNo");
+            }
+        }
+        private short _deviceType;
+        public new short DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType=value;
+                RaisePropertyChanged("DeviceType");
+            }
+        }
+        private string _linkageGroup;
+        public new string LinkageGroup
+        {
+            get
+            {
+                return _linkageGroup;                    
+            }
+            set
+            {
+                _linkageGroup=value;
+                  RaisePropertyChanged("LinkageGroup");
+            }
+        }
         private string _controlTypeString;
         public string ControlTypeString
         {
@@ -522,8 +588,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
-                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithAnyAlarm();                
+                IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);                
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfo();                
                 return lstDeviceType;
        
             }
@@ -766,7 +832,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             
             #region 调业务逻辑
             _manualControlBoardService.TheController = this.TheController;
-            List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(rowsAmount);
+            //List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(rowsAmount);
+            List<ManualControlBoard> lstMCB = _manualControlBoardService.Create(0,1,1,rowsAmount);
             #endregion 调业务逻辑
             foreach (var v in lstMCB)
             {
@@ -775,6 +842,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 mcb.ControllerID = v.ControllerID;
                 mcb.ID = v.ID;
                 mcb.Code = v.Code;
+                mcb.BoardNo = v.BoardNo;
+                mcb.SubBoardNo = v.SubBoardNo;
+                mcb.KeyNo = v.KeyNo;
                 ManualControlBoardInfoObservableCollection.Add(mcb);
             }
         }

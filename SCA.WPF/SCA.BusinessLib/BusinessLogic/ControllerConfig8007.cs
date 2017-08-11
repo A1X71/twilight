@@ -327,6 +327,39 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
+
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageInput()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageOutput()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageInput()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageOutput()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<LinkageInputPartType> GetLinkageInputType()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<ManualControlBoardControlType> GetManualControlBoardControlType()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

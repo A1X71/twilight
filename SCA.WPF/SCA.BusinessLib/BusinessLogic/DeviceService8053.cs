@@ -306,23 +306,23 @@ namespace SCA.BusinessLib.BusinessLogic
                         //    result.Code = data[i];
                         //    break;
                         case "器件类型":
-                            result.TypeCode = Convert.ToInt16(data[i]);
+                            result.TypeCode = data[i] == "" ? (short)0 : Convert.ToInt16(data[i]);
                             break;
                         case "特性":
-                            result.Feature = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.Feature = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "屏蔽":
                             //需要将Disable存储为0或1                            
-                            result.Disable =  data[i]==""?false:(data[i].ToString().ToUpper() == "TRUE" ? true : false);
+                            result.Disable = data[i] == "" ? false : (data[i].ToString().ToUpper() == "TRUE" ? true : false);
                             break;                        
                         case "输出组1":
-                            result.LinkageGroup1 = data[i].ToString();
+                            result.LinkageGroup1 = data[i];
                             break;
                         case "输出组2":
-                            result.LinkageGroup2 = data[i].ToString();
+                            result.LinkageGroup2 = data[i];
                             break;
                         case "输出组3":
-                            result.LinkageGroup3 = data[i].ToString();
+                            result.LinkageGroup3 = data[i];
                             break;
                         case "延时":
                             result.DelayValue = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
@@ -340,7 +340,7 @@ namespace SCA.BusinessLib.BusinessLogic
                             result.RoomNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "安装地点":
-                            result.Location = data[i].ToString();
+                            result.Location = data[i];
                             break;
                     }
                 }

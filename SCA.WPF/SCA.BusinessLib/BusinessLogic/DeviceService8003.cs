@@ -271,17 +271,17 @@ namespace SCA.BusinessLib.BusinessLogic
                         //    result.Code = data[i];
                         //    break;
                         case "器件类型":
-                            result.TypeCode = Convert.ToInt16(data[i]);
+                            result.TypeCode = data[i] == "" ? (short)0 : Convert.ToInt16(data[i]);
                             break;
                         case "特性":
-                            result.Feature = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.Feature = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "屏蔽":
                             //需要将Disable存储为0或1
-                            result.Disable = new Nullable<bool>(data[i].ToString().ToUpper() == "TRUE" ? true : false);
+                            result.Disable = data[i] == "" ? null : new Nullable<bool>(data[i].ToString().ToUpper() == "TRUE" ? true : false);
                             break;
                         case "灵敏度":
-                            result.SensitiveLevel = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.SensitiveLevel = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;
                         case "输出组1":
                             result.LinkageGroup1 = data[i];
@@ -290,10 +290,10 @@ namespace SCA.BusinessLib.BusinessLogic
                             result.LinkageGroup2 = data[i];
                             break;                        
                         case "延时":
-                            result.DelayValue = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.DelayValue = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;                      
                         case "区号":
-                            result.ZoneNo = new Nullable<short>(Convert.ToInt16(data[i]));
+                            result.ZoneNo = data[i] == "" ? null : new Nullable<short>(Convert.ToInt16(data[i]));
                             break;                        
                         case "安装地点":
                             result.Location = data[i];

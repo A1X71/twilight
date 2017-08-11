@@ -11,6 +11,7 @@ using SCA.Interface.BusinessLogic;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.WPF.Utility;
 using SCA.WPF.Infrastructure;
+using SCA.Interface;
 using SCA.BusinessLib.Controller;
 using System.Windows;
 /* ==============================
@@ -791,8 +792,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
-                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithAnyAlarm();                
+                //SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
+                IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoForGeneralLinkageInput();                
                 return lstDeviceType;
        
             }
@@ -801,8 +803,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             get
             {
-                SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
-                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoWithoutFireDevice();                 
+                //SCA.BusinessLib.BusinessLogic.ControllerConfig8001 config = new BusinessLib.BusinessLogic.ControllerConfig8001();
+                IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
+                List<DeviceType> lstDeviceType = config.GetDeviceTypeInfoForGeneralLinkageOutput();                 
                 return lstDeviceType;
             }
         }

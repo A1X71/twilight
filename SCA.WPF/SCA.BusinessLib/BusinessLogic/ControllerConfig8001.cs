@@ -119,7 +119,7 @@ namespace SCA.BusinessLib.BusinessLogic
             columnDefinitionArray[5] = new ColumnConfigInfo();
             columnDefinitionArray[5].ColumnName =  "A层号2";
             columnDefinitionArray[6] = new ColumnConfigInfo();
-            columnDefinitionArray[6].ColumnName =  "类型A";
+            columnDefinitionArray[6].ColumnName =  "A类型";
             columnDefinitionArray[7] = new ColumnConfigInfo();
             columnDefinitionArray[7].ColumnName =  "C分类";
             columnDefinitionArray[8] = new ColumnConfigInfo();
@@ -414,9 +414,6 @@ namespace SCA.BusinessLib.BusinessLogic
            //C编号
            dictExpressionAndInfo.Add("Device", new RuleAndErrorMessage("^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-2]|0)$", "器件编号范围为1~252"));
            //类型C
-
-
-           
            return dictExpressionAndInfo;
        }
 
@@ -596,6 +593,41 @@ namespace SCA.BusinessLib.BusinessLogic
             //备注
             dictExpressionAndInfo.Add("Memo", new RuleAndErrorMessage("^[\\s\\S]{30}$","长度为30个字符"));   
             return dictExpressionAndInfo;
+        }
+
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageInput()
+        {
+            string deviceType = GetDeviceTypeCodeInfo();
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForMixedLinkageOutput()
+        {
+            string deviceType = GetDeviceTypeCodeInfo();
+            return base.ConvertDeviceTypeCodeToDeviceType(deviceType);
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageInput()
+        {
+            return  GetDeviceTypeInfoWithAnyAlarm();    
+        }
+
+        public List<DeviceType> GetDeviceTypeInfoForGeneralLinkageOutput()
+        {
+            return GetDeviceTypeInfoWithoutFireDevice();
+        }
+
+
+        public List<LinkageInputPartType> GetLinkageInputType()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<ManualControlBoardControlType> GetManualControlBoardControlType()
+        {
+            throw new NotImplementedException();
         }
     }
 }

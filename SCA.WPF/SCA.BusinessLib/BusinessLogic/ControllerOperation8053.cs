@@ -29,6 +29,8 @@ using SCA.Model;
 using SCA.Interface;
 using SCA.BusinessLib.Utility;
 using SCA.Interface.DatabaseAccess;
+using SCA.Model.BusinessModel;
+using SCA.BusinessLib.Utility;
 using Neat.Dennis.Common.LoggerManager;
 using System.Reflection;
 
@@ -106,98 +108,7 @@ namespace SCA.BusinessLib.BusinessLogic
             throw new NotImplementedException();
         }
 
-        public ControllerModel OrganizeControllerInfoFromOldVersionSoftwareDataFile(IOldVersionSoftwareDBService oldDBService)
-        {
-             ControllerModel controllerInfo= new ControllerModel();
-            try
-            {
-                ControllerConfigNone configBase = new ControllerConfigNone();
-
-                controllerInfo.Name = "OldVersion";
-                controllerInfo.Project = null;
-                controllerInfo.DeviceAddressLength = 8;
-                controllerInfo.Type = ControllerType.NT8053;
-                controllerInfo.PrimaryFlag = false;
-                controllerInfo.LoopAddressLength = 2;
-
-                List<LoopModel> lstLoopInfo = null; //GetLoopInfoFromOldVersionSoftwareDataFile(oldDBService);
-                StringBuilder sbQuerySQL = new StringBuilder();
-                foreach (var l in lstLoopInfo)//回路信息
-                {
-                    LoopModel loop = l;
-                    #region comment
-                    //sbQuerySQL.Clear();
-                    //sbQuerySQL.Append("select bianhao,leixing,geli,shuchu1,shuchu2,nongdu,yjnongdu,yanshi,louhao,quhao,cenghao,fangjianhao,didian from " + loop.Code);                             
-                    
-
-                    //DataTable dtDevices=_databaseService.GetDataTableBySQL(sbQuerySQL);
-                    //int dtDevicesRowsCount=dtDevices.Rows.Count;
-                    
-                    //for (int j = 0; j< dtDevicesRowsCount; j++) //器件信息
-                    //{
-                    //    DeviceInfo8036 device = new DeviceInfo8036();
-                    //    device.Code    = dtDevices.Rows[j]["bianhao"].ToString();
-                    //    device.TypeCode    = Convert.ToInt16(dtDevices.Rows[j]["leixing"].ToString().NullToZero());
-                    //    device.Disable = Convert.ToInt16(dtDevices.Rows[j]["geli"].ToString().NullToZero());
-                    //    device.LinkageGroup1 = dtDevices.Rows[j]["shuchu1"].ToString();
-                    //    device.LinkageGroup2 = dtDevices.Rows[j]["shuchu2"].ToString();
-                    //    device.AlertValue =float.Parse(dtDevices.Rows[j]["nongdu"].ToString().NullToZero());
-                    //    device.ForcastValue =float.Parse(dtDevices.Rows[j]["yjnongdu"].ToString().NullToZero());
-                    //    device.DelayValue=Int16.Parse( dtDevices.Rows[j]["yanshi"].ToString().NullToZero());
-                    //    device.BuildingNo=Int16.Parse(dtDevices.Rows[j]["louhao"].ToString().NullToZero());                        
-                    //    device.ZoneNo=Int16.Parse(dtDevices.Rows[j]["quhao"].ToString().NullToZero());
-                    //    device.FloorNo=Int16.Parse(dtDevices.Rows[j]["cenghao"].ToString().NullToZero());
-                    //    device.RoomNo=Int16.Parse(dtDevices.Rows[j]["fangjianhao"].ToString().NullToZero());
-                    //    device.Location =dtDevices.Rows[j]["didian"].ToString();
-                    //    device.Loop = loop;
-                    //    loop.SetDevice<DeviceInfo8036>(device);
-                    //}
-                    #endregion
-                    oldDBService.GetDevicesInLoop(ref loop,null);
-                    //foreach (var device in lstDevices)
-                    //{
-                    //    device.Loop = loop;
-                    //    loop.SetDevice<DeviceInfo8036>(device);
-                    //}
-                    loop.Controller = controllerInfo;
-                    controllerInfo.Loops.Add(loop);
-                }
-                #region comment
-                //sbQuerySQL.Clear();
-                //sbQuerySQL = sbQuerySQL.Append("select 输出组号,编号1,编号2,编号3,编号4,动作常数,联动组1,联动组2,联动组3 from 器件组态;");                
-                //DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
-                //int dtRowsCount=dt.Rows.Count;
-                //for(int i=0;i<dtRowsCount;i++)
-                //{
-                //    LinkageConfigStandard linkageConfigStandard = new LinkageConfigStandard();
-                //    linkageConfigStandard.Code=dt.Rows[i]["输出组号"].ToString();
-                //    linkageConfigStandard.DeviceNo1=dt.Rows[i]["编号1"].ToString();
-                //    linkageConfigStandard.DeviceNo2=dt.Rows[i]["编号2"].ToString();
-                //    linkageConfigStandard.DeviceNo3=dt.Rows[i]["编号3"].ToString();
-                //    linkageConfigStandard.DeviceNo4=dt.Rows[i]["编号4"].ToString();
-                //    linkageConfigStandard.ActionCoefficient=Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToImpossibleValue());
-                //    linkageConfigStandard.LinkageNo1=dt.Rows[i]["联动组1"].ToString();
-                //    linkageConfigStandard.LinkageNo2=dt.Rows[i]["联动组2"].ToString();
-                //    linkageConfigStandard.LinkageNo3 = dt.Rows[i]["联动组3"].ToString();
-                //    linkageConfigStandard.Controller = controllerInfo;
-                //    controllerInfo.StandardConfig.Add(linkageConfigStandard);
-                //}
-                #endregion
-                List<LinkageConfigStandard> lstStandardLinkageConfig= oldDBService.GetStandardLinkageConfig();
-                foreach (var config in lstStandardLinkageConfig)
-                {
-                    config.Controller = controllerInfo;
-                    controllerInfo.StandardConfig.Add(config);
-                }
-            }
-            catch
-            {
-
-                
-            }
-            return controllerInfo;
-        }
-
+      
 
         public Model.ControllerType GetControllerType()
         {
@@ -218,23 +129,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 #region 控制器配置
                 ControllerConfig8053 config=new ControllerConfig8053();
                 string strMatchingDevTypeID=config.GetDeviceTypeCodeInfo();
-                #region comment 
-                //StringBuilder sbDeviceTypeSQL = new StringBuilder("Select Code,Name,IsValid,ProjectID, MatchingController from DeviceType where Code in ("+strMatchingDevTypeID+");" );
-                //List<Model.DeviceType> lstDeviceType=(List<Model.DeviceType>)_databaseService.GetDataListBySQL<DeviceType>(sbDeviceTypeSQL);
-                //foreach (DeviceType devType in lstDeviceType)
-                //{
-                //    devType.MatchingController = devType.MatchingController == null ? "" : devType.MatchingController;
-                     
-                //    //如果MatchingController中不包含当前的控制器，则更新字段
-                //    if (!devType.MatchingController.Contains(ControllerType.NT8036.ToString()))
-                //    {
-                //        devType.MatchingController = devType.MatchingController == "" ? devType.MatchingController : devType.MatchingController + ",";
-                //        devType.MatchingController = devType.MatchingController  + ControllerType.NT8036;
-                //        sbDeviceTypeSQL = new StringBuilder("Update DeviceType set MatchingController='" + devType.MatchingController + "' where Code=" + devType.Code + ";");
-                //   //     _databaseService.ExecuteBySql(sbDeviceTypeSQL);
-                //    }                    
-                //}
-                #endregion
+               
                 deviceTypeDBService.UpdateMatchingController(ControllerType.NT8053, strMatchingDevTypeID); 
                 #endregion 
 
@@ -263,57 +158,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 return false;
             }
         }
-        //此方法的功能逻辑同CreateController,需要删除。测试后如无用，则删掉
-        public bool SaveController(ControllerModel controller)
-        {
-            try
-            {
-                #region 控制器配置
-                ControllerConfig8053 config = new ControllerConfig8053();
-                string strMatchingDevTypeID = config.GetDeviceTypeCodeInfo();
-                StringBuilder sbDeviceTypeSQL = new StringBuilder("Select Code,Name,IsValid,ProjectID, MatchingController from DeviceType where Code in (" + strMatchingDevTypeID + ");");
-                List<Model.DeviceType> lstDeviceType = (List<Model.DeviceType>)_databaseService.GetDataListBySQL<DeviceType>(sbDeviceTypeSQL);
-                foreach (DeviceType devType in lstDeviceType)
-                {
-                    devType.MatchingController = devType.MatchingController == null ? "" : devType.MatchingController;
-
-                    //如果MatchingController中不包含当前的控制器，则更新字段
-                    if (!devType.MatchingController.Contains(ControllerType.NT8036.ToString()))
-                    {
-                        devType.MatchingController = devType.MatchingController == "" ? devType.MatchingController : devType.MatchingController + ",";
-                        devType.MatchingController = devType.MatchingController + ControllerType.NT8053;
-                        sbDeviceTypeSQL = new StringBuilder("Update DeviceType set MatchingController='" + devType.MatchingController + "' where Code=" + devType.Code + ";");
-                        _databaseService.ExecuteBySql(sbDeviceTypeSQL);
-                    }
-
-                }
-                #endregion
-                #region 增加控制器信息
-                //版本号怎么计，是按原版本号累加，还是初始化一个新的版本号
-                //当前为初始化一个新的版本号
-                StringBuilder sbControllerSQL = new StringBuilder("Insert into Controller(ID,PrimaryFlag,TypeID,DeviceAddressLength,Name,PortName,BaudRate,MachineNumber,Version,ProjectID) values(");
-                sbControllerSQL.Append(controller.ID + ",'");
-                sbControllerSQL.Append(controller.PrimaryFlag + "',");//+ "',0);");
-                sbControllerSQL.Append((int)controller.Type + ",");
-                sbControllerSQL.Append(controller.DeviceAddressLength + ",'");
-                sbControllerSQL.Append(controller.Name + "','");
-                sbControllerSQL.Append(controller.PortName + "',");
-                sbControllerSQL.Append(controller.BaudRate + ",'");
-                sbControllerSQL.Append(controller.MachineNumber + "',");
-                sbControllerSQL.Append(controller.Version + ",");
-                sbControllerSQL.Append(controller.Project.ID + ")");
-                _databaseService.ExecuteBySql(sbControllerSQL);
-
-                #endregion
- 
-                return true;
-            }
-            catch (Exception ex)
-            {
-
-                return false;
-            }
-        }
+        
+      
         public List<LoopModel> CreateLoops(int amount)
         {
             throw new NotImplementedException();
@@ -379,19 +225,15 @@ namespace SCA.BusinessLib.BusinessLogic
         public List<DeviceInfoForSimulator> GetSimulatorDevices(ControllerModel controller)
         {
 
-         //   var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers where r.Type == ControllerType.NT8036 select r;
-            List<DeviceInfo8053> lstDeviceInfo = new List<DeviceInfo8053>();
-           // foreach (var c in controllers)
-           // {
-                foreach (var l in controller.Loops)
+         
+            List<DeviceInfo8053> lstDeviceInfo = new List<DeviceInfo8053>();           
+            foreach (var l in controller.Loops)
+            {
+                foreach (var d in l.GetDevices<DeviceInfo8053>())
                 {
-                    foreach (var d in l.GetDevices<DeviceInfo8053>())
-                    {
-                        lstDeviceInfo.Add(d);
-                    }
+                    lstDeviceInfo.Add(d);
                 }
-         //   }
-
+            }
             List<DeviceInfoForSimulator> lstDeviceSimulator = new List<DeviceInfoForSimulator>();
             int i = 0;
             foreach (var d in lstDeviceInfo)
@@ -433,10 +275,11 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 string message = ex.Message;
                 return false;
-            }   
+            }
         }
 
-        protected override bool GenerateExcelTemplateLoopSheet(List<string> sheetNames, IControllerConfig config, Model.BusinessModel.ExcelTemplateCustomizedInfo summaryInfo, ref IExcelService excelService)
+        #region 生成EXCEL模板
+        protected override bool GenerateExcelTemplateLoopSheet(List<string> sheetNames, IControllerConfig config, ExcelTemplateCustomizedInfo summaryInfo, ref IExcelService excelService)
         {
             try
             {
@@ -446,7 +289,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 string loopSheetNamePrefix = "";//回路页签名称前缀
                 short maxDeviceAmount = config.GetMaxDeviceAmountValue();
                 int maxLoopAmount = config.GetMaxLoopAmountValue(); //允许最大回路数量
-                int defaultDeviceTypeCode = summaryInfo.DefaultDeviceTypeCode;//默认器件编码   
+                int defaultDeviceTypeCode = summaryInfo.DefaultDeviceTypeCode;//默认器件编码                
                 DeviceType defaultDeviceType = config.GetDeviceTypeViaDeviceCode(defaultDeviceTypeCode);//默认器件类型
                 ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetDeviceColumns(); //取得器件的列定义信息
                 List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
@@ -496,8 +339,8 @@ namespace SCA.BusinessLib.BusinessLogic
                             string deviceCode = (k + 1).ToString().PadLeft(summaryInfo.SelectedDeviceCodeLength - defaultLoopCodeLength - summaryInfo.MachineNumberFormatted.Length, '0');
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 0, loopCode + deviceCode, CellStyleType.Data); //器件编码
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 1, defaultDeviceType.Name, CellStyleType.Data); //器件类型
-                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 2, "0", CellStyleType.Data);
-                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 3, null, CellStyleType.Data); //屏蔽
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 2, null, CellStyleType.Data);
+                            excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 3, "0", CellStyleType.Data); //屏蔽
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 4, null, CellStyleType.Data); 
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 5, null, CellStyleType.Data);
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 6, null, CellStyleType.Data);
@@ -507,21 +350,29 @@ namespace SCA.BusinessLib.BusinessLogic
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 10, null, CellStyleType.Data);
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 11, null, CellStyleType.Data);
                             excelService.SetCellValue(sheetNames[i], j * maxDeviceAmount + k + (j * extraLine + 2), 12, null, CellStyleType.Data);
+                            
                         }
                         mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 1;
                         mergeCellRange.LastColumnIndex = 1;
-                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.DeviceType.ToString(), mergeCellRange);                        
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
                         mergeCellRange = new MergeCellRange();
                         mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
                         mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
                         mergeCellRange.FirstColumnIndex = 2;
                         mergeCellRange.LastColumnIndex = 2;
+                        excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.Feature.ToString(), mergeCellRange);
+                        mergeCellRange = new MergeCellRange();
+                        mergeCellRange.FirstRowIndex = j * maxDeviceAmount + (j * extraLine + 2);
+                        mergeCellRange.LastRowIndex = j * maxDeviceAmount + (j * extraLine + 2) + maxDeviceAmount - 1;
+                        mergeCellRange.FirstColumnIndex = 3;
+                        mergeCellRange.LastColumnIndex = 3;
                         excelService.SetSheetValidationForListConstraint(sheetNames[i], RefereceRegionName.Disable.ToString(), mergeCellRange);                        
                     }
                     excelService.SetColumnWidth(sheetNames[i], 1, 15f);
+                    excelService.SetColumnWidth(sheetNames[i], deviceColumnDefinitionArray.Length-1, 50f);//安装地点
                     excelService.SetMergeCells(sheetNames[i], lstMergeCellRange);//设置"回路页签"合并单元格
                 }
                 #endregion
@@ -530,54 +381,67 @@ namespace SCA.BusinessLib.BusinessLogic
             {
                 return false;
             }
-            return true;  
+            return true;
         }
-
         protected override bool GenerateExcelTemplateStandardSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
         {
             try
             {
                 #region 标准组态表头
+                //调整为从配置信息中读取，未测试 2017-07-28
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.NT8053);
+                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetStandardLinkageConfigColumns(); //取得标准组态的列定义信息
                 List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
-                lstMergeCellRange.Clear();
-                // 加的1页，为“摘要页”                
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "输出组号", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "联动模块1", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "联动模块2", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "联动模块3", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "联动模块4", CellStyleType.TableHead);                
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 5, "动作常数", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 6, "联动组1", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 7, "联动组2", CellStyleType.TableHead);
-                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 8, "联动组3", CellStyleType.TableHead);
+                int currentRowIndex = 0;
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], currentRowIndex, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                currentRowIndex++;
+                for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], currentRowIndex, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                }
+
                 MergeCellRange mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 0;
                 mergeCellRange.LastRowIndex = 0;
                 mergeCellRange.FirstColumnIndex = 0;
-                mergeCellRange.LastColumnIndex = 8;
+                mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
                 lstMergeCellRange.Add(mergeCellRange);
                 excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"标准组态页签"合并单元格
                 //int maxStandardLinkageAmount = config.GetMaxAmountForStandardLinkageConfig();
                 for (int i = 2; i < maxLinkageAmount + 3; i++)
                 {
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);                    
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 15, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 16, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 17, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 18, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 19, null, CellStyleType.Data);
                 }
                 mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 2;
                 mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
-                mergeCellRange.FirstColumnIndex = 5;
-                mergeCellRange.LastColumnIndex = 5;
+                mergeCellRange.FirstColumnIndex = 15;
+                mergeCellRange.LastColumnIndex = 15;
                 excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
-
+                excelService.SetColumnWidth(sheetNames[loopSheetAmount + currentIndex], deviceColumnDefinitionArray.Length - 1, 50f);//备注
                 #endregion
             }
             catch (Exception ex)
@@ -586,25 +450,236 @@ namespace SCA.BusinessLib.BusinessLogic
             }
             return true;
         }
-
         protected override bool GenerateExcelTemplateMixedSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                #region 混合组态表头
+                // 修改为从配置文件中读取，未测试2017-07-28
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.NT8053);
+                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetMixedLinkageConfigColumns(); //取得混合组态的列定义信息
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                }
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"混合组态页签"合并单元格                
+                for (int i = 2; i < maxLinkageAmount + 3; i++)
+                {
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }
+                }
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 1;
+                mergeCellRange.LastColumnIndex = 1;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 2;
+                mergeCellRange.LastColumnIndex = 2;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 3;
+                mergeCellRange.LastColumnIndex = 3;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 4;
+                mergeCellRange.LastColumnIndex = 4;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageInputPartType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 10;
+                mergeCellRange.LastColumnIndex = 10;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 11;
+                mergeCellRange.LastColumnIndex = 11;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 12;
+                mergeCellRange.LastColumnIndex = 12;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageInputPartType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 18;
+                mergeCellRange.LastColumnIndex = 18;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 19;
+                mergeCellRange.LastColumnIndex = 19;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeCastration.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 26;
+                mergeCellRange.LastColumnIndex = 26;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
 
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+
+        }
         protected override bool GenerateExcelTemplateGeneralSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxLinkageAmount, ref IExcelService excelService)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                #region 通用组态表头
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.NT8053);
+                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetGeneralLinkageConfigColumns(); //取得混合组态的列定义信息
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                }
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
+                lstMergeCellRange.Add(mergeCellRange);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"通用组态页签"合并单元格                    
 
+                for (int i = 2; i < maxLinkageAmount + 3; i++)
+                {
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }                    
+                }
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 1;
+                mergeCellRange.LastColumnIndex = 1;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ActionCoefficient.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 2;
+                mergeCellRange.LastColumnIndex = 2;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageInputPartType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 7;
+                mergeCellRange.LastColumnIndex = 7;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeInfoForGeneralLinkageInput.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 8;
+                mergeCellRange.LastColumnIndex = 8;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.LinkageTypeAll.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
+                mergeCellRange.FirstColumnIndex = 15;
+                mergeCellRange.LastColumnIndex = 15;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeInfoForGeneralLinkageOutput.ToString(), mergeCellRange);
+            }
+                #endregion
+
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
         protected override bool GenerateExcelTemplateManualControlBoardSheet(List<string> sheetNames, int currentIndex, int loopSheetAmount, int maxAmount, ref IExcelService excelService)
         {
-            throw new NotImplementedException();
+            try
+            {
+                #region 网络手动盘表头
+
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();
+
+                IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.NT8053);
+                ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetManualControlBoardColumns(); 
+                excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                for (int devColumnCount = 0; devColumnCount < deviceColumnDefinitionArray.Length; devColumnCount++)
+                {
+                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
+                }
+                MergeCellRange mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 0;
+                mergeCellRange.LastRowIndex = 0;
+                mergeCellRange.FirstColumnIndex = 0;
+                mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
+                lstMergeCellRange.Add(mergeCellRange);
+                //修改为从配置文件中读取 未测试 2017-07-28
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "编号", CellStyleType.TableHead);
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "板卡号", CellStyleType.TableHead);
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "手盘号", CellStyleType.TableHead);
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "手键号", CellStyleType.TableHead);
+                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "地编号", CellStyleType.TableHead);
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"网络手动盘页签"合并单元格
+
+                for (int i = 2; i < maxAmount + 3; i++)
+                {
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }                               
+                }
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex =  maxAmount + 2;
+                mergeCellRange.FirstColumnIndex = 3;
+                mergeCellRange.LastColumnIndex = 3;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.ManualControlBoardControlType.ToString(), mergeCellRange);
+                mergeCellRange = new MergeCellRange();
+                mergeCellRange.FirstRowIndex = 2;
+                mergeCellRange.LastRowIndex = maxAmount + 2;
+                mergeCellRange.FirstColumnIndex = 11;
+                mergeCellRange.LastColumnIndex = 11;
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceType.ToString(), mergeCellRange);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+
         }
+        #endregion
 
         protected override bool ExistSameDeviceCode(LoopModel loop)
         {
-            DeviceService8036 deviceService = new DeviceService8036();
+            DeviceService8053 deviceService = new DeviceService8053();
             deviceService.TheLoop = loop;
             if (deviceService.IsExistSameDeviceCode())
             {
@@ -621,7 +696,7 @@ namespace SCA.BusinessLib.BusinessLogic
             loopDetailErrorInfo = "";//Initialize
             //取得当前控制器最大器件ID
             int maxDeviceID = this.GetMaxDeviceID();
-            ControllerConfig8036 config = new ControllerConfig8036();
+            ControllerConfig8053 config = new ControllerConfig8053();
             //暂停对具体信息进行验证
             //Dictionary<string, RuleAndErrorMessage> dictDeviceDataRule = config.GetDeviceInfoRegularExpression(controller.DeviceAddressLength);
             List<LoopModel> lstLoops = new List<LoopModel>();
@@ -674,7 +749,15 @@ namespace SCA.BusinessLib.BusinessLogic
                 device.ID = maxDeviceID;
                 device.Code = dt.Rows[i]["编码"].ToString();
                 device.TypeCode = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["器件类型"].ToString());
-                device.Disable = (int)(dt.Rows[i]["屏蔽"]) == 0 ? false : true;
+                if (dt.Rows[i]["特性"].ToString() == "")
+                {
+                    device.Feature = null;
+                }
+                else
+                {
+                    device.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["特性"].ToString()));
+                }
+                device.Disable = Convert.ToInt32(dt.Rows[i]["屏蔽"].ToString().NullToZero()) == 0 ? false : true;
           
                 device.LinkageGroup1 = dt.Rows[i]["输出组1"].ToString();
                 device.LinkageGroup2 = dt.Rows[i]["输出组2"].ToString();
@@ -748,33 +831,298 @@ namespace SCA.BusinessLib.BusinessLogic
                 LinkageConfigStandard lcs = new LinkageConfigStandard();
                 lcs.ID = maxID;
                 lcs.Code = dtStandard.Rows[i]["输出组号"].ToString();
-                lcs.DeviceNo1 = dtStandard.Rows[i]["联动模块1"].ToString();
-                lcs.DeviceNo2 = dtStandard.Rows[i]["联动模块2"].ToString();
-                lcs.DeviceNo3 = dtStandard.Rows[i]["联动模块3"].ToString();
-                lcs.DeviceNo4 = dtStandard.Rows[i]["联动模块4"].ToString();                
+                lcs.DeviceNo1 = dtStandard.Rows[i]["输入模块1"].ToString();
+                lcs.DeviceNo2 = dtStandard.Rows[i]["输入模块2"].ToString();
+                lcs.DeviceNo3 = dtStandard.Rows[i]["输入模块3"].ToString();
+                lcs.DeviceNo4 = dtStandard.Rows[i]["输入模块4"].ToString();
+                lcs.DeviceNo5 = dtStandard.Rows[i]["输入模块5"].ToString();
+                lcs.DeviceNo6 = dtStandard.Rows[i]["输入模块6"].ToString();
+                lcs.DeviceNo7 = dtStandard.Rows[i]["输入模块7"].ToString();
+                lcs.DeviceNo8 = dtStandard.Rows[i]["输入模块8"].ToString();
+                lcs.DeviceNo9 = dtStandard.Rows[i]["输入模块9"].ToString();
+                lcs.DeviceNo10 = dtStandard.Rows[i]["输入模块10"].ToString();
+                lcs.DeviceNo11 = dtStandard.Rows[i]["输入模块11"].ToString();
+                lcs.DeviceNo12 = dtStandard.Rows[i]["输入模块12"].ToString();                
                 lcs.ActionCoefficient = Convert.ToInt32(dtStandard.Rows[i]["动作常数"].ToString().NullToZero());
                 lcs.LinkageNo1 = dtStandard.Rows[i]["联动组1"].ToString();
                 lcs.LinkageNo2 = dtStandard.Rows[i]["联动组2"].ToString();
                 lcs.LinkageNo3 = dtStandard.Rows[i]["联动组3"].ToString();
+                lcs.Memo = dtStandard.Rows[i]["备注"].ToString();
                 lstStandardLinkage.Add(lcs);
             }
             ProjectManager.GetInstance.MaxIDForStandardLinkageConfig = maxID;
             return lstStandardLinkage;
         }
 
-        protected override List<LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dtMixed)
+        protected override List<LinkageConfigMixed> ConvertToMixedLinkageModelFromDataTable(DataTable dt)
         {
-            return null;
+            ControllerConfig8053 config = new ControllerConfig8053();
+            List<LinkageConfigMixed> lstMixedLinkage = new List<LinkageConfigMixed>();
+            int maxID = ProjectManager.GetInstance.MaxIDForMixedLinkageConfig;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
+                maxID++;
+                LinkageConfigMixed lcm = new LinkageConfigMixed();
+                lcm.ID = maxID;
+                lcm.Code = dt.Rows[i]["编号"].ToString();
+                lcm.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
+
+                LinkageActionType lActiontype = lcm.ActionType;
+                Enum.TryParse<LinkageActionType>(EnumUtility.GetEnumName(lActiontype.GetType(), dt.Rows[i]["动作类型"].ToString()), out lActiontype);
+                lcm.ActionType = lActiontype;
+
+                LinkageType lTypeA = lcm.TypeA;
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeA.GetType(), dt.Rows[i]["A分类"].ToString()), out lTypeA);
+                lcm.TypeA = lTypeA;
+
+                LinkageInputPartType inputPartTypeA;
+                Enum.TryParse<LinkageInputPartType>(EnumUtility.GetEnumName(typeof(LinkageInputPartType), dt.Rows[i]["A类别"].ToString()), out inputPartTypeA);
+                lcm.CategoryA = (int)inputPartTypeA; 
+            
+                if (dt.Rows[i]["A楼号"].ToString() == "")
+                {
+                    lcm.BuildingNoA = null;
+                }
+                else
+                {
+                    lcm.BuildingNoA = Convert.ToInt32(dt.Rows[i]["A楼号"].ToString());
+                }
+                if (dt.Rows[i]["A区号"].ToString() == "")
+                {
+                    lcm.ZoneNoA = null;
+                }
+                else
+                {
+                    lcm.ZoneNoA = Convert.ToInt32(dt.Rows[i]["A区号"].ToString());
+                }
+                if (dt.Rows[i]["A层号"].ToString() == "")
+                {
+                    lcm.LayerNoA = null;
+                }
+                else
+                {
+                    lcm.LayerNoA = Convert.ToInt32(dt.Rows[i]["A层号"].ToString());
+                }
+                lcm.LoopNoA = dt.Rows[i]["A路号"].ToString();
+                lcm.DeviceCodeA = dt.Rows[i]["A编号"].ToString();
+
+                lcm.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["A类型"].ToString());
+
+
+                LinkageType lTypeB = lcm.TypeB;
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeB.GetType(), dt.Rows[i]["B分类"].ToString()), out lTypeB);
+                lcm.TypeB = lTypeB;
+
+                LinkageInputPartType inputPartTypeB;
+                Enum.TryParse<LinkageInputPartType>(EnumUtility.GetEnumName(typeof(LinkageInputPartType), dt.Rows[i]["B类别"].ToString()), out inputPartTypeB);
+                lcm.CategoryB = (int)inputPartTypeB; 
+                
+
+                if (dt.Rows[i]["B楼号"].ToString() == "")
+                {
+                    lcm.BuildingNoB = null;
+                }
+                else
+                {
+                    lcm.BuildingNoB = Convert.ToInt32(dt.Rows[i]["B楼号"].ToString());
+                }
+                if (dt.Rows[i]["B区号"].ToString() == "")
+                {
+                    lcm.ZoneNoB = null;
+                }
+                else
+                {
+                    lcm.ZoneNoB = Convert.ToInt32(dt.Rows[i]["B区号"].ToString());
+                }
+                if (dt.Rows[i]["B层号"].ToString() == "")
+                {
+                    lcm.LayerNoB = null;
+                }
+                else
+                {
+                    lcm.LayerNoB = Convert.ToInt32(dt.Rows[i]["B层号"].ToString());
+                }
+                lcm.LoopNoB = dt.Rows[i]["B路号"].ToString();
+                lcm.DeviceCodeB = dt.Rows[i]["B编号"].ToString();
+
+                lcm.DeviceTypeCodeB = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["B类型"].ToString());
+
+
+                LinkageType lTypeC = lcm.TypeC;
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeC.GetType(), dt.Rows[i]["C分类"].ToString()), out lTypeC);
+                lcm.TypeC = lTypeC;
+
+                if (dt.Rows[i]["C楼号"].ToString() == "")
+                {
+                    lcm.BuildingNoC = null;
+                }
+                else
+                {
+                    lcm.BuildingNoC = Convert.ToInt32(dt.Rows[i]["C楼号"].ToString());
+                }
+                if (dt.Rows[i]["C区号"].ToString() == "")
+                {
+                    lcm.ZoneNoC = null;
+                }
+                else
+                {
+                    lcm.ZoneNoC = Convert.ToInt32(dt.Rows[i]["C区号"].ToString());
+                }
+                if (dt.Rows[i]["C层号"].ToString() == "")
+                {
+                    lcm.LayerNoC = null;
+                }
+                else
+                {
+                    lcm.LayerNoC = Convert.ToInt32(dt.Rows[i]["C层号"].ToString());
+                }
+                lcm.MachineNoC = dt.Rows[i]["C机号"].ToString();
+                lcm.LoopNoC = dt.Rows[i]["C回路号"].ToString();
+                lcm.DeviceCodeC = dt.Rows[i]["C编号"].ToString();
+                lcm.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString());
+                lstMixedLinkage.Add(lcm);
+            }
+            ProjectManager.GetInstance.MaxIDForMixedLinkageConfig = maxID;
+            return lstMixedLinkage;
         }
 
-        protected override List<LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dtGeneral)
+        protected override List<LinkageConfigGeneral> ConvertToGeneralLinkageModelFromDataTable(DataTable dt)
         {
-            return null;
+            ControllerConfig8053 config = new ControllerConfig8053();
+            List<LinkageConfigGeneral> lstGeneralLinkage = new List<LinkageConfigGeneral>();
+            int maxID = ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
+                maxID++;
+                LinkageConfigGeneral lcg = new LinkageConfigGeneral();
+                lcg.ID = maxID;
+                lcg.Code = dt.Rows[i]["编号"].ToString();
+                lcg.ActionCoefficient = Convert.ToInt32(dt.Rows[i]["动作常数"].ToString().NullToZero());
+
+
+                LinkageInputPartType inputPartTypeA;
+                Enum.TryParse<LinkageInputPartType>(EnumUtility.GetEnumName(typeof(LinkageInputPartType), dt.Rows[i]["A类别"].ToString()), out inputPartTypeA);
+                lcg.CategoryA = (int)inputPartTypeA; 
+                
+
+                if (dt.Rows[i]["A楼号"].ToString() == "")
+                {
+                    lcg.BuildingNoA = null;
+                }
+                else
+                {
+                    lcg.BuildingNoA = Convert.ToInt32(dt.Rows[i]["A楼号"].ToString());
+                }
+                if (dt.Rows[i]["A区号"].ToString() == "")
+                {
+                    lcg.ZoneNoA = null;
+                }
+                else
+                {
+                    lcg.ZoneNoA = Convert.ToInt32(dt.Rows[i]["A区号"].ToString());
+                }
+                if (dt.Rows[i]["A层号1"].ToString() == "")
+                {
+                    lcg.LayerNoA1 = null;
+                }
+                else
+                {
+                    lcg.LayerNoA1 = Convert.ToInt32(dt.Rows[i]["A层号1"].ToString());
+                }
+                if (dt.Rows[i]["A层号2"].ToString() == "")
+                {
+                    lcg.LayerNoA2 = null;
+                }
+                else
+                {
+                    lcg.LayerNoA2 = Convert.ToInt32(dt.Rows[i]["A层号2"].ToString());
+                }
+
+                lcg.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["A类型"].ToString());
+                LinkageType lTypeC = lcg.TypeC;
+                Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeC.GetType(), dt.Rows[i]["C分类"].ToString()), out lTypeC);
+
+                lcg.TypeC = lTypeC;
+                if (dt.Rows[i]["C楼号"].ToString() == "")
+                {
+                    lcg.BuildingNoC = null;
+                }
+                else
+                {
+                    lcg.BuildingNoC = Convert.ToInt32(dt.Rows[i]["C楼号"].ToString());
+                }
+                if (dt.Rows[i]["C区号"].ToString() == "")
+                {
+                    lcg.ZoneNoC = null;
+                }
+                else
+                {
+                    lcg.ZoneNoC = Convert.ToInt32(dt.Rows[i]["C区号"].ToString());
+                }
+                if (dt.Rows[i]["C层号"].ToString() == "")
+                {
+                    lcg.LayerNoC = null;
+                }
+                else
+                {
+                    lcg.LayerNoC = Convert.ToInt32(dt.Rows[i]["C层号"].ToString());
+                }
+                lcg.MachineNoC = dt.Rows[i]["C机号"].ToString();
+                lcg.LoopNoC = dt.Rows[i]["C回路号"].ToString();
+                lcg.DeviceCodeC = dt.Rows[i]["C编号"].ToString();
+                lcg.DeviceTypeCodeC = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["C类型"].ToString());
+                lstGeneralLinkage.Add(lcg);
+            }
+            ProjectManager.GetInstance.MaxIDForGeneralLinkageConfig = maxID;
+            return lstGeneralLinkage;
         }
 
-        protected override List<ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dtManualControlBoard)
+        protected override List<ManualControlBoard> ConvertToManualControlBoardModelFromDataTable(DataTable dt)
         {
-            return null;
+            ControllerConfig8053 config = new ControllerConfig8053();
+            List<ManualControlBoard> lstManualControlBoard = new List<ManualControlBoard>();
+            int maxID = ProjectManager.GetInstance.MaxIDForManualControlBoard;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["编号"].ToString() == "") //无编号值，认为此工作表已不存在有效数据
+                {
+                    break;
+                }
+                maxID++;
+                ManualControlBoard mcb = new ManualControlBoard();
+                mcb.ID = maxID;
+                mcb.Code = Convert.ToInt32(dt.Rows[i]["编号"].ToString().NullToZero());
+                //mcb.BoardNo = Convert.ToInt32(dt.Rows[i][""].ToString().NullToZero());
+                mcb.SubBoardNo = Convert.ToInt32(dt.Rows[i]["手盘号"].ToString().NullToZero());
+                mcb.KeyNo = Convert.ToInt32(dt.Rows[i]["手键号"].ToString().NullToZero());
+                ManualControlBoardControlType mcbControlType;
+                Enum.TryParse<ManualControlBoardControlType>(EnumUtility.GetEnumName(typeof(ManualControlBoardControlType), dt.Rows[i]["被控类型"].ToString()), out mcbControlType);
+                mcb.ControlType = (int)mcbControlType; 
+                mcb.LocalDevice1 = dt.Rows[i]["本机设备1"].ToString();
+                mcb.LocalDevice2 = dt.Rows[i]["本机设备2"].ToString();
+                mcb.LocalDevice3 = dt.Rows[i]["本机设备3"].ToString();
+                mcb.LocalDevice4 = dt.Rows[i]["本机设备4"].ToString();
+                mcb.BuildingNo = dt.Rows[i]["楼号"].ToString();
+                mcb.AreaNo = dt.Rows[i]["区号"].ToString();
+                mcb.FloorNo = dt.Rows[i]["层号"].ToString();
+                mcb.DeviceType = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["设备类型"].ToString());
+                mcb.LinkageGroup = dt.Rows[i]["输出组"].ToString();
+                mcb.NetDevice1 = dt.Rows[i]["网络设备1"].ToString();
+                mcb.NetDevice2 = dt.Rows[i]["网络设备2"].ToString();
+                mcb.NetDevice3 = dt.Rows[i]["网络设备3"].ToString();
+                mcb.NetDevice4 = dt.Rows[i]["网络设备4"].ToString(); 
+                lstManualControlBoard.Add(mcb);
+            }
+            ProjectManager.GetInstance.MaxIDForManualControlBoard = maxID;
+            return lstManualControlBoard;
         }
         public void SetStaticProgressBarCancelFlag(bool flag)
         {

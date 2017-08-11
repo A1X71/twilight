@@ -260,11 +260,11 @@ namespace SCA.BusinessLib.BusinessLogic
                 SCA.Interface.IControllerConfig config =ControllerConfigManager.GetConfigObject(this.TheController.Type);
                 int totalMaxKeyNo=config.GetMaxAmountForKeyNoInManualControlBoardConfig();
               
-                int maxKeyNo=1;
+                int maxKeyNo=0;
                 //获取当前板卡及回路下的最大"手键号"
                 if (TheController.ControlBoard.Count == 0)
                 {
-                    maxKeyNo = 1;
+                    maxKeyNo = 0;
                 }
                 else
                 {
@@ -274,14 +274,15 @@ namespace SCA.BusinessLib.BusinessLogic
                 }
                 if (maxKeyNo < totalMaxKeyNo)
                 {
-                    for (int i = maxKeyNo; i <= amount; i++)
+                    for (int i = 1; i <= amount; i++)
                     {
                         tempCode++;
                         _maxID++;
+                        maxKeyNo++;
                         ManualControlBoard mcb = new ManualControlBoard();
                         mcb.BoardNo = boardNo;
                         mcb.SubBoardNo = j;
-                        mcb.KeyNo = i;
+                        mcb.KeyNo = maxKeyNo;
                         mcb.Controller = _controller;
                         mcb.ControllerID = _controller.ID;
                         mcb.Code = tempCode;//.ToString().PadLeft(MaxManualControlBoardAmount.ToString().Length, '0');
@@ -349,12 +350,77 @@ namespace SCA.BusinessLib.BusinessLogic
                         case "手盘号":
                             result.SubBoardNo = Convert.ToInt32(data[i]);
                             break;
-                        case "手键号":
-                            result.KeyNo = Convert.ToInt32(data[i]);
-                            break;
+                        //case "手键号":
+                        //    result.KeyNo = Convert.ToInt32(data[i]);
+                        //    break;
                         case "器件编号":
                             result.DeviceCode = data[i].ToString();
-                            break;                       
+                            break;
+                        case "被控类型":
+                            {
+                                switch (data[i])
+                                {
+                                    case "空器件":
+                                        result.ControlType = 0;
+                                        break;
+                                    case "本机设备":
+                                        result.ControlType = 1;
+                                        break;
+                                    case "楼区层":
+                                        result.ControlType = 2;
+                                        break;
+                                    case "输出组":
+                                        result.ControlType = 3;
+                                        break;
+                                    case "网络设备":
+                                        result.ControlType = 4;
+                                        break;
+                                    default:
+                                        result.ControlType = 0;
+                                        break;
+                                }                                
+                            }
+                            break;
+                        case "本机设备1":
+                            result.LocalDevice1 = data[i];
+                            break;
+                        case "本机设备2":
+                            result.LocalDevice2 = data[i];
+                            break;
+                        case "本机设备3":
+                            result.LocalDevice3 = data[i];
+                            break;
+                        case "本机设备4":
+                            result.LocalDevice4 = data[i];
+                            break;
+                        case "楼号":
+                            result.BuildingNo = data[i];
+                            break;
+                        case "区号":
+                            result.AreaNo = data[i];
+                            break;
+                        case "层号":
+                            result.FloorNo = data[i];
+                            break;
+                        case "设备类型":
+                            result.DeviceType = data[i]==""?(short)0:Convert.ToInt16(data[i]);
+                            break;
+                        case "输出组":
+                            result.LinkageGroup = data[i];
+                            break;
+                        case "网络设备1":
+                            result.NetDevice1 = data[i];
+                            break;
+                        case "网络设备2":
+                            result.NetDevice2 = data[i];
+                            break;
+                        case "网络设备3":
+                            result.NetDevice3 = data[i];
+                            break;
+                        case "网络设备4":
+                            result.NetDevice4 = data[i];
+                            break;
+
                     }
                 }
 

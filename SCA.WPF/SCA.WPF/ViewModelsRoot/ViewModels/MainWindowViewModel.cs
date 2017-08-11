@@ -203,8 +203,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         public void OpenProjectFileExecute(object param)
         {
             if (param != null)
-            { 
-                if(((RoutedEventArgs)param).OriginalSource.GetType().Name=="Button")
+            {
+                if (((RoutedEventArgs)param).OriginalSource.GetType().Name == "Button")
                 {
                     if (((System.Windows.Controls.Button)((RoutedEventArgs)param).OriginalSource).CommandParameter == null)
                     {
@@ -214,7 +214,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                         if (dialog.FileName != "")
                         {
                             using (new WaitCursor())
-                            { 
+                            {
                                 ProjectManager.GetInstance.OpenProject(dialog.FileName);
                                 EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
                             }
@@ -226,6 +226,20 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                         {
                             string fileName = ((System.Windows.Controls.Button)((RoutedEventArgs)param).OriginalSource).CommandParameter.ToString();
                             ProjectManager.GetInstance.OpenProject(fileName);
+                            EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
+                        }
+                    }
+                }
+                else //工具条和菜单等非Button类型的打开操作命令
+                {
+                    VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+                    dialog.Filter = "工程文件 (*.nt)|*.nt";
+                    dialog.ShowDialog();
+                    if (dialog.FileName != "")
+                    {
+                        using (new WaitCursor())
+                        {
+                            ProjectManager.GetInstance.OpenProject(dialog.FileName);
                             EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
                         }
                     }

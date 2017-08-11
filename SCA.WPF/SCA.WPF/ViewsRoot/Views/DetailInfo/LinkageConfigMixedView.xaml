@@ -24,6 +24,8 @@
             <ObjectDataProvider x:Key="LinkageTypeEnumDS" ObjectType="{x:Type local:LinkageConfigMixedViewModel}" MethodName="GetLinkageType">
             </ObjectDataProvider>
             <CollectionViewSource x:Key="TypesCollection" Source="{Binding ValidDeviceType}"/>
+            <CollectionViewSource x:Key="OutputTypesCollection" Source="{Binding OutputValidDeviceType}"/>
+            
             <infrastructure:BindingProxy  x:Key="proxy" Data="{Binding}"/>
         </Grid.Resources>
         <StackPanel>
@@ -290,7 +292,7 @@
                                        Binding="{Binding Path=MachineNoC}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                 <dg:DataGridTextColumn Width="Auto" 
-                                       Header="C路号" 
+                                       Header="C回路号" 
                                        Binding="{Binding Path=LoopNoC,ValidatesOnDataErrors=True}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"
                                        EditingElementStyle="{StaticResource errorStyle}"
@@ -306,7 +308,7 @@
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
                                                SelectedValueBinding="{Binding Path=DeviceTypeCodeC}"                                                                      
-                                               ItemsSource="{Binding Source={StaticResource TypesCollection}}"
+                                               ItemsSource="{Binding Source={StaticResource OutputTypesCollection}}"
                                                >
                     </dg:DataGridComboBoxColumn>
 

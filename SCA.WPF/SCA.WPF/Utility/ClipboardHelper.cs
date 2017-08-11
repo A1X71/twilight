@@ -109,7 +109,11 @@ namespace SCA.WPF.Utility
                         {                        
                             i++;
                             tempCh = value[i];
-                        }                    
+                        }
+                        if (i + 1 == value.Length)
+                        {                         
+                            outputList.Add(value.Substring(startIndex).Trim('\"'));
+                        }
                         endIndex = i+1;
                     }
                     else if (i + 1 == value.Length)

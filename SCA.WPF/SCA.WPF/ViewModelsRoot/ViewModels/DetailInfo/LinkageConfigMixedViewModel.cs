@@ -932,14 +932,25 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
 
         /// <summary>
-        /// 有效器件类型
+        /// 输入器件类型
         /// </summary>
         public List<DeviceType> ValidDeviceType
         {
             get
             {
                 IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
-                return config.GetDeviceTypeInfo();
+                return config.GetDeviceTypeInfoForMixedLinkageInput();
+            }
+        }
+        /// <summary>
+        /// 输出器件类型 
+        /// </summary>
+        public List<DeviceType> OutputValidDeviceType
+        {
+            get
+            {
+                IControllerConfig config = SCA.BusinessLib.BusinessLogic.ControllerConfigManager.GetConfigObject(TheController.Type);
+                return config.GetDeviceTypeInfoForMixedLinkageOutput();
             }
         }
         public  List<LinkageActionType> GetLinkageActionType()

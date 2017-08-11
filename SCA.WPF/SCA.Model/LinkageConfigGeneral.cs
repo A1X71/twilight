@@ -142,6 +142,20 @@ namespace SCA.Model
         NONE=0
            
     }
+    
+    /// <summary>
+    /// 输入组的分类(NT8053中首次应用)
+    /// </summary>
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
+    public enum LinkageInputPartType
+    { 
+        [Description("外系统")]
+         ForeignSystem=0,
+        [Description("本系统")]
+         LocalSystem =1,
+        [Description("全系统")]
+         AllSystem =2
+    }
     public class EnumDescriptionTypeConverter : EnumConverter
     {
         public EnumDescriptionTypeConverter(Type type)

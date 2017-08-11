@@ -308,7 +308,7 @@ namespace SCA.BusinessLib.BusinessLogic
                                 case "C机号":
                                     result.MachineNoC = data[i].ToString();
                                     break;
-                                case "C路号":
+                                case "C回路号":
                                     result.LoopNoC = data[i].ToString();
                                     break;
                                 case "C编号":

@@ -145,13 +145,13 @@ namespace SCA.BusinessLib.BusinessLogic
                             case "A区号":
                                 result.ZoneNoA = new Nullable<int>(Convert.ToInt32(data[i]));
                                 break;
-                            case "A层1":
+                            case "A层号1":
                                 result.LayerNoA1 = new Nullable<int>(Convert.ToInt32(data[i]));
                                 break;
-                            case "A层2":
+                            case "A层号2":
                                 result.LayerNoA2 = new Nullable<int>(Convert.ToInt32(data[i]));
                                 break;
-                            case "类型A":
+                            case "A类型":
                                 result.DeviceTypeCodeA = Convert.ToInt16(data[i]);
                                 break;     
                             case "C分类":
@@ -173,7 +173,7 @@ namespace SCA.BusinessLib.BusinessLogic
                             case "C机号":
                                 result.MachineNoC = data[i].ToString();
                                 break;
-                            case "C路号":
+                            case "C回路号":
                                 result.LoopNoC = data[i].ToString();
                                 break;
                             case "C编号":

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SCA.WPF.Infrastructure;
+using SCA.BusinessLib.BusinessLogic;
 namespace SCA.WPF.ViewsRoot.Views.DetailInfo
 {
     /// <summary>
@@ -44,14 +45,16 @@ namespace SCA.WPF.ViewsRoot.Views.DetailInfo
                     var selectedItems = DataGrid_Device.SelectedItems;
                     if (selectedItems != null)
                     {
-                        SCA.BusinessLib.BusinessLogic.DeviceService8036 deviceService = new SCA.BusinessLib.BusinessLogic.DeviceService8036();
+                        DeviceService8036 deviceService = new DeviceService8036();
+                        LoopService loopService =new LoopService(loop.Controller);
                         deviceService.TheLoop = loop;
-
                         foreach (SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.EditableDeviceInfo8036 r in selectedItems)
                         {
                             if (r != null)
                             {
                                 deviceService.DeleteBySpecifiedID(r.ID);
+
+                                
                             }
                         }
                         //刷新界面

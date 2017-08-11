@@ -161,12 +161,12 @@
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
-                                       Header="A层1" 
+                                       Header="A层号1" 
                                        Binding="{Binding Path=LayerNoA1, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
-                                       Header="A层2" 
+                                       Header="A层号2" 
                                        Binding="{Binding Path=LayerNoA2, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
@@ -175,7 +175,7 @@
                                        Binding="{Binding Path=DeviceTypeCodeA}" 
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>-->
 
-                    <dg:DataGridComboBoxColumn Header="类型A" 
+                    <dg:DataGridComboBoxColumn Header="A类型" 
                                                DisplayMemberPath="Name"
                                                SelectedValuePath="Code"
                                                SelectedValueBinding="{Binding DeviceTypeCodeA}"                                                                      
@@ -269,7 +269,7 @@
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>
                     <dg:DataGridTextColumn
-                                       Header="C路号" 
+                                       Header="C回路号" 
                                        Binding="{Binding Path=LoopNoC, ValidatesOnDataErrors=True}" 
                                        EditingElementStyle="{StaticResource errorStyle}"
                                        ElementStyle="{StaticResource tb_ElementStyle}"/>

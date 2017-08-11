@@ -23,17 +23,6 @@ namespace SCA.BusinessLib.BusinessLogic
 {
     public class ControllerOperation8001:ControllerOperationBase,IControllerOperation
     {
-
-        
-        ///// <summary>
-        ///// 更新进度条
-        ///// </summary>
-        //public event Action<int> UpdateProgressBarEvent;        
-        ///// <summary>
-        ///// EXCEL读取完毕事件
-        ///// </summary>
-        //public event Action<ControllerModel, string> ReadingExcelCompletedEvent;
-        //public event Action<ControllerModel, string> ReadingExcelCancelationEvent;
         public ControllerOperation8001()
         { 
         
@@ -91,17 +80,6 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             throw new NotImplementedException();
         }
-        //public bool ProgressBarCancelFlag
-        //{
-        //    get
-        //    {
-        //        return _progressBarCancelFlag;
-        //    }
-        //    set
-        //    {
-        //        _progressBarCancelFlag = value;
-        //    }
-        //}    
                
         public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService, ControllerModel controller)
         {
@@ -155,74 +133,7 @@ namespace SCA.BusinessLib.BusinessLogic
             //   }
             return controllerInfo;
         }
-        //public ControllerModel OrganizeControllerInfoFromSpecifiedDBFileVersion(IDBFileVersionService dbFileVersionService)
-        //{ 
-        //        ControllerModel controllerInfo = new ControllerModel();
-        //        controllerInfo.Type = ControllerType.NT8001;
-        //        //ControllerConfigBase configBase = new ControllerConfigBase();                
-        //        //8021,8036默认为8
-        //        //8000,8001,8003默认为7
-        //        //根据当前读到的版本需要进行判断                                
-        //        //在版本6时，在每个回路表中增加了“特性”字段，需要更新特性字段的值       
-        //        //#通用组态更新“器件类型A”，“器件类型C”
-        //        //带“点动”字样的为大数，需要-64
-        //        //带“自动”字样的不需要改变
-        //        //#混合组态更新“器件类型A",“器件类型B",“器件类型C"
-        //        //更新逻辑同上           
-        //        //controllerInfo.DeviceAddressLength
-        //        //dbFileVersionService.GetFileVersionAndControllerType
-        //        //存在只有特定版本才存在的数据结构（如版本5有“器件长度”，版本4没有）
-                
-        //        //if (dbFileVersionService.GetControllerInfo(ref controllerInfo))
-        //        //{ 
-        //            List<LoopModel> lstLoopInfo=null;// = dbFileVersionService.GetLoopsInfo();
-        //            StringBuilder sbQuerySQL = new StringBuilder();
-        //            //set sdpkey=xianggh,xianggh= (Round((xianggh/756)+.4999999)-1),panhao=IIF(Round(((xianggh/63))+.4999999)>12,Round(((xianggh/63))+.4999999)-12,Round(((xianggh/63))+.4999999)),jianhao=IIF((xianggh Mod 63)=0,63,xianggh Mod 63)
-        //            //(1)网络手动盘       
-        //            Dictionary<string, string> dictDeviceMappingManualControlBoard = new Dictionary<string, string>();//存储器件编码与手控盘编号的对应关系，将此关系存储在回路信息中
-        //            List<ManualControlBoard> lstBoard=dbFileVersionService.GetManualControlBoard();
-        //            foreach (var r in lstBoard)
-        //            {
-        //                dictDeviceMappingManualControlBoard.Add(r.DeviceCode.ToString(), r.Code.ToString());
-        //                ManualControlBoard board = r;
-        //                board.Controller = controllerInfo;
-        //                controllerInfo.ControlBoard.Add(board);
-        //            }                
-        //            //(2)回路及器件
-        //            foreach  (var l in lstLoopInfo)//回路信息
-        //            {
-        //                LoopModel loop = l;
-        //                dbFileVersionService.GetDevicesByLoopForControllerType8001(ref loop,dictDeviceMappingManualControlBoard);//为loop赋予“器件信息”
-        //                loop.Controller = controllerInfo;                  
-        //                controllerInfo.Loops.Add(loop);
-        //            }
-        //            //(3)标准组态
-        //            List<LinkageConfigStandard> lstStandard = dbFileVersionService.GetStandardLinkageConfig();
-        //            foreach (var l in lstStandard)
-        //            {
-        //                LinkageConfigStandard standardConfig = l;
-        //                standardConfig.Controller = controllerInfo;
-        //                controllerInfo.StandardConfig.Add(standardConfig);
-        //            }
-        //            //(4)混合组态
-        //            List<LinkageConfigMixed> lstMixedConfig = dbFileVersionService.GetMixedLinkageConfig();
-        //            foreach (var l in lstMixedConfig)
-        //            {
-        //                LinkageConfigMixed mixedConfig = l;
-        //                mixedConfig.Controller = controllerInfo;
-        //                controllerInfo.MixedConfig.Add(mixedConfig);
-        //            }
-        //            //(5)通用组态
-        //            List<LinkageConfigGeneral> lstGeneral = dbFileVersionService.GetGeneralLinkageConfig();
-        //            foreach (var l in lstGeneral)
-        //            {
-        //                LinkageConfigGeneral generalConfig = l;
-        //                generalConfig.Controller = controllerInfo;
-        //                controllerInfo.GeneralConfig.Add(generalConfig);
-        //            }
-        //     //   }
-        //        return controllerInfo;
-        //}
+
         
 
         public Model.ControllerType GetControllerType()
@@ -233,8 +144,8 @@ namespace SCA.BusinessLib.BusinessLogic
         public int GetMaxDeviceID()
         { 
             //更改于2017-06-23 采用属性值记录
-            //var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers  where r.Type==ControllerType.NT8001 select r;
             int maxDeviceID = ProjectManager.GetInstance.MaxDeviceIDInController8001;
+            //var controllers = from r in SCA.BusinessLib.ProjectManager.GetInstance.Project.Controllers  where r.Type==ControllerType.NT8001 select r;   
             //foreach (var c in controllers)
             //{
             //    foreach (var l in c.Loops)
@@ -489,7 +400,7 @@ namespace SCA.BusinessLib.BusinessLogic
             return lstDeviceSimulator;
         }
 
-
+        #region 生成EXCEL模板
         protected override bool GenerateExcelTemplateLoopSheet(List<string> sheetNames, IControllerConfig config,ExcelTemplateCustomizedInfo summaryInfo, ref IExcelService excelService)
         {
             try
@@ -727,31 +638,35 @@ namespace SCA.BusinessLib.BusinessLogic
                     //int maxLinkageAmount = config.GetMaxAmountForMixedLinkageConfig();
                     for (int i = 2; i < maxLinkageAmount + 3; i++)
                     {
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 15, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 16, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 17, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 18, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 19, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 20, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 21, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 22, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 23, null, CellStyleType.Data);
-                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 24, null, CellStyleType.Data);
+                        for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                        {
+                            excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                        }
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 15, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 16, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 17, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 18, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 19, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 20, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 21, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 22, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 23, null, CellStyleType.Data);
+                        //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 24, null, CellStyleType.Data);
                     }
                     mergeCellRange = new MergeCellRange();
                     mergeCellRange.FirstRowIndex = 2;
@@ -851,21 +766,25 @@ namespace SCA.BusinessLib.BusinessLogic
                 
                 for (int i = 2; i < maxLinkageAmount + 3; i++)
                 {
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 9, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 10, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 11, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 12, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 13, null, CellStyleType.Data);
+                    //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 14, null, CellStyleType.Data);
                 }
                 mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 2;
@@ -878,7 +797,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                 mergeCellRange.FirstColumnIndex = 6;
                 mergeCellRange.LastColumnIndex = 6;
-                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithAnyAlarm.ToString(), mergeCellRange);
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeInfoForGeneralLinkageInput.ToString(), mergeCellRange);
                 mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 2;
                 mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
@@ -890,7 +809,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 mergeCellRange.LastRowIndex = maxLinkageAmount + 2;
                 mergeCellRange.FirstColumnIndex = 14;
                 mergeCellRange.LastColumnIndex = 14;
-                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeWithoutFireDevice.ToString(), mergeCellRange);
+                excelService.SetSheetValidationForListConstraint(sheetNames[loopSheetAmount + currentIndex], RefereceRegionName.DeviceTypeInfoForGeneralLinkageOutput.ToString(), mergeCellRange);
             }
             #endregion
             
@@ -949,19 +868,33 @@ namespace SCA.BusinessLib.BusinessLogic
             return true;
 
         }
+        #endregion
 
-        public bool DownloadDefaultEXCELTemplate(string strFilePath,IFileService fileService,ExcelTemplateCustomizedInfo customizedInfo)
+        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo)
         {
             try
             {
-                DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, ControllerType.NT8001);                
+                DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, ControllerType.NT8001);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string message = ex.Message;
                 return false;
-            }            
+            }
+        }
+        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, Model.BusinessModel.ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType)
+        {
+            try
+            {
+                DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, ControllerType.NT8001);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                return false;
+            }
         }
 
         //需注销
@@ -972,34 +905,34 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="value"></param>
         /// <param name="controller"></param>
         /// <returns></returns>
-        private ControllerModel GetControllerViaExcelTemplate(string name,string value,ControllerModel controller)
-        {
-            ControllerModel controllerInfo = controller;                
-            switch (name)
-            { 
-                case "控制器名称":
-                    controllerInfo.Name = value;
-                    break;
-                case "控制器类型":
-                    {
-                        ControllerType controllerType;
-                        Enum.TryParse<ControllerType>(value, out controllerType);
-                        controllerInfo.Type = controllerType;
-                    }
-                    break;
-                case "控制器机号":
-                    controllerInfo.MachineNumber = value;
-                    break;
-                case "器件长度":
-                    controllerInfo.DeviceAddressLength = Convert.ToInt32(value);
-                    break;
-                case "串口号":
-                    controllerInfo.PortName = value;
-                    break;
+        //private ControllerModel GetControllerViaExcelTemplate(string name,string value,ControllerModel controller)
+        //{
+        //    ControllerModel controllerInfo = controller;                
+        //    switch (name)
+        //    { 
+        //        case "控制器名称":
+        //            controllerInfo.Name = value;
+        //            break;
+        //        case "控制器类型":
+        //            {
+        //                ControllerType controllerType;
+        //                Enum.TryParse<ControllerType>(value, out controllerType);
+        //                controllerInfo.Type = controllerType;
+        //            }
+        //            break;
+        //        case "控制器机号":
+        //            controllerInfo.MachineNumber = value;
+        //            break;
+        //        case "器件长度":
+        //            controllerInfo.DeviceAddressLength = Convert.ToInt32(value);
+        //            break;
+        //        case "串口号":
+        //            controllerInfo.PortName = value;
+        //            break;
 
-            }
-            return controllerInfo;
-        }
+        //    }
+        //    return controllerInfo;
+        //}
         /// <summary>
         /// 读取EXCEL模板中的数据
         /// </summary>
@@ -1008,23 +941,24 @@ namespace SCA.BusinessLib.BusinessLogic
         /// <param name="targetController">目标控制器信息</param>
         /// <param name="strErrorMessage">错误信息</param>
         /// <returns></returns>
-        public void ReadEXCELTemplate(string strFilePath, IFileService fileService,ControllerModel targetController)
-        {
-            //ReadExcelLoopArgumentForIn inArgs = new ReadExcelLoopArgumentForIn();            
-            //inArgs.FileService=fileService;
-            //inArgs.FilePath=strFilePath;
-            //inArgs.Controller=targetController;
-            //DoWorkEventArgs args = new DoWorkEventArgs(inArgs);                                    
-            //BackgroundWorker worker = new BackgroundWorker();
-            //worker.DoWork += ReadingEXCELDoWork;
-            //worker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(UpdateProgress);
-            //worker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(ReadingEXCELCompleteWork); 
-            //worker.WorkerReportsProgress = true;
-            //worker.WorkerSupportsCancellation = true;
-            //worker.RunWorkerAsync(inArgs);    
-            base.ReadEXCELTemplate(strFilePath, fileService, targetController);
-        }       
-        
+        //public  void ReadEXCELTemplate(string strFilePath, IFileService fileService,ControllerModel targetController)
+        //{
+        //    //ReadExcelLoopArgumentForIn inArgs = new ReadExcelLoopArgumentForIn();            
+        //    //inArgs.FileService=fileService;
+        //    //inArgs.FilePath=strFilePath;
+        //    //inArgs.Controller=targetController;
+        //    //DoWorkEventArgs args = new DoWorkEventArgs(inArgs);                                    
+        //    //BackgroundWorker worker = new BackgroundWorker();
+        //    //worker.DoWork += ReadingEXCELDoWork;
+        //    //worker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(UpdateProgress);
+        //    //worker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(ReadingEXCELCompleteWork); 
+        //    //worker.WorkerReportsProgress = true;
+        //    //worker.WorkerSupportsCancellation = true;
+        //    //worker.RunWorkerAsync(inArgs);    
+        //    base.ReadEXCELTemplate(strFilePath, fileService, targetController);
+        //}       
+
+        #region 数据转换
         /// <summary>
         /// 将读出的回路及器件信息转换为LoopModel类型存储
         /// </summary>
@@ -1402,7 +1336,7 @@ namespace SCA.BusinessLib.BusinessLogic
                     lcg.LayerNoA2 = Convert.ToInt32(dt.Rows[i]["A层号2"].ToString());
                 }
 
-                lcg.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["类型A"].ToString());
+                lcg.DeviceTypeCodeA = config.GetDeviceCodeViaDeviceTypeName(dt.Rows[i]["A类型"].ToString());
                 LinkageType lTypeC = lcg.TypeC;
                 Enum.TryParse<LinkageType>(EnumUtility.GetEnumName(lTypeC.GetType(),dt.Rows[i]["C分类"].ToString()), out lTypeC);                
 
@@ -1469,11 +1403,12 @@ namespace SCA.BusinessLib.BusinessLogic
             ProjectManager.GetInstance.MaxIDForManualControlBoard = maxID;
             return lstManualControlBoard;
         }
+        #endregion
         //private void SetDeviceID
-        public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType)
-        {
-            return base.DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, controllerType);
-        }
+        //public bool DownloadDefaultEXCELTemplate(string strFilePath, IFileService fileService, ExcelTemplateCustomizedInfo customizedInfo, ControllerType controllerType)
+        //{
+        //    return base.DownLoadDefaultExcelTemplate(strFilePath, fileService, customizedInfo, controllerType);
+        //}
 
         public void SetStaticProgressBarCancelFlag(bool flag)
         {
@@ -1820,7 +1755,10 @@ namespace SCA.BusinessLib.BusinessLogic
 
 
 
- 
+
+
+
+        
     }
 
 }

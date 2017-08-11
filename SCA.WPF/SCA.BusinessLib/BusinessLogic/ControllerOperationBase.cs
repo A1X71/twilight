@@ -734,32 +734,84 @@ namespace SCA.BusinessLib.BusinessLogic
                     }
                     excelService.SetRangeName(RefereceRegionName.SensitiveLevel.ToString(), string.Format("'{0}'!$V$" + regionNameStartIndex + ":$V${1}", sheetNames[1], (lstSensitiveLevel.Count + 30001).ToString()));
                 }
-                //写入具有任意火警的器件名称                
-                List<DeviceType> lstDeviceTypeWithAnyAlarm = config.GetDeviceTypeInfoWithAnyAlarm();
-                if (lstDeviceTypeWithAnyAlarm != null)
+                //写通用组态输入部分器件类型
+                List<DeviceType> lstDeviceTypeInfoForGeneralLinkageInput = config.GetDeviceTypeInfoForGeneralLinkageInput();
+                if (lstDeviceTypeInfoForGeneralLinkageInput != null)
                 {
-                    excelService.SetCellValue(sheetNames[1], 30000, 23, "器件类型(任意火警)", CellStyleType.SubCaption);
+                    excelService.SetCellValue(sheetNames[1], 30000, 23, "通用组态输入部分器件类型", CellStyleType.SubCaption);
                     rowNumber = 30000;
-                    foreach (var deviceType in lstDeviceTypeWithAnyAlarm)
+                    foreach (var deviceType in lstDeviceTypeInfoForGeneralLinkageInput)
                     {
                         rowNumber++;
                         excelService.SetCellValue(sheetNames[1], rowNumber, 23, deviceType.Name, CellStyleType.Data);
                     }
-                    excelService.SetRangeName(RefereceRegionName.DeviceTypeWithAnyAlarm.ToString(), string.Format("'{0}'!$X$" + regionNameStartIndex + ":$X${1}", sheetNames[1], (lstDeviceTypeWithAnyAlarm.Count + 30001).ToString()));
+                    excelService.SetRangeName(RefereceRegionName.DeviceTypeInfoForGeneralLinkageInput.ToString(), string.Format("'{0}'!$X$" + regionNameStartIndex + ":$X${1}", sheetNames[1], (lstDeviceTypeInfoForGeneralLinkageInput.Count + 30001).ToString()));
                 }
-                //写入具有非报警器件的器件名称                                
-                List<DeviceType> lstDeviceTypeWithoutFireAlarm = config.GetDeviceTypeInfoWithoutFireDevice();
-                if (lstDeviceTypeWithoutFireAlarm != null)
+                //写入通用组态输出部分器件类型
+                List<DeviceType> lstDeviceTypeInfoForGeneralLinkageOutput = config.GetDeviceTypeInfoForGeneralLinkageOutput();
+                if (lstDeviceTypeInfoForGeneralLinkageOutput != null)
                 {
-                    excelService.SetCellValue(sheetNames[1], 30000, 25, "器件类型(非火警器件)", CellStyleType.SubCaption);
+                    excelService.SetCellValue(sheetNames[1], 30000, 25, "通用组态输出部分器件类型", CellStyleType.SubCaption);
                     rowNumber = 30000;
-                    foreach (var deviceType in lstDeviceTypeWithoutFireAlarm)
+                    foreach (var deviceType in lstDeviceTypeInfoForGeneralLinkageOutput)
                     {
                         rowNumber++;
                         excelService.SetCellValue(sheetNames[1], rowNumber, 25, deviceType.Name, CellStyleType.Data);
                     }
-                    excelService.SetRangeName(RefereceRegionName.DeviceTypeWithoutFireDevice.ToString(), string.Format("'{0}'!$Z$" + regionNameStartIndex + ":$Z${1}", sheetNames[1], (lstDeviceTypeWithoutFireAlarm.Count + 30001).ToString()));
-                }                
+                    excelService.SetRangeName(RefereceRegionName.DeviceTypeInfoForGeneralLinkageOutput.ToString(), string.Format("'{0}'!$Z$" + regionNameStartIndex + ":$Z${1}", sheetNames[1], (lstDeviceTypeInfoForGeneralLinkageOutput.Count + 30001).ToString()));
+                }
+                //写混合组态输入部分器件类型
+                List<DeviceType> lstDeviceTypeInfoForMixedLinkageInput = config.GetDeviceTypeInfoForMixedLinkageInput();
+                if (lstDeviceTypeInfoForMixedLinkageInput != null)
+                {
+                    excelService.SetCellValue(sheetNames[1], 30000, 27, "混合组态输入部分器件类型", CellStyleType.SubCaption);
+                    rowNumber = 30000;
+                    foreach (var deviceType in lstDeviceTypeInfoForMixedLinkageInput)
+                    {
+                        rowNumber++;
+                        excelService.SetCellValue(sheetNames[1], rowNumber, 27, deviceType.Name, CellStyleType.Data);
+                    }
+                    excelService.SetRangeName(RefereceRegionName.DeviceTypeInfoForMixedLinkageInput.ToString(), string.Format("'{0}'!$AB$" + regionNameStartIndex + ":$AB${1}", sheetNames[1], (lstDeviceTypeInfoForMixedLinkageInput.Count + 30001).ToString()));
+                }
+                //写入混合组态输出部分器件类型
+                List<DeviceType> lstDeviceTypeInfoForMixedLinkageOutput = config.GetDeviceTypeInfoForMixedLinkageOutput();
+                if (lstDeviceTypeInfoForMixedLinkageOutput != null)
+                {
+                    excelService.SetCellValue(sheetNames[1], 30000, 29, "混合组态输出部分器件类型", CellStyleType.SubCaption);
+                    rowNumber = 30000;
+                    foreach (var deviceType in lstDeviceTypeInfoForMixedLinkageOutput)
+                    {
+                        rowNumber++;
+                        excelService.SetCellValue(sheetNames[1], rowNumber, 29, deviceType.Name, CellStyleType.Data);
+                    }
+                    excelService.SetRangeName(RefereceRegionName.DeviceTypeInfoForMixedLinkageOutput.ToString(), string.Format("'{0}'!$AD$" + regionNameStartIndex + ":$AD${1}", sheetNames[1], (lstDeviceTypeInfoForMixedLinkageOutput.Count + 30001).ToString()));
+                }
+                //写入组态输入部分类别
+                List<LinkageInputPartType> lstLinkageInputType = config.GetLinkageInputType();
+                if (lstLinkageInputType != null)
+                {
+                    excelService.SetCellValue(sheetNames[1], 30000, 31, "组态输入部分类别", CellStyleType.SubCaption);
+                    rowNumber = 30000;
+                    foreach (var type in lstLinkageInputType)
+                    {
+                        rowNumber++;
+                        excelService.SetCellValue(sheetNames[1], rowNumber, 31, type.GetDescription(), CellStyleType.Data);
+                    }
+                    excelService.SetRangeName(RefereceRegionName.LinkageInputPartType.ToString(), string.Format("'{0}'!$AF$" + regionNameStartIndex + ":$AF${1}", sheetNames[1], (lstLinkageInputType.Count + 30001).ToString()));
+                }
+                //写入网络手动盘补控类别
+                List<ManualControlBoardControlType> lstMCBControlType = config.GetManualControlBoardControlType();
+                if (lstLinkageInputType != null)
+                {
+                    excelService.SetCellValue(sheetNames[1], 30000, 33, "网络手动盘被控类型", CellStyleType.SubCaption);
+                    rowNumber = 30000;
+                    foreach (var type in lstMCBControlType)
+                    {
+                        rowNumber++;
+                        excelService.SetCellValue(sheetNames[1], rowNumber, 33, type.GetDescription(), CellStyleType.Data);
+                    }
+                    excelService.SetRangeName(RefereceRegionName.ManualControlBoardControlType.ToString(), string.Format("'{0}'!$AH$" + regionNameStartIndex + ":$AH${1}", sheetNames[1], (lstMCBControlType.Count + 30001).ToString()));
+                }
                 #endregion
             }
             catch (Exception ex)
