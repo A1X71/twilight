@@ -8,6 +8,7 @@
              xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"                    
              xmlns:utility="clr-namespace:SCA.WPF.Utility"
              xmlns:eventToCommand="clr-namespace:SCA.WPF.Utility"
+             xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
              xmlns:views="clr-namespace:SCA.WPF.ViewsRoot.Views"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
@@ -33,7 +34,6 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-
                 </Grid.RowDefinitions>
                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+                    <ComboBox Width="45" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" PresentationOptions:Freeze="True" >
                         <Button Name="btnAddMoreLine"   HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" Width="30" Height="30" Command="{Binding DisplayMoreLinesViewCommand}"  Background="Transparent" BorderBrush="Transparent">
                             添加更多项
                         </Button>

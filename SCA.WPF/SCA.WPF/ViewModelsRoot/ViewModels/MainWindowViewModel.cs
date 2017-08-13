@@ -130,9 +130,9 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             _deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
             _defaultViewModel = new DefaultViewModel();
 
-            _linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
-            _linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
-            _linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
+            //_linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
+            //_linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
+            //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
             _manualControlBoardViewModel = new ManualControlBoardViewModel();
             _summaryViewModel = new Query.SummaryInfoViewModel();
             _projectSummaryViewModel = new Query.ProjectSummaryViewModel();
@@ -255,7 +255,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     #region 作废->采用IEditableObject接口集合
                     //_linkageConfigStandardViewModel.StandardLinkageConfigInfoObservableCollection = new ObservableCollection<LinkageConfigStandard>(((SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem).StandardConfig);
                     #endregion
-                    
+                    _linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
                     _linkageConfigStandardViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _linkageConfigStandardViewModel.StandardLinkageConfigInfoObservableCollection = new EditableLinkageConfigStandards(_linkageConfigStandardViewModel.TheController, _linkageConfigStandardViewModel.TheController.StandardConfig);
                     if (_linkageConfigStandardViewModel.TheController.Type != ControllerType.NT8001 && _linkageConfigStandardViewModel.TheController.Type != ControllerType.FT8000)//对于非8001及8000主机的标准组态信息，隐藏部分列
@@ -281,7 +281,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     }
                     CurrentView = _linkageConfigStandardViewModel;
                     break;
-                case ControllerNodeType.General:
+                case ControllerNodeType.General:                            
+                    _linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
                     _linkageConfigGeneralViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;
                     _linkageConfigGeneralViewModel.GeneralLinkageConfigInfoObservableCollection = new EditableLinkageConfigGenerals(_linkageConfigGeneralViewModel.TheController, _linkageConfigGeneralViewModel.TheController.GeneralConfig);
                     if (_linkageConfigGeneralViewModel.TheController.Type == ControllerType.NT8053)
@@ -295,6 +296,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     CurrentView = _linkageConfigGeneralViewModel;
                     break;
                 case ControllerNodeType.Mixed:
+            
+            _linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
                     _linkageConfigMixedViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _linkageConfigMixedViewModel.MixedLinkageConfigInfoObservableCollection = new EditableLinkageConfigMixeds(_linkageConfigMixedViewModel.TheController, _linkageConfigMixedViewModel.TheController.MixedConfig);
                     if (_linkageConfigMixedViewModel.TheController.Type == ControllerType.NT8053)
@@ -327,7 +330,8 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     CurrentView = _loopSummaryViewModel;
                     break;
 
-            }          
+            }
+            SetOtherDetailToNull(CurrentView);
         }
 
         public void NavigateToDeviceInfoExecute(object o)
@@ -374,6 +378,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     break;
             }
         }
+        
 
         public void NavigateToControllerSummary(object o)
         {            
@@ -542,6 +547,86 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             //controllerOperation.AddControllerToProject(controller);
         }
 
+        private void SetOtherDetailToNull(object o)
+        {
+            switch (o.GetType().ToString())
+            {
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8001ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8007ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8000ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8003ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8021ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8053ViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigStandardViewModel":
+                    {
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _defaultViewModel = null;
+                    //    _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel":
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel":
+                    {
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _defaultViewModel = null;
+                        _linkageConfigStandardViewModel.Dispose();
+                        _linkageConfigStandardViewModel = null;
+                        
+                        _linkageConfigGeneralViewModel = null;                        
+                        //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel":
+                    break;
 
+            }
+            //_deviceInfoViewModel8036 = new DeviceInfo8036ViewModel();
+            //_deviceInfoViewModel8001 = new DeviceInfo8001ViewModel();
+            //_deviceInfoViewModel8007 = new DeviceInfo8007ViewModel();
+            //_deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
+            //_deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
+            //_deviceInfoViewModel8021 = new DeviceInfo8021ViewModel();
+            //_deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
+            //_defaultViewModel = new DefaultViewModel();
+
+            //_linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
+            //_linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
+            //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
+            //_manualControlBoardViewModel = new ManualControlBoardViewModel();
+            //_summaryViewModel = new Query.SummaryInfoViewModel();
+            //_projectSummaryViewModel = new Query.ProjectSummaryViewModel();
+            //_loopSummaryViewModel = new Query.LoopSummaryViewModel();
+        }
     }
 }

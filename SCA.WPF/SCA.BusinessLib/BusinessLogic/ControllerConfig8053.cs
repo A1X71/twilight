@@ -585,12 +585,109 @@ namespace SCA.BusinessLib.BusinessLogic
 
         public Dictionary<string, RuleAndErrorMessage> GetMixedLinkageConfigRegularExpression(int addressLength)
         {
-            throw new NotImplementedException();
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号 0001-4000
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-3][0-9][0-9][0-9]|4000)$", "输出组取值范围为0001~4000"));
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([0-5])$", "动作常数为0~5"));
+            //动作类型，以下拉框作限制，不需要验证
+
+            //A分类 区层/地址
+
+            //A楼
+            dictExpressionAndInfo.Add("Building", new RuleAndErrorMessage("^([1-9]|[1-5][0-9]|6[0-3])$", "楼号范围为1~63"));
+            //A区
+            dictExpressionAndInfo.Add("Zone", new RuleAndErrorMessage("^([1-9]|[1-9][0-9])$", "区号范围为1~99"));
+            //A层
+            dictExpressionAndInfo.Add("FloorNo", new RuleAndErrorMessage("^(-[1-9]|([1-9]|[1-5][0-9]|6[0-3]))$", "层号取值范围为-9~63(不包括0)"));
+
+            #region 字段标识
+            //A路号
+
+            //A编号
+
+            //A类型
+
+            //B楼
+
+            //B区
+
+            //B层
+
+            //B路号
+
+            //B编号
+
+            //B类型
+
+            //C分类
+
+            //C楼
+
+            //C区
+
+            //C层
+            #endregion
+            //C机号
+            if (addressLength == 7) //7位地址，机号范围0~63  
+            {
+                dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([06][0-3])$", "机号范围为0~63"));
+            }
+            else //8位地址 机号范围0~199
+            {
+                dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([01][0-9][0-9])$", "机号范围为000~199"));
+            }
+            //C回路
+            dictExpressionAndInfo.Add("Loop", new RuleAndErrorMessage("^([1-9]|[1-5][0-9]|6[0-4])$", "路号范围为1~64"));
+
+            //C编号
+            dictExpressionAndInfo.Add("Device", new RuleAndErrorMessage("^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-2]|0)$", "器件编号范围为1~252"));
+            //C类型
+            return dictExpressionAndInfo;
         }
 
         public Dictionary<string, RuleAndErrorMessage> GetGeneralLinkageConfigRegularExpression(int addressLength)
         {
-            throw new NotImplementedException();
+            Dictionary<string, RuleAndErrorMessage> dictExpressionAndInfo = new Dictionary<string, RuleAndErrorMessage>();
+            //输出组号
+            dictExpressionAndInfo.Add("Code", new RuleAndErrorMessage("^([0-1][0-9][0-9][0-9]|2000)$", "输出组取值范围为0001~2000"));
+            //联动模块 考虑是手输还是选择，如果选择就不需要验证
+            //动作常数
+            dictExpressionAndInfo.Add("ActionCoefficient", new RuleAndErrorMessage("^([0-5])$", "动作常数为0~5"));
+            //A楼
+            dictExpressionAndInfo.Add("Building", new RuleAndErrorMessage("^([0-9]|[1-5][0-9]|6[0-3])$", "楼号范围为1~63 (0代表任意)"));
+            //A区
+            dictExpressionAndInfo.Add("Zone", new RuleAndErrorMessage("^([0-9]|[1-9][0-9])$", "区号范围为1~99 (0代表任意)"));
+            //A层1
+            dictExpressionAndInfo.Add("FloorNo", new RuleAndErrorMessage("^(-[1-9]|([1-9]|[1-5][0-9]|6[0-3]|0))$", "层号取值范围为-9~63 (0代表任意)"));
+            //A层2
+
+            //类型A
+
+            //C分类
+
+            //C楼
+
+            //C区
+
+            //C层
+
+            //C机号
+            if (addressLength == 7) //7位地址，机号范围0~63  
+            {
+                dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([0-5][0-9]|6[0-3])$", "机号范围为00~63"));
+            }
+            else //8位地址 机号范围0~199
+            {
+                dictExpressionAndInfo.Add("MachineNo", new RuleAndErrorMessage("^([01][0-9][0-9])$", "机号范围为000~199"));
+            }
+            //C回路
+            dictExpressionAndInfo.Add("Loop", new RuleAndErrorMessage("^([1-9]|[1-5][0-9]|6[0-4])$", "路号范围为1~64"));
+            //C编号
+            dictExpressionAndInfo.Add("Device", new RuleAndErrorMessage("^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-2]|0)$", "器件编号范围为1~252"));
+            //类型C
+            return dictExpressionAndInfo;
         }
 
 

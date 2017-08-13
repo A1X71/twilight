@@ -140,194 +140,194 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         //        return _maxStandardLinkageConfigAmount;
         //    }
         //}
-                switch (columnName)
-                {
-                    case "Code":
-                        if(!string.IsNullOrEmpty(this.Code))
-                        {
-                            rule = dictMessage["Code"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.Code.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo1":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo1.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo2":
-                      {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo2.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo3":
-                         {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo3.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo4":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo4.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo5":
-                        {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo5.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo6":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo6.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo7":
-                        {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo7.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo8":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo8.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo9":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo9.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo10":
-                        {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo10.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo11":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo11.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "DeviceNo12":
-                        {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.DeviceNo12.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "OutputDevice1":
-                       {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.OutputDevice1.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "OutputDevice2":
-                        {                   
-                            rule = dictMessage["DeviceCode"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.OutputDevice2.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "LinkageNo1":
-                        if (!string.IsNullOrEmpty(this.LinkageNo1))
-                        { 
-                            rule = dictMessage["Code"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageNo1.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "LinkageNo2":
-                        if (!string.IsNullOrEmpty(this.LinkageNo2))
-                        {
-                            rule = dictMessage["Code"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageNo2.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
-                    case "LinkageNo3":
-                        if (!string.IsNullOrEmpty(this.LinkageNo3))
-                        {
-                            rule = dictMessage["Code"];
-                            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
-                            if (!exminator.IsMatch(this.LinkageNo3.ToString()))
-                            {
-                                errorMessage = rule.ErrorMessage;
-                            }
-                        }
-                        break;
+                //switch (columnName)
+                //{
+                //    case "Code":
+                //        if(!string.IsNullOrEmpty(this.Code))
+                //        {
+                //            rule = dictMessage["Code"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.Code.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo1":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo1.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo2":
+                //      {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo2.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo3":
+                //         {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo3.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo4":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo4.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo5":
+                //        {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo5.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo6":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo6.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo7":
+                //        {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo7.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo8":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo8.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo9":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo9.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo10":
+                //        {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo10.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo11":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo11.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "DeviceNo12":
+                //        {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.DeviceNo12.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "OutputDevice1":
+                //       {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.OutputDevice1.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "OutputDevice2":
+                //        {                   
+                //            rule = dictMessage["DeviceCode"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.OutputDevice2.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "LinkageNo1":
+                //        if (!string.IsNullOrEmpty(this.LinkageNo1))
+                //        { 
+                //            rule = dictMessage["Code"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.LinkageNo1.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "LinkageNo2":
+                //        if (!string.IsNullOrEmpty(this.LinkageNo2))
+                //        {
+                //            rule = dictMessage["Code"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.LinkageNo2.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
+                //    case "LinkageNo3":
+                //        if (!string.IsNullOrEmpty(this.LinkageNo3))
+                //        {
+                //            rule = dictMessage["Code"];
+                //            exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
+                //            if (!exminator.IsMatch(this.LinkageNo3.ToString()))
+                //            {
+                //                errorMessage = rule.ErrorMessage;
+                //            }
+                //        }
+                //        break;
 
-                }
+                //}
                 return errorMessage;
             }
         }
@@ -369,7 +369,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
 
     }
-    public class LinkageConfigStandardViewModel:PropertyChangedBase
+    public class LinkageConfigStandardViewModel:PropertyChangedBase,IDisposable
     {
         //private ObservableCollection<LinkageConfigStandard> _standardLinkageConfigInfoObservableCollection;
         private ILinkageConfigStandardService _linkageConfigStandardService;
@@ -673,5 +673,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         //    return result;
         //}
 
+
+        public void Dispose()
+        {
+            this.StandardLinkageConfigInfoObservableCollection = null;
+            //GC.Collect();
+           // GC.WaitForPendingFinalizers();
+            //GC.SuppressFinalize(true);
+        }
     }
 }
