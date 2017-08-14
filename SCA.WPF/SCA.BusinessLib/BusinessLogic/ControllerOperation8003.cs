@@ -300,8 +300,8 @@ namespace SCA.BusinessLib.BusinessLogic
             try
             {
                 #region 标准组态表头
-                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();                
-                //调整为从配置信息中读取，未测试 2017-07-28
+                List<MergeCellRange> lstMergeCellRange = new List<MergeCellRange>();               
+                
                 IControllerConfig config = ControllerConfigManager.GetConfigObject(ControllerType.FT8003);
                 ColumnConfigInfo[] deviceColumnDefinitionArray = config.GetStandardLinkageConfigColumns(); //取得标准组态的列定义信息                
                 
@@ -310,37 +310,19 @@ namespace SCA.BusinessLib.BusinessLogic
                 {
                     excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, devColumnCount, deviceColumnDefinitionArray[devColumnCount].ColumnName, CellStyleType.TableHead);
                 }
-
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 0, 0, sheetNames[loopSheetAmount + currentIndex], CellStyleType.SubCaption);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 0, "输出组号", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 1, "联动模块1", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 2, "联动模块2", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 3, "联动模块3", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 4, "联动模块4", CellStyleType.TableHead);                
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 5, "动作常数", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 6, "联动组1", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 7, "联动组2", CellStyleType.TableHead);
-                //excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], 1, 8, "联动组3", CellStyleType.TableHead);
-
                 MergeCellRange mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 0;
                 mergeCellRange.LastRowIndex = 0;
                 mergeCellRange.FirstColumnIndex = 0;
                 mergeCellRange.LastColumnIndex = deviceColumnDefinitionArray.Length - 1;
                 lstMergeCellRange.Add(mergeCellRange);
-                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"标准组态页签"合并单元格
-                //int maxStandardLinkageAmount = config.GetMaxAmountForStandardLinkageConfig();
+                excelService.SetMergeCells(sheetNames[loopSheetAmount + currentIndex], lstMergeCellRange);//设置"标准组态页签"合并单元格                
                 for (int i = 2; i < maxLinkageAmount + 3; i++)
                 {
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 0, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 1, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 2, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 3, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 4, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 5, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 6, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 7, null, CellStyleType.Data);
-                    excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, 8, null, CellStyleType.Data);
+                    for (int j = 0; j < deviceColumnDefinitionArray.Length; j++)
+                    {
+                        excelService.SetCellValue(sheetNames[loopSheetAmount + currentIndex], i, j, null, CellStyleType.Data);
+                    }  
                 }
                 mergeCellRange = new MergeCellRange();
                 mergeCellRange.FirstRowIndex = 2;
@@ -530,6 +512,7 @@ namespace SCA.BusinessLib.BusinessLogic
                 lcs.LinkageNo1 = dtStandard.Rows[i]["联动组1"].ToString();
                 lcs.LinkageNo2 = dtStandard.Rows[i]["联动组2"].ToString();
                 lcs.LinkageNo3 = dtStandard.Rows[i]["联动组3"].ToString();
+                lcs.Memo = dtStandard.Rows[i]["备注"].ToString();
                 lstStandardLinkage.Add(lcs);
             }
             ProjectManager.GetInstance.MaxIDForStandardLinkageConfig = maxID;
@@ -683,19 +666,19 @@ namespace SCA.BusinessLib.BusinessLogic
                             currentRowIndex++;
                             excelService.SetCellValue(sheetName, currentRowIndex, 0, device.Code, CellStyleType.Data); //器件编码
                             excelService.SetCellValue(sheetName, currentRowIndex, 1, config.GetDeviceTypeViaDeviceCode(device.TypeCode).Name, CellStyleType.Data); //器件类型
-                            excelService.SetCellValue(sheetName, currentRowIndex, 2, device.Feature, CellStyleType.Data); //特性
-                            excelService.SetCellValue(sheetName, currentRowIndex, 3, device.Disable, CellStyleType.Data); //屏蔽
-                            excelService.SetCellValue(sheetName, currentRowIndex, 4, device.SensitiveLevel, CellStyleType.Data); //灵敏度
+                            excelService.SetCellValue(sheetName, currentRowIndex, 2, device.Feature==null?null:device.Feature.ToString(), CellStyleType.Data); //特性
+                            excelService.SetCellValue(sheetName, currentRowIndex, 3, device.Disable==null?null:device.Disable.ToString(), CellStyleType.Data); //屏蔽
+                            excelService.SetCellValue(sheetName, currentRowIndex, 4, device.SensitiveLevel==null?null:device.SensitiveLevel.ToString(), CellStyleType.Data); //灵敏度
                             excelService.SetCellValue(sheetName, currentRowIndex, 5, device.LinkageGroup1, CellStyleType.Data); //输出组1
                             excelService.SetCellValue(sheetName, currentRowIndex, 6, device.LinkageGroup2, CellStyleType.Data); //输出组2                            
-                            excelService.SetCellValue(sheetName, currentRowIndex, 7, device.DelayValue, CellStyleType.Data); //延时
+                            excelService.SetCellValue(sheetName, currentRowIndex, 7, device.DelayValue==null?null:device.DelayValue.ToString(), CellStyleType.Data); //延时
                             excelService.SetCellValue(sheetName, currentRowIndex, 8, device.sdpKey, CellStyleType.Data); //区号                            
                             excelService.SetCellValue(sheetName, currentRowIndex, 9, device.Location, CellStyleType.Data);//安装地点                        }
                         }
                         excelService.SetMergeCells(sheetName, lstMergeCellRange);//设置"回路页签"合并单元格
                         excelService.SetColumnWidth(sheetName, 1, 15f);
                         excelService.SetColumnWidth(sheetName, 9, 50f);
-
+                        currentRowIndex++;
 
                     }
                 }
@@ -741,7 +724,9 @@ namespace SCA.BusinessLib.BusinessLogic
                         excelService.SetCellValue(sheetName, currentRowIndex, 6, model.LinkageNo1, CellStyleType.Data);
                         excelService.SetCellValue(sheetName, currentRowIndex, 7, model.LinkageNo2, CellStyleType.Data);
                         excelService.SetCellValue(sheetName, currentRowIndex, 8, model.LinkageNo3, CellStyleType.Data);                        
+                        excelService.SetCellValue(sheetName, currentRowIndex, 9, model.Memo, CellStyleType.Data);                        
                     }
+                    excelService.SetColumnWidth(sheetName, 9, 50f);  
                 }
             }
             catch (Exception ex)

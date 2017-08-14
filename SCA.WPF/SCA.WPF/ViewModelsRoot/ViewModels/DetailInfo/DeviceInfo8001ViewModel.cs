@@ -386,7 +386,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
     }
-    public class DeviceInfo8001ViewModel : PropertyChangedBase//, IDeviceInfoViewModel<DeviceInfo8001>
+    public class DeviceInfo8001ViewModel : PropertyChangedBase,IDisposable//, IDeviceInfoViewModel<DeviceInfo8001>
     {
         //private ObservableCollection<DeviceInfo8001> _deviceInfoObservableCollection;
 
@@ -701,5 +701,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         //    return controllerOperation.GetMaxDeviceID();            
         //}
 
+
+        public void Dispose()
+        {
+            this.DeviceInfoObservableCollection = null;
+        }
     }
 }

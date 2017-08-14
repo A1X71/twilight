@@ -11,7 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 using Ookii.Dialogs.Wpf;
+using SCA.BusinessLib.BusinessLogic;
+using SCA.Model;
 namespace SCA.WPF.ViewsRoot.Views
 {
     /// <summary>
@@ -50,18 +53,42 @@ namespace SCA.WPF.ViewsRoot.Views
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            SCA.Model.ProjectModel project = new Model.ProjectModel();
-            project.Name = this.ProjectNameInputTextBox.Text;
-            project.SavePath = this.FilePathInputTextBox.Text + "\\" + project.Name + ".nt"; 
-            //project.SaveFilePath = this.FilePathInputTextBox.Text + "\\" + project.Name + ".nt";
-            project.FileVersion = BusinessLogic.DBFileVersionManager.CurrentDBFileVersion;
-            SCA.BusinessLib.ProjectManager.GetInstance.CreateProject(project);
+            this.ErrorMessagePromptName.Text = "";
+            this.ErrorMessagePromptFilePath.Text = "";
+            bool verifyFlag = true;
+              
+            ProjectConfig projectConfig = new ProjectConfig();
+            Dictionary<string, RuleAndErrorMessage> dictRule = projectConfig.GetProjectInfoRegularExpression();
+            RuleAndErrorMessage rule = dictRule["Name"];
 
-            RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
+            Regex exminator = new Regex(rule.Rule);
+
+            if (!exminator.IsMatch(this.ProjectNameInputTextBox.Text))
+            {            
+                this.ErrorMessagePromptName.Text = rule.ErrorMessage;
+                verifyFlag = false;
+            }
+
+            if (string.IsNullOrEmpty(this.FilePathInputTextBox.Text))
+            {
+                this.ErrorMessagePromptFilePath.Text += "请选择有效路径";
+                verifyFlag = false;
+            }
+            if (verifyFlag)
+            {
+                SCA.Model.ProjectModel project = new Model.ProjectModel();
+                project.Name = this.ProjectNameInputTextBox.Text;   
+                project.SavePath = this.FilePathInputTextBox.Text + "\\" + project.Name + ".nt";                 
+                project.FileVersion = BusinessLogic.DBFileVersionManager.CurrentDBFileVersion;
+                SCA.BusinessLib.ProjectManager.GetInstance.CreateProject(project);
+                RaiseEvent(new RoutedEventArgs(AddButtonClickEvent));
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            this.ErrorMessagePromptName.Text = "";
+            this.ErrorMessagePromptFilePath.Text = "";
             RaiseEvent(new RoutedEventArgs(CloseButtonClickEvent));
         }
     }

@@ -221,15 +221,17 @@
                 </i:Interaction.Behaviors>
             </View:WelcomeView>
             <!--<View:ProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  />-->
-            <View:CreateProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center" AddButtonClick="ProjectUserControl_AddButtonClick" CloseButtonClick="ProjectUserControl_CloseButtonClick"   Visibility="Hidden"/>
+            <View:CreateProjectView x:Name="ProjectUserControl" HorizontalAlignment="Center" VerticalAlignment="Center" AddButtonClick="ProjectUserControl_AddButtonClick"                                    
+                                    CloseButtonClick="ProjectUserControl_CloseButtonClick"   
+                                    Visibility="Hidden"/>
 
-            <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"
+            <View:ImportFromOldVersionView x:Name="ImportFromOldVersionUserControl" HorizontalAlignment="Center" VerticalAlignment="Top"  Visibility="Hidden"  Margin="20,20,0,0"
                                            ConfirmButtonClick="ImportFromOldVersionUserControl_ConfirmButtonClick" 
                                            CloseButtonClick="ProjectUserControl_CloseButtonClick"/>
 
-            <View:CreateControllerView x:Name="CreateControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="Hidden"  AddButtonClick="CreateControllerUserControl_AddButtonClick"  CancelButtonClick="CreateControllerUserControl_CancelButtonClick"/>
+            <View:CreateControllerView x:Name="CreateControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="20,20,0,0" Visibility="Hidden"  AddButtonClick="CreateControllerUserControl_AddButtonClick"  CancelButtonClick="CreateControllerUserControl_CancelButtonClick"/>
 
-            <View:ImportControllerView x:Name="ImportControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Center"   
+            <View:ImportControllerView x:Name="ImportControllerUserControl" HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="20,20,0,0"                                       
                                        DataContext="{Binding Path=ImportControllerDataContext}"
                                        Visibility="{Binding Data.ImportControllerVisibilityState, Source={StaticResource proxy},Mode=TwoWay}"/>
             <!--<View:CreateManualControlBoardView  DataContext="{Binding Path=CreateVM}" x:Name="CreateManualControlBoard" HorizontalAlignment="Center" VerticalAlignment="Center"

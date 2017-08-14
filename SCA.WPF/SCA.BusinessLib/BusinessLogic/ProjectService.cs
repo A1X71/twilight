@@ -291,7 +291,7 @@ namespace SCA.BusinessLib.BusinessLogic
         {
             if (projName != null)
             {
-                if (projName.Length > 0 && projName.Length < 20)
+                if (projName.Length > 0 && projName.Length <= 20)
                 {
                     return true;
                 }

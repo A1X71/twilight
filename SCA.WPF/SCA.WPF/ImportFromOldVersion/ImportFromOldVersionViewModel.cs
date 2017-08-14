@@ -14,6 +14,7 @@ using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLogic;
 using SCA.BusinessLib.Utility;
 using SCA.WPF.Infrastructure;
+using System.Text.RegularExpressions;
 
 /* ==============================
 *
@@ -35,6 +36,10 @@ namespace SCA.WPF.ImportFromOldVersion
         private string _importedFilePath;
         //文件存储路径
         private string _savedFilePath;
+
+        private string _errorMessagePromptName;
+        private string _errorMessagePromptImportFilePath;
+        private string _errorMessagePromptSaveFilePath;
         public String ProjectName
         {
             get
@@ -68,6 +73,42 @@ namespace SCA.WPF.ImportFromOldVersion
             set
             {
                 _savedFilePath = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public string ErrorMessagePromptName
+        {
+            get
+            {
+                return _errorMessagePromptName;
+            }
+            set
+            {
+                _errorMessagePromptName = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public string ErrorMessagePromptImportFilePath
+        {
+            get
+            {
+                return _errorMessagePromptImportFilePath;
+            }
+            set
+            {
+                _errorMessagePromptImportFilePath = value;
+                NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
+            }
+        }
+        public string ErrorMessagePromptSaveFilePath
+        {
+            get
+            {
+                return _errorMessagePromptSaveFilePath;
+            }
+            set
+            {
+                _errorMessagePromptSaveFilePath=value;
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
             }
         }
@@ -118,117 +159,106 @@ namespace SCA.WPF.ImportFromOldVersion
         }
         public void ComfirmExecute()
         {
-            IFileService _fileService = new FileService();            
-            ILogRecorder _logRecorder=null;
-            string strImportedFilePath = this.ImportedFilePath;
-            string strExtentionName = strImportedFilePath.Substring(strImportedFilePath.LastIndexOf(".") + 1);            
-            DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this.ImportedFilePath, _logRecorder, _fileService);
-            //取得某一系列的数据文件操作服务（4，5，6 系列没有项目，7开始有项目信息，以文件扩展名作为划分依据）
-            IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByExtentionName(strExtentionName);
-            //取得文件版本
-            int fileVersion = dbFileVersionService.GetFileVersion();
-            dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(fileVersion);
-            //取得项目信息
-            ProjectModel project = dbFileVersionService.GetProject(1);
-            project.Name = this.ProjectName; //以当前设置的名称作为项目名
-            project.SavePath = this.SavedFilePath + "\\" + project.Name + ".nt";  //以当前设置的路径作为项目的存储路径
-            IControllerOperation controllerOperation = null;            
-            //取得项目下所有控制器信息
-            List<ControllerModel> lstController = dbFileVersionService.GetControllersByProject(project);
-            int dataFileVersion = 0;//数据文件版本
-            ControllerModel controller=null;
-            foreach (var controllerInfo in lstController)//取得控制器操作服务
+            this.ErrorMessagePromptImportFilePath = "";
+            this.ErrorMessagePromptName = "";
+            this.ErrorMessagePromptSaveFilePath = "";
+            bool verifyFlag = true;
+            ProjectConfig projectConfig = new ProjectConfig();
+            Dictionary<string,RuleAndErrorMessage> dictRule= projectConfig.GetProjectInfoRegularExpression();
+            RuleAndErrorMessage rule = dictRule["Name"];
+            Regex exminator = new Regex(rule.Rule);
+
+            if (!string.IsNullOrEmpty(ProjectName))
             {
-                if (project.FileVersion == -1) //4，5，6版本文件无项目信息
-                { 
-                    project.FileVersion = controllerInfo.FileVersion;
-                }
-                switch (controllerInfo.Type)
+
+                if (!exminator.IsMatch(ProjectName))
                 {
-                    case ControllerType.FT8000:
-                        controllerOperation = new ControllerOperation8000();
-                        break;
-                    case ControllerType.FT8003:
-                        controllerOperation = new ControllerOperation8003();
-                        break;
-                    case ControllerType.NT8001:
-                        controllerOperation = new ControllerOperation8001();
-                        break;
-                    case ControllerType.NT8007:
-                        controllerOperation = new ControllerOperation8007();
-                        break;             
-                    case ControllerType.NT8021:
-                        controllerOperation = new ControllerOperation8021();
-                        break;
-                    case ControllerType.NT8036:
-                        controllerOperation = new ControllerOperation8036();
-                        break;
+                    ErrorMessagePromptName = rule.ErrorMessage;
+                    verifyFlag = false;
                 }
-                if (controllerOperation != null)//合法控制器类型 
-                {
-                    dataFileVersion = Convert.ToInt32(project.FileVersion);//取得当前项目文件版本号
-                    dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(dataFileVersion); //取得当前文件的数据文件服务
-                    //controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
-                    controller = controllerOperation.OrganizeControllerInfoFromSpecifiedDBFileVersion(dbFileVersionService,controllerInfo);//取得组织完成的控制器信息
-                }
-                if (controller != null)//将组织完成的信息增加至项目中
-                {
-                    project.Controllers.Add(controllerInfo);      
-                }   
             }
-            if (dataFileVersion != 0)//将所有数据转换为当前软件应用的数据版本
+            else
             {
-                project = dbFileVersionManager.VersionConverter(dataFileVersion, DBFileVersionManager.CurrentDBFileVersion, project);
+                ErrorMessagePromptName = "请输入工程名称";
+                verifyFlag = false;
             }
-
-
-            //SCA.Model.ProjectModel project = new Model.ProjectModel();
-            //project.Name = this.ProjectName;
-            //project.SavePath = this.SavedFilePath; // SaveFilePathInputTextBox.Text;
-            
-            
-            
-            // _databaseService = new MSAccessDatabaseAccess(strImportedFilePath, null, _fileService);
-            // IOldVersionSoftwareDBService oldVersionService = new OldVersionSoftware8036DBService(_databaseService);
-            
-            //string[] strFileInfo = oldVersionService.GetFileVersionAndControllerType();
-            
-            //ControllerModel controllerInfo = null;
-            //int dataFileVersion=0 ;
-            //if (strFileInfo.Length > 0)
-            //{
-            //    //switch (strFileInfo[0])
-            //    //{
-            //    //    case "8036":
-            //    //        controllerOperation = new ControllerOperation8036();
-            //    //        break;
-            //    //    case "8001":
-            //    //        controllerOperation = new ControllerOperation8001();
-            //    //        break;
-            //    //}
-            //    if (controllerOperation != null)
-            //    {
-            //        dataFileVersion = Convert.ToInt32(strFileInfo[1]);
-            //        dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(dataFileVersion);
-            //        //controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
-            //        controllerInfo = controllerOperation.OrganizeControllerInfoFromSpecifiedDBFileVersion(dbFileVersionService);
-            //    }
-                
-
-            //    //strFileInfo[1];
-            //}
-            //if (controllerInfo != null)
-            //{
-            //    project.Controllers.Add(controllerInfo);     
-            //    if(dataFileVersion!=0)
-            //    {
-            //      project = dbFileVersionManager.VersionConverter(dataFileVersion, dbFileVersionManager.CurrentDBFileVersion,project);
-            //    }
-            //}                   
-            SCA.BusinessLib.ProjectManager.GetInstance.CreateProject(project);
-            //RaiseEvent(new RoutedEventArgs(ConfirmButtonClickEvent));
-            
-            EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
+            if (string.IsNullOrEmpty(ImportedFilePath))
+            {
+                ErrorMessagePromptImportFilePath = "请选择有效导入文件路径";
+                verifyFlag = false;
+            }
+            if (string.IsNullOrEmpty(SavedFilePath))
+            {
+                ErrorMessagePromptSaveFilePath = "请选择有效文件存储路径";
+                verifyFlag = false;
+            }
+            if (verifyFlag)
+            {
+                IFileService _fileService = new FileService();
+                ILogRecorder _logRecorder = null;
+                string strImportedFilePath = this.ImportedFilePath;
+                string strExtentionName = strImportedFilePath.Substring(strImportedFilePath.LastIndexOf(".") + 1);
+                DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(this.ImportedFilePath, _logRecorder, _fileService);
+                //取得某一系列的数据文件操作服务（4，5，6 系列没有项目，7开始有项目信息，以文件扩展名作为划分依据）
+                IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByExtentionName(strExtentionName);
+                //取得文件版本
+                int fileVersion = dbFileVersionService.GetFileVersion();
+                dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(fileVersion);
+                //取得项目信息
+                ProjectModel project = dbFileVersionService.GetProject(1);
+                project.Name = this.ProjectName; //以当前设置的名称作为项目名
+                project.SavePath = this.SavedFilePath + "\\" + project.Name + ".nt";  //以当前设置的路径作为项目的存储路径
+                IControllerOperation controllerOperation = null;
+                //取得项目下所有控制器信息
+                List<ControllerModel> lstController = dbFileVersionService.GetControllersByProject(project);
+                int dataFileVersion = 0;//数据文件版本
+                ControllerModel controller = null;
+                foreach (var controllerInfo in lstController)//取得控制器操作服务
+                {
+                    if (project.FileVersion == -1) //4，5，6版本文件无项目信息
+                    {
+                        project.FileVersion = controllerInfo.FileVersion;
+                    }
+                    switch (controllerInfo.Type)
+                    {
+                        case ControllerType.FT8000:
+                            controllerOperation = new ControllerOperation8000();
+                            break;
+                        case ControllerType.FT8003:
+                            controllerOperation = new ControllerOperation8003();
+                            break;
+                        case ControllerType.NT8001:
+                            controllerOperation = new ControllerOperation8001();
+                            break;
+                        case ControllerType.NT8007:
+                            controllerOperation = new ControllerOperation8007();
+                            break;
+                        case ControllerType.NT8021:
+                            controllerOperation = new ControllerOperation8021();
+                            break;
+                        case ControllerType.NT8036:
+                            controllerOperation = new ControllerOperation8036();
+                            break;
+                    }
+                    if (controllerOperation != null)//合法控制器类型 
+                    {
+                        dataFileVersion = Convert.ToInt32(project.FileVersion);//取得当前项目文件版本号
+                        dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(dataFileVersion); //取得当前文件的数据文件服务
+                        //controllerInfo = controllerOperation.OrganizeControllerInfoFromOldVersionSoftwareDataFile(oldVersionService);
+                        controller = controllerOperation.OrganizeControllerInfoFromSpecifiedDBFileVersion(dbFileVersionService, controllerInfo);//取得组织完成的控制器信息
+                    }
+                    if (controller != null)//将组织完成的信息增加至项目中
+                    {
+                        project.Controllers.Add(controllerInfo);
+                    }
+                }
+                if (dataFileVersion != 0)//将所有数据转换为当前软件应用的数据版本
+                {
+                    project = dbFileVersionManager.VersionConverter(dataFileVersion, DBFileVersionManager.CurrentDBFileVersion, project);
+                }
+                SCA.BusinessLib.ProjectManager.GetInstance.CreateProject(project);
+                EventMediator.NotifyColleagues("DisplayTheOpenedProject", null);
+            }
         }
         public void CancelExecute()
         {

@@ -6,9 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <!-- Header -->
-        <Border x:Name="Header"  BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
-            <TextBlock Text="创建工程" TextWrapping="Wrap" Margin="15,5,10,5" Foreground="Black" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
+        <!-- Header -->        
+        <Border x:Name="Header" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" >
+            <TextBlock Text="创建工程"  TextWrapping="Wrap" Margin="15,5,10,5" Foreground="{DynamicResource HeaderFontColor}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="HeaderTextBlock"/>
         </Border>
         <!-- Content -->
         <Border  BorderThickness="1,1,1,1">
@@ -20,6 +20,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+               
+                    
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="1" Margin="10,0,0,0">
@@ -27,28 +29,35 @@
                         <ColumnDefinition Width="29*"/>                        
                         <ColumnDefinition Width="83*"/>
                         <ColumnDefinition Width="14*"/>
+                        
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!--MouseDown="AvatarGrid_MouseDown"-->
                     <Label Grid.Row="0" Grid.Column="0" Content="_工程名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
                     <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100" />
-                    <Label Grid.Row="1" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=FilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="FilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120" />
-                    <Button x:Name="SelectFolderButton"  Grid.Row="1" Grid.Column="3" Click="SelectFolderButton_Click">...</Button>
+                    <TextBlock Style="{DynamicResource ErrorMessageStyle}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ErrorMessagePromptName" TextWrapping="Wrap" Width="200" Height="Auto"></TextBlock>
+                    <Label Grid.Row="2" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=FilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="FilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120"  IsReadOnly="True"/>
+                    <Button x:Name="SelectFolderButton"  Grid.Row="2" Grid.Column="3" Click="SelectFolderButton_Click">...</Button>
+                    <TextBlock Style="{DynamicResource ErrorMessageStyle}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ErrorMessagePromptFilePath" TextWrapping="Wrap" Width="200" Height="Auto"></TextBlock>
                 </Grid>
 
-                <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                     <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Click="AddButton_Click" TabIndex="140" Width="64"/>
                     <Button Content="_取消" x:Name="CloseButton" VerticalAlignment="Bottom" IsCancel="True" HorizontalAlignment="Left" Click="CloseButton_Click"  TabIndex="150" Margin="10,0,0,0" Width="60"/>
                 </StackPanel>
+                
+                
             </Grid>
         </Border>
 
         <!-- Footer -->
-        <Border  Height="35" x:Name="Footer" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
+        <Border Background="{DynamicResource BackgroundBrush}" Height="35" x:Name="Footer" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5"/>
 
     </StackPanel>
 </UserControl>

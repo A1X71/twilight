@@ -815,7 +815,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             _linkageConfigMixedService.Update(o.ToLinkageConfigMixed());
         }
     }
-    public class LinkageConfigMixedViewModel:PropertyChangedBase
+    public class LinkageConfigMixedViewModel:PropertyChangedBase,IDisposable
     {
         
         private ILinkageConfigMixedService _linkageConfigMixedService;
@@ -1097,5 +1097,10 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
 
 
+
+        public void Dispose()
+        {
+            this.MixedLinkageConfigInfoObservableCollection = null;
+        }
     }
 }

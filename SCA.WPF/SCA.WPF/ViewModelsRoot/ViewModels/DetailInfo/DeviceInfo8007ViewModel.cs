@@ -283,7 +283,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
     }
-    public class DeviceInfo8007ViewModel:PropertyChangedBase
+    public class DeviceInfo8007ViewModel:PropertyChangedBase,IDisposable
     {
         private EditableDeviceInfo8007Collection _deviceInfoCollection;
         private List<DeviceInfo8007> _lstDeviceInfo8007;
@@ -579,6 +579,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             ControllerOperation8007 controllerOperation = new ControllerOperation8007();
             return controllerOperation.GetMaxDeviceID();
+        }
+
+        public void Dispose()
+        {
+            this.DeviceInfoObservableCollection = null;
         }
     }
 }

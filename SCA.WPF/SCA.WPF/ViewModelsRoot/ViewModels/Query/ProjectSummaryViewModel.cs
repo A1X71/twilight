@@ -27,7 +27,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
 {
 
 
-    public class ProjectSummaryViewModel:PropertyChangedBase
+    public class ProjectSummaryViewModel:PropertyChangedBase,IDisposable
     {
         public ProjectModel TheProject { get; set; }
         private string _projectName;
@@ -1673,7 +1673,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
             }
             
         }
-       
+
+
+        public void Dispose()
+        {
+            this.TheProject = null;
+            this._summaryNodes = null;            
+        }
     }
 
     //public enum QueryType

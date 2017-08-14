@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignWidth="300">
+    
     <StackPanel  Background="{StaticResource WindowBackgroundBrush}" >
         <!-- Header -->
         <Border x:Name="Header"  Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0">
@@ -24,26 +25,34 @@
 
                 <Grid Grid.Row="1" Margin="10,0,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="56*"/>
-                        <ColumnDefinition Width="14*"/>
+                        <ColumnDefinition Width="87*"/>
+                        <ColumnDefinition Width="101*"/>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="40*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <!--MouseDown="AvatarGrid_MouseDown"-->
                     <Label Grid.Row="0" Grid.Column="0" Content="工程名称" Target="{Binding ElementName=ProjectNameInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="100"  Text="{Binding Path=ProjectName}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ProjectNameInputTextBox" HorizontalAlignment="Left" Width="151" Margin="5,0,0,0" TabIndex="100"  Text="{Binding Path=ProjectName}" Grid.ColumnSpan="2"/>
+                    <TextBlock Style="{DynamicResource ErrorMessageStyle}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ErrorMessagePromptName" TextWrapping="Wrap" Width="200" Height="Auto" Text="{Binding Path=ErrorMessagePromptName, Mode=OneWay}"></TextBlock>
+                    
+                    <Label Grid.Row="2" Grid.Column="0" Content="导入文件路径" Target="{Binding ElementName=ImportFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <!--<TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="156" Margin="5,0,0,0" TabIndex="120"  Text="{Binding Path=ImportedFilePath}" Grid.ColumnSpan="2"/>-->
+                    <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="156" Margin="5,0,0,0"  Text="{Binding Path=ImportedFilePath}" Grid.ColumnSpan="2"/>
+                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="2" Grid.Column="3"  Command="{Binding Path=SelectedImportedFilePathCommand}">...</Button>
+                    <TextBlock Style="{DynamicResource ErrorMessageStyle}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ErrorMessagePromptImportFilePath" TextWrapping="Wrap" Width="200" Height="Auto" Text="{Binding Path=ErrorMessagePromptImportFilePath, Mode=OneWay}"></TextBlock>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="导入文件路径" Target="{Binding ElementName=ImportFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" x:Name="ImportFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120"  Text="{Binding Path=ImportedFilePath}"/>                    
-                    <Button x:Name="SelectFolderForSourceFileButton"  Grid.Row="1" Grid.Column="3"  Command="{Binding Path=SelectedImportedFilePathCommand}">...</Button>
-
-                    <Label Grid.Row="2" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=SaveFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" x:Name="SaveFilePathInputTextBox" HorizontalAlignment="Left" Width="180" Margin="5,0,0,0" TabIndex="120"  Text="{Binding Path=SavedFilePath}"/>                    
-                    <Button x:Name="SelectFolderForSavePathButton"  Grid.Row="2" Grid.Column="3" Command="{Binding Path=SelectedSavedFilePathCommand}">...</Button>
+                    <Label Grid.Row="4" Grid.Column="0" Content="文件存储路径" Target="{Binding ElementName=SaveFilePathInputTextBox, Mode=OneWay}" Foreground="Black"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" x:Name="SaveFilePathInputTextBox" HorizontalAlignment="Left" Width="156" Margin="5,0,0,0"  Text="{Binding Path=SavedFilePath}" Grid.ColumnSpan="2"/>
+                    <Button x:Name="SelectFolderForSavePathButton"  Grid.Row="4" Grid.Column="3" Command="{Binding Path=SelectedSavedFilePathCommand}">...</Button>
+                    <TextBlock  Style="{DynamicResource ErrorMessageStyle}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ErrorMessagePromptSaveFilePath" TextWrapping="Wrap" Width="200" Height="Auto" Text="{Binding Path=ErrorMessagePromptSaveFilePath, Mode=OneWay}"></TextBlock>
                 </Grid>
 
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">

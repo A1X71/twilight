@@ -120,23 +120,24 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             }
         }
         public MainWindowViewModel()
-        {            
-            _deviceInfoViewModel8036 = new DeviceInfo8036ViewModel();
-            _deviceInfoViewModel8001 = new DeviceInfo8001ViewModel();
-            _deviceInfoViewModel8007 = new DeviceInfo8007ViewModel();
-            _deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
-            _deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
-            _deviceInfoViewModel8021 =new DeviceInfo8021ViewModel();
-            _deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
+        {
             _defaultViewModel = new DefaultViewModel();
+
+            //_deviceInfoViewModel8036 = new DeviceInfo8036ViewModel();
+            //_deviceInfoViewModel8001 = new DeviceInfo8001ViewModel();
+            //_deviceInfoViewModel8007 = new DeviceInfo8007ViewModel();
+            //_deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
+            //_deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
+            //_deviceInfoViewModel8021 =new DeviceInfo8021ViewModel();
+            //_deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();           
 
             //_linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
             //_linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
             //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
-            _manualControlBoardViewModel = new ManualControlBoardViewModel();
-            _summaryViewModel = new Query.SummaryInfoViewModel();
-            _projectSummaryViewModel = new Query.ProjectSummaryViewModel();
-            _loopSummaryViewModel = new Query.LoopSummaryViewModel();
+            //_manualControlBoardViewModel = new ManualControlBoardViewModel();
+            //_summaryViewModel = new Query.SummaryInfoViewModel();
+            //_projectSummaryViewModel = new Query.ProjectSummaryViewModel();
+            //_loopSummaryViewModel = new Query.LoopSummaryViewModel();
             ImportControllerDataContext = new ImportControllerViewModel();            
             CurrentView = _defaultViewModel;
             AutoSaveExecute();
@@ -297,7 +298,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     break;
                 case ControllerNodeType.Mixed:
             
-            _linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
+                    _linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
                     _linkageConfigMixedViewModel.TheController = (SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _linkageConfigMixedViewModel.MixedLinkageConfigInfoObservableCollection = new EditableLinkageConfigMixeds(_linkageConfigMixedViewModel.TheController, _linkageConfigMixedViewModel.TheController.MixedConfig);
                     if (_linkageConfigMixedViewModel.TheController.Type == ControllerType.NT8053)
@@ -311,6 +312,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     CurrentView = _linkageConfigMixedViewModel;
                     break;
                 case ControllerNodeType.Board:
+                    _manualControlBoardViewModel = new ManualControlBoardViewModel();
                     _manualControlBoardViewModel.TheController=(SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     _manualControlBoardViewModel.ManualControlBoardInfoObservableCollection = new EditableManualControlBoards(_manualControlBoardViewModel.TheController,_manualControlBoardViewModel.TheController.ControlBoard);
                     if(_manualControlBoardViewModel.TheController.Type == ControllerType.NT8053)
@@ -326,6 +328,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     CurrentView = _manualControlBoardViewModel;
                     break;
                 case ControllerNodeType.Loop:
+                    _loopSummaryViewModel = new Query.LoopSummaryViewModel();
                     _loopSummaryViewModel.TheController=(SCA.Model.ControllerModel)((NavigatorItemViewModel)item).Parent.DataItem;                    
                     CurrentView = _loopSummaryViewModel;
                     break;
@@ -342,36 +345,43 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             switch (controllerType)
             { 
                 case ControllerType.NT8036:
+                    _deviceInfoViewModel8036 = new DeviceInfo8036ViewModel();
                     _deviceInfoViewModel8036.TheLoop = loop;                    
                     _deviceInfoViewModel8036.DeviceInfoObservableCollection = new EditableDeviceInfo8036Collection(loop,loop.GetDevices<DeviceInfo8036>());                  
                     CurrentView = _deviceInfoViewModel8036;                    
                     break;
                 case ControllerType.NT8001:
+                    _deviceInfoViewModel8001 = new DeviceInfo8001ViewModel();
                     _deviceInfoViewModel8001.TheLoop = loop;                    
                     _deviceInfoViewModel8001.DeviceInfoObservableCollection = new EditableDeviceInfo8001Collection(loop,loop.GetDevices<DeviceInfo8001>());                  
                     CurrentView = _deviceInfoViewModel8001;                    
                     break;
                 case ControllerType.NT8007:
+                    _deviceInfoViewModel8007 = new DeviceInfo8007ViewModel();
                     _deviceInfoViewModel8007.TheLoop = loop;                    
                     _deviceInfoViewModel8007.DeviceInfoObservableCollection = new EditableDeviceInfo8007Collection(loop, loop.GetDevices<DeviceInfo8007>());                  
                     CurrentView = _deviceInfoViewModel8007;
                     break;
                 case ControllerType.FT8000:
+                    _deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
                     _deviceInfoViewModel8000.TheLoop = loop;
                     _deviceInfoViewModel8000.DeviceInfoObservableCollection = new EditableDeviceInfo8000Collection(loop, loop.GetDevices<DeviceInfo8000>());
                     CurrentView = _deviceInfoViewModel8000;
                     break;
                 case ControllerType.FT8003:
+                    _deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
                     _deviceInfoViewModel8003.TheLoop = loop;
                     _deviceInfoViewModel8003.DeviceInfoObservableCollection = new EditableDeviceInfo8003Collection(loop, loop.GetDevices<DeviceInfo8003>());
                     CurrentView = _deviceInfoViewModel8003;
                     break;
                 case ControllerType.NT8021:
+                    _deviceInfoViewModel8021 = new DeviceInfo8021ViewModel();
                     _deviceInfoViewModel8021.TheLoop = loop;
                     _deviceInfoViewModel8021.DeviceInfoObservableCollection = new EditableDeviceInfo8021Collection(loop, loop.GetDevices<DeviceInfo8021>());
                     CurrentView = _deviceInfoViewModel8021;
                     break;
                 case ControllerType.NT8053:
+                    _deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
                     _deviceInfoViewModel8053.TheLoop = loop;
                     _deviceInfoViewModel8053.DeviceInfoObservableCollection = new EditableDeviceInfo8053Collection(loop, loop.GetDevices<DeviceInfo8053>());
                     CurrentView = _deviceInfoViewModel8053;
@@ -383,6 +393,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         public void NavigateToControllerSummary(object o)
         {            
             object item = (SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((SCA.WPF.ViewsRoot.Views.Navigator.NavigatorView)((RoutedEventArgs)o).Source).HierarchyTreeView.SelectedItem;
+            _summaryViewModel = new Query.SummaryInfoViewModel();
             _summaryViewModel.SetController((SCA.Model.ControllerModel)((NavigatorItemViewModel)item).DataItem);
             CurrentView = _summaryViewModel;            
         }
@@ -390,6 +401,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         public void NavigateToProjectSummary(object o)
         {
             object item = (SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((SCA.WPF.ViewsRoot.Views.Navigator.NavigatorView)((RoutedEventArgs)o).Source).HierarchyTreeView.SelectedItem;
+            _projectSummaryViewModel = new Query.ProjectSummaryViewModel();
             _projectSummaryViewModel.ProjectName = ((SCA.Model.ProjectModel)((NavigatorItemViewModel)item).DataItem).Name;
             _projectSummaryViewModel.TheProject = (SCA.Model.ProjectModel)((NavigatorItemViewModel)item).DataItem;
             _projectSummaryViewModel.GenerateSummaryInfo();
@@ -552,21 +564,253 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
             switch (o.GetType().ToString())
             {
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8036ViewModel":
+                    { 
+                        //_defaultViewModel = null;
+                        //_deviceInfoViewModel8036.Dispose();
+                        if(_deviceInfoViewModel8001!=null) _deviceInfoViewModel8001.Dispose();
+                        if(_deviceInfoViewModel8007!=null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if(_linkageConfigStandardViewModel!=null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if( _summaryViewModel!= null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        //   _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8001ViewModel":
+                    {
+                      //  _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        //if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        //_deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8007ViewModel":
+                    {
+                     //   _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        //if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        //_deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8000ViewModel":
+                    {
+                     //   _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        //if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        //_deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8003ViewModel":
+                    {
+                      //  _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        //if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        //_deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8021ViewModel":
+                    {
+                      //  _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        //if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        //_deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.DeviceInfo8053ViewModel":
+                    {
+                   //     _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        //if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        //_deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigStandardViewModel":
                     {
+                     //   _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        //if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
                         _deviceInfoViewModel8036 = null;
                         _deviceInfoViewModel8001 = null;
                         _deviceInfoViewModel8007 = null;
@@ -574,8 +818,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                         _deviceInfoViewModel8003 = null;
                         _deviceInfoViewModel8021 = null;
                         _deviceInfoViewModel8053 = null;
-                        _defaultViewModel = null;
-                    //    _linkageConfigStandardViewModel = null;
+                        //_linkageConfigStandardViewModel = null;
                         _linkageConfigGeneralViewModel = null;
                         _linkageConfigMixedViewModel = null;
                         _manualControlBoardViewModel = null;
@@ -585,9 +828,22 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigGeneralViewModel":
-                    break;
-                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel":
                     {
+                   //     _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        //if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
                         _deviceInfoViewModel8036 = null;
                         _deviceInfoViewModel8001 = null;
                         _deviceInfoViewModel8007 = null;
@@ -595,12 +851,42 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                         _deviceInfoViewModel8003 = null;
                         _deviceInfoViewModel8021 = null;
                         _deviceInfoViewModel8053 = null;
-                        _defaultViewModel = null;
-                        _linkageConfigStandardViewModel.Dispose();
                         _linkageConfigStandardViewModel = null;
-                        
-                        _linkageConfigGeneralViewModel = null;                        
-                        //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
+                        //_linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        _manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
+                    break;
+                case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.LinkageConfigMixedViewModel":
+                    {
+                   //     _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        //if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        //_linkageConfigMixedViewModel = null;
                         _manualControlBoardViewModel = null;
                         _summaryViewModel = null;
                         _projectSummaryViewModel = null;
@@ -608,25 +894,40 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
                     }
                     break;
                 case "SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo.ManualControlBoardViewModel":
+                    {
+                   //     _defaultViewModel = null;
+                        if (_deviceInfoViewModel8036 != null) _deviceInfoViewModel8036.Dispose();
+                        if (_deviceInfoViewModel8001 != null) _deviceInfoViewModel8001.Dispose();
+                        if (_deviceInfoViewModel8007 != null) _deviceInfoViewModel8007.Dispose();
+                        if (_deviceInfoViewModel8000 != null) _deviceInfoViewModel8000.Dispose();
+                        if (_deviceInfoViewModel8003 != null) _deviceInfoViewModel8003.Dispose();
+                        if (_deviceInfoViewModel8021 != null) _deviceInfoViewModel8021.Dispose();
+                        if (_deviceInfoViewModel8053 != null) _deviceInfoViewModel8053.Dispose();
+                        if (_linkageConfigStandardViewModel != null) _linkageConfigStandardViewModel.Dispose();
+                        if (_linkageConfigGeneralViewModel != null) _linkageConfigGeneralViewModel.Dispose();
+                        if (_linkageConfigMixedViewModel != null) _linkageConfigMixedViewModel.Dispose();
+                        //if (_manualControlBoardViewModel != null) _manualControlBoardViewModel.Dispose();
+                        if (_summaryViewModel != null) _summaryViewModel.Dispose();
+                        if (_projectSummaryViewModel != null) _projectSummaryViewModel.Dispose();
+                        if (_loopSummaryViewModel != null) _loopSummaryViewModel.Dispose();
+                        _deviceInfoViewModel8036 = null;
+                        _deviceInfoViewModel8001 = null;
+                        _deviceInfoViewModel8007 = null;
+                        _deviceInfoViewModel8000 = null;
+                        _deviceInfoViewModel8003 = null;
+                        _deviceInfoViewModel8021 = null;
+                        _deviceInfoViewModel8053 = null;
+                        _linkageConfigStandardViewModel = null;
+                        _linkageConfigGeneralViewModel = null;
+                        _linkageConfigMixedViewModel = null;
+                        //_manualControlBoardViewModel = null;
+                        _summaryViewModel = null;
+                        _projectSummaryViewModel = null;
+                        _loopSummaryViewModel = null;
+                    }
                     break;
 
             }
-            //_deviceInfoViewModel8036 = new DeviceInfo8036ViewModel();
-            //_deviceInfoViewModel8001 = new DeviceInfo8001ViewModel();
-            //_deviceInfoViewModel8007 = new DeviceInfo8007ViewModel();
-            //_deviceInfoViewModel8000 = new DeviceInfo8000ViewModel();
-            //_deviceInfoViewModel8003 = new DeviceInfo8003ViewModel();
-            //_deviceInfoViewModel8021 = new DeviceInfo8021ViewModel();
-            //_deviceInfoViewModel8053 = new DeviceInfo8053ViewModel();
-            //_defaultViewModel = new DefaultViewModel();
-
-            //_linkageConfigStandardViewModel = new LinkageConfigStandardViewModel();
-            //_linkageConfigGeneralViewModel = new LinkageConfigGeneralViewModel();
-            //_linkageConfigMixedViewModel = new LinkageConfigMixedViewModel();
-            //_manualControlBoardViewModel = new ManualControlBoardViewModel();
-            //_summaryViewModel = new Query.SummaryInfoViewModel();
-            //_projectSummaryViewModel = new Query.ProjectSummaryViewModel();
-            //_loopSummaryViewModel = new Query.LoopSummaryViewModel();
         }
     }
 }

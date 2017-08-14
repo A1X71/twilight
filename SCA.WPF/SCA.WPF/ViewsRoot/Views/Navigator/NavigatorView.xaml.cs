@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SCA.Model;
+using SCA.BusinessLib;
+using SCA.WPF.Infrastructure;
 namespace SCA.WPF.ViewsRoot.Views.Navigator
 {
     /// <summary>
@@ -140,7 +142,15 @@ namespace SCA.WPF.ViewsRoot.Views.Navigator
         }
         private void btnSetMasterController_Click(object sender, RoutedEventArgs e)
         {
-
+            if (this.HierarchyTreeView.SelectedItem.GetType() == typeof(SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel))
+            {
+                if (((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)this.HierarchyTreeView.SelectedItem).DataItem.GetType() == typeof(SCA.Model.ControllerModel))
+                {
+                    ProjectManager.GetInstance.SetPrimaryControllerByID(((SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)this.HierarchyTreeView.SelectedItem).DataItem).ID);
+                    EventMediator.NotifyColleagues("RefreshNavigator",true);
+                }
+                
+            }            
         }
         #endregion
         #region Loop Toolbox event

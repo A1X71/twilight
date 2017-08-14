@@ -141,8 +141,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 if (o != null)
                 {                    
                     TheLoop.GetDevices<DeviceInfo8036>().Remove(o);
-                    DeleteDeviceFromDB(id);
                     TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8036>().Count;            
+                    DeleteDeviceFromDB(id);                    
                 }
             }
             catch
@@ -169,6 +169,8 @@ namespace SCA.BusinessLib.BusinessLogic
                         BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8036 = controllerOperation.GetMaxDeviceID();
                     }
                 }
+                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(dbFileVersionService); //更新回路中存储的器件数量
+                loopDBService.AddLoopInfo(TheLoop);
             }
             catch (Exception ex)
             {

@@ -13,26 +13,25 @@
              >
 
 
-    <StackPanel>
-        <Grid Background="#FF3892C5" x:Name="EmptyContentTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Visible">
-            <Grid.ColumnDefinitions>                
+    <StackPanel x:Name="NavigatorContainer" HorizontalAlignment="Left">
+        <Grid Background="#FF3892C5" x:Name="EmptyContentTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="{Binding Path=Width, ElementName=NavigatorContainer}" Visibility="Visible">
+            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="32"/>
                 <ColumnDefinition Width="32"/>
-                <ColumnDefinition Width="32"/>                
+                <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label  Grid.Row="0" Grid.Column="0">NEAT</Label>            
+            <Label  Grid.Row="0" Grid.Column="0">NEAT</Label>
             <Button x:Name="btnAddProject"  Grid.Column="1" Grid.Row="0" Width="32" Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnAddProject_Click">
-                <!--<Image Source="{Binding Path=ProjectAddIconPath,Mode=OneWay}"/>-->
-                <Image >
+                <Image Source="{Binding Path=ProjectAddIconPath,Mode=OneTime}"/>
+                <!--<Image >
                     <Image.Source>
                         <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectAddIconPath"/>
                     </Image.Source>
-                </Image>
+                </Image>-->
             </Button>
 
             <Button x:Name="btnOpenProject" Grid.Column="2" Grid.Row="0" Width="32" Height="32"  Background="Transparent" BorderBrush="Transparent" Click="btnOpenProject_Click">
@@ -40,17 +39,17 @@
                     <Image.Source>
                         <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectOpenIconPath"/>
                     </Image.Source>
-                </Image>                
+                </Image>
             </Button>
             <!--Source="{Binding Path=ProjectOpenIconPath,Mode=OneWay}"-->
-            <Button x:Name="btnCloseProject" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnCloseProject_Click">
-                <!--<Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>-->
+            <!--<Button x:Name="btnCloseProject" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnCloseProject_Click">
+                --><!--<Image Source="{Binding Path=ProjectDeleteIconPath,Mode=OneWay}"/>--><!--
                 <Image >
                     <Image.Source>
                         <Utility:LazyBinding ElementName="Navigator" Path="DataContext.ProjectDeleteIconPath"/>
                     </Image.Source>
                 </Image>
-            </Button>
+            </Button>-->
         </Grid>
         <Grid x:Name="ProjectTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -103,7 +102,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                
+
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -111,7 +110,7 @@
             <Label x:Name="NodeText"  Grid.Row="0" Grid.Column="0">控制器</Label>
 
             <Button x:Name="btnDeleteController" Grid.Column="1" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnDeleteController_Click">
-                <Image Source="{Binding Path=ControllerDeleteIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=ControllerDeleteIconPath,Mode=OneTime}"/>
                 <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <Infrastructure:ConfirmInvokeCommandAction Message="确认删除?"/>
@@ -119,17 +118,17 @@
                 </i:Interaction.Triggers>-->
             </Button>
             <Button x:Name="btnStartController" Grid.Column="2" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnStartController_Click">
-                <Image Source="{Binding Path=ControllerStartIconPath,Mode=OneWay}"/>
-                
+                <Image Source="{Binding Path=ControllerStartIconPath,Mode=OneTime}"/>
+
             </Button>
             <Button x:Name="btnStopController" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnStopController_Click">
-                <Image Source="{Binding Path=ControllerStopIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=ControllerStopIconPath,Mode=OneTime}"/>
             </Button>
             <Button x:Name="btnSetMasterController" Grid.Column="4" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnSetMasterController_Click">
-                <Image Source="{Binding Path=ControllerSetMasterIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=ControllerSetMasterIconPath,Mode=OneTime}"/>
             </Button>
             <Button x:Name="btnControllerMerge" Grid.Column="5" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnControllerMerge_Click">
-                <Image Source="{Binding Path=ProjectMergeIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=ProjectMergeIconPath,Mode=OneTime}"/>
             </Button>
         </Grid>
         <Grid x:Name="LoopsTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
@@ -194,17 +193,17 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">网络手动盘</Label>
         </Grid>
-        
+
         <Grid>
             <Grid.Resources>
                 <local:NavigatorDataTemplateSelector x:Key="hierarchyDataTemplateSelector"/>
                 <local:PrimaryControllerColorSelector x:Key="primaryColorSelector"/>
             </Grid.Resources>
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>            
-             <TreeView   Name="HierarchyTreeView" 
+            </Grid.RowDefinitions>
+            <TreeView   Name="HierarchyTreeView" 
                         ItemTemplateSelector="{StaticResource hierarchyDataTemplateSelector}" 
                         ItemsSource="{Binding Projects}"
                         SelectedItemChanged="OnSelectedItemChanged"                             
@@ -250,7 +249,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>-->
-                                    
+
                             </TextBlock>
                         </StackPanel>
                     </HierarchicalDataTemplate>
@@ -260,7 +259,7 @@
                             <TextBlock Text="{Binding Path=DataItem.Name}">
                             </TextBlock>
                         </StackPanel>
-                    </HierarchicalDataTemplate>                    
+                    </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate x:Key="LoopTemplate" DataType="{x:Type local:NavigatorItemViewModel}" >
                         <StackPanel Orientation="Horizontal" >
                             <Image Source="{Binding Path=DataItem.IconInTree}" Height="15"></Image>
@@ -273,8 +272,8 @@
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
-            </TreeView>            
-        </Grid>        
+            </TreeView>
+        </Grid>
     </StackPanel>
 
 </UserControl>

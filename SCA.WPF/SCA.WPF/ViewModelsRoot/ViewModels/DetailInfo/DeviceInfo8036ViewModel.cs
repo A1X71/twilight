@@ -342,7 +342,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
     #endregion
 
     //去掉IDeviceInfoViewModel<DeviceInfo8036>,涉及各个控制器的器件类，暂放弃进一步抽象 2017-03-30
-    public class DeviceInfo8036ViewModel:PropertyChangedBase//,IDeviceInfoViewModel<DeviceInfo8036>
+    public class DeviceInfo8036ViewModel:PropertyChangedBase,IDisposable//,IDeviceInfoViewModel<DeviceInfo8036>
     {
         private EditableDeviceInfo8036Collection _deviceInfoCollection;
         private List<DeviceInfo8036> _lstDeviceInfo8036;
@@ -660,6 +660,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         {
             ControllerOperation8036 controllerOperation = new ControllerOperation8036();
             return controllerOperation.GetMaxDeviceID();
+        }
+
+        public void Dispose()
+        {
+            this.DeviceInfoObservableCollection = null;
         }
     }
 }

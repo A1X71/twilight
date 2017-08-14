@@ -783,13 +783,13 @@ namespace SCA.BusinessLib.BusinessLogic
                             currentRowIndex++;
                             excelService.SetCellValue(sheetName, currentRowIndex, 0, device.Code, CellStyleType.Data); //器件编码
                             excelService.SetCellValue(sheetName, currentRowIndex, 1, config.GetDeviceTypeViaDeviceCode(device.TypeCode).Name, CellStyleType.Data); //器件类型                            
-                            excelService.SetCellValue(sheetName, currentRowIndex, 2, device.Disable, CellStyleType.Data); //屏蔽
-                            excelService.SetCellValue(sheetName, currentRowIndex, 3, device.CurrentThreshold, CellStyleType.Data); //电流报警值
-                            excelService.SetCellValue(sheetName, currentRowIndex, 4, device.TemperatureThreshold, CellStyleType.Data); //温度报警值                                                     
-                            excelService.SetCellValue(sheetName, currentRowIndex, 5, device.BuildingNo, CellStyleType.Data); //楼号
-                            excelService.SetCellValue(sheetName, currentRowIndex, 6, device.ZoneNo, CellStyleType.Data); //区号
-                            excelService.SetCellValue(sheetName, currentRowIndex, 7, device.FloorNo, CellStyleType.Data);//层号
-                            excelService.SetCellValue(sheetName, currentRowIndex, 8, device.RoomNo, CellStyleType.Data);//房间号                           
+                            excelService.SetCellValue(sheetName, currentRowIndex, 2, device.Disable==null?null:device.Disable.ToString(), CellStyleType.Data); //屏蔽
+                            excelService.SetCellValue(sheetName, currentRowIndex, 3, device.CurrentThreshold==null?null:device.CurrentThreshold.ToString(), CellStyleType.Data); //电流报警值
+                            excelService.SetCellValue(sheetName, currentRowIndex, 4, device.TemperatureThreshold==null?null:device.TemperatureThreshold.ToString(), CellStyleType.Data); //温度报警值                                                     
+                            excelService.SetCellValue(sheetName, currentRowIndex, 5, device.BuildingNo==null?null:device.BuildingNo.ToString(), CellStyleType.Data); //楼号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 6, device.ZoneNo==null?null:device.ZoneNo.ToString(), CellStyleType.Data); //区号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 7, device.FloorNo==null?null:device.FloorNo.ToString(), CellStyleType.Data);//层号
+                            excelService.SetCellValue(sheetName, currentRowIndex, 8, device.RoomNo==null?null:device.RoomNo.ToString(), CellStyleType.Data);//房间号                           
                             excelService.SetCellValue(sheetName, currentRowIndex, 9, device.Location, CellStyleType.Data);//安装地点
                         } 
                     }

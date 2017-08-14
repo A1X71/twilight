@@ -23,7 +23,7 @@ using Caliburn.Micro;
 */
 namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
 {
-    public class LoopSummaryViewModel:PropertyChangedBase
+    public class LoopSummaryViewModel:PropertyChangedBase,IDisposable
     {
         //List<LoopModel> _loopsCode = null;
         
@@ -72,14 +72,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
             {
                 _theController = value;                
                 NotifyOfPropertyChange(MethodBase.GetCurrentMethod().GetPropertyName());
-                Loops = _theController.Loops;
-                DeviceTypes = GetValidDeviceTypes();
-
-                //if (DeviceTypes.Count > 0)
-                //{
-                //    SelectedDeviceTypeCode = DeviceTypes[0].Code;
-                //}
-                
+                if (_theController != null)
+                { 
+                    Loops = _theController.Loops;
+                    DeviceTypes = GetValidDeviceTypes();
+                }
             }
         }
         
@@ -271,5 +268,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
             return lstQueryDevice;
         }
 
+
+        public void Dispose()
+        {
+            this.TheController = null;
+            this.DeviceInfoObservableCollection = null;
+        }
     }
 }

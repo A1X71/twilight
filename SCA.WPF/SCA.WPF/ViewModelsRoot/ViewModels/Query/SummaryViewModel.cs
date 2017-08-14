@@ -26,7 +26,7 @@ using System.Collections.ObjectModel;
 */
 namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
 {
-    public class SummaryInfoViewModel:PropertyChangedBase
+    public class SummaryInfoViewModel:PropertyChangedBase,IDisposable
     {
 
         #region 属性
@@ -613,7 +613,13 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
                 SummaryNodes.Add(controllerSummary);
             }
         }
-        
+
+
+        public void Dispose()
+        {
+            this.TheController = null;
+            this._summaryNodes = null;
+        }
     }
     
 }

@@ -10,10 +10,12 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>-->
+    <Style x:Key="ErrorMessageStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="Red"/>
+    </Style>
     <!--菜单弹出背景颜色-->
     <SolidColorBrush x:Key="PopupMenuBackgroundBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="DisabledMenuForegroundBrush" Color="#888" />
-    
+    <SolidColorBrush x:Key="DisabledMenuForegroundBrush" Color="#888" />    
     <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />    
     <SolidColorBrush x:Key="FontColor" Color="#FFE6E6E6" />
     <SolidColorBrush x:Key="GridHeaderFontColor" Color="#FF888888" />

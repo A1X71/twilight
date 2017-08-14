@@ -676,7 +676,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
         public void Dispose()
         {
-            this.StandardLinkageConfigInfoObservableCollection = null;
+            this.StandardLinkageConfigInfoObservableCollection = null;            
             //GC.Collect();
            // GC.WaitForPendingFinalizers();
             //GC.SuppressFinalize(true);

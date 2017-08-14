@@ -153,8 +153,8 @@
                             <col:ArrayList>
                                 <sys:Int16>0</sys:Int16>
                                 <sys:Int16>1</sys:Int16>
-                                <sys:Int16>2</sys:Int16>
-                                <sys:Int16>3</sys:Int16>
+                                <!--<sys:Int16>2</sys:Int16>
+                                <sys:Int16>3</sys:Int16>-->
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>

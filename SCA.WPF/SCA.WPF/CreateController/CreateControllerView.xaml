@@ -56,34 +56,34 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>            
             <Label Grid.Row="0" Grid.Column="0" Content="控制器名称"   Style="{StaticResource Label}" />
             <TextBox Grid.Row="0" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerNameInputTextBox" HorizontalAlignment="Left"
                      Width="145"  TabIndex="100" Foreground="{DynamicResource InputFontColor}"   Margin="5,0,0,0"  ToolTip="{Binding Path=Content, ElementName=ErrorMessageControllerName}"/>
-            <TextBlock x:Name="ErrorMessageControllerName"  Grid.Row="0" Grid.Column="2"   Height="30"  TextWrapping="Wrap"/>
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageControllerName"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"  TextWrapping="Wrap" Width="200"/>            
             
-            
-            <Label Grid.Row="1" Grid.Column="0" Content="控制器类型"  Style="{StaticResource Label}" />
-             <ComboBox IsSynchronizedWithCurrentItem="False"  Grid.Row="1" Grid.Column="1"
+            <Label Grid.Row="2" Grid.Column="0" Content="控制器类型"  Style="{StaticResource Label}" />
+             <ComboBox IsSynchronizedWithCurrentItem="False"  Grid.Row="2" Grid.Column="1"
                               ItemsSource="{Binding Source={StaticResource ControllerTypeEnumDS}}" 
                               x:Name="ControllerTypeComboBox"  Width="120"                              
                                HorizontalAlignment="Left"  
-                              SelectionChanged="ControllerTypeComboBox_SelectionChanged" Grid.ColumnSpan="2"  Margin="5,0,0,0" />          
-            <TextBlock x:Name="ErrorMessageControllerType"  Grid.Row="1" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>           
+                              SelectionChanged="ControllerTypeComboBox_SelectionChanged" Grid.ColumnSpan="2"  Margin="5,0,0,0" />
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageControllerType"  Grid.Row="2" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>           
             
-            <Label Grid.Row="2" Grid.Column="0" Content="控制器机号" Target="{Binding ElementName=ControllerMachineNumInputTextBox, Mode=OneWay}"  Style="{StaticResource Label}" />
-            <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerMachineNumInputTextBox"
+            <Label Grid.Row="3" Grid.Column="0" Content="控制器机号" Target="{Binding ElementName=ControllerMachineNumInputTextBox, Mode=OneWay}"  Style="{StaticResource Label}" />
+            <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="ControllerMachineNumInputTextBox"
                      HorizontalAlignment="Left" Width="120" 
                       Foreground="{DynamicResource InputFontColor}" 
                      TabIndex="100"  Margin="5,0,0,0"  />
-            <TextBlock x:Name="ErrorMessageControllerMachineNumber"  Grid.Row="2" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
-            <Label Grid.Row="3" Grid.Column="0" Content="器件长度"   Style="{StaticResource Label}" />
-            <ComboBox x:Name="DeviceCodeLengthComboBox" ItemsSource="{Binding Path=DeviceCodeLength}"  Width="120" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" IsSynchronizedWithCurrentItem="False" />
-            <TextBlock x:Name="ErrorMessageControllerDeviceAddressLength"  Grid.Row="3" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageControllerMachineNumber"  Grid.Row="3" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="器件长度"   Style="{StaticResource Label}" />
+            <ComboBox x:Name="DeviceCodeLengthComboBox" ItemsSource="{Binding Path=DeviceCodeLength}"  Width="120" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" IsSynchronizedWithCurrentItem="False" />
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageControllerDeviceAddressLength"  Grid.Row="4" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>
 
-            <Label Grid.Row="4" Grid.Column="0" Content="串口号" Style="{StaticResource Label}" />
-            <ComboBox  Grid.Row="4" Grid.Column="1" IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}" x:Name="SerialPortNumberComboBox"  Width="120" HorizontalAlignment="Left" SelectionChanged="SerialPortNumberComboBox_SelectionChanged"  Margin="5,0,0,0"   />
-            <TextBlock x:Name="ErrorMessageControllerPortName"  Grid.Row="4" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>              
+            <Label Grid.Row="5" Grid.Column="0" Content="串口号" Style="{StaticResource Label}" />
+            <ComboBox  Grid.Row="5" Grid.Column="1" IsSynchronizedWithCurrentItem="False" ItemsSource="{Binding Source={StaticResource SerialPortNumberEnumDS}}" x:Name="SerialPortNumberComboBox"  Width="120" HorizontalAlignment="Left" SelectionChanged="SerialPortNumberComboBox_SelectionChanged"  Margin="5,0,0,0"   />
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageControllerPortName"  Grid.Row="5" Grid.Column="2"   Height="30" TextWrapping="Wrap"/>              
             
             <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Button Content="_确定" x:Name="AddButton" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Click="AddButton_Click" TabIndex="140" Width="64"/>

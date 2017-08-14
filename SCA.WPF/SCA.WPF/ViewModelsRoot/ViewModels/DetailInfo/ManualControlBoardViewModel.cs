@@ -522,7 +522,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             _manualControlBoardService.Update(o.ToManualControlBoard());
         }
     }
-    public class ManualControlBoardViewModel : PropertyChangedBase
+    public class ManualControlBoardViewModel : PropertyChangedBase,IDisposable
     {
         private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
         //private ObservableCollection<ManualControlBoard> _manualControlBoardInfoObservableCollection;
@@ -1042,6 +1042,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                 logger.Error(ex.Message, ex);
             }
             
+        }
+
+        public void Dispose()
+        {
+            this.ManualControlBoardInfoObservableCollection = null;
         }
     }
 }

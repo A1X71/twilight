@@ -105,11 +105,17 @@ namespace SCA.WPF.ViewsRoot.Views
                 RuleAndErrorMessage rule = dictRule["Name"];
 
                 Regex exminator = new Regex(rule.Rule);
-
-                if (!exminator.IsMatch(controller.Name))
+                if (!string.IsNullOrEmpty(controller.Name))
                 {
-                    this.ErrorMessageControllerName.Text = rule.ErrorMessage;
-                    
+                    if (!exminator.IsMatch(controller.Name))
+                    {
+                        this.ErrorMessageControllerName.Text = rule.ErrorMessage;
+                        verifyFlag = false;
+                    }
+                }
+                else
+                {
+                    this.ErrorMessageControllerName.Text = "请填写控制器名称";
                     verifyFlag = false;
                 }
                 rule = dictRule["MachineNumber"];

@@ -551,7 +551,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
 
     }
-    public class LinkageConfigGeneralViewModel:PropertyChangedBase
+    public class LinkageConfigGeneralViewModel:PropertyChangedBase,IDisposable
     {
         private ILinkageConfigGeneralService _linkageConfigGeneralService;
         private int _addedAmount = 1;//向集合中新增LinkageConfigMixed的数量        
@@ -818,6 +818,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
             }
         }
 
+
+        public void Dispose()
+        {
+            this.GeneralLinkageConfigInfoObservableCollection = null;
+        }
     }
 
 

@@ -129,8 +129,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 if (o != null)
                 {
                     TheLoop.GetDevices<DeviceInfo8021>().Remove(o);
-                    DeleteDeviceFromDB(id);
                     TheLoop.DeviceAmount = TheLoop.GetDevices<DeviceInfo8021>().Count;            
+                    DeleteDeviceFromDB(id);                    
                 }
             }
             catch
@@ -146,8 +146,8 @@ namespace SCA.BusinessLib.BusinessLogic
                 IFileService _fileService = new SCA.BusinessLib.Utility.FileService();
                 ILogRecorder logger = null;
                 DBFileVersionManager dbFileVersionManager = new DBFileVersionManager(TheLoop.Controller.Project.SavePath, logger, _fileService);
-                IDBFileVersionService _dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
-                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, _dbFileVersionService);
+                IDBFileVersionService dbFileVersionService = dbFileVersionManager.GetDBFileVersionServiceByVersionID(DBFileVersionManager.CurrentDBFileVersion);
+                IDeviceDBServiceTest deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(TheLoop.Controller.Type, dbFileVersionService);
                 if (deviceDBService.DeleteDeviceByID(id))
                 {
                     if (BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 == id) //如果最大ID等于被删除的ID，则重新赋值
@@ -156,6 +156,8 @@ namespace SCA.BusinessLib.BusinessLogic
                         BusinessLib.ProjectManager.GetInstance.MaxDeviceIDInController8021 = controllerOperation.GetMaxDeviceID();
                     }
                 }
+                ILoopDBService loopDBService = new SCA.DatabaseAccess.DBContext.LoopDBService(dbFileVersionService); //更新回路中存储的器件数量
+                loopDBService.AddLoopInfo(TheLoop);
             }
             catch (Exception ex)
             {

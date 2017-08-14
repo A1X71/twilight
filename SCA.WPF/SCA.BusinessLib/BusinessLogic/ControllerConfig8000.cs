@@ -61,7 +61,7 @@ namespace SCA.BusinessLib.BusinessLogic
        
         public Model.ColumnConfigInfo[] GetStandardLinkageConfigColumns()
         {
-            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[13];
+            ColumnConfigInfo[] columnDefinitionArray = new ColumnConfigInfo[14];
             ColumnConfigInfo code = new ColumnConfigInfo();
             columnDefinitionArray[0] = new ColumnConfigInfo();
             columnDefinitionArray[0].ColumnName = "输出组号";
@@ -89,6 +89,8 @@ namespace SCA.BusinessLib.BusinessLogic
             columnDefinitionArray[11].ColumnName = "联动组2";
             columnDefinitionArray[12] = new ColumnConfigInfo();
             columnDefinitionArray[12].ColumnName = "联动组3";
+            columnDefinitionArray[13] = new ColumnConfigInfo();
+            columnDefinitionArray[13].ColumnName = "备注";
             return columnDefinitionArray;
         }
 
