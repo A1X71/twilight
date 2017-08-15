@@ -37,7 +37,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <!--<Setter Property="Data" TargetName="ExpandPath" Value="M 1 10 L 7 3 L 7 10 Z"/>-->
-                                <Setter Property="Data" TargetName="ExpandPath" Value="M 10 2 L 12 8 L 4 2 Z"/>
+                                <Setter Property="Data" TargetName="ExpandPath" Value="M 2 10 L 8 10 L 5 3 Z"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -79,7 +79,7 @@
                                                    Columns="{StaticResource gvcc}"
                                                    >
                                 </GridViewRowPresenter>
-                            </Border>
+                            </Border>                            
                             <ItemsPresenter x:Name="ItemsHost" />
                         </StackPanel>
                         <ControlTemplate.Triggers>
@@ -137,10 +137,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent" Command="{Binding SaveProjectInfoCommand}">                
-                <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"  ToolTip="保存" />
+                <Image Source="{Binding Path=SaveIconPath,Mode=OneTime}"  ToolTip="保存" />
             </Button>
             <Button Grid.Column="1" Grid.Row="0" Width="30"  Height="30"   Background="Transparent" BorderBrush="Transparent" Command="{Binding ToggleSimulatorInfoCommand}">
-                <Image Source="{Binding Path=SimulatorIconPath,Mode=OneWay}"  ToolTip="模拟联动" />
+                <Image Source="{Binding Path=SimulatorIconPath,Mode=OneTime}"  ToolTip="模拟联动" />
             </Button>
             
             <!--<Button Grid.Column="1" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent" IsEnabled="False">
