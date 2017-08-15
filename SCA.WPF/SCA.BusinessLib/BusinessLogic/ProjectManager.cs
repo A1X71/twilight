@@ -10,6 +10,7 @@ using SCA.Model;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib;
 using System.Collections.Specialized;
+using Neat.Dennis.Connection;
 namespace SCA.BusinessLib
 {
     public class ProjectManager:SCA.Interface.IProjectManager
@@ -39,6 +40,7 @@ namespace SCA.BusinessLib
         private ILinkageConfigGeneralDBService _linkageConfigGeneralDBService;
         private ILinkageConfigMixedDBService _linkageConfigMixedDBService;
         private IManualControlBoardDBService _manualControlBoardDBService;
+        private INTConnection _connection;
         //private IDatabaseService _databaseService;
         private IDBFileVersionService _dbFileVersionService;
         private IFileService _fileService;
@@ -276,6 +278,7 @@ namespace SCA.BusinessLib
             _linkageConfigMixedDBService = new SCA.DatabaseAccess.DBContext.LinkageConfigMixedDBService(_dbFileVersionService);
             _manualControlBoardDBService = new SCA.DatabaseAccess.DBContext.ManualControlBoardDBService(_dbFileVersionService);
             _deviceTypeDBService = new SCA.DatabaseAccess.DBContext.DeviceTypeDBService(_dbFileVersionService);
+            _connection = new SerialConnection();
         }
         public IProjectDBService ProjectDBService
         {
@@ -317,6 +320,11 @@ namespace SCA.BusinessLib
         {
             get { return _deviceTypeDBService; }
             set { _deviceTypeDBService = value; }
+        }
+		public INTConnection NTConnection
+        {
+            get { return _connection; }
+            set { _connection = value; }
         }
 
         /// <summary>

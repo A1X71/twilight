@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SCA.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="NT8001系列控制器配置程序V4.0" Height="350" Width="525" Icon="{Binding Path=AppIconPath,Mode=OneWay}"
+        Title="NT8001系列控制器配置程序V4.0(内部测试版Jiang)" Height="350" Width="525" Icon="{Binding Path=AppIconPath,Mode=OneWay}"
         xmlns:view="clr-namespace:SCA.WPF.ViewsRoot.Views.DetailInfo"
         xmlns:navigatorView="clr-namespace:SCA.WPF.ViewsRoot.Views.Navigator"
         xmlns:viewModel="clr-namespace:SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo"

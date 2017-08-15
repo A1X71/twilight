@@ -14,6 +14,7 @@ using SCA.WPF.Infrastructure;
 using SCA.Interface;
 using SCA.BusinessLib.Controller;
 using System.Windows;
+using SCA.BusinessLib;
 /* ==============================
 *
 * Author     : William
@@ -780,8 +781,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void DownloadExecute()
         {
-            _linkageConfigGeneralService.TheController = this.TheController;
-            _linkageConfigGeneralService.DownloadExecute(LinkageConfigGeneral);       
+            ProjectManager.GetInstance.NTConnection.SetGeneralConfigSetup(TheController.GeneralConfig, this.TheController.Type);
+            //if (this.TheController.Type == ControllerType.NT8053)
+            //{
+            //    ProjectManager.GetInstance.NTConnection.SetGeneralConfigSetup(TheController.GeneralConfig, this.TheController.Type);
+            //}
+            //else
+            //{
+            //    _linkageConfigGeneralService.TheController = this.TheController;
+            //    _linkageConfigGeneralService.DownloadExecute(LinkageConfigGeneral); 
+            //}
         }
         public void UploadExecute()
         {

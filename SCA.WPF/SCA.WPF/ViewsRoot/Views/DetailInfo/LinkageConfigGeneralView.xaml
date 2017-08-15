@@ -146,7 +146,7 @@
                             <col:ArrayList>
                                 <sys:String>本系统</sys:String>
                                 <sys:String>它系统</sys:String>
-                                <sys:String>全系统</sys:String>
+                                <!--<sys:String>全系统</sys:String>-->
                             </col:ArrayList>
                         </dg:DataGridComboBoxColumn.ItemsSource>
                     </dg:DataGridComboBoxColumn>

@@ -38,7 +38,7 @@ namespace SCA.Model
         /// <summary>
         /// 回路ID
         /// </summary>
-        public Int32? LoopID { get; set; }
+        public Int32 LoopID { get; set; }
         /// <summary>
         /// 标识ID
         /// </summary>

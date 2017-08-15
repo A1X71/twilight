@@ -30,12 +30,14 @@
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border Width="19"  Height="13"  Background="Transparent">
                             <Border Width="12" Height="14">
-                                <Path x:Name="ExpandPath" Data="M 2 2 L 7 7 L 2 12 Z" HorizontalAlignment="Right" Stroke="#FF090A0A" Fill="Transparent" VerticalAlignment="Center"/>
+                                <!--<Path x:Name="ExpandPath" Data="M 2 2 L 7 7 L 2 12 Z" HorizontalAlignment="Right" Stroke="#FF090A0A" Fill="Transparent" VerticalAlignment="Center"/>-->
+                                <Path x:Name="ExpandPath" Data="M 2 2 L 8 2 L 5 10 Z" HorizontalAlignment="Right" Stroke="#FF090A0A" Fill="Transparent" VerticalAlignment="Center"/>
                             </Border>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Data" TargetName="ExpandPath" Value="M 1 10 L 7 3 L 7 10 Z"/>
+                                <!--<Setter Property="Data" TargetName="ExpandPath" Value="M 1 10 L 7 3 L 7 10 Z"/>-->
+                                <Setter Property="Data" TargetName="ExpandPath" Value="M 10 2 L 12 8 L 4 2 Z"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

@@ -244,7 +244,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "Location":
-                        if (this.Location != null)
+                        if (!string.IsNullOrEmpty(this.Location))
                         { 
                             rule = dictMessage["Location"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
@@ -580,27 +580,37 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void DownloadExecute()
         {
+            List<DeviceInfo8036> list = TheLoop.GetDevices<DeviceInfo8036>();
+            List<DeviceInfoBase> baseList = new List<DeviceInfoBase>();
 
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            if (iCC.GetPortStatus())
+            foreach (var item in list)
             {
-                if(iCC.TheControllerType != null ) //如果已经取得当前的控制器类型
-                {
-                    if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
-                    { 
-                       
-                        //iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                        lstLoopsModel.Add(TheLoop);
-                        ((ControllerType8036)iCC.TheControllerType).Loops = lstLoopsModel;
-                        //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = DeviceInfo;                        
-                        iCC.TheControllerType.OperableDataType = OperantDataType.Device;
-                        iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                        iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        
-                    }
-                }
+                DeviceInfoBase baseItem = (DeviceInfoBase)item;
+                baseList.Add(baseItem);
             }
+
+            SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.SetDeviceSetup(baseList, TheLoop.DeviceAmount, TheLoop.Controller.Type);
+
+            //InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //if (iCC.GetPortStatus())
+            //{
+            //    if(iCC.TheControllerType != null ) //如果已经取得当前的控制器类型
+            //    {
+            //        if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
+            //        { 
+                       
+            //            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //            List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //            lstLoopsModel.Add(TheLoop);
+            //            ((ControllerType8036)iCC.TheControllerType).Loops = lstLoopsModel;
+            //            //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = DeviceInfo;                        
+            //            iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+            //            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+                        
+            //        }
+            //    }
+            //}
         }
         public void AddNewRecordExecute(object rowsAmount)
         {

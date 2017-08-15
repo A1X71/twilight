@@ -14,6 +14,7 @@ using SCA.BusinessLib.BusinessLogic;
 using SCA.BusinessLib.Controller;
 using SCA.Interface.BusinessLogic;
 using System.Windows;
+using SCA.BusinessLib;
 using SCA.Interface;
 /* ==============================
 *
@@ -932,7 +933,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
 
         /// <summary>
-        /// 输入器件类型
+        /// 有效器件类型
         /// </summary>
         public List<DeviceType> ValidDeviceType
         {
@@ -1079,8 +1080,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void DownloadExecute()
         {
-            _linkageConfigMixedService.TheController = this.TheController;
-            _linkageConfigMixedService.DownloadExecute(LinkageConfigMixed);
+            ProjectManager.GetInstance.NTConnection.SetMixedConfigSetup(TheController.MixedConfig, this.TheController.Type);
+            //if (this.TheController.Type == ControllerType.NT8053)
+            //{
+            //    ProjectManager.GetInstance.NTConnection.SetMixedConfigSetup(TheController.MixedConfig, this.TheController.Type);
+            //}
+            //else
+            //{
+            //    _linkageConfigMixedService.TheController = this.TheController;
+            //    _linkageConfigMixedService.DownloadExecute(LinkageConfigMixed);
+            //}
         }
         public void UploadExecute()
         {

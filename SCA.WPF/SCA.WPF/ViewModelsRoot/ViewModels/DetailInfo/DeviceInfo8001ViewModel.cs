@@ -204,31 +204,29 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "LinkageGroup1":
-                        if (this.LinkageGroup1 != null)
+                        if (!string.IsNullOrEmpty(this.LinkageGroup1))
                         { 
-                            if (this.LinkageGroup1.ToString() != "")
-                            {
+                            
                                 rule = dictMessage["StandardLinkageGroup"];
                                 exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
                                 if (!exminator.IsMatch(this.LinkageGroup1.ToString()))
                                 {
                                     errorMessage = rule.ErrorMessage;
                                 }
-                            }
+                           
                         }
                         break;
                     case "LinkageGroup2":
-                        if (this.LinkageGroup2 != null)
+                        if (!string.IsNullOrEmpty(this.LinkageGroup2))
                         {
-                            if (this.LinkageGroup2.ToString() != "")
-                            {
+                           
                                 rule = dictMessage["StandardLinkageGroup"];
                                 exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
                                 if (!exminator.IsMatch(this.LinkageGroup2.ToString()))
                                 {
                                     errorMessage = rule.ErrorMessage;
                                 }
-                            }
+                           
                         }
                         break;
                     case "LinkageGroup3":
@@ -257,7 +255,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "BroadcastZone":
-                        if (this.BroadcastZone != null)
+                        if (!string.IsNullOrEmpty(this.BroadcastZone))
                         { 
                             rule = dictMessage["DelayValue"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
@@ -324,7 +322,7 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
                         }
                         break;
                     case "Location":
-                        if (this.Location != null)
+                        if (!string.IsNullOrEmpty(this.Location))
                         { 
                             rule = dictMessage["Location"];
                             exminator = new System.Text.RegularExpressions.Regex(rule.Rule);
@@ -623,24 +621,35 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void DownloadExecute()
         {
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            if (iCC.GetPortStatus())
+            List<DeviceInfo8001> list = TheLoop.GetDevices<DeviceInfo8001>();
+            List<DeviceInfoBase> baseList = new List<DeviceInfoBase>();
+
+            foreach (var item in list)
             {
-                if (iCC.TheControllerType != null) //如果已经取得当前的控制器类型
-                {
-                    if (iCC.TheControllerType.ControllerType == ControllerType.NT8001) //如果控制器类型不相符，则不执行操作
-                    {
-                                               
-                        List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                        lstLoopsModel.Add(TheLoop);
-                        ((ControllerType8001)iCC.TheControllerType).Loops = lstLoopsModel;
-                        
-                        iCC.TheControllerType.OperableDataType = OperantDataType.Device;
-                        iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                    }
-                }
+                DeviceInfoBase baseItem = (DeviceInfoBase)item;
+                baseList.Add(baseItem);
             }
+
+            SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.SetDeviceSetup(baseList, TheLoop.DeviceAmount, TheLoop.Controller.Type);
+
+            //InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //if (iCC.GetPortStatus())
+            //{
+            //    if (iCC.TheControllerType != null) //如果已经取得当前的控制器类型
+            //    {
+            //        if (iCC.TheControllerType.ControllerType == ControllerType.NT8001) //如果控制器类型不相符，则不执行操作
+            //        {
+                                               
+            //            List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //            lstLoopsModel.Add(TheLoop);
+            //            ((ControllerType8001)iCC.TheControllerType).Loops = lstLoopsModel;
+                        
+            //            iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+            //            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //        }
+            //    }
+            //}
         }
         public void AddNewRecordExecute(object rowsAmount)
         {

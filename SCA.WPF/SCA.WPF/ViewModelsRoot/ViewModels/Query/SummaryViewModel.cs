@@ -207,271 +207,304 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.Query
         //下传当前控制器下的所有信息
         public void DownloadExecute()
         {
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            
-            if (iCC.GetPortStatus())
-            {
+            bool result = ProjectManager.GetInstance.NTConnection.SetMachineSetup(this.TheController, this.TheController.Type);
+            //if (this.TheController.Type == ControllerType.NT8053)
+            //{
+            //    bool result = ProjectManager.GetInstance.NTConnection.SetMachineSetup(this.TheController, this.TheController.Type);
+            //}
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
 
-                if (iCC.TheControllerType.GetType().ToString() != "SCA.BusinessLib.Controller.ControllerTypeUnknown")
-                {
-                    if (iCC.TheControllerType != null) //如果已经取得当前的控制器类型
-                    {
-                        iCC.TheControllerType.InitializeCommunicateStatus();
-                        #region 8036
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
-                        {
-                            //下传所有回路信息
-                      //      foreach (var linkage in TheController.Loops)
-                           // {
-                                //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                                List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                                lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                                ((ControllerType8036)iCC.TheControllerType).Loops = lstLoopsModel;
-                                //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = linkage.GetDevices<DeviceInfo8036>().ToList<DeviceInfo8036>();                            
-                                ((ControllerType8036)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-                                iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;    
-                       //     }
-                            ////下传所有标准组态信息
-                            //if (iCC.TheControllerType.Status != ControllerStatus.DataSending)
-                            //{ 
-                            //    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            
-                            //    iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
-                            //    iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            //}
-                        }
-                        #endregion
-                        #region 8001
+            //    if (iCC.GetPortStatus())
+            //    {
 
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8001) //如果控制器类型不相符，则不执行操作
-                        {
-                            //下传所有回路信息
-                            //foreach (var l in TheController.Loops)
-                            //{
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                                List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                                lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                                //((ControllerType8001)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8001>();
-                                ((ControllerType8001)iCC.TheControllerType).Loops = lstLoopsModel;
-                                ((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-                                ((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig.ToList<LinkageConfigMixed>();
-                                ((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig.ToList<LinkageConfigGeneral>();
-                                ((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard.ToList<ManualControlBoard>();
-                                iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            //}
-                            ////下传所有标准组态信息
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            //((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
-                            //iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //        if (iCC.TheControllerType.GetType().ToString() != "SCA.BusinessLib.Controller.ControllerTypeUnknown")
+            //        {
+            //            if (iCC.TheControllerType != null) //如果已经取得当前的控制器类型
+            //            {
+            //                iCC.TheControllerType.InitializeCommunicateStatus();
+            //                #region 8036
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    //下传所有回路信息
+            //                    //      foreach (var linkage in TheController.Loops)
+            //                    // {
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //                    lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+            //                    ((ControllerType8036)iCC.TheControllerType).Loops = lstLoopsModel;
+            //                    //((ControllerType8036)iCC.TheControllerType).DeviceInfoList = linkage.GetDevices<DeviceInfo8036>().ToList<DeviceInfo8036>();
 
-                            ////下传所有混合组态信息
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            //((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
-                            //iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    ((ControllerType8036)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
 
-                            ////下传所有通用组态信息
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            //((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
-                            //iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    //     }
+            //                    ////下传所有标准组态信息
+            //                    //if (iCC.TheControllerType.Status != ControllerStatus.DataSending)
+            //                    //{ 
+            //                    //    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
 
-                            ////下传所有网络手动盘信息
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            //((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
-                            //iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
-                            //iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        }
+            //                    //    iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+            //                    //    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    //}
+            //                }
+            //                #endregion
+            //                #region 8001
 
-                        #endregion 
-                        #region 8007
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8007) //如果控制器类型不相符，则不执行操作
-                        {
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8001) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    //下传所有回路信息
+            //                    foreach (var l in TheController.Loops)
+            //                    {
+            //                        iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                        ((ControllerType8001)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8001>();
+            //                        iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+            //                        iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    }
 
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                            lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                            ((ControllerType8007)iCC.TheControllerType).Loops = lstLoopsModel;   
-                            ((ControllerType8007)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-                            iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                    //下传所有标准组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8001)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                        }
-                        #endregion
-                        #region 8003
-                        if (iCC.TheControllerType.ControllerType == ControllerType.FT8003) //如果控制器类型不相符，则不执行操作
-                        {
+            //                    //下传所有混合组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8001)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                            lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                            ((ControllerType8003)iCC.TheControllerType).Loops = lstLoopsModel;
-                            ((ControllerType8003)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-                            iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        }
-                        #endregion
-                        #region 8000
-                        if (iCC.TheControllerType.ControllerType == ControllerType.FT8000) //如果控制器类型不相符，则不执行操作
-                        {
+            //                    //下传所有通用组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8001)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                            lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                            ((ControllerType8000)iCC.TheControllerType).Loops = lstLoopsModel;
-                            ((ControllerType8000)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
-                            iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        }
-                        #endregion
-                        #region 8021
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8021) //如果控制器类型不相符，则不执行操作
-                        {
+            //                    //下传所有网络手动盘信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8001)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                }
 
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                            lstLoopsModel = TheController.Loops.ToList<LoopModel>();
-                            ((ControllerType8021)iCC.TheControllerType).Loops = lstLoopsModel;                            
-                            iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
-                        #region 8053
+            //                #endregion
+            //                #region 8007
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8007) //如果控制器类型不相符，则不执行操作
+            //                {
 
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
-                        {
-                            //下传所有回路信息
-                            foreach (var l in TheController.Loops)
-                            {
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                                ((ControllerType8053)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8053>();
-                                iCC.TheControllerType.OperableDataType = OperantDataType.Device;
-                                iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                            }
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //                    lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+            //                    ((ControllerType8007)iCC.TheControllerType).Loops = lstLoopsModel;
+            //                    ((ControllerType8007)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
 
-                            //下传所有标准组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8053)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                }
+            //                #endregion
+            //                #region 8003
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.FT8003) //如果控制器类型不相符，则不执行操作
+            //                {
 
-                            //下传所有混合组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8053)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //                    lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+            //                    ((ControllerType8003)iCC.TheControllerType).Loops = lstLoopsModel;
+            //                    ((ControllerType8003)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                }
+            //                #endregion
+            //                #region 8000
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.FT8000) //如果控制器类型不相符，则不执行操作
+            //                {
 
-                            //下传所有通用组态信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8053)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //                    lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+            //                    ((ControllerType8000)iCC.TheControllerType).Loops = lstLoopsModel;
+            //                    ((ControllerType8000)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig.ToList<LinkageConfigStandard>();
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                }
+            //                #endregion
+            //                #region 8021
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8021) //如果控制器类型不相符，则不执行操作
+            //                {
 
-                            //下传所有网络手动盘信息
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                            ((ControllerType8053)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
-                            iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
-                            iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        }
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    List<LoopModel> lstLoopsModel = new List<LoopModel>();
+            //                    lstLoopsModel = TheController.Loops.ToList<LoopModel>();
+            //                    ((ControllerType8021)iCC.TheControllerType).Loops = lstLoopsModel;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.DownloadAll;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                }
+            //                #endregion
+            //                #region 8053
 
-                        #endregion 
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    //下传所有回路信息
+            //                    foreach (var l in TheController.Loops)
+            //                    {
+            //                        iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                        ((ControllerType8053)iCC.TheControllerType).DeviceInfoList = l.GetDevices<DeviceInfo8053>();
+            //                        iCC.TheControllerType.OperableDataType = OperantDataType.Device;
+            //                        iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                    }
 
-                    }
-                }
-            }
+            //                    //下传所有标准组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8053)iCC.TheControllerType).StandardLinkageConfigList = TheController.StandardConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.StandardLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
 
+            //                    //下传所有混合组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8053)iCC.TheControllerType).MixedLinkageConfigList = TheController.MixedConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.MixedLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+
+            //                    //下传所有通用组态信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8053)iCC.TheControllerType).GeneralLinkageConfigList = TheController.GeneralConfig;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.GeneralLinkageConfig;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+
+            //                    //下传所有网络手动盘信息
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
+            //                    ((ControllerType8053)iCC.TheControllerType).ManualControlBoardList = TheController.ControlBoard;
+            //                    iCC.TheControllerType.OperableDataType = OperantDataType.MannualControlBoard;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataSending;
+            //                }
+
+            //                #endregion
+
+            //            }
+            //        }
+            //    }
+            //}
         }
         //上传当前控制器下的所有信息
         public void UploadExecute()
         {
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            if (iCC.GetPortStatus())
+            //if(this.TheController.Type == ControllerType.NT8053)
             {
-                if (iCC.TheControllerType.GetType().ToString() != "SCA.BusinessLib.Controller.ControllerTypeUnknown")
+                ControllerModel model = ProjectManager.GetInstance.NTConnection.GetMachineSetup(this.TheController.Type);
+                if (model != null)
                 {
-                    if (iCC.TheControllerType != null && iCC.TheControllerType.ControllerType != ControllerType.NONE) //如果已经取得当前的控制器类型
+                    TheController.StandardConfig.Clear();
+                    foreach (var config in model.StandardConfig)
                     {
-                        #region 8036
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8036> lstDevicesInfo = new List<DeviceInfo8036>();
-                            List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
-                            ((ControllerType8036)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
-                            ((ControllerType8036)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                        }
-                        #endregion
-                        #region 8007
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8007) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8007> lstDevicesInfo = new List<DeviceInfo8007>();
-                            List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
-                            ((ControllerType8007)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
-                            ((ControllerType8007)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
-                        #region 8003
-                        if (iCC.TheControllerType.ControllerType == ControllerType.FT8003) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8003> lstDevicesInfo = new List<DeviceInfo8003>();
-                            List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
-                            ((ControllerType8003)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
-                            ((ControllerType8003)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
-                        #region 8000
-                        if (iCC.TheControllerType.ControllerType == ControllerType.FT8000) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8000> lstDevicesInfo = new List<DeviceInfo8000>();
-                            List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
-                            ((ControllerType8000)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
-                            ((ControllerType8000)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
-                        #region 8021
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8021) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8021> lstDevicesInfo = new List<DeviceInfo8021>();                            
-                            ((ControllerType8021)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;                            
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
-                        #region 8053
-                        if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
-                        {
-                            List<DeviceInfo8053> lstDevicesInfo = new List<DeviceInfo8053>();
-                            ((ControllerType8053)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
-                            iCC.TheController = TheController;
-                            iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
-                            iCC.AllDataUploadedEvent += UploadedFinished;
-                            iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-                        }
-                        #endregion
+                        config.Controller = TheController;
+                        this.TheController.StandardConfig.Add(config);
+                    }
+                    TheController.MixedConfig.Clear();
+                    foreach (var config in model.MixedConfig)
+                    {
+                        config.Controller = TheController;
+                        this.TheController.MixedConfig.Add(config);
+                    }
+                    TheController.GeneralConfig.Clear();
+                    foreach (var config in model.GeneralConfig)
+                    {
+                        config.Controller = TheController;
+                        this.TheController.GeneralConfig.Add(config);
+                    }
+                    TheController.ControlBoard.Clear();
+                    foreach (var config in model.ControlBoard)
+                    {
+                        config.Controller = TheController;
+                        this.TheController.ControlBoard.Add(config);
+                    }
+                    TheController.Loops.Clear();
+                    foreach (var loop in model.Loops)
+                    {
+                        loop.Controller = TheController;
+                        this.TheController.Loops.Add(loop);
                     }
                 }
+                EventMediator.NotifyColleagues("UploadedFinished", TheController);
             }
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //    if (iCC.GetPortStatus())
+            //    {
+            //        if (iCC.TheControllerType.GetType().ToString() != "SCA.BusinessLib.Controller.ControllerTypeUnknown")
+            //        {
+            //            if (iCC.TheControllerType != null && iCC.TheControllerType.ControllerType != ControllerType.NONE) //如果已经取得当前的控制器类型
+            //            {
+            //                #region 8036
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8036) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    List<DeviceInfo8036> lstDevicesInfo = new List<DeviceInfo8036>();
+            //                    List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
+            //                    ((ControllerType8036)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
+            //                    ((ControllerType8036)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
+            //                    iCC.TheController = TheController;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+            //                    iCC.AllDataUploadedEvent += UploadedFinished;
+            //                }
+            //                #endregion
+            //                #region 8007
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8007) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    List<DeviceInfo8007> lstDevicesInfo = new List<DeviceInfo8007>();
+            //                    List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
+            //                    ((ControllerType8007)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
+            //                    ((ControllerType8007)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
+            //                    iCC.TheController = TheController;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+            //                    iCC.AllDataUploadedEvent += UploadedFinished;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                }
+            //                #endregion
+            //                #region 8003
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.FT8003) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    List<DeviceInfo8003> lstDevicesInfo = new List<DeviceInfo8003>();
+            //                    List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
+            //                    ((ControllerType8003)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
+            //                    ((ControllerType8003)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
+            //                    iCC.TheController = TheController;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+            //                    iCC.AllDataUploadedEvent += UploadedFinished;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                }
+            //                #endregion
+            //                #region 8000
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.FT8000) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    List<DeviceInfo8000> lstDevicesInfo = new List<DeviceInfo8000>();
+            //                    List<LinkageConfigStandard> lstStandardLinkageConfig = new List<LinkageConfigStandard>();
+            //                    ((ControllerType8000)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
+            //                    ((ControllerType8000)iCC.TheControllerType).StandardLinkageConfigList = lstStandardLinkageConfig;
+            //                    iCC.TheController = TheController;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+            //                    iCC.AllDataUploadedEvent += UploadedFinished;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                }
+            //                #endregion
+            //                #region 8021
+            //                if (iCC.TheControllerType.ControllerType == ControllerType.NT8021) //如果控制器类型不相符，则不执行操作
+            //                {
+            //                    List<DeviceInfo8021> lstDevicesInfo = new List<DeviceInfo8021>();
+            //                    ((ControllerType8021)iCC.TheControllerType).DeviceInfoList = lstDevicesInfo;
+            //                    iCC.TheController = TheController;
+            //                    iCC.TheControllerType.Status = ControllerStatus.DataReceiving;
+            //                    iCC.AllDataUploadedEvent += UploadedFinished;
+            //                    iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
+            //                }
+            //                #endregion
+            //            }
+            //        }
+            //    }
+            //}
         }
         private void UpdateProcessBarStatus(int currentValue, int totalValue,ControllerNodeType nodeType)
         {

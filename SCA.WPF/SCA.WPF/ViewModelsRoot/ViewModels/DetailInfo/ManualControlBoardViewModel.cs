@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 212 $
+*  $Revision: 250 $
 *  $Author: dennis_zhang $        
-*  $Date: 2017-08-01 16:23:47 +0800 (周二, 01 八月 2017) $
+*  $Date: 2017-08-11 15:33:06 +0800 (周五, 11 八月 2017) $
 ***************************************************************************/
 using System;
 using System.Linq;
@@ -36,6 +36,7 @@ using SCA.WPF.Infrastructure;
 using SCA.BusinessLib.BusinessLogic;
 using SCA.Interface.BusinessLogic;
 using Neat.Dennis.Common.LoggerManager;
+using SCA.BusinessLib;
 using SCA.Interface;
 
 /* ==============================
@@ -852,8 +853,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
 
         public void DownloadExecute()
         {
-            _manualControlBoardService.TheController = this.TheController;
-            _manualControlBoardService.DownloadExecute(ManualControlBoard);
+            ProjectManager.GetInstance.NTConnection.SetManualBoardSetup(TheController.ControlBoard, this.TheController.Type);
+            //if(this.TheController.Type == ControllerType.NT8053)
+            //{
+            //    ProjectManager.GetInstance.NTConnection.SetManualBoardSetup(TheController.ControlBoard, this.TheController.Type);
+            //}
+            //else
+            //{
+            //    _manualControlBoardService.TheController = this.TheController;
+            //    _manualControlBoardService.DownloadExecute(ManualControlBoard);
+            //}
         }
         public void SaveExecute()
         {

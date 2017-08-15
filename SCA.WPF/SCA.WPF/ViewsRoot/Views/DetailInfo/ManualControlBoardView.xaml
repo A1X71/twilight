@@ -70,7 +70,7 @@
                         >
                     <Image Source="{Binding Path=SaveIconPath,Mode=OneWay}"/>
                 </Button>
-                <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">
+                <Button Grid.Column="5" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent" Command="{Binding Path=DownloadCommand}">
                     <Image Source="{Binding Path=DownloadIconPath,Mode=OneWay}"/>
                 </Button>
                 <!--<Button Grid.Column="6" Grid.Row="0" Width="30"  Height="30"  Background="Transparent" BorderBrush="Transparent">

@@ -446,10 +446,17 @@ namespace SCA.WPF
         {
             //取得当前的控制器信息
             ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)e.OriginalSource).DataItem;
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            //为通信组件指定控制器信息
-            iCC.TheController = controller;
-            iCC.StartCommunication();
+            //if(controller.Type == ControllerType.NT8053)
+            {
+                SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.Connect(controller.PortName, controller.BaudRate);
+            }
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //    //为通信组件指定控制器信息
+            //    iCC.TheController = controller;
+            //    iCC.StartCommunication();
+            //}
 
             //iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
             //switch (iCC.TheControllerType.ControllerType)
@@ -477,8 +484,16 @@ namespace SCA.WPF
         }
         private void NaviagtorUserControl_StopControllerButtonClick(object sender, RoutedEventArgs e)
         {
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            iCC.StopCommunication();
+            ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)e.OriginalSource).DataItem;
+            //if (controller.Type == ControllerType.NT8053)
+            {
+                SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.Disconnect();
+            }
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //    iCC.StopCommunication();
+            //}
 
         }
         #endregion
@@ -561,7 +576,7 @@ namespace SCA.WPF
             CreateViewArea.Children.Clear();
             CreateViewArea.Visibility = Visibility.Collapsed;
             this.DetailsPane.Visibility = Visibility.Visible;
-        }    
+        }
     }
 
 }

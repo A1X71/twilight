@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 185 $
-*  $Author: dennis_zhang $        
-*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
+*  $Revision: 264 $
+*  $Author: william_wang $        
+*  $Date: 2017-08-15 11:06:08 +0800 (周二, 15 八月 2017) $
 ***************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -35,6 +35,7 @@ namespace SCA.Model
         public int LoopID { get; set; }                 //回路ID
         public string Code { get; set; }                //器件编码  (机号+路号+器件编号):七位示例->0102003; 八位示例->00102003
         public Int16 TypeCode { get; set; }             //器件类型
+		public Int16? SensitiveLevel { get; set; }      //灵敏性
         //屏蔽
         private bool _disable = false;  //增加默认值  by william at 2017-08-09
         public bool Disable {

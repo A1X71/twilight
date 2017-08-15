@@ -11,8 +11,6 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="Navigator"
              >
-
-
     <StackPanel x:Name="NavigatorContainer" HorizontalAlignment="Left">
         <Grid Background="#FF3892C5" x:Name="EmptyContentTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="{Binding Path=Width, ElementName=NavigatorContainer}" Visibility="Visible">
             <Grid.ColumnDefinitions>
@@ -110,7 +108,7 @@
             <Label x:Name="NodeText"  Grid.Row="0" Grid.Column="0">控制器</Label>
 
             <Button x:Name="btnDeleteController" Grid.Column="1" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnDeleteController_Click">
-                <Image Source="{Binding Path=ControllerDeleteIconPath,Mode=OneTime}"/>
+                <Image Source="{Binding Path=ControllerDeleteIconPath,Mode=OneTime}" ToolTip="删除控制器"/>
                 <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <Infrastructure:ConfirmInvokeCommandAction Message="确认删除?"/>
@@ -118,17 +116,16 @@
                 </i:Interaction.Triggers>-->
             </Button>
             <Button x:Name="btnStartController" Grid.Column="2" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnStartController_Click">
-                <Image Source="{Binding Path=ControllerStartIconPath,Mode=OneTime}"/>
-
+                <Image Source="{Binding Path=ControllerStartIconPath,Mode=OneTime}" ToolTip="开启端口"/>
             </Button>
             <Button x:Name="btnStopController" Grid.Column="3" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnStopController_Click">
-                <Image Source="{Binding Path=ControllerStopIconPath,Mode=OneTime}"/>
+                <Image Source="{Binding Path=ControllerStopIconPath,Mode=OneTime}" ToolTip="关闭端口"/>
             </Button>
             <Button x:Name="btnSetMasterController" Grid.Column="4" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnSetMasterController_Click">
-                <Image Source="{Binding Path=ControllerSetMasterIconPath,Mode=OneTime}"/>
+                <Image Source="{Binding Path=ControllerSetMasterIconPath,Mode=OneTime}" ToolTip="设置主控制器"/>
             </Button>
             <Button x:Name="btnControllerMerge" Grid.Column="5" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnControllerMerge_Click">
-                <Image Source="{Binding Path=ProjectMergeIconPath,Mode=OneTime}"/>
+                <Image Source="{Binding Path=ProjectMergeIconPath,Mode=OneTime}" ToolTip="工程合并"/>
             </Button>
         </Grid>
         <Grid x:Name="LoopsTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
@@ -141,7 +138,7 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">回路</Label>
             <Button x:Name="btnAddLoop" Grid.Column="1" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnAddLoop_Click">
-                <Image Source="{Binding Path=LoopAddIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=LoopAddIconPath,Mode=OneTime}"  ToolTip="添加回路"/>
             </Button>
         </Grid>
         <Grid x:Name="SingleLoopTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
@@ -154,7 +151,7 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">回路</Label>
             <Button x:Name="btnDelLoop" Grid.Column="1" Grid.Row="0" Width="32"  Height="32" Background="Transparent" BorderBrush="Transparent" Click="btnDelLoop_Click">
-                <Image Source="{Binding Path=LoopDeleteIconPath,Mode=OneWay}"/>
+                <Image Source="{Binding Path=LoopDeleteIconPath,Mode=OneTime}" ToolTip="删除回路"/>
             </Button>
         </Grid>
         <Grid x:Name="StandardLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">

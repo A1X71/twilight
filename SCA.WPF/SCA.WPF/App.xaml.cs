@@ -15,7 +15,7 @@ namespace SCA.WPF
     
     public partial class App : Application
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(App));        
+        //private static readonly ILog log = LogManager.GetLogger(typeof(App));        
         
     }
 }

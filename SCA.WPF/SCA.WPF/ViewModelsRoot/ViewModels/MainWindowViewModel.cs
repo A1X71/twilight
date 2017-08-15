@@ -20,6 +20,7 @@ using SCA.Interface.DatabaseAccess;
 using SCA.BusinessLib;
 using SCA.BusinessLib.Utility;
 using SCA.BusinessLib.BusinessLogic;
+using Neat.Dennis.Common.LoggerManager;
 //using SCA.DatabaseAccess;
 //using SCA.DatabaseAccess.DBContext;
 
@@ -37,6 +38,11 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
 {
     public partial class MainWindowViewModel:PropertyChangedBase
     {
+        /// <summary>
+        /// 日志
+        /// </summary>
+        private static NeatLogger logger = new NeatLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private object _currentView;
         // Dictionary<ControllerType, IDeviceInfoViewModel<IDevice>> _dict;
 
@@ -448,16 +454,23 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
         {
             //取得当前的控制器信息
             //ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)o).DataItem; 2017-04-06注释 ，调试8003时报错
-            ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;            
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            //为通信组件指定控制器信息
-            iCC.TheController = controller;
-            iCC.StartCommunication();
-            if (iCC.GetPortStatus()) //打开成功时才置可用状态
+            ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;
+            //if (controller.Type == ControllerType.NT8053)
             {
-                _blnNavigationStartCommunicationCommandCanExecute = false;
-                _blnNavigationStopCommunicationCommandCanExecute = true;
+                SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.Connect(controller.PortName, controller.BaudRate);
             }
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //    //为通信组件指定控制器信息
+            //    iCC.TheController = controller;
+            //    iCC.StartCommunication();
+            //    if (iCC.GetPortStatus()) //打开成功时才置可用状态
+            //    {
+            //        _blnNavigationStartCommunicationCommandCanExecute = false;
+            //        _blnNavigationStopCommunicationCommandCanExecute = true;
+            //    }
+            //}
         }
         private bool Navigation_StartCommunicationCommand_CanExecute(object o)
         {
@@ -473,13 +486,21 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels
 
         private void NavigatorUserControl_StopCommunicationExecute(object o)
         {
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            iCC.StopCommunication();
-            if (!iCC.GetPortStatus()) //打开成功时才置可用状态
+            ControllerModel controller = (SCA.Model.ControllerModel)((SCA.WPF.ViewModelsRoot.ViewModels.Navigator.NavigatorItemViewModel)((RoutedEventArgs)o).OriginalSource).DataItem;
+             //if (controller.Type == ControllerType.NT8053)
             {
-                _blnNavigationStartCommunicationCommandCanExecute = true;
-                _blnNavigationStopCommunicationCommandCanExecute = false;
+                SCA.BusinessLib.ProjectManager.GetInstance.NTConnection.Disconnect();
             }
+            //else
+            //{
+            //    InvokeControllerCom iCC = InvokeControllerCom.Instance;
+            //    iCC.StopCommunication();
+            //    if (!iCC.GetPortStatus()) //打开成功时才置可用状态
+            //    {
+            //        _blnNavigationStartCommunicationCommandCanExecute = true;
+            //        _blnNavigationStopCommunicationCommandCanExecute = false;
+            //    }
+            //}
         }
         private bool Navigation_StopCommunicationCommand_CanExecute(object o)
         {

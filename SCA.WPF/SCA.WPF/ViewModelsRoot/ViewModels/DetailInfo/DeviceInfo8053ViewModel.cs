@@ -16,9 +16,9 @@
 *  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
 *
 *  Unpublished - All rights reserved under the copyright laws of the China.
-*  $Revision: 185 $
-*  $Author: dennis_zhang $        
-*  $Date: 2017-07-28 10:42:19 +0800 (周五, 28 七月 2017) $
+*  $Revision: 273 $
+*  $Author: william_wang $        
+*  $Date: 2017-08-15 11:33:58 +0800 (周二, 15 八月 2017) $
 ***************************************************************************/
 using Caliburn.Micro;
 using System;
@@ -548,27 +548,16 @@ namespace SCA.WPF.ViewModelsRoot.ViewModels.DetailInfo
         }
         public void DownloadExecute()
         {
+            List<DeviceInfo8053> list = TheLoop.GetDevices<DeviceInfo8053>();
+            List<DeviceInfoBase> baseList = new List<DeviceInfoBase>();
 
-            InvokeControllerCom iCC = InvokeControllerCom.Instance;
-            if (iCC.GetPortStatus())
+            foreach(var item in list)
             {
-                if (iCC.TheControllerType != null) //如果已经取得当前的控制器类型
-                {
-                    if (iCC.TheControllerType.ControllerType == ControllerType.NT8053) //如果控制器类型不相符，则不执行操作
-                    {
-
-                        //iCC.TheControllerType.Status = ControllerStatus.DataSending;
-                        List<LoopModel> lstLoopsModel = new List<LoopModel>();
-                        lstLoopsModel.Add(TheLoop);
-                        ((ControllerType8053)iCC.TheControllerType).Loops = lstLoopsModel;
-                        //((ControllerType8053)iCC.TheControllerType).DeviceInfoList = DeviceInfo;                        
-                        iCC.TheControllerType.OperableDataType = OperantDataType.Device;
-                        iCC.TheControllerType.Status = ControllerStatus.DataSending;// 将控制器置于数据发送状态
-                        iCC.TheControllerType.UpdateProgressBarEvent += UpdateProcessBarStatus;
-
-                    }
-                }
+                DeviceInfoBase baseItem = (DeviceInfoBase)item;
+                baseList.Add(baseItem);
             }
+
+            ProjectManager.GetInstance.NTConnection.SetDeviceSetup(baseList, TheLoop.DeviceAmount, TheLoop.Controller.Type);
         }
         public void AddNewRecordExecute(object rowsAmount)
         {

@@ -1,4 +1,26 @@
-﻿using System;
+﻿/**************************************************************************
+*
+*  PROPRIETARY and CONFIDENTIAL
+*
+*  This file is licensed from, and is a trade secret of:
+*
+*                   Neat, Inc.
+*                   No. 66, Xigang North Road
+*                   Qinhuangdao City, Hebei Province, China
+*                   Telephone: 0335-3660312
+*                   WWW: www.neat.com.cn
+*
+*  Refer to your License Agreement for restrictions on use,
+*  duplication, or disclosure.
+*
+*  Copyright © 2017-2018 Neat® Inc. All Rights Reserved. 
+*
+*  Unpublished - All rights reserved under the copyright laws of the China.
+*  $Revision: 262 $
+*  $Author: william_wang $        
+*  $Date: 2017-08-15 10:53:57 +0800 (周二, 15 八月 2017) $
+***************************************************************************/
+using System;
 using System.Text;
 using System.Data;
 using System.Collections.Generic;
@@ -208,14 +230,14 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BroadcastZone = dt.Rows[i]["SensitiveLevel"].ToString();
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
@@ -237,14 +259,14 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BroadcastZone = dt.Rows[i]["SensitiveLevel"].ToString();
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
@@ -378,23 +400,23 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
-                model.SubBoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
-                model.KeyNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.BoardNo = dt.Rows[i]["BoardNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
+                model.SubBoardNo = dt.Rows[i]["SubBoardNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
+                model.KeyNo = dt.Rows[i]["KeyNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
                 model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
-                model.MCBID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
+                model.MCBID = dt.Rows[i]["MCBID"] == null ? null : new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
@@ -413,23 +435,23 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
-                model.BoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
-                model.SubBoardNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
-                model.KeyNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.BoardNo = dt.Rows[i]["BoardNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BoardNo"]));
+                model.SubBoardNo = dt.Rows[i]["SubBoardNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SubBoardNo"]));
+                model.KeyNo = dt.Rows[i]["KeyNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["KeyNo"]));
                 model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
-                model.MCBID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
+                model.MCBID = dt.Rows[i]["MCBID"] == null ? null : new Nullable<int>(Convert.ToInt32(dt.Rows[i]["MCBID"]));
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
@@ -549,15 +571,15 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["ID"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
                 model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -577,15 +599,15 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["ID"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
                 model.sdpKey = dt.Rows[i]["sdpKey"].ToString();
-                model.BroadcastZone = dt.Rows[i]["BroadcastZone"].ToString();
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.BroadcastZone = dt.Rows[i]["BroadcastZone"] == null ? null : dt.Rows[i]["BroadcastZone"].ToString();
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -762,14 +784,14 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -794,14 +816,14 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.SensitiveLevel = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -906,12 +928,12 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.CurrentThreshold = new Nullable<float>(Convert.ToSingle(dt.Rows[i]["CurrentThreshold"]));
-                model.TemperatureThreshold = new Nullable<float>(Convert.ToSingle(dt.Rows[i]["TemperatureThreshold"]));
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.CurrentThreshold = dt.Rows[i]["CurrentThreshold"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["CurrentThreshold"]));
+                model.TemperatureThreshold = dt.Rows[i]["TemperatureThreshold"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["TemperatureThreshold"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -937,12 +959,12 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool?)dt.Rows[i]["Disable"];
-                model.CurrentThreshold = new Nullable<float>(Convert.ToSingle(dt.Rows[i]["CurrentThreshold"]));
-                model.TemperatureThreshold = new Nullable<float>(Convert.ToSingle(dt.Rows[i]["TemperatureThreshold"]));
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.CurrentThreshold = dt.Rows[i]["CurrentThreshold"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["CurrentThreshold"]));
+                model.TemperatureThreshold = dt.Rows[i]["TemperatureThreshold"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["TemperatureThreshold"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -1042,15 +1064,15 @@ namespace SCA.DatabaseAccess.DBContext
                 model.Disable = (dt.Rows[i]["Disable"].ToString() == "" || dt.Rows[i]["Disable"].ToString() == "0") ? false : true;
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
-                model.AlertValue = Convert.ToSingle(dt.Rows[i]["AlertValue"]);
-                model.ForcastValue = Convert.ToSingle(dt.Rows[i]["ForcastValue"]);
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.AlertValue = dt.Rows[i]["AlertValue"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["AlertValue"]));
+                model.ForcastValue = dt.Rows[i]["ForcastValue"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["ForcastValue"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
-                model.LoopID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["LoopID"]));
+                model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
                 model.LoopID = loop.ID;
@@ -1075,15 +1097,15 @@ namespace SCA.DatabaseAccess.DBContext
                 model.Disable = (dt.Rows[i]["Disable"].ToString() == "" || dt.Rows[i]["Disable"].ToString() == "0") ? false : true;
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
-                model.AlertValue = Convert.ToSingle(dt.Rows[i]["AlertValue"]);
-                model.ForcastValue = Convert.ToSingle(dt.Rows[i]["ForcastValue"]);
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.AlertValue = dt.Rows[i]["AlertValue"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["AlertValue"]));
+                model.ForcastValue = dt.Rows[i]["ForcastValue"] == null ? null : new Nullable<float>(Convert.ToSingle(dt.Rows[i]["ForcastValue"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
-                model.LoopID = new Nullable<int>(Convert.ToInt32(dt.Rows[i]["LoopID"]));
+                model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
                 model.LoopID = loop.ID;
@@ -1121,6 +1143,7 @@ namespace SCA.DatabaseAccess.DBContext
                 sbDeviceInfoSQL.Append("Disable Boolean,");
                 sbDeviceInfoSQL.Append("Feature integer,");
                 sbDeviceInfoSQL.Append("DelayValue integer,");
+                sbDeviceInfoSQL.Append("SensitiveLevel integer,");
                 sbDeviceInfoSQL.Append("LinkageGroup1 varchar(4),");
                 sbDeviceInfoSQL.Append("LinkageGroup2 varchar(4),");
                 sbDeviceInfoSQL.Append("LinkageGroup3 varchar(4),");
@@ -1152,6 +1175,7 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append("Disable,");
             sbDeviceInfoSQL.Append("Feature,");
             sbDeviceInfoSQL.Append("DelayValue,");
+            sbDeviceInfoSQL.Append("SensitiveLevel,");
             sbDeviceInfoSQL.Append("LinkageGroup1,");
             sbDeviceInfoSQL.Append("LinkageGroup2,");
             sbDeviceInfoSQL.Append("LinkageGroup3,");
@@ -1168,6 +1192,7 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append(device.Disable + "','");
             sbDeviceInfoSQL.Append(device.Feature + "','");
             sbDeviceInfoSQL.Append(device.DelayValue + "','");
+            sbDeviceInfoSQL.Append(device.SensitiveLevel + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup1 + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup2 + "','");
             sbDeviceInfoSQL.Append(device.LinkageGroup3 + "','");
@@ -1176,8 +1201,6 @@ namespace SCA.DatabaseAccess.DBContext
             sbDeviceInfoSQL.Append(device.FloorNo + "','");
             sbDeviceInfoSQL.Append(device.RoomNo + "','");
             sbDeviceInfoSQL.Append(device.Location + "','");
-            //sbDeviceInfoSQL.Append(device.sdpKey + "','");
-            //sbDeviceInfoSQL.Append(device.MCBID + "','");
             sbDeviceInfoSQL.Append(device.LoopID + "','");
             sbDeviceInfoSQL.Append(device.TypeCode + "');");
             return _databaseService.ExecuteBySql(sbDeviceInfoSQL);
@@ -1185,8 +1208,7 @@ namespace SCA.DatabaseAccess.DBContext
 
         public LoopModel GetDevicesByLoopForControllerType8053(LoopModel loop)
         {
-            //StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,BoardNo,SubBoardNo,KeyNo,BroadcastZone,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,SDPKey,MCBID,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID); commented by william at 2017-08-09
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);//added by william at 2017-08-09
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1194,15 +1216,16 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.Feature = dt.Rows[i]["Feature"]==null?null:new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"].GetType() ==typeof(System.DBNull) ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
@@ -1214,7 +1237,7 @@ namespace SCA.DatabaseAccess.DBContext
         }
         public bool GetDevicesByLoopForControllerType8053(ref Model.LoopModel loop, System.Collections.Generic.Dictionary<string, string> dictDeviceMappingManualControlBoard)
         {
-            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,BoardNo,SubBoardNo,KeyNo,BroadcastZone,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,SDPKey,MCBID,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);
+            StringBuilder sbQuerySQL = new StringBuilder("select ID,Code,Disable,Feature,DelayValue,SensitiveLevel,LinkageGroup1,LinkageGroup2,LinkageGroup3,BuildingNo,ZoneNo,FloorNo,RoomNo,Location,LoopID,TypeCode from DeviceInfo8053 where LoopID=" + loop.ID);
             System.Data.DataTable dt = _databaseService.GetDataTableBySQL(sbQuerySQL);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -1222,27 +1245,21 @@ namespace SCA.DatabaseAccess.DBContext
                 model.ID = Convert.ToInt32(dt.Rows[i]["id"]);
                 model.Code = dt.Rows[i]["Code"].ToString();
                 model.Disable = (bool)dt.Rows[i]["Disable"];
-                model.Feature = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
-                model.DelayValue = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.Feature = dt.Rows[i]["Feature"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["Feature"]));
+                model.DelayValue = dt.Rows[i]["DelayValue"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["DelayValue"]));
+                model.SensitiveLevel = dt.Rows[i]["SensitiveLevel"].GetType() == typeof(System.DBNull) ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["SensitiveLevel"]));
                 model.LinkageGroup1 = dt.Rows[i]["LinkageGroup1"].ToString();
                 model.LinkageGroup2 = dt.Rows[i]["LinkageGroup2"].ToString();
                 model.LinkageGroup3 = dt.Rows[i]["LinkageGroup3"].ToString();
-                model.BuildingNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
-                model.ZoneNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
-                model.FloorNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
-                model.RoomNo = new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
+                model.BuildingNo = dt.Rows[i]["BuildingNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["BuildingNo"]));
+                model.ZoneNo = dt.Rows[i]["ZoneNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["ZoneNo"]));
+                model.FloorNo = dt.Rows[i]["FloorNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["FloorNo"]));
+                model.RoomNo = dt.Rows[i]["RoomNo"] == null ? null : new Nullable<short>(Convert.ToInt16(dt.Rows[i]["RoomNo"]));
                 model.Location = dt.Rows[i]["Location"].ToString();
                 model.LoopID = Convert.ToInt32(dt.Rows[i]["LoopID"]);
                 model.TypeCode = Convert.ToInt16(dt.Rows[i]["TypeCode"]);
                 model.Loop = loop;
                 model.LoopID = loop.ID;
-                //if (dictDeviceMappingManualControlBoard != null)
-                //{
-                //    if (dictDeviceMappingManualControlBoard.ContainsKey(model.Code))//如果存在网络手动盘的信息定义，则设置MCBCode的值，建立与手动盘的关系
-                //    {
-                //        model.MCBCode = dictDeviceMappingManualControlBoard[model.Code];
-                //    }
-                //}
                 loop.SetDevice<DeviceInfo8053>(model);
             }
             return true;
@@ -1345,11 +1362,6 @@ namespace SCA.DatabaseAccess.DBContext
             }
             return lstData;   
         }
-
-
-  
-
-
 
         public List<string> GetTablesOfDB()
         {

@@ -152,9 +152,10 @@ namespace SCA.Model
         [Description("外系统")]
          ForeignSystem=0,
         [Description("本系统")]
-         LocalSystem =1,
-        [Description("全系统")]
-         AllSystem =2
+         LocalSystem =1
+        // ,
+        //[Description("全系统")]
+        // AllSystem =2
     }
     public class EnumDescriptionTypeConverter : EnumConverter
     {
