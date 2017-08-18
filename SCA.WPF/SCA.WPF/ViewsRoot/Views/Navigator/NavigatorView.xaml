@@ -49,7 +49,7 @@
                 </Image>
             </Button>-->
         </Grid>
-        <Grid x:Name="ProjectTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="ProjectTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -92,7 +92,7 @@
                 <Image Source="{Binding Path=DeviceTypeIconPath,Mode=OneWay}"/>
             </Button>
         </Grid>
-        <Grid x:Name="ControllerTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="ControllerTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -128,7 +128,7 @@
                 <Image Source="{Binding Path=ProjectMergeIconPath,Mode=OneTime}" ToolTip="工程合并"/>
             </Button>
         </Grid>
-        <Grid x:Name="LoopsTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="LoopsTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -141,7 +141,7 @@
                 <Image Source="{Binding Path=LoopAddIconPath,Mode=OneTime}"  ToolTip="添加回路"/>
             </Button>
         </Grid>
-        <Grid x:Name="SingleLoopTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="SingleLoopTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -154,7 +154,7 @@
                 <Image Source="{Binding Path=LoopDeleteIconPath,Mode=OneTime}" ToolTip="删除回路"/>
             </Button>
         </Grid>
-        <Grid x:Name="StandardLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="StandardLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -163,7 +163,7 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">标准组态</Label>
         </Grid>
-        <Grid x:Name="MixedLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="MixedLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -172,7 +172,7 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">混合组态</Label>
         </Grid>
-        <Grid x:Name="GeneralLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="GeneralLinkageTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -181,7 +181,7 @@
             </Grid.RowDefinitions>
             <Label  Grid.Row="0" Grid.Column="0">通用组态</Label>
         </Grid>
-        <Grid x:Name="ManualControlBoardTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
+        <Grid  Background="#FF3892C5" x:Name="ManualControlBoardTool"  Margin="0,5,0,0"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="300" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>

@@ -196,6 +196,7 @@ namespace SCA.DatabaseAccess
             catch (Exception ex)
             {
                 logger.Error(ex.Message, ex);
+                Console.WriteLine(ex.Message);
             }
             finally
             {

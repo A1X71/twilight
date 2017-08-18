@@ -396,6 +396,8 @@ namespace SCA.BusinessLib
             project.SavePath = strPath;
             this.Project = project;
             SetMaxIDWithMemoryData();
+            RecentFiles.Add(Project.SavePath);
+            SaveRecentFiles();
         }
         private void SetMaxIDWithMemoryData()
         {
@@ -668,25 +670,62 @@ namespace SCA.BusinessLib
                 {
                     if (!_fileService.IsExistFile(this.Project.SavePath)) //数据文件不存在
                     {
-                        _projectDBService.CreateLocalDBFile();
+                        if (_projectDBService.CreateLocalDBFile())
+                        {
+                            Console.WriteLine("创建文件成功");
+                        }
+                        else
+                        {
+                            Console.WriteLine("创建文件失败");
+                        }
                     }
                     if (!IsCreatedFundamentalTableStructure) //未建立项目基础表结构
                     {
                         if (_projectDBService != null)
                         {
-                            _projectDBService.CreatFundamentalTableStructure();  //创建基础存储结构
+                            if (_projectDBService.CreatFundamentalTableStructure())//;  //创建基础存储结构
+                            {
+                                Console.WriteLine("初始化成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("初始化失败");
+                            }
                         }
                     }
                     //保存工程信息
-                    _projectDBService.AddProject(this.Project);
+
+                    if (_projectDBService.AddProject(this.Project)>0)//;
+                    {
+                        Console.WriteLine("工程信息保存成功");
+                    }
+                    else
+                    {
+                        Console.WriteLine("工程信息保存失败");
+                    }
+
                     //初始化“控制器类型信息”
-                    _projectDBService.InitializeControllerTypeInfo();
+                    if (_projectDBService.InitializeControllerTypeInfo())
+                    {
+                        Console.WriteLine("控制器类型初始化成功");
+                    }
+                    else
+                    {
+                        Console.WriteLine("控制器类型初始化失败");
+                    }
 
                     //初始化此工程下的“器件类型”
                     int projectID=_projectDBService.GetMaxID();
                     IControllerConfig controllerConfig =  ControllerConfigManager.GetConfigObject(ControllerType.NONE);               
                 
-                    _deviceTypeDBService.InitializeDeviceTypeInfo(controllerConfig.GetALLDeviceTypeInfo(projectID));
+                    if(_deviceTypeDBService.InitializeDeviceTypeInfo(controllerConfig.GetALLDeviceTypeInfo(projectID)))
+                    {
+                        Console.WriteLine("器件类型初始化成功");
+                    }
+                    else
+                    {
+                        Console.WriteLine("器件类型初始化失败");
+                    }
                 
                     //保存此工程下的回路，器件，组态，手动盘
                     foreach (var c in this.Project.Controllers)
@@ -694,42 +733,105 @@ namespace SCA.BusinessLib
                         _deviceDBService = SCA.DatabaseAccess.DBContext.DeviceManagerDBServiceTest.GetDeviceDBContext(c.Type, _dbFileVersionService);
                         c.Project.ID = projectID;
                         c.ProjectID = projectID;
-                        _controllerDBService.AddController(c);
+                        if (_controllerDBService.AddController(c))
+                        {
+                            Console.WriteLine(c.Name+"控制器保存成功");
+                        }
+                        else
+                        {
+                            Console.WriteLine(c.Name + "控制器保存失败");
+                        }
 
                         //更新器件类型表的“匹配控制器信息”
                         controllerConfig = ControllerConfigManager.GetConfigObject(c.Type);                    
-                        _deviceTypeDBService.UpdateMatchingController(c.Type,controllerConfig.GetDeviceTypeCodeInfo());
+                        if(_deviceTypeDBService.UpdateMatchingController(c.Type,controllerConfig.GetDeviceTypeCodeInfo()))
+                        {
+                            Console.WriteLine(c.Name+"控制器匹配信息更新成功");
+                        }
+                        else
+                        {
+                            Console.WriteLine(c.Name + "控制器匹配信息更新失败");
+                        }
 
                         //取得当前ControllerID
                        // int controllerID = _controllerDBService.GetMaxID();
-                        _deviceDBService.CreateTableStructure();
+                        if(_deviceDBService.CreateTableStructure())
+                        {
+                            Console.WriteLine("器件结构初始化成功");
+                        }
+                        else
+                        {
+                            Console.WriteLine("器件结构初始化失败");
+                        }
                         foreach (var loop in c.Loops)
                         {
                             loop.Controller.ID = c.ID;
                             loop.ControllerID = c.ID;
-                            _loopDBService.AddLoopInfo(loop);
+                            if(_loopDBService.AddLoopInfo(loop))
+                            {
+                                Console.WriteLine("回路信息初始化成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("回路信息初始化失败");
+                            }
                             //取得当前LoopID
                           //  int loopID = _loopDBService.GetMaxID();
                             loop.ID = loop.ID;                        
-                            _deviceDBService.AddDevice(loop);                        
+                            if(_deviceDBService.AddDevice(loop))
+                            {
+                                Console.WriteLine("器件信息保存成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("器件信息保存失败");
+                            }
                             //取得当前器件最大ID号
                             //int deviceID=_deviceDBService.GetMaxID();
                         }
                         if (c.StandardConfig.Count != 0)
                         {
-                            _linkageConfigStandardDBService.AddStandardLinkageConfigInfo(c.StandardConfig);
+                           if( _linkageConfigStandardDBService.AddStandardLinkageConfigInfo(c.StandardConfig))
+                           {
+                               Console.WriteLine("标准组态信息保存成功");
+                           }
+                           else
+                           {
+                               Console.WriteLine("标准组态信息保存失败");
+                           }
                         }
                         if (c.GeneralConfig.Count != 0)
                         {
-                            _linkageConfigGeneralDBService.AddGeneralLinkageConfigInfo(c.GeneralConfig);
+                            if(_linkageConfigGeneralDBService.AddGeneralLinkageConfigInfo(c.GeneralConfig))
+                            {
+                                Console.WriteLine("通用组态信息保存成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("通用组态信息保存失败");
+                            }
                         }
                         if (c.MixedConfig.Count!=0)
                         {
-                            _linkageConfigMixedDBService.AddMixedLinkageConfigInfo(c.MixedConfig);
+                            if(_linkageConfigMixedDBService.AddMixedLinkageConfigInfo(c.MixedConfig))
+                            {
+                                Console.WriteLine("混合组态信息保存成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("混合组态信息保存失败");
+                            }
                         }
                         if (c.ControlBoard.Count!=0)
                         {
-                            _manualControlBoardDBService.AddManualControlBoardInfo(c.ControlBoard);
+                            if(_manualControlBoardDBService.AddManualControlBoardInfo(c.ControlBoard))
+                            {
+                                Console.WriteLine("手控盘保存成功");
+                            }
+                            else
+                            {
+                                Console.WriteLine("手控盘保存失败");
+                            }
                         }
                     }
                 }
@@ -974,7 +1076,10 @@ namespace SCA.BusinessLib
         private int GetMaxIDForController()
         {           
             int maxID = 0;
-            maxID = Project.Controllers.Max(info => info.ID);            
+            if (Project.Controllers.Count > 0)
+            { 
+                maxID = Project.Controllers.Max(info => info.ID);
+            }
             return maxID;
         }
 

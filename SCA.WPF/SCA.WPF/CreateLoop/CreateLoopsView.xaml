@@ -53,16 +53,17 @@
                       VerticalAlignment="Center"
                       x:Name="LoopCodeComboBox"  Width="120" 
                       Margin="5,0,0,0" />
-            <Label x:Name="ErrorMessageLoopCode" Grid.Row="1" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopCode}"/>
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageLoopCode" Grid.Row="1" Grid.Column="2"  Text="{Binding ErrorMessageLoopCode}"/>
             <Label Grid.Row="2" Grid.Column="0" Content="节点数" Style="{StaticResource Label}" />
             <TextBox Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" x:Name="DeviceAmountInputTextBox" Margin="5,0" TabIndex="100" Text="{Binding Path=DeviceAmount}"/>
-            <Label x:Name="ErrorMessageDeviceAmount" Grid.Row="2" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageDeviceAmount }" />
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}"  x:Name="ErrorMessageDeviceAmount" Grid.Row="2" Grid.Column="2"  Text="{Binding ErrorMessageDeviceAmount }" />
+            
             <Label Grid.Row="3" Grid.Column="0" Content="回路数"  Style="{StaticResource Label}"/>
             <TextBox Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopAmountInputTextBox" Margin="5,0" TabIndex="100"  Text="{Binding Path=LoopsAmount}"/>
-            <Label   x:Name="ErrorMessageLoopAmount" Grid.Row="3" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopAmount}"/>
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}"  x:Name="ErrorMessageLoopAmount" Grid.Row="3" Grid.Column="2"   Text="{Binding ErrorMessageLoopAmount}"/>
             <Label Grid.Row="4" Grid.Column="0" Content="回路名" Style="{StaticResource Label}" />
             <TextBox Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" x:Name="LoopNameInputTextBox" Margin="5,0" TabIndex="100"  Text="{Binding Path=LoopName}"/>
-            <Label x:Name="ErrorMessageLoopName" Grid.Row="4" Grid.Column="2"  Style="{StaticResource Label}" Content="{Binding ErrorMessageLoopName}"/>
+            <TextBlock Style="{DynamicResource ErrorMessageStyle}" x:Name="ErrorMessageLoopName" Grid.Row="4" Grid.Column="2"   Text="{Binding ErrorMessageLoopName}"/>
             <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Margin="15,15,15,15" Orientation="Horizontal"  HorizontalAlignment="Center">
                 <Button Content="确定" x:Name="AddButton"  IsDefault="True" Command="{Binding Path=ConfirmCommand }" TabIndex="140" Width="64"/>
                 <Button Content="取消" x:Name="CloseButton" IsCancel="True" Command="{Binding Path=CloseCommand }"  TabIndex="150" Margin="10,0,0,0" Width="60"/>

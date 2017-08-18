@@ -125,22 +125,37 @@ namespace SCA.BusinessLib.Utility
         public StringCollection ReadStringCollectionFromXML(string filePath)
         {
             StringCollection stringCollection = new StringCollection();
-            if (File.Exists(filePath))
-            {                
-                XmlSerializer ser = new XmlSerializer(typeof(StringCollection));
-                using (TextReader reader = new StreamReader(filePath))
+            try
+            {
+                
+                if (File.Exists(filePath))
                 {
-                    stringCollection = (StringCollection)ser.Deserialize(reader);
-                }             
+                    XmlSerializer ser = new XmlSerializer(typeof(StringCollection));
+                    using (TextReader reader = new StreamReader(filePath))
+                    {
+                        stringCollection = (StringCollection)ser.Deserialize(reader);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return stringCollection;
         }
         public void WriteStringCollectionToXML(string filePath, StringCollection stringCollection)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(StringCollection));
-            using (TextWriter writer = new StreamWriter(filePath))
+            try
             {
-                ser.Serialize(writer, stringCollection);
+                XmlSerializer ser = new XmlSerializer(typeof(StringCollection));
+                using (TextWriter writer = new StreamWriter(filePath))
+                {
+                    ser.Serialize(writer, stringCollection);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
